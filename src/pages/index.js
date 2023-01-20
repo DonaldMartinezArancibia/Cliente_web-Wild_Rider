@@ -2,17 +2,17 @@ import { ApolloClient, InMemoryCache, ApolloProvider, useQuery, gql } from '@apo
 import * as React from 'react'
 import client from '../apollo/client';
 
-// const QUERY = client
-//   .query({
-//     query: gql`
-//     {
-//       character(id: 1) {
-//         name
-//         image
-//       }
-//     }
-//     `,
-//   }).then((result) => console.log(result));
+const QUERY = client
+  .query({
+    query: gql`
+    {
+      character(id: 1) {
+        name
+        image
+      }
+    }
+    `,
+  }).then((result) => console.log(result));
 
 
 const Rick = gql`
@@ -25,7 +25,7 @@ query
   }
 `;
 function Cupcake() {
-  const { loading, error, data } = useQuery(Rick,{client: client.current,});
+  const { loading, error, data } = useQuery(Rick);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
