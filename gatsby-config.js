@@ -8,10 +8,9 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 
- require('dotenv').config({
+require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
-});
-
+})
 
 module.exports = {
   siteMetadata: {
@@ -45,17 +44,22 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
-    'gatsby-plugin-apollo',
-    
-
     // {
-    //   resolve: `gatsby-source-strapi`,
-    //   options:{
-    //     apiURL: process.env.STRAPI_API_URL,
-    //     accessToken: process.env.STRAPI_TOKEN,
-    //     queryLimit: 25,
-    //     collectionTypes: ['post', 'email'],
+    //   resolve: `gatsby-plugin-apollo`,
+    //   options: {
+    //     uri: process.env.GRAPHCMS_ENDPOINT,
+    //     headers: {
+    //       Authorization: process.env.GRAPHCMS_TOKEN,
+    //     },
     //   },
     // },
+
+    {
+      resolve: `gatsby-source-graphcms`,
+      options: {
+        endpoint: process.env.GATSBY_GRAPHCMS_ENDPOINT,
+        token: process.env.GATSBY_GRAPHCMS_TOKEN,
+      },
+    },
   ],
 }

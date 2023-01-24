@@ -1,13 +1,16 @@
 // src/gatsby-plugin-apollo/client.js
-import fetch from 'isomorphic-fetch';
-import {ApolloClient, HttpLink, InMemoryCache} from '@apollo/client';
+import fetch from "isomorphic-fetch"
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client"
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: 'https://rickandmortyapi.com/graphql',
+    uri: "https://api-us-east-1.hygraph.com/v2/clcj76sfd00bq01t92eu9bpiz/master",
     fetch,
-  })
-});
+    headers: {
+      Authorization: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImdjbXMtbWFpbi1wcm9kdWN0aW9uIn0.eyJ2ZXJzaW9uIjozLCJpYXQiOjE2NzM5MDg4NTgsImF1ZCI6WyJodHRwczovL2FwaS11cy1lYXN0LTEuaHlncmFwaC5jb20vdjIvY2xjajc2c2ZkMDBicTAxdDkyZXU5YnBpei9tYXN0ZXIiLCJtYW5hZ2VtZW50LW5leHQuZ3JhcGhjbXMuY29tIl0sImlzcyI6Imh0dHBzOi8vbWFuYWdlbWVudC5ncmFwaGNtcy5jb20vIiwic3ViIjoiMWJmY2YxMGQtZjY5Ny00Yzk3LWFmY2YtODM1M2Y2ZGNiMzA1IiwianRpIjoiY2xjemU0NWxmNGNzdzAxdWtlcjJyYzljNyJ9.f-CUNVJ6cnm1O1rokA4NQ7sYsAj7no5gC6wf3MBgV6p1ksE1Z8T7StUjvXPrSkKr7tK7mhbH7S-JEgS8ik0bf1isbzLiIeaaNhXbwdp3fYMLS9wgQs40g8jrhHGX-XE33dzqjNw5WrtuGghn3g_sLgpBcrtavfQbs0vjgfrDRdqx2hZNyNa5GpO5S7b2GZpez7j9GvkQejOrOe0zTSAqmGY2aTDJWFkU8vWPzQvebcRDrz2bAlMusJmlHXWqfrlkvjCGea4r1yKNX5KezIyj669PB75ITIL7EbpEfqGAS39IS4OO9oYdYaK04V32gT9w3DvD8A_Rw7hRjIqlEZN4BjytVHey-6VWXVXh0Ef_UssUw9MjP6Atz1y_8gR1g6Q_Ee3q6Wtxe-aHIAsRvL58dfweXxcA4tB5FLNQKMfctlRzf9z4Kg6zykzkhObYUqe8uBelZl2fv2v8xMjmV-N5i6R57Wit20EY86n389pn8VyUGbvU5-dFxFCqIWQ2gopRo52cT4u66eb4Yo6nH2XZ4C4ZU_n0k8EdF_Ts1CtOuKL8K9bLgSUxhTLfUc8Cej2CKIH_Yf_JbNrLtxyvACHw8SzK9I2OnR94WQo5sSN3Zu8aO_CY5Z_ID2mNqi4aIvsJQkxCuoB8AtDJfBXazqvsAWwKtkYrEcBD2hGrzvmoupE`,
+    },
+  }),
+})
 
-export default client;
+export default client

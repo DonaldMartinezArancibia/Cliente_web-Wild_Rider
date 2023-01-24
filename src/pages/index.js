@@ -1,38 +1,19 @@
-import { ApolloClient, InMemoryCache, ApolloProvider, useQuery, gql } from '@apollo/client';
-import * as React from 'react'
-import client from '../apollo/client';
+import React from "react"
+import client from "../apollo/client"
+import Showdata from "../components/showdata"
+import Storedata from "../components/storedata"
+import { ApolloProvider } from "@apollo/client"
 
-const QUERY = client
-  .query({
-    query: gql`
-    {
-      character(id: 1) {
-        name
-        image
-      }
-    }
-    `,
-  }).then((result) => console.log(result));
+export default function index() {
+  // const client = new ApolloClient({
+  //   uri: 'https://rickandmortyapi.com/graphql',
+  //   cache: new InMemoryCache(),
+  // });
 
-
-const Rick = gql`
-query
-  {
-      character(id: 1) {
-        name
-        image
-      }
-  }
-`;
-function Cupcake() {
-  const { loading, error, data } = useQuery(Rick);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
-
-return(
-    <ApolloProvider client={client}><p>Hola</p></ApolloProvider>
+  return (
+    <main>
+      <Showdata />
+      <Storedata />
+    </main>
   )
 }
-
-export default Cupcake;
