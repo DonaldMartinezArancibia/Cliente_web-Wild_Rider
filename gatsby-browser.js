@@ -17,6 +17,7 @@ import fetch from "isomorphic-fetch"
 
 import "./src/components/layout.css"
 import Layout from "./src/components/layout"
+import "./src/styles/global.css"
 
 const httpLink = new HttpLink({
   uri: process.env.GATSBY_GRAPHCMS_ENDPOINT,

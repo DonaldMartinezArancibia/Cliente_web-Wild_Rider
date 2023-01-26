@@ -61,5 +61,6 @@ module.exports = {
         token: process.env.GATSBY_GRAPHCMS_TOKEN,
       },
     },
+    "gatsby-plugin-postcss",
   ],
 }

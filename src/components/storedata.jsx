@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useMutation, useQuery } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import CREATE_SEO from "./create"
 import PUBLISH_SEO from "./publishSeo"
 import Show from "./show"
@@ -12,14 +12,12 @@ export default function Storedata() {
     title: "",
     description: "",
   })
-  const [data, loading, error] = useMutation(CREATE_SEO)
+  const [data] = useMutation(CREATE_SEO)
   const [publishSEO] = useMutation(PUBLISH_SEO, {
     onCompleted: data => {
       client.query({ query: Show })
     },
   })
-
-  const { showdatas } = useQuery(Show)
 
   const Filechange = e => {
     setData({
