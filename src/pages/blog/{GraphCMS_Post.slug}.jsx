@@ -44,33 +44,29 @@ const PostLayout = ({ data: { graphCmsPost: post, cover } }) => {
 }
 
 export const query = graphql`
-  query Post($slug: String!) {
-    posts(where: { slug: $slug }) {
+  query Post($id: String!, $slug: String!) {
+    graphCmsPost(slug: { eq: $slug }) {
       id
-      slug
       title
+      slug
       category
       content
       cover {
-        url(
-          transformation: {
-            image: { resize: { width: 1200, height: 630, fit: crop } }
-          }
-        )
+        url
       }
       seo {
-        ... on Seo {
+        ... on GraphCMS_Seo {
           title
           description
           image {
-            url(
-              transformation: {
-                image: { resize: { width: 1200, height: 630 } }
-              }
-            )
+            url
           }
         }
       }
+      publishedAt
+    }
+    cover: graphCmsAsset(coverPost: { elemMatch: { id: { eq: $id } } }) {
+      gatsbyImageData(layout: FULL_WIDTH)
     }
   }
 `

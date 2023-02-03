@@ -2,6 +2,7 @@ import React from "react"
 import Showdata from "../components/showdata"
 import Storedata from "../components/storedata"
 import ImageSlider from "../components/imageSlider"
+import Example from "../components/popup"
 
 export default function index() {
   // const client = new ApolloClient({
@@ -20,6 +21,7 @@ export default function index() {
       <div className="mx-auto">
         <ImageSlider images={images} />
       </div>
+      <Example />
       <Showdata />
       <Storedata />
     </main>
