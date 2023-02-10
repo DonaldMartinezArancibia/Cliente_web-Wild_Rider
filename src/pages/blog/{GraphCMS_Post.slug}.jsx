@@ -11,7 +11,7 @@ const PostLayout = ({ data: { graphCmsPost: post, cover } }) => {
     post.seo && post.seo.image ? post.seo.image.url : post.cover.url || null
 
   return (
-    <Layout>
+    <>
       {post.seo !== null ? (
         <Seo
           title={post.seo.title}
@@ -39,7 +39,7 @@ const PostLayout = ({ data: { graphCmsPost: post, cover } }) => {
           </div>
         </section>
       </div>
-    </Layout>
+    </>
   )
 }
 

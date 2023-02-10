@@ -16,10 +16,8 @@ export default function Showdata() {
   } = useQuery(PostBySlug, { variables: { slug: "lorem-ipsum" } })
   if (postBySlugQueryLoading) return <p>Loading...</p>
   if (postBySlugQueryError) return <p>Error : {postBySlugQueryError.message}</p>
-  console.log(posts)
 
   return (
-    <>
       <section className="flex flex-wrap container mx-auto xl:px-24 justify-between">
         {posts.posts.map(item => (
           <article
@@ -42,6 +40,5 @@ export default function Showdata() {
           </article>
         ))}
       </section>
-    </>
   )
 }

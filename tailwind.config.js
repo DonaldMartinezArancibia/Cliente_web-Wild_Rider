@@ -22,6 +22,11 @@ module.exports = {
           },
         },
       }),
+      fontFamily: {
+        CarterOne: "Carter One",
+        Inter: "Inter",
+        Poppins: "Poppins",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

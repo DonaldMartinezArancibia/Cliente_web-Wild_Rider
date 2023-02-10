@@ -34,7 +34,7 @@ const ImageSlider = ({ images }) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative flex justify-center">
       <img
         src={images[currentImage]}
         alt="Slider Image"
@@ -43,13 +43,13 @@ const ImageSlider = ({ images }) => {
         onMouseLeave={handleMouseLeave}
       />
       <button
-        className="absolute top-0 left-0 -ml-8 -mt-8 p-2 rounded-full bg-gray-600 text-white hover:bg-gray-800"
+        className="absolute top-1/2 left-10 -ml-8 -mt-8 p-2 rounded-full bg-gray-600 text-white hover:bg-gray-800"
         onClick={handlePrevClick}
       >
         Prev
       </button>
       <button
-        className="absolute top-0 right-0 -mr-8 -mt-8 p-2 rounded-full bg-gray-600 text-white hover:bg-gray-800"
+        className="absolute top-1/2 right-10 -mr-8 -mt-8 p-2 rounded-full bg-gray-600 text-white hover:bg-gray-800"
         onClick={handleNextClick}
       >
         Next
