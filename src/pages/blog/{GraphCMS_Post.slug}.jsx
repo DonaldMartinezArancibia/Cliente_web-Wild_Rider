@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Layout, Seo } from "../../components"
+import { Seo } from "../../components"
 import { graphql } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import { formatDate } from "../../utils"

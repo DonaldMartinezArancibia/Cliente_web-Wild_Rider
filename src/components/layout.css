@@ -151,9 +151,9 @@ dt,
 th {
   font-weight: bold;
 }
-li {
+/*li {
   margin-bottom: calc(var(--space-4) / 2);
-}
+}*/
 ol li,
 ul li {
   padding-left: 0;
