@@ -48,8 +48,21 @@ module.exports = {
     {
       resolve: "gatsby-source-graphcms",
       options: {
+        typeName: "GraphCMS",
+        fieldName: "gcms",
         endpoint: process.env.GATSBY_GRAPHCMS_ENDPOINT,
         token: process.env.GATSBY_GRAPHCMS_TOKEN,
+        locales: ["en", "es"],
+      },
+    },
+    // Add to gatsby-config.js
+    {
+      resolve: `gatsby-plugin-i18n`,
+      options: {
+        langKeyDefault: "en",
+        langKeyForNull: "en",
+        prefixDefault: false,
+        useLangKeyLayout: false,
       },
     },
   ],

@@ -1,30 +1,28 @@
+// DynamicPage.js
+
 import React from "react"
-import { graphql } from "gatsby"
-// import { createApolloClient } from "./gatsby-browser"
-import { gql } from "@apollo/client"
+import { navigate } from "gatsby"
 
-const DynamicPage = ({ data, pageContext }) => {
-  console.log(data, pageContext)
-  return <div>{/* Your content here */}Hello</div>
-}
-
-export const query = gql`
-  query PostBySlug($slug: String!) {
-    posts(where: { slug: $slug }) {
-      id
-      slug
-      title
-      category
-      content
-      cover {
-        url(
-          transformation: {
-            image: { resize: { width: 1200, height: 630, fit: crop } }
-          }
-        )
-      }
-    }
+export default function DynamicPage({ pageContext }) {
+  const { slug, locale } = pageContext
+  const generateDynamicPagePath = (slug, language) => {
+    return `/dynamic/${language}/${slug}`
   }
-`
 
-export default DynamicPage
+  const changeLanguage = (language, slug) => {
+    const path = generateDynamicPagePath(slug, language)
+    navigate(path)
+  }
+
+  return (
+    <div>
+      <button onClick={() => changeLanguage("es", slug)}>Español</button>
+      <h1>{slug}</h1>
+      {locale === "es" ? (
+        <p>Contenido en español</p>
+      ) : (
+        <p>Content in English</p>
+      )}
+    </div>
+  )
+}

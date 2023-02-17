@@ -17,27 +17,56 @@ exports.createPages = async ({ actions }) => {
   })
 }
 
-// exports.createPages = async ({ graphql, actions }) => {
-//   const { createPage } = actions
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
 
-//   const result = await graphql(`
-//     query {
-//       posts {
-//         id
-//         slug
-//       }
-//     }
-//   `)
+  const locales = ["es", "en"]
 
-//   console.log(result.data)
+  for (const locale of locales) {
+    const result = await graphql(
+      `
+        query ($locale: GraphCMS_Locale!) {
+          allGraphCmsPost(filter: { locale: { eq: $locale } }) {
+            nodes {
+              category
+              content
+              locale
+              slug
+            }
+          }
+        }
+      `,
+      { locale }
+    )
 
-//   result.data.posts.forEach(({ node }) => {
-//     createPage({
-//       path: `/dynamic/${node.slug}`,
-//       component: require.resolve("./src/templates/DynamicPage.js"),
-//       context: {
-//         slug: node.slug,
-//       },
-//     })
-//   })
-// }
+    result.data.allGraphCmsPost.nodes.forEach(({ slug }) => {
+      createPage({
+        path: `/dynamic/${locale}/${slug}`,
+        component: require.resolve("./src/templates/DynamicPage.js"),
+        context: {
+          slug: slug,
+          locale,
+        },
+      })
+    })
+  }
+  // result.data.allGraphCmsPost.nodes.forEach(post => {
+  //   createPage({
+  //     path: `/dynamic/${post.slug}`,
+  //     component: require.resolve("./src/templates/DynamicPage.js"),
+  //     context: {
+  //       slug: post.slug,
+  //     },
+  //   })
+  // })
+
+  // result.data.allGraphCmsPost.nodes.forEach(({ nodes }) => {
+  //   createPage({
+  //     path: `/dynamic/${nodes.slug}`,
+  //     component: require.resolve("./src/templates/DynamicPage.js"),
+  //     context: {
+  //       slug: node.slug,
+  //     },
+  //   })
+  // })
+}
