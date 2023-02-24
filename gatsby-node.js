@@ -28,8 +28,7 @@ exports.createPages = async ({ graphql, actions }) => {
         query ($locale: GraphCMS_Locale!) {
           allGraphCmsPost(filter: { locale: { eq: $locale } }) {
             nodes {
-              category
-              content
+              id
               locale
               slug
             }
@@ -38,14 +37,16 @@ exports.createPages = async ({ graphql, actions }) => {
       `,
       { locale }
     )
+    const urlPrefix = locale == "en" ? "/blog/" : `${locale}/blog/`
 
-    result.data.allGraphCmsPost.nodes.forEach(({ slug }) => {
+    result.data.allGraphCmsPost.nodes.forEach(({ slug, id }) => {
       createPage({
-        path: `/dynamic/${locale}/${slug}`,
-        component: require.resolve("./src/templates/DynamicPage.js"),
+        path: `${urlPrefix}${slug}`,
+        component: require.resolve("./src/templates/Post.jsx"),
         context: {
           slug: slug,
-          locale,
+          id: id,
+          langKey: locale,
         },
       })
     })

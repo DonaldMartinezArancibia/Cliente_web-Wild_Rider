@@ -6,16 +6,14 @@ import { Link } from "gatsby"
 export default function Showdata() {
   const {
     data: posts,
-    // loading: postsQueryLoading,
-    // error: postsQueryError,
+    loading: postsQueryLoading,
+    error: postsQueryError,
   } = useQuery(GetAllPosts)
-  const {
-    // data: postBySlug,
-    loading: postBySlugQueryLoading,
-    error: postBySlugQueryError,
-  } = useQuery(PostBySlug, { variables: { slug: "lorem-ipsum" } })
-  if (postBySlugQueryLoading) return <p>Loading...</p>
-  if (postBySlugQueryError) return <p>Error : {postBySlugQueryError.message}</p>
+  const { error: postBySlugQueryError } = useQuery(PostBySlug, {
+    variables: { slug: "lorem-ipsum" },
+  })
+  if (postsQueryLoading) return <p>Loading...</p>
+  if (postsQueryError) return <p>Error : {postBySlugQueryError.message}</p>
 
   return (
     <section className="flex flex-wrap container mx-auto xl:px-24 justify-between">
@@ -31,7 +29,7 @@ export default function Showdata() {
           </div>
           <div className="px-6 py-4">
             <Link
-              to={`/blog/${item.slug}`}
+              to={`blog/${item.slug}`}
               className="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded-full"
             >
               Read More

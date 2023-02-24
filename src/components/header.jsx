@@ -3,8 +3,9 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import { StaticImage } from "gatsby-plugin-image"
+import LanguageSelector from "./languajeSelector"
 
-const Header = () => {
+export default function Header({ pageContext }) {
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
   const links = [
@@ -16,15 +17,14 @@ const Header = () => {
   React.useEffect(() => {
     document.querySelector("html").style.overflow = isOpen ? "hidden" : ""
   }, [isOpen])
-
   const getLinkClass = to => {
     return location.pathname === to
       ? "transition ease-in-out border-[#f6cc4d] border-b-[3.7px] py-2"
       : "transition ease-in-out hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
   }
-
   return (
     <header className="w-full">
+      <LanguageSelector pageContext={pageContext} />
       <div className="container flex items-center mx-auto xl:px-10 mt-6">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
           <Link to="/" className="font-bold text-black font-CarterOne">
@@ -35,7 +35,12 @@ const Header = () => {
             </p>
           </Link>
         </h1> */}
-        <Link to="/" className="w-72 xl:mr-52">
+        <Link
+          to={
+            pageContext.langKey === "en" ? "/" : `/${pageContext.langKey || ""}`
+          }
+          className="w-72 xl:mr-52"
+        >
           <StaticImage
             src="../images/Logo Horizontal Negro Transparente.svg"
             alt=""
@@ -106,5 +111,3 @@ const Header = () => {
     </header>
   )
 }
-
-export default Header

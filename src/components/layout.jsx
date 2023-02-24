@@ -1,10 +1,11 @@
 import * as React from "react"
 import Header from "./header"
 import Footer from "./footer"
-export const Layout = ({ children }) => {
+
+export const Layout = ({ children, pageContext }) => {
   return (
     <>
-      <Header />
+      <Header pageContext={pageContext} />
       {children}
       <Footer />
     </>

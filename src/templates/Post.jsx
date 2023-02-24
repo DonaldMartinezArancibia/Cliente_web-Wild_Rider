@@ -1,12 +1,14 @@
-import * as React from "react"
-import { Seo } from "../../components"
+import React from "react"
 import { graphql } from "gatsby"
-import { GatsbyImage, getImage } from "gatsby-plugin-image"
-import { formatDate } from "../../utils"
+import { formatDate } from "../utils"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import { Seo } from "../components"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
-const PostLayout = ({ data: { graphCmsPost: post, cover } }) => {
-  console.log(post, cover)
+export default function DynamicPage({ data }) {
+  const post = data.graphCmsPost
+  const cover = data.cover
+
   const shareImage =
     post.seo && post.seo.image ? post.seo.image.url : post.cover.url || null
 
@@ -44,16 +46,13 @@ const PostLayout = ({ data: { graphCmsPost: post, cover } }) => {
 }
 
 export const query = graphql`
-  query Post($id: String!, $slug: String!) {
-    graphCmsPost(slug: { eq: $slug }) {
+  query Post($slug: String!, $langKey: GraphCMS_Locale!) {
+    graphCmsPost(slug: { eq: $slug }, locale: { eq: $langKey }) {
       id
       title
       slug
       category
       content
-      cover {
-        url
-      }
       seo {
         ... on GraphCMS_Seo {
           title
@@ -65,9 +64,31 @@ export const query = graphql`
       }
       publishedAt
     }
-    cover: graphCmsAsset(coverPost: { elemMatch: { id: { eq: $id } } }) {
+    cover: graphCmsAsset(coverPost: { elemMatch: { slug: { eq: $slug } } }) {
       gatsbyImageData(layout: FULL_WIDTH)
     }
   }
 `
-export default PostLayout
+//Dropdown para ver los vehiculos, especificaciones de cada carro, por tipo de vehiculo, para galerias de vehiculos, y solicitud de ese vehiculo, boton para mas información, siempre deberia estar visible la información de la temporada, la información editar los precios.
+
+//Un modelo de temporadas, un boton de calendario para filtrar la información de los calendarios /*para más adelante*/
+
+//Quote en los carros.
+
+//Long time rental es un formulario, aparte del de contacto.
+
+//Free extra and pickup airport, se planea colocar un pickup de el cual muestra información de precios según la distancia
+
+//Lo ventajoso y positivo.
+
+//Videos en la pagina, preview en la home.
+
+//Travel information carousel de fotos, información mas nueva se mostrara al inicio de la pagina, separa información por importancia, por medio de etiquetas.
+
+//Contact and location.
+
+//Rental information and inssurace, dropdown.
+
+//Posicionamiento de marca y seo.
+
+//Input para el search

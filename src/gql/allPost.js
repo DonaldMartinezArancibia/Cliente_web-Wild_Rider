@@ -8,6 +8,7 @@ const GetAllPosts = gql`
       title
       category
       content
+      locale
       cover {
         url(
           transformation: {
@@ -39,6 +40,7 @@ const PostBySlug = gql`
       title
       category
       content
+      locale
       cover {
         url(
           transformation: {
