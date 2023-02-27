@@ -4,8 +4,9 @@ import { formatDate } from "../utils"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { Seo } from "../components"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
+import LanguageSelector from "../components/languajeSelector"
 
-export default function DynamicPage({ data }) {
+export default function DynamicPage({ data, pageContext }) {
   const post = data.graphCmsPost
   const cover = data.cover
 
@@ -14,6 +15,7 @@ export default function DynamicPage({ data }) {
 
   return (
     <>
+      <LanguageSelector pageContext={pageContext} />
       {post.seo !== null ? (
         <Seo
           title={post.seo.title}

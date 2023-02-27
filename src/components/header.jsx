@@ -25,7 +25,6 @@ export default function Header({ pageContext }) {
   console.log(pageContext)
   return (
     <header className="w-full">
-      <LanguageSelector pageContext={pageContext} />
       <div className="container flex items-center mx-auto mt-6 xl:px-10">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
           <Link to="/" className="font-bold text-black font-CarterOne">
