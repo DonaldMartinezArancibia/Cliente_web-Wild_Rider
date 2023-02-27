@@ -6,7 +6,7 @@ import { Seo } from "../components"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import LanguageSelector from "../components/languajeSelector"
 
-export default function DynamicPage({ data, pageContext }) {
+export default function DynamicPage({ data }) {
   const post = data.graphCmsPost
   const cover = data.cover
 
@@ -15,7 +15,6 @@ export default function DynamicPage({ data, pageContext }) {
 
   return (
     <>
-      <LanguageSelector pageContext={pageContext} />
       {post.seo !== null ? (
         <Seo
           title={post.seo.title}

@@ -4,7 +4,7 @@ import Storedata from "../components/storedata"
 import ImageSlider from "../components/imageSlider"
 import Example from "../components/popup"
 
-export default function index({ pageContext }) {
+export default function index() {
   // const client = new ApolloClient({
   //   uri: 'https://rickandmortyapi.com/graphql',
   //   cache: new InMemoryCache(),
