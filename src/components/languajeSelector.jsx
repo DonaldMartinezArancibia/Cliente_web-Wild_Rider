@@ -3,6 +3,7 @@ import { navigate } from "gatsby"
 import { useLocation } from "@reach/router"
 
 export default function LanguageSelector({ pageContext }) {
+  console.log(pageContext)
   const location = useLocation()
   if (pageContext.langKey === "en") {
     return (

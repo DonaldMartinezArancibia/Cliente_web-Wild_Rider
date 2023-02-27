@@ -36,12 +36,7 @@ export default function Header({ pageContext }) {
             </p>
           </Link>
         </h1> */}
-        <Link
-          to={
-            pageContext.langKey === "en" ? "/" : `/${pageContext.langKey || ""}`
-          }
-          className="w-72 xl:mr-52"
-        >
+        <Link to="/" className="w-72 xl:mr-52">
           <StaticImage
             src="../images/Logo Horizontal Negro Transparente.svg"
             alt=""
