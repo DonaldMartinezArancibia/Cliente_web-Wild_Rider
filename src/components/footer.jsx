@@ -2,8 +2,8 @@ import * as React from "react"
 
 const Footer = () => {
   return (
-    <footer className="py-6 w-full mt-4 border-t border-gray-200 bg-footer-bg bg-opacity-30">
-      <div className="contanier px-5 mx-auto flex items-center flex-col lg:flex-row lg:justify-between lg:space-y-0">
+    <footer className="w-full py-6 mt-4 border-t border-gray-200 bg-footer-bg bg-opacity-30">
+      <div className="flex flex-col items-center px-5 mx-auto contanier lg:flex-row lg:justify-between lg:space-y-0">
         <div>
           <p>
             <strong>Rent a car</strong> &copy; 2023

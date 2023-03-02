@@ -1,24 +1,11 @@
-fragment Post on Post {
+fragment Index on Index {
   stage
   locale
   publishedAt(variation: COMBINED)
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
-  title
   slug
-  category
-  content
-  address {
-    ... on Adress {
-      stage
-      id
-      adressLineOne
-      adressLineTwo
-      cIty
-      postalCode
-    }
-  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -40,23 +27,8 @@ fragment Post on Post {
       stage
     }
   }
-  cover {
-    ... on Asset {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-  }
   scheduledIn {
     ... on ScheduledOperation {
-      remoteTypeName: __typename
-      remoteId: id
-      stage
-    }
-  }
-  seo {
-    ... on Seo {
       remoteTypeName: __typename
       remoteId: id
       stage

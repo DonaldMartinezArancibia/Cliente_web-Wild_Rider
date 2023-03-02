@@ -1,15 +1,15 @@
 import { gql } from "@apollo/client"
 
 const GetAllPosts = gql`
-  query Posts {
-    posts {
+  query Posts($locale: [Locale!]!) {
+    posts(locales: $locale) {
       id
       slug
       title
       category
       content
       locale
-      cover {
+      cover(locales: en) {
         url(
           transformation: {
             image: { resize: { width: 1200, height: 630, fit: crop } }
@@ -33,33 +33,11 @@ const GetAllPosts = gql`
   }
 `
 const PostBySlug = gql`
-  query PostBySlug($slug: String!) {
-    posts(where: { slug: $slug }) {
-      id
-      slug
-      title
-      category
-      content
-      locale
-      cover {
-        url(
-          transformation: {
-            image: { resize: { width: 1200, height: 630, fit: crop } }
-          }
-        )
-      }
-      seo {
-        ... on Seo {
-          title
-          description
-          image {
-            url(
-              transformation: {
-                image: { resize: { width: 1200, height: 630 } }
-              }
-            )
-          }
-        }
+  query PostBySlug($internalId: ID!, $locale: [Locale!]!) {
+    posts(where: { id: $internalId }, locales: $locale) {
+      localizations {
+        slug
+        locale
       }
       address {
         adressLineOne

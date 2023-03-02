@@ -43,6 +43,32 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on Car {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+    ... on CarsAndQuote {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+    ... on Contact {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+    ... on Index {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on LongTimeRental {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
     ... on Post {
       remoteTypeName: __typename
       remoteId: id

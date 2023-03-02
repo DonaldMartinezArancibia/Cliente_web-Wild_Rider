@@ -28,7 +28,7 @@ exports.createPages = async ({ graphql, actions }) => {
         query ($locale: GraphCMS_Locale!) {
           allGraphCmsPost(filter: { locale: { eq: $locale } }) {
             nodes {
-              id
+              remoteId
               locale
               slug
             }
@@ -39,35 +39,48 @@ exports.createPages = async ({ graphql, actions }) => {
     )
     const urlPrefix = locale == "en" ? "/blog/" : `${locale}/blog/`
 
-    result.data.allGraphCmsPost.nodes.forEach(({ slug, id }) => {
+    result.data.allGraphCmsPost.nodes.forEach(({ slug, id, remoteId }) => {
       createPage({
         path: `${urlPrefix}${slug}`,
         component: require.resolve("./src/templates/Post.jsx"),
         context: {
           slug: slug,
-          id: id,
+          remoteId: remoteId,
           langKey: locale,
+          pagePath: urlPrefix,
         },
       })
     })
   }
-  // result.data.allGraphCmsPost.nodes.forEach(post => {
-  //   createPage({
-  //     path: `/dynamic/${post.slug}`,
-  //     component: require.resolve("./src/templates/DynamicPage.js"),
-  //     context: {
-  //       slug: post.slug,
-  //     },
-  //   })
-  // })
 
-  // result.data.allGraphCmsPost.nodes.forEach(({ nodes }) => {
-  //   createPage({
-  //     path: `/dynamic/${nodes.slug}`,
-  //     component: require.resolve("./src/templates/DynamicPage.js"),
-  //     context: {
-  //       slug: node.slug,
-  //     },
-  //   })
-  // })
+  for (const locale of locales) {
+    const result = await graphql(
+      `
+        query ($locale: GraphCMS_Locale!) {
+          allGraphCmsIndex(filter: { locale: { eq: $locale } }) {
+            nodes {
+              remoteId
+              locale
+              slug
+            }
+          }
+        }
+      `,
+      { locale }
+    )
+    const urlPrefix = locale == "en" ? "/" : `/${locale}`
+
+    result.data.allGraphCmsIndex.nodes.forEach(({ slug, remoteId }) => {
+      createPage({
+        path: `${urlPrefix}`,
+        component: require.resolve("./src/templates/index.jsx"),
+        context: {
+          slug: slug,
+          remoteId: remoteId,
+          langKey: locale,
+          pagePath: urlPrefix,
+        },
+      })
+    })
+  }
 }

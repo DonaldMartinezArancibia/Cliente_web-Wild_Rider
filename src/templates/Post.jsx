@@ -4,11 +4,14 @@ import { formatDate } from "../utils"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { Seo } from "../components"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
-import LanguageSelector from "../components/languajeSelector"
+import { PostBySlug } from "../gql/allPost"
+import { useQuery } from "@apollo/client"
 
-export default function DynamicPage({ data }) {
+export default function DynamicPage({ data, pageContext }) {
   const post = data.graphCmsPost
   const cover = data.cover
+  console.log(data)
+  console.log(pageContext)
 
   const shareImage =
     post.seo && post.seo.image ? post.seo.image.url : post.cover.url || null
@@ -54,6 +57,7 @@ export const query = graphql`
       slug
       category
       content
+      remoteId
       seo {
         ... on GraphCMS_Seo {
           title
