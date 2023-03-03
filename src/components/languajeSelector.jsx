@@ -1,49 +1,39 @@
 import React from "react"
 import { navigate } from "gatsby"
-import { useLocation } from "@reach/router"
 import { PostBySlug } from "../gql/allPost"
 import { IndexById } from "../gql/indexQuery"
 import { useQuery } from "@apollo/client"
 
 export default function LanguageSelector({ pageContext }) {
-  // console.log(pageContext)
-  const location = useLocation()
   const query =
     /^\/[a-z]{2}$/.test(pageContext.pagePath) || pageContext.pagePath === "/"
       ? IndexById
       : PostBySlug
-  const {
-    data: posts,
-    loading: postsQueryLoading,
-    error: postsQueryError,
-  } = useQuery(query, {
+
+  const { data, loading, error } = useQuery(query, {
     variables: {
       internalId: pageContext.remoteId,
       locale: [pageContext.langKey],
     },
   })
-  if (postsQueryLoading) return <p>Loading...</p>
-  if (postsQueryError) return console.log(postsQueryError)
-  console.log(posts)
-  const spanishSlug =
-    posts?.index?.localizations[0].locale ||
-    posts.posts[0].localizations[0].locale === "en"
-      ? "blog/" + posts.posts[0].localizations[0].slug
-      : posts.posts[0].localizations[0].locale +
-        "/blog/" +
-        posts.posts[0].localizations[0].slug
-  console.log(spanishSlug)
-  const englishSlug = posts?.index?.localizations.find(
-    loc => loc.locale === "en"
-  )?.slug
+  if (loading) return <p>Loading...</p>
+  if (error) return console.log(error)
 
-  // Comprobar si se encuentra en la página principal
-  const isIndex = pageContext.pagePath === "/"
-  // Utilizar una única expresión JSX para renderizar el botón de idioma
+  function getSlugByLocale(data) {
+    const indexData = data.index ? data.index.localizations[0] : undefined
+    const postData = data.posts ? data.posts[0].localizations[0] : undefined
+    if (indexData?.locale === "en") return ""
+    if (indexData?.locale) return indexData.locale
+    if (postData.locale === "en") return `blog/${postData.slug}`
+    return `${postData.locale}/blog/${postData.slug}`
+  }
+
   return (
     <button
+      type="button"
+      className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
       onClick={() => {
-        navigate(isIndex ? `/${spanishSlug}` : `/${spanishSlug}`)
+        navigate(`/${getSlugByLocale(data)}`)
       }}
     >
       {pageContext.langKey === "en" ? "Español" : "English"}

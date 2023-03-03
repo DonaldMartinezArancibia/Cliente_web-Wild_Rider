@@ -10,9 +10,6 @@ export default function Showdata({ pageContext }) {
     loading: postsQueryLoading,
     error: postsQueryError,
   } = useQuery(GetAllPosts, { variables: { locale: [pageContext.langKey] } })
-  const { error: postBySlugQueryError } = useQuery(PostBySlug, {
-    variables: { slug: "lorem-ipsum" },
-  })
   client.refetchQueries({
     include: [GetAllPosts],
   })

@@ -9,7 +9,6 @@ export default function index({ pageContext }) {
   //   uri: 'https://rickandmortyapi.com/graphql',
   //   cache: new InMemoryCache(),
   // });
-  console.log(pageContext)
   const images = [
     "https://picsum.photos/id/1/800/800",
     "https://picsum.photos/id/2/800/800",
