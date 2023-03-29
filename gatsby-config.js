@@ -12,7 +12,23 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
+const { createProxyMiddleware } = require("http-proxy-middleware")
+
 module.exports = {
+  developMiddleware: app => {
+    app.use(
+      "/apis",
+      createProxyMiddleware({
+        target: "https://maps.googleapis.com",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/apis":
+            "/maps/api/place/details/json?placeid=ChIJkUvR8VbjoI8RjlaQqi1QI1U&fields=reviews&language=de&key=AIzaSyB2H-WpOFQN0yyp8ARh4sl36uWL_Mb0ALE",
+        },
+      })
+    )
+  },
+
   siteMetadata: {
     title: `Gatsby Default Starter`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,

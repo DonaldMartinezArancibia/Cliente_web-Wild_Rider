@@ -3,6 +3,7 @@ import Showdata from "../components/showdata"
 import Storedata from "../components/storedata"
 import ImageSlider from "../components/imageSlider"
 import Example from "../components/popup"
+import MyComponent from "../components/reviewsData"
 
 export default function index({ pageContext }) {
   // const client = new ApolloClient({
@@ -32,6 +33,7 @@ export default function index({ pageContext }) {
       <Example />
       <Showdata pageContext={pageContext} />
       <Storedata />
+      <MyComponent />
     </main>
   )
 }

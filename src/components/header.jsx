@@ -20,12 +20,12 @@ export default function Header({ pageContext }) {
   const getLinkClass = to => {
     return location.pathname === to
       ? "transition ease-in-out border-[#f6cc4d] border-b-[3.7px] py-2"
-      : "transition ease-in-out hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
+      : "transition ease-in-out text-white hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
   }
   return (
     <header className="w-full">
       <LanguageSelector pageContext={pageContext} />
-      <div className="container flex items-center mx-auto mt-6 xl:px-10">
+      <div className="flex items-center bg-[#0833A2] mx-auto xl:px-10 w-full">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
           <Link to="/" className="font-bold text-black font-CarterOne">
             Wild Rider
@@ -42,7 +42,7 @@ export default function Header({ pageContext }) {
           className="w-72 xl:mr-52"
         >
           <StaticImage
-            src="../images/Logo Horizontal Negro Transparente.svg"
+            src="../images/Logo Horizontal Amarillo Transparente.svg"
             alt=""
           />
         </Link>
