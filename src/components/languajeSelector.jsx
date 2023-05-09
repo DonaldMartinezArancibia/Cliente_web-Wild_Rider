@@ -2,7 +2,7 @@ import React from "react"
 import { navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
 import { Post } from "../gql/allPost"
-import { Index } from "../gql/IndexQuery"
+import { Index } from "../gql/indexQuery"
 import { ContactAndLocation } from "../gql/contactQuery"
 
 export default function LanguageSelector({ pageContext }) {
