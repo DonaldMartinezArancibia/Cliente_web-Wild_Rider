@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client"
 
-const IndexById = gql`
-  query IndexById($internalId: ID!, $locale: [Locale!]!) {
+const Index = gql`
+  query Index($internalId: ID!, $locale: [Locale!]!) {
     index(where: { id: $internalId }, locales: $locale) {
       localizations {
         slug
@@ -11,4 +11,19 @@ const IndexById = gql`
   }
 `
 
-export { IndexById }
+const IndexContent = gql`
+  query IndexContent {
+    indices {
+      id
+      mainTextBelowTitle
+      mainTitle
+      mainTextBelow {
+        html
+        markdown
+        text
+      }
+    }
+  }
+`
+
+export { Index, IndexContent }

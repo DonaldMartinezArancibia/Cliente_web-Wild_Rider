@@ -4,27 +4,69 @@ import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import { StaticImage } from "gatsby-plugin-image"
 import LanguageSelector from "./languajeSelector"
+import { useApolloClient, useQuery } from "@apollo/client"
+import { menuElements } from "../gql/menuElements"
 
 export default function Header({ pageContext }) {
+  const client = useApolloClient()
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
-  const links = [
-    { to: "/cars-and-quote/", text: "Cars and Quote" },
-    { to: "/long-time-rental/", text: "Long time rental" },
-    { to: "/quote/", text: "Contact" },
-  ]
 
   React.useEffect(() => {
     document.querySelector("html").style.overflow = isOpen ? "hidden" : ""
   }, [isOpen])
+
+  const {
+    data: menuElementsData,
+    loading: menuElementsDataQueryLoading,
+    error: menuElementsDataQueryError,
+  } = useQuery(menuElements, {
+    variables: { locale: [pageContext.langKey] },
+  })
+  client.refetchQueries({
+    include: [menuElements],
+  })
+  if (menuElementsDataQueryLoading) return <p>Loading...</p>
+  if (menuElementsDataQueryError)
+    return <p>Error : {menuElementsDataQueryError.message}</p>
+  const menuData = menuElementsData.menus[0].menuElements
+
+  const links = menuData.map(obj => ({
+    to:
+      pageContext.langKey === "en"
+        ? `/${obj.slug}`
+        : `/${pageContext.langKey}/${obj.slug}/`,
+    text: `${obj.title}`,
+  }))
+  links.push(
+    {
+      to: "/cars-and-rates",
+      text: "Cars and Rates",
+    },
+    {
+      to: "/rental-info",
+      text: "Rental Info",
+    },
+    {
+      to: "/long-rental-info",
+      text: "Long Rental Info",
+    },
+    {
+      to: "/travel-info",
+      text: "Travel Info",
+    }
+  )
+
+  console.log(links)
   const getLinkClass = to => {
     return location.pathname === to
       ? "transition ease-in-out border-[#f6cc4d] border-b-[3.7px] py-2"
       : "transition ease-in-out text-white hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
   }
+
   return (
     <header className="w-full">
-      <LanguageSelector pageContext={pageContext} />
+      {/* <LanguageSelector pageContext={pageContext} /> */}
       <div className="flex items-center bg-[#0833A2] mx-auto xl:px-10 w-full">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
           <Link to="/" className="font-bold text-black font-CarterOne">

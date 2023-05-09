@@ -37,6 +37,12 @@ fragment ScheduledOperation on ScheduledOperation {
   }
   status
   affectedDocuments {
+    ... on AboutUs {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on Asset {
       remoteTypeName: __typename
       remoteId: id
@@ -53,9 +59,16 @@ fragment ScheduledOperation on ScheduledOperation {
       remoteId: id
       stage
     }
-    ... on Contact {
+    ... on ContactAndLocation {
       remoteTypeName: __typename
       remoteId: id
+      locale
+      stage
+    }
+    ... on GoogleReview {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
     ... on Index {

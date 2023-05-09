@@ -3,9 +3,24 @@ import Showdata from "../components/showdata"
 import Storedata from "../components/storedata"
 import ImageSlider from "../components/imageSlider"
 import Example from "../components/popup"
-import MapContainer from "../components/reviewsData"
+// import MapContainer from "../components/reviewsData"
+import MapContainer from "../components/reviewsHygraph"
+import { useApolloClient, useQuery } from "@apollo/client"
+import { IndexContent } from "../gql/IndexQuery"
+import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
-export default function index({ pageContext }) {
+export default function IndexPage({ pageContext }) {
+  const client = useApolloClient()
+  const {
+    data: IndexContentData,
+    loading: IndexContentDataQueryLoading,
+    error: IndexContentDataQueryError,
+  } = useQuery(IndexContent)
+  client.refetchQueries({
+    include: [IndexContent],
+  })
+  if (IndexContentDataQueryLoading) return <p>Loading...</p>
+  console.log(IndexContentData.indices[0])
   // const client = new ApolloClient({
   //   uri: 'https://rickandmortyapi.com/graphql',
   //   cache: new InMemoryCache(),
@@ -25,15 +40,44 @@ export default function index({ pageContext }) {
   //   navigate(path)
   // }
   return (
-    <main>
-      <div className="mx-auto">
-        <ImageSlider images={images} />
+    <main className=" bg-hero-pattern bg-no-repeat bg-[right_-30rem_top_-20rem] bg-[length:85%]">
+      {/* <div
+        dangerouslySetInnerHTML={{
+          __html: IndexContentData.indices[0].mainTextBelow.html,
+        }}
+      /> */}
+      <section id="sectionBellowHeader">
+        <ReactMarkdown>
+          {IndexContentData.indices[0].mainTextBelow.markdown}
+        </ReactMarkdown>
+      </section>
+      <button class="bg-[#0833a2] text-white ml-16 mb-12 py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg">
+        View Cars
+      </button>
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest pl-16">
+        — VIDEOS
+      </h4>
+      <div className="flex items-center justify-center my-8 video-container">
+        <iframe
+          title="YouTube video player"
+          width="1007"
+          height="570"
+          src="https://www.youtube.com/embed/4hY11BvySTk"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className=" rounded-3xl"
+        ></iframe>
       </div>
-      {/* <button onClick={() => changeLanguage("es", slug)}>Español</button> */}
-      <Example />
-      <Showdata pageContext={pageContext} />
-      <Storedata />
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest pl-16">
+        — TESTIMONIALS
+      </h4>
       <MapContainer />
+
+      <div className="mx-auto">{/* <ImageSlider images={images} /> */}</div>
+      {/* <button onClick={() => changeLanguage("es", slug)}>Español</button> */}
+      {/* <Example /> */}
+      {/* <Showdata pageContext={pageContext} /> */}
+      {/* <Storedata /> */}
     </main>
   )
 }

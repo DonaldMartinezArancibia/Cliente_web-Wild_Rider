@@ -1,16 +1,12 @@
-fragment Asset on Asset {
+fragment ContactAndLocation on ContactAndLocation {
   stage
   locale
-  mimeType
-  size
-  width
-  height
-  fileName
-  handle
   publishedAt(variation: COMBINED)
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
+  slug
+  title
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -32,29 +28,6 @@ fragment Asset on Asset {
       stage
     }
   }
-  coverPost {
-    ... on Post {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-  }
-  imageSeo {
-    ... on Seo {
-      remoteTypeName: __typename
-      remoteId: id
-      stage
-    }
-  }
-  reviewImageGoogleReview {
-    ... on GoogleReview {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename
@@ -62,5 +35,4 @@ fragment Asset on Asset {
       stage
     }
   }
-  url
 }

@@ -1,9 +1,12 @@
-fragment Contact on Contact {
+fragment AboutUs on AboutUs {
   stage
-  publishedAt
-  updatedAt
-  createdAt
+  locale
+  publishedAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  createdAt(variation: COMBINED)
   remoteId: id
+  slug
+  title
   publishedBy {
     ... on User {
       remoteTypeName: __typename

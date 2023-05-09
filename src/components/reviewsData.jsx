@@ -91,5 +91,6 @@ const MapContainer = props => {
 
 export default GoogleApiWrapper({
   apiKey: "AIzaSyB2H-WpOFQN0yyp8ARh4sl36uWL_Mb0ALE",
-  language: "en",
+  language: "de",
+  reviews_sort: "most_relevant",
 })(MapContainer)

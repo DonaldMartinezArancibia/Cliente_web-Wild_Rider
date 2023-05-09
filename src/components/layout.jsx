@@ -7,7 +7,7 @@ export const Layout = ({ children, pageContext }) => {
     <>
       <Header pageContext={pageContext} />
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }

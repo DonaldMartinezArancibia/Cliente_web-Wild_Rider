@@ -22,65 +22,111 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const locales = ["es", "en"]
 
-  for (const locale of locales) {
-    const result = await graphql(
-      `
-        query ($locale: GraphCMS_Locale!) {
-          allGraphCmsPost(filter: { locale: { eq: $locale } }) {
-            nodes {
-              remoteId
-              locale
-              slug
+  await Promise.all(
+    locales.map(async locale => {
+      const [postsResult, indexResult, contactResult] = await Promise.all([
+        graphql(
+          `
+            query ($locale: GraphCMS_Locale!) {
+              allGraphCmsPost(filter: { locale: { eq: $locale } }) {
+                nodes {
+                  remoteId
+                  remoteTypeName
+                  locale
+                  slug
+                }
+              }
             }
-          }
-        }
-      `,
-      { locale }
-    )
-    const urlPrefix = locale == "en" ? "/blog/" : `${locale}/blog/`
-
-    result.data.allGraphCmsPost.nodes.forEach(({ slug, id, remoteId }) => {
-      createPage({
-        path: `${urlPrefix}${slug}`,
-        component: require.resolve("./src/templates/Post.jsx"),
-        context: {
-          slug: slug,
-          remoteId: remoteId,
-          langKey: locale,
-          pagePath: urlPrefix,
-        },
-      })
-    })
-  }
-
-  for (const locale of locales) {
-    const result = await graphql(
-      `
-        query ($locale: GraphCMS_Locale!) {
-          allGraphCmsIndex(filter: { locale: { eq: $locale } }) {
-            nodes {
-              remoteId
-              locale
-              slug
+          `,
+          { locale }
+        ),
+        graphql(
+          `
+            query ($locale: GraphCMS_Locale!) {
+              allGraphCmsIndex(filter: { locale: { eq: $locale } }) {
+                nodes {
+                  remoteId
+                  remoteTypeName
+                  locale
+                  slug
+                }
+              }
             }
-          }
-        }
-      `,
-      { locale }
-    )
-    const urlPrefix = locale == "en" ? "/" : `/${locale}`
+          `,
+          { locale }
+        ),
+        graphql(
+          `
+            query ($locale: GraphCMS_Locale!) {
+              allGraphCmsContactAndLocation(
+                filter: { locale: { eq: $locale } }
+              ) {
+                nodes {
+                  remoteId
+                  remoteTypeName
+                  locale
+                  slug
+                }
+              }
+            }
+          `,
+          { locale }
+        ),
+      ])
 
-    result.data.allGraphCmsIndex.nodes.forEach(({ slug, remoteId }) => {
-      createPage({
-        path: `${urlPrefix}`,
-        component: require.resolve("./src/templates/index.jsx"),
-        context: {
-          slug: slug,
-          remoteId: remoteId,
-          langKey: locale,
-          pagePath: urlPrefix,
-        },
-      })
+      const urlPrefix = locale === "en" ? "/" : `/${locale}/`
+
+      // Creación de páginas de los posts
+      postsResult.data.allGraphCmsPost.nodes.forEach(
+        ({ slug, id, remoteId, remoteTypeName }) => {
+          createPage({
+            path: `${urlPrefix}blog/${slug}`,
+            component: require.resolve("./src/templates/Post.jsx"),
+            context: {
+              slug: slug,
+              remoteId: remoteId,
+              remoteTypeName: remoteTypeName,
+              langKey: locale,
+              pagePath: `${urlPrefix}blog`,
+            },
+          })
+        }
+      )
+      // Creación de páginas de inicio en los diferentes idiomas
+      indexResult.data.allGraphCmsIndex.nodes.forEach(
+        ({ slug, remoteId, remoteTypeName }) => {
+          createPage({
+            path: `${urlPrefix}`,
+            component: require.resolve("./src/templates/index.jsx"),
+            context: {
+              slug: slug,
+              remoteId: remoteId,
+              remoteTypeName: remoteTypeName,
+              langKey: locale,
+              pagePath: urlPrefix,
+            },
+          })
+        }
+      )
+
+      // Creación de páginas de contacto en los diferentes idiomas
+      contactResult.data.allGraphCmsContactAndLocation.nodes.forEach(
+        ({ slug, remoteId, remoteTypeName }) => {
+          createPage({
+            path: `${urlPrefix}${slug}`,
+            component: require.resolve(
+              "./src/templates/contactAndLocation.jsx"
+            ),
+            context: {
+              slug: slug,
+              remoteId: remoteId,
+              remoteTypeName: remoteTypeName,
+              langKey: locale,
+              pagePath: urlPrefix,
+            },
+          })
+        }
+      )
     })
-  }
+  )
 }

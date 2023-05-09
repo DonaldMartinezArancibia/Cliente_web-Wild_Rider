@@ -1,16 +1,14 @@
-fragment Asset on Asset {
+fragment GoogleReview on GoogleReview {
   stage
   locale
-  mimeType
-  size
-  width
-  height
-  fileName
-  handle
   publishedAt(variation: COMBINED)
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
+  reviewerName
+  numberOfStars
+  review
+  reviewLink
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -32,23 +30,8 @@ fragment Asset on Asset {
       stage
     }
   }
-  coverPost {
-    ... on Post {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-  }
-  imageSeo {
-    ... on Seo {
-      remoteTypeName: __typename
-      remoteId: id
-      stage
-    }
-  }
-  reviewImageGoogleReview {
-    ... on GoogleReview {
+  reviewImage {
+    ... on Asset {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -62,5 +45,4 @@ fragment Asset on Asset {
       stage
     }
   }
-  url
 }

@@ -32,8 +32,8 @@ const GetAllPosts = gql`
     }
   }
 `
-const PostBySlug = gql`
-  query PostBySlug($internalId: ID!, $locale: [Locale!]!) {
+const Post = gql`
+  query Post($internalId: ID!, $locale: [Locale!]!) {
     posts(where: { id: $internalId }, locales: $locale) {
       localizations {
         slug
@@ -49,4 +49,4 @@ const PostBySlug = gql`
   }
 `
 
-export { GetAllPosts, PostBySlug }
+export { GetAllPosts, Post }

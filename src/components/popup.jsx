@@ -3,7 +3,7 @@ import { Fragment, useRef, useState, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { useQuery } from "@apollo/client"
-import { PostBySlug } from "../gql/allPost"
+import { Post } from "../gql/allPost"
 
 export default function Example() {
   let [open, setOpen] = useState(false)
@@ -19,7 +19,7 @@ export default function Example() {
     data: postBySlug,
     loading: postBySlugQueryLoading,
     error: postBySlugQueryError,
-  } = useQuery(PostBySlug, {
+  } = useQuery(Post, {
     variables: { internalId: "clddedal2k35b0biod66xakxk", locale: ["en"] },
   })
   if (postBySlugQueryLoading) return <p>Loading...</p>

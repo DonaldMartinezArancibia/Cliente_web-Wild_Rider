@@ -28,6 +28,10 @@ module.exports = {
         Inter: "Inter",
         Poppins: "Poppins",
       },
+      backgroundImage: {
+        "hero-pattern":
+          "url('https://media.graphassets.com/59PuuwRPSIykxHv4Ilvw')",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

@@ -1,14 +1,14 @@
 import React from "react"
 import { navigate } from "gatsby"
-import { PostBySlug } from "../gql/allPost"
-import { IndexById } from "../gql/indexQuery"
 import { useQuery } from "@apollo/client"
+import { Post } from "../gql/allPost"
+import { Index } from "../gql/IndexQuery"
+import { ContactAndLocation } from "../gql/contactQuery"
 
 export default function LanguageSelector({ pageContext }) {
-  const query =
-    /^\/[a-z]{2}$/.test(pageContext.pagePath) || pageContext.pagePath === "/"
-      ? IndexById
-      : PostBySlug
+  const query = [Index, Post, ContactAndLocation].find(
+    query => query.definitions[0].name.value === pageContext.remoteTypeName
+  )
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -21,10 +21,15 @@ export default function LanguageSelector({ pageContext }) {
 
   function getSlugByLocale(data) {
     const indexData = data.index ? data.index.localizations[0] : undefined
+    const contactData = data.contactAndLocations
+      ? data.contactAndLocations[0].localizations[0]
+      : undefined
     const postData = data.posts ? data.posts[0].localizations[0] : undefined
     if (indexData?.locale === "en") return ""
     if (indexData?.locale) return indexData.locale
-    if (postData.locale === "en") return `blog/${postData.slug}`
+    if (postData?.locale === "en") return `blog/${postData.slug}`
+    if (contactData?.locale === "en") return contactData.slug
+    if (contactData?.locale) return `${contactData.locale}/${contactData.slug}`
     return `${postData.locale}/blog/${postData.slug}`
   }
 
