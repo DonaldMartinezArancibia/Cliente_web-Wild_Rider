@@ -6,7 +6,7 @@ import Example from "../components/popup"
 // import MapContainer from "../components/reviewsData"
 import MapContainer from "../components/reviewsHygraph"
 import { useApolloClient, useQuery } from "@apollo/client"
-import { IndexContent } from "../gql/IndexQuery"
+import { IndexContent } from "../gql/indexQuery"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
 export default function IndexPage({ pageContext }) {
