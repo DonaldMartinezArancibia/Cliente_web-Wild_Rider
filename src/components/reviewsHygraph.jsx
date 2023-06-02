@@ -30,7 +30,7 @@ const MapContainer = props => {
   }
 
   return (
-    <div className="mx-16 my-8">
+    <div className="mx-4 xl:px-16">
       <h1 className="max-w-3xl mb-4 text-3xl font-CarterOne">
         As a result of our excellent service to our customers, we have a Top
         rating in different travel forums.
