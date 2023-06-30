@@ -30,7 +30,7 @@ module.exports = {
       },
       backgroundImage: {
         "hero-pattern":
-          "url('https://media.graphassets.com/59PuuwRPSIykxHv4Ilvw')",
+          "url('https://media.graphassets.com/03XpBnUfS0f4Z3AE9i5Q')",
       },
     },
   },

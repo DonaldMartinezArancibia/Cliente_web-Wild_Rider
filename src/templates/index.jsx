@@ -41,12 +41,17 @@ export default function IndexPage({ pageContext }) {
   //   navigate(path)
   // }
   return (
-    <main className=" bg-hero-pattern bg-no-repeat bg-[right_55%_top_10%] md:bg-[right_-18rem_top_-10%] lg:bg-[right_-30rem_top_-20rem] bg-[length:150%] md:bg-[length:90%] lg:bg-[length:85%]">
+    <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       {/* <div
         dangerouslySetInnerHTML={{
           __html: IndexContentData.indices[0].mainTextBelow.html,
         }}
       /> */}
+      <StaticImage
+        src="../images/site-header-3000x516-1.jpg"
+        alt="Profile"
+        className="w-full"
+      />
       <section id="sectionBellowHeader">
         <ReactMarkdown>
           {IndexContentData.indices[0].mainTextBelow.markdown}
@@ -55,6 +60,11 @@ export default function IndexPage({ pageContext }) {
       <button className="bg-[#0833a2] text-white ml-16 py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg">
         View Cars
       </button>
+      {/* <StaticImage
+        src="../images/site-header-3000x516-1.jpg"
+        alt="Profile"
+        className="w-full mt-10"
+      /> */}
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — 25 Years of Costa Rica Experience
       </h4>
@@ -100,37 +110,38 @@ export default function IndexPage({ pageContext }) {
           className=" rounded-3xl"
         ></iframe>
       </div>
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
-        — A family company, trustworthy with its own standards.
-      </h4>
-      <StaticImage
-        src="../images/alarm.png"
-        alt="Profile"
-        className="flex w-24 h-24 m-auto rounded-3xl"
-      />
-      <p className="mx-4 my-4 xl:pl-16">
-        Many customers believe that the major international car rental companies
-        have their own branches in Costa Rica and thus also US / Canada
-        standards. Unfortunately, this is not the case. They are licensees. They
-        must pay around 15% of fees and commissions to the parent company. This
-        is not their own money, but your money. They have leasing agreements
-        with banks and car financiers. This money, too, must be paid by you, the
-        customer.
-      </p>
-
-      <StaticImage
-        src="../images/ahorrar-dinero.png"
-        alt="Profile"
-        className="flex w-24 h-24 m-auto rounded-3xl"
-      />
-      <p className="mx-4 my-4 xl:pl-16">
-        As a family business, we work with lower overheads and financing costs
-        and can therefore offer very attractive rental prices. But why are you
-        in the first look more expensive than these big international companies?
-        We are never more expensive, but our offer is always honest and with no
-        hidden costs. The rate you agree is the rate you will pay, not any penny
-        more.
-      </p>
+      <section className="sm:grid sm:grid-cols-2">
+        <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 sm:col-span-2 xl:pl-16">
+          — A family company, trustworthy with its own standards.
+        </h4>
+        <StaticImage
+          src="../images/alarm.png"
+          alt="Profile"
+          className="flex w-24 h-24 m-auto rounded-3xl"
+        />
+        <p className="mx-4 my-4 xl:pl-16">
+          Many customers believe that the major international car rental
+          companies have their own branches in Costa Rica and thus also US /
+          Canada standards. Unfortunately, this is not the case. They are
+          licensees. They must pay around 15% of fees and commissions to the
+          parent company. This is not their own money, but your money. They have
+          leasing agreements with banks and car financiers. This money, too,
+          must be paid by you, the customer.
+        </p>
+        <StaticImage
+          src="../images/ahorrar-dinero.png"
+          alt="Profile"
+          className="flex w-24 h-24 m-auto rounded-3xl sm:row-start-2 sm:col-start-2"
+        />
+        <p className="mx-4 my-4 xl:px-16">
+          As a family business, we work with lower overheads and financing costs
+          and can therefore offer very attractive rental prices. But why are you
+          in the first look more expensive than these big international
+          companies? We are never more expensive, but our offer is always honest
+          and with no hidden costs. The rate you agree is the rate you will pay,
+          not any penny more.
+        </p>
+      </section>
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — Free Extras
       </h4>
@@ -220,8 +231,7 @@ export default function IndexPage({ pageContext }) {
           </li>
         </ul>
       </div>
-
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 xl:pl-16">
         — 3 language support 24/ 7.
       </h4>
       <p className="mx-4 mb-4 xl:pl-16">
@@ -234,21 +244,46 @@ export default function IndexPage({ pageContext }) {
         You will never end up in a telephone queue at Wild Rider. Have you ever
         experienced this at Hertz or Budget?
       </p>
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
-        — Reservation and Communication with our travel experts
-      </h4>
-      <p className="mx-4 mb-4 xl:pl-16">
-        We have all been living in Costa Rica for more than 25 years and have
-        travelled a lot during this time. Morten is a passionate surfer and
-        knows all beaches, waves, tides, and swells they need and the cool
-        places you should check out. Along both coasts. As a motorcycle tour
-        guide, Thomas has travelled about 500,000 km by motorcycle in Costa
-        Rica. In the years 1992-1997 he was mainly traveling on his mountain
-        bike through Costa Rica. Jose who worked less time outdoors, knows a lot
-        of the costaricas best restaurants and interesting destinations. We look
-        forward to sharing this knowledge and experience with you. Our goal is
-        to organize an unforgettable and unique vacation for you.
-      </p>
+      <section className="sm:grid sm:grid-cols-2 xl:grid-cols-3">
+        <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 sm:col-span-2 xl:pl-16">
+          — Reservation and Communication with our travel experts
+        </h4>
+        <p className="mx-4 mb-4 sm:col-span-2 md:col-span-3 xl:pl-16">
+          We have all been living in Costa Rica for more than 25 years and have
+          travelled a lot during this time.
+        </p>
+        <p className="mx-4 mb-4 xl:pl-16">
+          <StaticImage
+            src="../images/portrait-morten_357x480-1.jpg"
+            alt="Profile"
+            className="flex w-32 m-auto mt-5 rounded-3xl"
+          />
+          Morten is a passionate surfer and knows all beaches, waves, tides, and
+          swells they need and the cool places you should check out. Along both
+          coasts. As a motorcycle tour guide,
+        </p>
+        <p className="mx-4 mb-4 xl:pl-16">
+          <StaticImage
+            src="../images/portrait-thomas.jpg"
+            alt="Profile"
+            className="flex w-32 m-auto mt-5 rounded-3xl"
+          />
+          Thomas has travelled about 500,000 km by motorcycle in Costa Rica. In
+          the years 1992-1997 he was mainly traveling on his mountain bike
+          through Costa Rica.
+        </p>
+        <p className="mx-4 mb-4 xl:pl-16">
+          <StaticImage
+            src="../images/portrait-jose.jpg"
+            alt="Profile"
+            className="flex w-32 m-auto mt-5 rounded-3xl"
+          />
+          Jose who worked less time outdoors, knows a lot of the costaricas best
+          restaurants and interesting destinations. We look forward to sharing
+          this knowledge and experience with you. Our goal is to organize an
+          unforgettable and unique vacation for you.
+        </p>
+      </section>
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — Lowest insurance rates in Costa Rica
       </h4>
@@ -264,7 +299,7 @@ export default function IndexPage({ pageContext }) {
         />
         <div className="relative z-10 px-4 py-8 bg-gray-100 bg-opacity-5">
           <div className="max-w-2xl mx-auto">
-            <p className="mb-4 text-2xl text-center text-gray-800">
+          <p className="mb-4 text-2xl text-center text-gray-800">
               Many customers believe that the major international car rental
               companies have their own branches in Costa Rica and thus also US /
               Canada standards. Unfortunately, this is not the case. They are
@@ -291,12 +326,10 @@ export default function IndexPage({ pageContext }) {
           </div>
         </div>
       </div> */}
-
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — TESTIMONIALS
       </h4>
       <MapContainer />
-
       <div className="mx-auto">{/* <ImageSlider images={images} /> */}</div>
       {/* <button onClick={() => changeLanguage("es", slug)}>Español</button> */}
       {/* <Example /> */}

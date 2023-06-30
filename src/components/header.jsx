@@ -2,10 +2,10 @@ import React from "react"
 import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
-import { StaticImage } from "gatsby-plugin-image"
 import LanguageSelector from "./languajeSelector"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { menuElements } from "../gql/menuElements"
+import logo from "../images/LogoWEB Header Horizontal Amarillo Transparente.svg"
 
 export default function Header({ pageContext }) {
   const client = useApolloClient()
@@ -88,7 +88,6 @@ export default function Header({ pageContext }) {
 
   return (
     <header className="w-full">
-      {/* <LanguageSelector pageContext={pageContext} /> */}
       <div className="flex items-center bg-[#0833A2] mx-auto xl:px-10 w-full justify-between">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
           <Link to="/" className="font-bold text-black font-CarterOne">
@@ -97,25 +96,22 @@ export default function Header({ pageContext }) {
             <p className="text-[10px] font-Inter tracking-[.001px]">
               4x4 Car Rental & Travel Planner
             </p>
-          </Link>
-        </h1> */}
+            </Link>
+          </h1> */}
         <Link
           to={
             pageContext.langKey === "en" ? "/" : `/${pageContext.langKey || ""}`
           }
-          className="w-72 xl:mr-12"
+          className="w-1/2 py-4 pl-2 md:w-1/3 xl:w-96 2xl:w-64 xl:mr-12 xl:my-7"
         >
-          <StaticImage
-            src="../images/Logo Horizontal Amarillo Transparente.svg"
-            alt=""
-          />
+          <img src={logo} className="m-auto" alt="" />
         </Link>
         <div>
-          <div className="mr-5 xl:hidden">
+          <div className="mr-2 xl:hidden">
             <button type="button" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-[#f6cc4d]"
+                className="h-8 w-8 md:w-11 md:h-11 text-[#f6cc4d]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -136,6 +132,7 @@ export default function Header({ pageContext }) {
                 <Link to={link.to}>{link.text}</Link>
               </li>
             ))}
+            <LanguageSelector pageContext={pageContext} />
           </ul>
         </div>
       </div>
