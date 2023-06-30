@@ -47,11 +47,11 @@ export default function IndexPage({ pageContext }) {
           __html: IndexContentData.indices[0].mainTextBelow.html,
         }}
       /> */}
-      <StaticImage
+      {/* <StaticImage
         src="../images/site-header-3000x516-1.jpg"
         alt="Profile"
         className="w-full"
-      />
+      /> */}
       <section id="sectionBellowHeader">
         <ReactMarkdown>
           {IndexContentData.indices[0].mainTextBelow.markdown}
@@ -256,7 +256,7 @@ export default function IndexPage({ pageContext }) {
           <StaticImage
             src="../images/portrait-morten_357x480-1.jpg"
             alt="Profile"
-            className="flex w-32 m-auto mt-5 rounded-3xl"
+            className="!flex w-32 m-auto mt-5 rounded-3xl"
           />
           Morten is a passionate surfer and knows all beaches, waves, tides, and
           swells they need and the cool places you should check out. Along both
@@ -266,7 +266,7 @@ export default function IndexPage({ pageContext }) {
           <StaticImage
             src="../images/portrait-thomas.jpg"
             alt="Profile"
-            className="flex w-32 m-auto mt-5 rounded-3xl"
+            className="!flex w-32 m-auto mt-5 rounded-3xl"
           />
           Thomas has travelled about 500,000 km by motorcycle in Costa Rica. In
           the years 1992-1997 he was mainly traveling on his mountain bike
@@ -276,7 +276,7 @@ export default function IndexPage({ pageContext }) {
           <StaticImage
             src="../images/portrait-jose.jpg"
             alt="Profile"
-            className="flex w-32 m-auto mt-5 rounded-3xl"
+            className="!flex w-32 m-auto mt-5 rounded-3xl"
           />
           Jose who worked less time outdoors, knows a lot of the costaricas best
           restaurants and interesting destinations. We look forward to sharing
