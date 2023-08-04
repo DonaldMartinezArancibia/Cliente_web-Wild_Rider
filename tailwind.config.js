@@ -27,6 +27,7 @@ module.exports = {
         CarterOne: "Carter One",
         Inter: "Inter",
         Poppins: "Poppins",
+        Montserrat: "Montserrat",
       },
       backgroundImage: {
         "hero-pattern":

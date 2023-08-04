@@ -200,7 +200,7 @@ const MapContainer = props => {
         As a result of our excellent service to our customers, we have a Top
         rating in different travel forums.
       </h1>
-      {/* <p>Please check out, what customers say about us.</p>
+      <p>Please check out, what customers say about us.</p>
       <div className="grid grid-cols-1 gap-4 my-8 sm:grid-cols-3">
         {[...googleR.googleReviews, ...newReviews].map((review, index) => (
           <div
@@ -249,7 +249,7 @@ const MapContainer = props => {
             </p>
           </div>
         ))}
-      </div> */}
+      </div>
     </div>
   )
 }

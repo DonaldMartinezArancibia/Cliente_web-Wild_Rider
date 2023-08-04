@@ -17,6 +17,7 @@ const menuElements = gql`
         ... on Index {
           id
           slug
+          title
         }
       }
     }
