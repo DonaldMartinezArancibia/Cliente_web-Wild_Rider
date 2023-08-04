@@ -55,10 +55,10 @@ export default function IndexPage({ pageContext }) {
       <button className="bg-[#0833a2] text-white ml-16 py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg">
         View Cars
       </button>
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
+      {/* <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — 25 Years of Costa Rica Experience
-      </h4>
-      <div className="m-auto md:items-center md:w-10/12 md:grid md:grid-cols-2 md:justify-items-center">
+      </h4> */}
+      {/* <div className="m-auto md:items-center md:w-10/12 md:grid md:grid-cols-2 md:justify-items-center">
         <StaticImage
           src="../images/ab1.jpg"
           alt="Profile"
@@ -85,7 +85,7 @@ export default function IndexPage({ pageContext }) {
           stayed. We now offer small to medium-sized all-wheel drive vehicles
           for 1-5 travelers and fast communication with our travel experts.
         </p>
-      </div>
+      </div> */}
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest pl-4 xl:pl-16 mb-4 mt-8">
         — VIDEOS
       </h4>
@@ -100,7 +100,7 @@ export default function IndexPage({ pageContext }) {
           className=" rounded-3xl"
         ></iframe>
       </div>
-      <section className="sm:grid sm:grid-cols-2">
+      {/* <section className="sm:grid sm:grid-cols-2">
         <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 sm:col-span-2 xl:pl-16">
           — A family company, trustworthy with its own standards.
         </h4>
@@ -131,16 +131,16 @@ export default function IndexPage({ pageContext }) {
           and with no hidden costs. The rate you agree is the rate you will pay,
           not any penny more.
         </p>
-      </section>
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
+      </section> */}
+      {/* <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — Free Extras
-      </h4>
-      <p className="mx-4 mb-4 xl:pl-16">
+      </h4> */}
+      {/* <p className="mx-4 mb-4 xl:pl-16">
         In contrast to a lot of other rental car companies who charge you for
         every extra you need.
         <br /> WILD RIDER offers you a half dozen of free extras.
-      </p>
-      <div className="mx-4 xl:px-16">
+      </p> */}
+      {/* <div className="mx-4 xl:px-16">
         <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <li>
             <div className="bg-[#d9eaf9] p-4 rounded shadow">
@@ -220,11 +220,11 @@ export default function IndexPage({ pageContext }) {
             </div>
           </li>
         </ul>
-      </div>
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 xl:pl-16">
+      </div> */}
+      {/* <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 xl:pl-16">
         — 3 language support 24/ 7.
-      </h4>
-      <p className="mx-4 mb-4 xl:pl-16">
+      </h4> */}
+      {/* <p className="mx-4 mb-4 xl:pl-16">
         Since we also welcome many European customers in addition to our North
         American & South American customers, we can communicate in English,
         German, or Spanish when making reservations and correspondence as well
@@ -233,7 +233,7 @@ export default function IndexPage({ pageContext }) {
         customer can contact the boss of WILD RIDER on his mobile phone number.
         You will never end up in a telephone queue at Wild Rider. Have you ever
         experienced this at Hertz or Budget?
-      </p>
+      </p> */}
       {/* <section className="sm:grid sm:grid-cols-2 xl:grid-cols-3">
         <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 mb-4 mt-8 sm:col-span-2 xl:pl-16">
           — Reservation and Communication with our travel experts
@@ -274,14 +274,14 @@ export default function IndexPage({ pageContext }) {
           className="!flex w-32 m-auto mt-5 rounded-3xl"
         />
       </section> */}
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
+      {/* <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — Lowest insurance rates in Costa Rica
-      </h4>
-      <p className="mx-4 mb-4 xl:pl-16">
+      </h4> */}
+      {/* <p className="mx-4 mb-4 xl:pl-16">
         Wild Rider offers the lowest Zero-Deductible- Insurance in Costa Rica.
         We can offer you this Peace- In-Mind- Insurance at almost 50% lower than
         our competitors.
-      </p>
+      </p> */}
       {/* <div className="relative">
         <div
           className="absolute inset-0 z-0 h-full bg-center bg-no-repeat bg-cover"
@@ -316,13 +316,13 @@ export default function IndexPage({ pageContext }) {
           </div>
           </div>
         </div> */}
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-8 mt-16">
         — OFFERS
       </h4>
-      <h1 className="mx-4 xl:px-16 max-w-3xl mb-4 text-3xl font-CarterOne">
+      <h1 className="mx-4 xl:px-16 max-w-3xl mb-8 text-4xl font-CarterOne">
         Free Benefits
       </h1>
-      <section className="grid grid-cols-[repeat(5,_minmax(0,_100px))] gap-y-3 gap-x-5 mx-4 justify-items-center text-center font-bold xl:px-16">
+      <section className="grid grid-cols-[repeat(5,_minmax(0,_100px))] gap-y-3 gap-x-5 mx-4 my-14 justify-items-center text-center font-bold xl:px-16">
         <svg className="h-12" viewBox="0 0 680 510" transform="rotate(-90)">
           <path d="M562.1 219.3c7.6 9.5 13.9 22 13.9 36.7c0 29.1-23 49.4-41.4 60.4C514.9 328.2 490.2 336 470 336H370.5L276.8 499.9 269.9 512H256l-80 0H144.2l8.7-30.6L194.5 336 164 336l-40.8 54.4L116 400H104 32-1.3L9.2 368.4 46.7 256 9.2 143.6-1.3 112H32h72l12 0 7.2 9.6L164 176l30.5 0L152.9 30.6 144.2 0 176 0l80 0 13.9 0 6.9 12.1L370.5 176l99.5 0c20.3 0 45.1 8.1 64.6 20c10 6.1 19.9 13.8 27.5 23.3zM509.8 237c-14-8.5-30.2-13-39.7-13l-113.5 0H342.6l-6.9-12.1L242.1 48H207.8l41.5 145.4 8.7 30.6-31.8 0L152 224H140l-7.2-9.6L92 160H65.3l29.5 88.4 2.5 7.6-2.5 7.6L65.3 352H92l40.8-54.4L140 288h12l74.3 0h31.8l-8.7 30.6L207.8 464h34.3l93.7-163.9 6.9-12.1h13.9H470c9.7 0 26-4.4 39.8-12.8C525 266.1 528 258.4 528 256c0-.6-.2-2.8-3.3-6.7c-3.1-3.9-8.1-8.2-14.9-12.3z" />
         </svg>

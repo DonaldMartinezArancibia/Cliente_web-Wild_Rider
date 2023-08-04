@@ -197,10 +197,12 @@ const MapContainer = props => {
         </div>
       </div> */}
       <h1 className="max-w-3xl mb-4 text-3xl font-CarterOne">
-        As a result of our excellent service to our customers, we have a Top
-        rating in different travel forums.
+        Hear what our clients say
       </h1>
-      <p>Please check out, what customers say about us.</p>
+      <p>
+        Don’t just take our word for it. Here are a few (of many) reviews of
+        WildRider.
+      </p>
       <div className="grid grid-cols-1 gap-4 my-8 sm:grid-cols-3">
         {[...googleR.googleReviews, ...newReviews].map((review, index) => (
           <div
