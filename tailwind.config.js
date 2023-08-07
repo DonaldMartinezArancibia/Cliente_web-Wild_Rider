@@ -33,6 +33,15 @@ module.exports = {
         "hero-pattern":
           "url('https://media.graphassets.com/03XpBnUfS0f4Z3AE9i5Q')",
       },
+      keyframes: {
+        textScroll: {
+          "0%": { transform: "translate3d(0, 0, 0)" },
+          "100%": { transform: "translate3d(-100%, 0, 0)" },
+        },
+      },
+      // animation: {
+      //   textScroll: "textScroll 25s linear infinite",
+      // },
     },
   },
   plugins: [require("@tailwindcss/typography")],
