@@ -163,7 +163,7 @@ export default function Header({ pageContext }) {
       {/* <p className="text-xl p-4 animate-textScroll whitespace-nowrap">
         Este párrafo se moverá de derecha a izquierda en vistas menores a 960px.
       </p> */}
-      <div className="bg-[#18191b] w-full lg:grid lg:grid-cols-[1fr_1fr_1fr_12%] lg:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
+      <div className="bg-[#4f5153] w-full lg:grid lg:grid-cols-[1fr_1fr_1fr_12%] lg:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
         <img src={headerImg} alt="Profile" className="col-[1/5] w-full mb-4" />
         <div className="m-auto lg:m-0 flex justify-between">
           <Link
