@@ -2,9 +2,9 @@ import * as React from "react"
 
 const Footer = () => {
   return (
-    <footer className="w-full py-3 mt-4 bg-[#0833A2] text-white">
-      <div className="flex flex-col items-center w-9/12 m-auto mx-auto contanier lg:flex-row lg:justify-between lg:space-y-0">
-        <ul className="flex items-center mb-5 space-x-8 sm:mb-0 ">
+    <footer className="w-full py-1 mt-4 bg-[#0833A2] text-white lg:py-3">
+      <div className="flex flex-col items-center w-9/12 m-auto mx-auto contanier sm:flex-row sm:justify-evenly sm:w-11/12 lg:w-9/12 lg:justify-between lg:space-y-0">
+        <ul className="flex items-center mb-1 space-x-8 sm:mb-0 ">
           <li>
             <a href="#" rel="noopener noreferrer">
               About us
@@ -109,12 +109,9 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-      <hr className="w-9/12 h-px mx-auto my-3" />
-      <div className="flex flex-col items-center w-9/12 m-auto mx-auto contanier lg:flex-row lg:justify-between lg:space-y-0">
-        <p className="mb-2 sm:mb-0">
-          &copy; 2023 Wild Rider. All rights reserved.
-        </p>
-        <ul className="flex items-center space-x-8">
+      <hr className="w-9/12 h-px mx-auto my-1 lg:my-3" />
+      <div className="flex flex-col items-center sm:w-9/12 m-auto mx-auto contanier lg:flex-row-reverse lg:justify-between lg:space-y-0">
+        <ul className="flex items-center w-full justify-evenly lg:w-auto lg:space-x-8">
           <li>
             <a href="#" rel="noopener noreferrer">
               Terms of Service
@@ -126,6 +123,7 @@ const Footer = () => {
             </a>
           </li>
         </ul>
+        <p>&copy; 2023 Wild Rider. All rights reserved.</p>
       </div>
     </footer>
   )
