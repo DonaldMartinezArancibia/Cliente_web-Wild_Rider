@@ -109,7 +109,7 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-      <hr className="w-9/12 h-px mx-auto my-1 lg:my-3" />
+      <hr className="w-9/12 h-px mx-auto my-1 bg-[#0833A2] lg:my-3" />
       <div className="flex flex-col items-center sm:w-9/12 m-auto mx-auto contanier lg:flex-row-reverse lg:justify-between lg:space-y-0">
         <ul className="flex items-center w-full justify-evenly lg:w-auto lg:space-x-8">
           <li>
