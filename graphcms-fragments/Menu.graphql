@@ -33,7 +33,13 @@ fragment Menu on Menu {
     }
   }
   menuElements {
-    ... on AboutUs {
+    ... on AboutUsAndOurTeam {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on CarsAndQuote {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -45,7 +51,31 @@ fragment Menu on Menu {
       locale
       stage
     }
+    ... on Faq {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on Index {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on RentalInfo {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on Testimonial {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on TravelPlanner {
       remoteTypeName: __typename
       remoteId: id
       locale

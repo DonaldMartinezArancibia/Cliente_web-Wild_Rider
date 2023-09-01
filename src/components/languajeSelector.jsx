@@ -3,10 +3,26 @@ import { navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
 import { Post } from "../gql/allPost"
 import { Index } from "../gql/indexQuery"
+import { CarsAndQuote } from "../gql/carsPageQuery"
+import { AboutUsAndOurTeam } from "../gql/aboutusPageQuery"
+import { RentalInfo } from "../gql/rentalInfoPageQuery"
+import { Testimonial } from "../gql/testimonialPageQuery"
+import { Faq } from "../gql/faqPageQuery"
 import { ContactAndLocation } from "../gql/contactQuery"
+import { TravelPlanner } from "../gql/travelPlannerPageQuery"
 
 export default function LanguageSelector({ pageContext }) {
-  const query = [Index, Post, ContactAndLocation].find(
+  const query = [
+    Index,
+    Post,
+    CarsAndQuote,
+    AboutUsAndOurTeam,
+    RentalInfo,
+    Testimonial,
+    Faq,
+    ContactAndLocation,
+    TravelPlanner,
+  ].find(
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
 
@@ -20,16 +36,52 @@ export default function LanguageSelector({ pageContext }) {
   if (error) return console.log(error)
 
   function getSlugByLocale(data) {
+    console.log(data)
     const indexData = data.index ? data.index.localizations[0] : undefined
+    const aboutUsAndOurTeamData = data.aboutUsAndOurTeam
+      ? data.aboutUsAndOurTeam.localizations[0]
+      : undefined
+    const rentalInfoData = data.rentalInfo
+      ? data.rentalInfo.localizations[0]
+      : undefined
+    const testimonialData = data.testimonial
+      ? data.testimonial.localizations[0]
+      : undefined
+    const faqData = data.faq ? data.faq.localizations[0] : undefined
+    const carsAndQuotesData = data.carsAndQuotes
+      ? data.carsAndQuotes[0].localizations[0]
+      : undefined
     const contactData = data.contactAndLocations
       ? data.contactAndLocations[0].localizations[0]
       : undefined
+    const travelPlannerData = data.travelPlanner
+      ? data.travelPlanner.localizations[0]
+      : undefined
     const postData = data.posts ? data.posts[0].localizations[0] : undefined
+
     if (indexData?.locale === "en") return ""
     if (indexData?.locale) return indexData.locale
     if (postData?.locale === "en") return `blog/${postData.slug}`
+    if (carsAndQuotesData?.locale === "en") return carsAndQuotesData.slug
+    if (carsAndQuotesData?.locale)
+      return `${carsAndQuotesData.locale}/${carsAndQuotesData.slug}`
+    if (aboutUsAndOurTeamData?.locale === "en")
+      return aboutUsAndOurTeamData.slug
+    if (aboutUsAndOurTeamData?.locale)
+      return `${aboutUsAndOurTeamData.locale}/${aboutUsAndOurTeamData.slug}`
+    if (rentalInfoData?.locale === "en") return rentalInfoData.slug
+    if (rentalInfoData?.locale)
+      return `${rentalInfoData.locale}/${rentalInfoData.slug}`
+    if (testimonialData?.locale === "en") return testimonialData.slug
+    if (testimonialData?.locale)
+      return `${testimonialData.locale}/${testimonialData.slug}`
+    if (faqData?.locale === "en") return faqData.slug
+    if (faqData?.locale) return `${faqData.locale}/${faqData.slug}`
     if (contactData?.locale === "en") return contactData.slug
     if (contactData?.locale) return `${contactData.locale}/${contactData.slug}`
+    if (travelPlannerData?.locale === "en") return travelPlannerData.slug
+    if (travelPlannerData?.locale)
+      return `${travelPlannerData.locale}/${travelPlannerData.slug}`
     return `${postData.locale}/blog/${postData.slug}`
   }
 
@@ -65,10 +117,10 @@ export default function LanguageSelector({ pageContext }) {
             {pageContext.langKey !== "en" ? "Español" : "English"}
           </span>
         </button> */}
-        <ul className="text-center font-black text-white transition-shadow duration-300 border-opacity-100 shadow-md left-1/4 hover:shadow-lg">
+        <ul className="font-black text-center text-white transition-shadow duration-300 border-opacity-100 shadow-md left-1/4 hover:shadow-lg">
           <li className="">
             <a
-              className="block px-4 py-1 whitespace-no-wrap text-white hover:bg-gray-400 text"
+              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
                 navigate(`/${getSlugByLocale(data)}`)
@@ -80,7 +132,7 @@ export default function LanguageSelector({ pageContext }) {
           </li>
           <li className="">
             <a
-              className="block px-4 py-1 whitespace-no-wrap text-white hover:bg-gray-400 text"
+              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
                 navigate(`/${getSlugByLocale(data)}`)
@@ -92,7 +144,7 @@ export default function LanguageSelector({ pageContext }) {
           </li>
           <li className="">
             <a
-              className="block px-4 py-1 whitespace-no-wrap text-white hover:bg-gray-400 text"
+              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
                 navigate(`/${getSlugByLocale(data)}`)
@@ -104,7 +156,7 @@ export default function LanguageSelector({ pageContext }) {
           </li>
           <li className="">
             <a
-              className="block px-4 py-1 whitespace-no-wrap text-white hover:bg-gray-400 text"
+              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
                 navigate(`/${getSlugByLocale(data)}`)

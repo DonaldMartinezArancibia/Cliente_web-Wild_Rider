@@ -111,7 +111,7 @@ export default function Header({ pageContext }) {
   // Aplicamos la función de transformación al resultado de la consulta
   const transformedMenuElementsData = transformMenuElements(menuElementsData)
   const menuData = transformedMenuElementsData.menus[0].menuElements
-  // console.log(menuData)
+  console.log(menuData)
   const links = menuData.map(obj => ({
     to:
       pageContext.langKey === "en"
@@ -119,11 +119,7 @@ export default function Header({ pageContext }) {
         : `/${pageContext.langKey}/${obj.slug}`,
     text: `${obj.title}`,
   }))
-  links.push(
-    {
-      to: "/our-cars",
-      text: "Our cars & Reservation",
-    },
+  /*links.push(
     {
       to: "/reservation",
       text: "Rental Info",
@@ -139,16 +135,16 @@ export default function Header({ pageContext }) {
     {
       to: "/travel-planner",
       text: "Travel Planner",
-    }
-    //   {
-    //     to: "/videos-and-photos",
-    //     text: "Videos & Photos",
-    //   },
-    //   {
-    //     to: "/our-team",
-    //     text: "Our Team",
-    //   },
-  )
+    },
+    {
+      to: "/videos-and-photos",
+      text: "Videos & Photos",
+    },
+    {
+      to: "/our-team",
+      text: "Our Team",
+    },
+  )*/
 
   // console.log(links)
   const getLinkClass = to => {
@@ -160,12 +156,12 @@ export default function Header({ pageContext }) {
 
   return (
     <header className="w-full text-white font-Montserrat">
-      {/* <p className="text-xl p-4 animate-textScroll whitespace-nowrap">
+      {/* <p className="p-4 text-xl animate-textScroll whitespace-nowrap">
         Este párrafo se moverá de derecha a izquierda en vistas menores a 960px.
       </p> */}
       <div className="bg-[#4f5153] w-full lg:grid lg:grid-cols-[1fr_1fr_1fr_12%] lg:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
         <img src={headerImg} alt="Profile" className="col-[1/5] w-full mb-4" />
-        <div className="m-auto lg:m-0 flex justify-between">
+        <div className="flex justify-between m-auto lg:m-0">
           <Link
             to={
               pageContext.langKey === "en"
@@ -194,7 +190,7 @@ export default function Header({ pageContext }) {
             </button>
           </div>
         </div>
-        <div className="self-center text-center overflow-hidden">
+        <div className="self-center overflow-hidden text-center">
           <p className="my-2 px-6 font-medium animate-[textScroll_25s_linear_infinite] pl-[100%] lg:pl-0 lg:animate-[textScroll_0s_none] lg:whitespace-normal whitespace-nowrap">
             Call us toll-free from the U.S & Canada, from 8:00 to 18:00 Central
             Time and with skype from almost anywhere else:
@@ -208,8 +204,8 @@ export default function Header({ pageContext }) {
           </a>
         </div>
         <div className="grid min-[412px]:grid-cols-2">
-          <div className="col-span-1 flex items-center">
-            <svg className="mr-2 h-8 lg:h-12" viewBox="0 0 448 510">
+          <div className="flex items-center col-span-1">
+            <svg className="h-8 mr-2 lg:h-12" viewBox="0 0 448 510">
               <path
                 fill="#fff"
                 d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"
@@ -220,7 +216,7 @@ export default function Header({ pageContext }) {
               <p>+506-8973-2759</p>
             </div>
           </div>
-          <div className="col-span-1 flex items-center">
+          <div className="flex items-center col-span-1">
             <svg className="mr-2 h-7" viewBox="0 0 500 525">
               <path
                 fill="#fff"
@@ -232,7 +228,7 @@ export default function Header({ pageContext }) {
               <p>info@wildrider.com</p>
             </div>
           </div>
-          <div className="col-span-1 flex items-center">
+          <div className="flex items-center col-span-1">
             <svg className="mr-2 h-7 lg:h-10" viewBox="0 0 585 610">
               <path
                 fill="#fff"
@@ -244,7 +240,7 @@ export default function Header({ pageContext }) {
               <p>+506-2258-4604</p>
             </div>
           </div>
-          <div className="col-span-1 flex items-center">
+          <div className="flex items-center col-span-1">
             <svg className="mr-2 h-7 lg:h-9" viewBox="0 0 520 545">
               <path
                 fill="#fff"
@@ -269,7 +265,7 @@ export default function Header({ pageContext }) {
           </p>
           </Link>
         </h1> */}
-        <ul className="items-center hidden space-x-8 text-xl font-Poppins xl:flex m-auto">
+        <ul className="items-center hidden m-auto space-x-8 text-xl font-Poppins xl:flex">
           {links.map((link, index) => (
             <li key={index} className={getLinkClass(link.to)}>
               <Link to={link.to}>{link.text}</Link>

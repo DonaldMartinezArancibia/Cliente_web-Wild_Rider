@@ -1,9 +1,12 @@
-fragment LongTimeRental on LongTimeRental {
+fragment Testimonial on Testimonial {
   stage
-  publishedAt
-  updatedAt
-  createdAt
+  locale
+  publishedAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  createdAt(variation: COMBINED)
   remoteId: id
+  slug
+  title
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -27,6 +30,13 @@ fragment LongTimeRental on LongTimeRental {
   }
   scheduledIn {
     ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  menu {
+    ... on Menu {
       remoteTypeName: __typename
       remoteId: id
       stage

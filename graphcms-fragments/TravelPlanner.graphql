@@ -1,4 +1,4 @@
-fragment Index on Index {
+fragment TravelPlanner on TravelPlanner {
   stage
   locale
   publishedAt(variation: COMBINED)
@@ -7,16 +7,6 @@ fragment Index on Index {
   remoteId: id
   slug
   title
-  mainTitle
-  mainTextBelowTitle
-  mainTextBelow {
-    ... on RichText {
-      raw
-      html
-      markdown
-      text
-    }
-  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename

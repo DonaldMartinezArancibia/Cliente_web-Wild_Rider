@@ -63,5 +63,13 @@ module.exports = {
         useLangKeyLayout: false,
       },
     },
+    {
+      resolve: `gatsby-source-google-places`,
+      options: {
+        placeIds: ["ChIJkUvR8VbjoI8RjlaQqi1QI1U"],
+        apiKey: "AIzaSyCP5MaJT3eIa4DT1b_rhBmDxyjn1WIbdEk",
+        language: "en-US", // optional, defaults to en-US
+      },
+    },
   ],
 }

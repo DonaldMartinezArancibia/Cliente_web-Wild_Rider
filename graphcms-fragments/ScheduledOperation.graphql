@@ -37,7 +37,7 @@ fragment ScheduledOperation on ScheduledOperation {
   }
   status
   affectedDocuments {
-    ... on AboutUs {
+    ... on AboutUsAndOurTeam {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -57,9 +57,16 @@ fragment ScheduledOperation on ScheduledOperation {
     ... on CarsAndQuote {
       remoteTypeName: __typename
       remoteId: id
+      locale
       stage
     }
     ... on ContactAndLocation {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on Faq {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -77,7 +84,7 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
-    ... on LongTimeRental {
+    ... on Menu {
       remoteTypeName: __typename
       remoteId: id
       stage
@@ -88,9 +95,27 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on RentalInfo {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on Seo {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+    ... on Testimonial {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on TravelPlanner {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }

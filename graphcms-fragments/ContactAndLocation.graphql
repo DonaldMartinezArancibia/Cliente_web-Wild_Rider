@@ -35,4 +35,11 @@ fragment ContactAndLocation on ContactAndLocation {
       stage
     }
   }
+  menu {
+    ... on Menu {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
 }
