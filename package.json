@@ -20,6 +20,7 @@
     "gatsby-plugin-manifest": "^5.3.1",
     "gatsby-plugin-sharp": "^5.3.2",
     "gatsby-source-filesystem": "^5.3.1",
+    "gatsby-source-google-places": "^1.0.2",
     "gatsby-source-graphcms": "^2.8.0",
     "gatsby-source-graphql": "^5.4.0",
     "gatsby-source-strapi": "^3.0.4",
