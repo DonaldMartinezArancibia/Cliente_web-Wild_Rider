@@ -5,7 +5,20 @@ export default function contactAndLocation({ pageContext }) {
   return (
     <main>
       <h1 className="font-CarterOne">Contact & Location</h1>
-      <form action="mailto:myforms@mydomain.com">
+      <form
+        name="contact"
+        method="post"
+        data-netlify-recaptcha="true"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+      >
+        {/* You still need to add the hidden input with the form name to your JSX form */}
+        <p class="hidden">
+          <label>
+            Don’t fill this out if you’re human: <input name="bot-field" />
+          </label>
+        </p>
+        <input type="hidden" name="form-name" value="contact" />
         <div>
           <label for="nombre">Nombre:</label>
           <input type="text" id="nombre" name="nombre" required />
@@ -29,6 +42,7 @@ export default function contactAndLocation({ pageContext }) {
           <label for="mensaje">Mensaje:</label>
           <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
         </div>
+        <div data-netlify-recaptcha="true"></div>
         <button type="submit">Enviar</button>
       </form>
       <div class="mapouter">
