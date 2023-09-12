@@ -144,7 +144,7 @@ exports.createPages = async ({ graphql, actions }) => {
       createPagesForContent(
         faqResult.data.allGraphCmsFaq.nodes,
         urlPrefix,
-        "./src/templates/aboutUsAndOurTeam.jsx"
+        "./src/templates/frequentAnswerAndQuestion.jsx"
       )
 
       // Creación de páginas de preguntas frecuentes en los diferentes idiomas
