@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client"
 
 const FrequentAnswersAndQuestions = gql`
-  query FrequentAnswersAndQuestions {
-    frequentAnswersAndQuestions {
+  query FrequentAnswersAndQuestions($locale: [Locale!]!) {
+    frequentAnswersAndQuestions(locales: $locale) {
       question
       answer
     }

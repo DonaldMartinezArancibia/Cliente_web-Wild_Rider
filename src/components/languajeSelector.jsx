@@ -36,7 +36,6 @@ export default function LanguageSelector({ pageContext }) {
   if (error) return console.log(error)
 
   function getSlugByLocale(data) {
-    console.log(data)
     const indexData = data.index ? data.index.localizations[0] : undefined
     const aboutUsAndOurTeamData = data.aboutUsAndOurTeam
       ? data.aboutUsAndOurTeam.localizations[0]

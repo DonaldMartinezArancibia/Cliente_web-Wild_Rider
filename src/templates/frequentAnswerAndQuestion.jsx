@@ -9,7 +9,9 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
     data: faqData,
     loading: faqLoading,
     error: faqError,
-  } = useQuery(FrequentAnswersAndQuestions)
+  } = useQuery(FrequentAnswersAndQuestions, {
+    variables: { locale: [pageContext.langKey] },
+  })
 
   // Estado para almacenar los resultados de búsqueda
   const [searchResults, setSearchResults] = useState([])

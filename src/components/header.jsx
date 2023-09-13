@@ -111,7 +111,6 @@ export default function Header({ pageContext }) {
   // Aplicamos la función de transformación al resultado de la consulta
   const transformedMenuElementsData = transformMenuElements(menuElementsData)
   const menuData = transformedMenuElementsData.menus[0].menuElements
-  console.log(menuData)
   const links = menuData.map(obj => ({
     to:
       pageContext.langKey === "en"

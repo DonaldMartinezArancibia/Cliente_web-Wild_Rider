@@ -14,7 +14,7 @@ export default function useContactAndLocation({ pageContext }) {
   }
 
   return (
-    <main className="lg:grid lg:grid-cols-[1fr_1fr] lg:w-11/12 lg:m-auto lg:my-16">
+    <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16">
       <h1 className="font-CarterOne lg:text-5xl">Contact & Location</h1>
       <form
         name="contact"
