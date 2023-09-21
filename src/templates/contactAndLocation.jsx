@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
-import parkingWR from "../images/Captura de pantalla 2023-09-06 124559.png"
+import parkingWR1 from "../images/Captura de pantalla 2023-09-06 124559(2).png"
+import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
 
 export default function useContactAndLocation({ pageContext }) {
   const captcha = useRef(null)
@@ -32,58 +33,123 @@ export default function useContactAndLocation({ pageContext }) {
         <input type="hidden" name="form-name" value="contact" />
 
         <fieldset
-          className="flex flex-col"
+          className="flex flex-row"
           role="group"
           aria-label="Datos personales"
         >
-          <label htmlFor="nombre" className="my-2 font-black font-Poppins">
-            Name:
-          </label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            placeholder="Name"
-            className="h-10"
-            required
-          />
+          <div className="flex flex-col justify-between w-1/2 pr-3">
+            <label
+              htmlFor="nombre"
+              className="my-2 font-black font-Poppins w-full"
+            >
+              Name:
+            </label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder="Name"
+              className="h-10 w-full"
+              required
+            />
+          </div>
+          <div className="flex flex-col justify-between w-1/2 pl-3">
+            <label
+              htmlFor="surname"
+              className="my-2 font-black font-Poppins w-full"
+            >
+              Surname:
+            </label>
+            <input
+              type="text"
+              id="surname"
+              name="surname"
+              placeholder="Surname"
+              className="h-10 w-full"
+              required
+            />
+          </div>
         </fieldset>
 
         <fieldset
-          className="flex flex-col"
+          className="flex flex-row"
           role="group"
           aria-label="Correo Electrónico"
         >
-          <label htmlFor="correo" className="my-2 font-black font-Poppins">
-            Email:
-          </label>
-          <input
-            type="email"
-            id="correo"
-            name="correo"
-            className="h-10"
-            placeholder="Email"
-            required
-          />
+          <div className="flex flex-col justify-between w-1/2 pr-3">
+            <label
+              htmlFor="correo"
+              className="my-2 font-black font-Poppins w-full"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              className="h-10 w-full"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div className="flex flex-col justify-between w-1/2 pl-3">
+            <label
+              htmlFor="correoconfirm"
+              className="my-2 font-black font-Poppins w-full"
+            >
+              Confirm Email:
+            </label>
+            <input
+              type="email"
+              id="correoconfirm"
+              name="correoconfirm"
+              className="h-10 w-full"
+              placeholder="Confirm Email"
+              required
+            />
+          </div>
         </fieldset>
 
         <fieldset
-          className="flex flex-col"
+          className="flex flex-row"
           role="group"
           aria-label="Número de Teléfono"
         >
-          <label htmlFor="telefono" className="my-2 font-black font-Poppins">
-            Phone number:
-          </label>
-          <input
-            type="tel"
-            id="telefono"
-            name="telefono"
-            pattern="[0-9]{10}"
-            placeholder="Ej. 1234567890"
-            className="h-10"
-            required
-          />
+          <div className="flex flex-col justify-between w-1/2 pr-3">
+            <label
+              htmlFor="countryCode"
+              className="my-2 font-black font-Poppins w-full"
+            >
+              Country Code:
+            </label>
+            <input
+              type="tel"
+              id="countryCode"
+              name="countryCode"
+              pattern="[0-3]{3}"
+              placeholder="+01"
+              className="h-10 w-full"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col justify-between w-1/2 pl-3">
+            <label
+              htmlFor="telefono"
+              className="my-2 font-black font-Poppins w-full"
+            >
+              Phone number:
+            </label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              pattern="[0-9]{10}"
+              placeholder="Ej. 1234567890"
+              className="h-10 w-full"
+              required
+            />
+          </div>
         </fieldset>
 
         <fieldset
@@ -149,7 +215,7 @@ export default function useContactAndLocation({ pageContext }) {
             />
           </svg>
           <div className="text-base">
-            <p className="font-bold">Office Time</p>
+            <p className="font-bold">Central Time</p>
             <p>8:00 - 18:00</p>
           </div>
         </div>
@@ -167,11 +233,10 @@ export default function useContactAndLocation({ pageContext }) {
         </div>
       </div>
 
-      <img
-        src={parkingWR}
-        alt="Profile"
-        className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[1/3] lg:col-[2/3] lg:w-10/12"
-      />
+      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[1/3] lg:col-[2/3] lg:w-10/12">
+        <img src={parkingWR1} alt="Profile" className="mb-10" />
+        <img src={parkingWR2} alt="Profile" />
+      </div>
 
       <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
         Calle Alajuela, behind City Mall, from “Molinos de Costa Rica” 300
