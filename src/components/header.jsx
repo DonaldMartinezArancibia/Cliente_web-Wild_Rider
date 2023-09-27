@@ -69,12 +69,15 @@ export default function Header({ pageContext }) {
     }
   }, [])
 
+  // Antes de realizar la consulta, verifica si pageContext.langKey está definido
+  const langKey = pageContext && pageContext.langKey ? pageContext.langKey : ""
+
   const {
     data: menuElementsData,
     loading: menuElementsDataQueryLoading,
     error: menuElementsDataQueryError,
   } = useQuery(menuElements, {
-    variables: { locale: [pageContext.langKey] },
+    variables: { locale: [langKey] },
   })
   client.refetchQueries({
     include: [menuElements],
