@@ -116,7 +116,7 @@ exports.createPages = async ({ graphql, actions }) => {
       createPagesForContent(
         carsResult.data.allGraphCmsCarsAndQuote.nodes,
         urlPrefix,
-        "./src/templates/ourCarsAndReservation.jsx"
+        "./src/templates/using-dsg.jsx"
       )
 
       // Creación de páginas de sobre nosotros y el equipo en los diferentes idiomas
@@ -130,14 +130,14 @@ exports.createPages = async ({ graphql, actions }) => {
       createPagesForContent(
         rentalResult.data.allGraphCmsRentalInfo.nodes,
         urlPrefix,
-        "./src/templates/aboutUsAndOurTeam.jsx"
+        "./src/templates/using-dsg.jsx"
       )
 
       // Creación de páginas de testimonios en los diferentes idiomas
       createPagesForContent(
         testimonialResult.data.allGraphCmsTestimonial.nodes,
         urlPrefix,
-        "./src/templates/aboutUsAndOurTeam.jsx"
+        "./src/templates/testimonials.jsx"
       )
 
       // Creación de páginas de preguntas frecuentes en los diferentes idiomas
@@ -151,7 +151,7 @@ exports.createPages = async ({ graphql, actions }) => {
       createPagesForContent(
         travelResult.data.allGraphCmsTravelPlanner.nodes,
         urlPrefix,
-        "./src/templates/aboutUsAndOurTeam.jsx"
+        "./src/templates/using-dsg.jsx"
       )
     })
   )

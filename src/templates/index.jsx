@@ -34,7 +34,7 @@ export default function IndexPage({ pageContext }) {
   // const { slug, locale } = pageContext
   // const generateDynamicPagePath = (slug, language) => {
   //   return `/${language}/`
-  // }
+  //
 
   // const changeLanguage = (language, slug) => {
   //   const path = generateDynamicPagePath(slug, language)
@@ -141,7 +141,7 @@ export default function IndexPage({ pageContext }) {
         <br /> WILD RIDER offers you a half dozen of free extras.
       </p> */}
       {/* <div className="mx-4 xl:px-16">
-        <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <ul className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <li>
             <div className="bg-[#d9eaf9] p-4 rounded shadow">
               <img
@@ -319,7 +319,7 @@ export default function IndexPage({ pageContext }) {
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-8 mt-16">
         — OFFERS
       </h4>
-      <h1 className="mx-4 xl:px-16 max-w-3xl mb-8 text-4xl font-CarterOne">
+      <h1 className="max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne">
         Free Benefits
       </h1>
       <section className="grid grid-cols-[repeat(5,_minmax(0,_100px))] gap-y-3 gap-x-5 mx-4 my-14 justify-items-center text-center font-bold xl:px-16">
@@ -348,7 +348,7 @@ export default function IndexPage({ pageContext }) {
         — TESTIMONIALS
       </h4>
       <MapContainer />
-      <div className="mx-auto">{/* <ImageSlider images={images} /> */}</div>
+      <div className="mx-auto">{<ImageSlider images={images} />}</div>
       {/* <button onClick={() => changeLanguage("es", slug)}>Español</button> */}
       {/* <Example /> */}
       {/* <Showdata pageContext={pageContext} /> */}
