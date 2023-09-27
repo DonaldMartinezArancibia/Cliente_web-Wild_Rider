@@ -181,16 +181,16 @@ const FacebookReviewsCarousel = ({
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 1, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 1,
+    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
+    slidesToScroll: 3,
     prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
     nextArrow: <NextArrow />,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToShow: 3,
+          slidesToScroll: 3,
           infinite: true,
           dots: true,
         },
@@ -198,9 +198,9 @@ const FacebookReviewsCarousel = ({
       {
         breakpoint: 1023,
         settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          initialSlide: 1,
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
         },
       },
       {
