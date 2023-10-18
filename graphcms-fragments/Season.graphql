@@ -1,14 +1,12 @@
-fragment GoogleReview on GoogleReview {
+fragment Season on Season {
   stage
-  locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
+  publishedAt
+  updatedAt
+  createdAt
   remoteId: id
-  reviewerName
-  numberOfStars
-  review
-  reviewLink
+  seasonTitle
+  startDate
+  endDate
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -30,15 +28,6 @@ fragment GoogleReview on GoogleReview {
       stage
     }
   }
-  reviewImage {
-    ... on Asset {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-  }
-  reviewOrigin
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename

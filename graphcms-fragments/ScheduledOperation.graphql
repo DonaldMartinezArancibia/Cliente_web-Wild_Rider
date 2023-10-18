@@ -52,6 +52,7 @@ fragment ScheduledOperation on ScheduledOperation {
     ... on Car {
       remoteTypeName: __typename
       remoteId: id
+      locale
       stage
     }
     ... on CarsAndQuote {
@@ -67,6 +68,12 @@ fragment ScheduledOperation on ScheduledOperation {
       stage
     }
     ... on Faq {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on FrequentAnswersAndQuestion {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -99,6 +106,11 @@ fragment ScheduledOperation on ScheduledOperation {
       remoteTypeName: __typename
       remoteId: id
       locale
+      stage
+    }
+    ... on Season {
+      remoteTypeName: __typename
+      remoteId: id
       stage
     }
     ... on Seo {

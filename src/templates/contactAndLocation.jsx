@@ -42,7 +42,7 @@ export default function useContactAndLocation({ pageContext }) {
           <div className="flex flex-col justify-between w-1/2 pr-3">
             <label
               htmlFor="nombre"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
               Name*:
             </label>
@@ -51,14 +51,14 @@ export default function useContactAndLocation({ pageContext }) {
               id="nombre"
               name="nombre"
               placeholder="Name"
-              className="h-10 w-full"
+              className="w-full h-10"
               required
             />
           </div>
           <div className="flex flex-col justify-between w-1/2 pl-3">
             <label
               htmlFor="surname"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
               Surname*:
             </label>
@@ -67,7 +67,7 @@ export default function useContactAndLocation({ pageContext }) {
               id="surname"
               name="surname"
               placeholder="Surname"
-              className="h-10 w-full"
+              className="w-full h-10"
               required
             />
           </div>
@@ -81,7 +81,7 @@ export default function useContactAndLocation({ pageContext }) {
           <div className="flex flex-col justify-between w-1/2 pr-3">
             <label
               htmlFor="correo"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
               Email*:
             </label>
@@ -89,7 +89,7 @@ export default function useContactAndLocation({ pageContext }) {
               type="email"
               id="correo"
               name="correo"
-              className="h-10 w-full"
+              className="w-full h-10"
               placeholder="Email"
               required
             />
@@ -97,7 +97,7 @@ export default function useContactAndLocation({ pageContext }) {
           <div className="flex flex-col justify-between w-1/2 pl-3">
             <label
               htmlFor="correoconfirm"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
               Confirm Email*:
             </label>
@@ -105,7 +105,7 @@ export default function useContactAndLocation({ pageContext }) {
               type="email"
               id="correoconfirm"
               name="correoconfirm"
-              className="h-10 w-full"
+              className="w-full h-10"
               placeholder="Confirm Email"
               required
             />
@@ -120,7 +120,7 @@ export default function useContactAndLocation({ pageContext }) {
           <div className="flex flex-col justify-between w-1/2 pr-3">
             <label
               htmlFor="countryCode"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
               Country Code:
             </label>
@@ -130,14 +130,14 @@ export default function useContactAndLocation({ pageContext }) {
               name="countryCode"
               pattern="[0-3]{3}"
               placeholder="+01"
-              className="h-10 w-full"
+              className="w-full h-10"
             />
           </div>
 
           <div className="flex flex-col justify-between w-1/2 pl-3">
             <label
               htmlFor="telefono"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
               Phone number:
             </label>
@@ -147,7 +147,7 @@ export default function useContactAndLocation({ pageContext }) {
               name="telefono"
               pattern="[0-9]{10}"
               placeholder="Ej. 1234567890"
-              className="h-10 w-full"
+              className="w-full h-10"
             />
           </div>
         </fieldset>

@@ -348,10 +348,10 @@ export default function IndexPage({ pageContext }) {
         — TESTIMONIALS
       </h4>
       <MapContainer />
-      <div className="mx-auto">{<ImageSlider images={images} />}</div>
+      {/* <div className="mx-auto">{<ImageSlider images={images} />}</div> */}
       {/* <button onClick={() => changeLanguage("es", slug)}>Español</button> */}
       {/* <Example /> */}
-      {/* <Showdata pageContext={pageContext} /> */}
+      <Showdata pageContext={pageContext} />
       {/* <Storedata /> */}
     </main>
   )

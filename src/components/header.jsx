@@ -267,7 +267,7 @@ export default function Header({ pageContext }) {
           </p>
           </Link>
         </h1> */}
-        <ul className="items-center hidden m-auto space-x-8 text-xl font-Poppins xl:flex">
+        <ul className="items-center hidden m-auto space-x-8 text-xl font-bold font-Poppins xl:flex">
           {links.map((link, index) => (
             <li key={index} className={getLinkClass(link.to)}>
               <Link to={link.to}>{link.text}</Link>

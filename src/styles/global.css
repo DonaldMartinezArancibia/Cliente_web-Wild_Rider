@@ -22,7 +22,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Carter+One&family=Montserrat&family=Inter&family=Poppins:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Carter+One&family=Montserrat&family=Inter&family=Poppins:wght@400;700&display=swap");
 @layer components {
   #sectionBellowHeader {
     @apply grid grid-cols-1 p-2 md:grid-cols-[55%_45%] md:p-6 xl:pt-20;
@@ -48,4 +48,22 @@
   .dropdown:hover .dropdown-menu {
     display: block;
   }
+  #modalOfCar ul {
+    @apply list-inside list-disc font-semibold ml-2 mt-5;
+  }
+  #modalOfCar ul li strong {
+    @apply font-medium;
+  }
+  #modalOfCar div div > p {
+    @apply font-Poppins font-light text-lg;
+  }
+  #modalOfCar div div > p strong {
+    @apply font-bold;
+  }
+}
+
+/* custom-styles.css */
+:root {
+  --react-international-phone-border-radius: 0px;
+  --react-international-phone-height: 40px;
 }
