@@ -100,7 +100,7 @@ const CarForm = ({ pageContext }) => {
       </div>
 
       <form
-        name="contact"
+        name="carquote"
         method="post"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
@@ -112,11 +112,7 @@ const CarForm = ({ pageContext }) => {
             Don’t fill this out if you’re human: <input name="bot-field" />
           </label>
         </p>
-        <input type="hidden" name="form-name" value="contact" />
-        {/* Agrega el campo oculto con el nombre del formulario */}
-        <input type="hidden" name="form-name" value="contact" />
-
-        {/* Sección de Datos Personales */}
+        <input type="hidden" name="form-name" value="carquote" />
         <fieldset
           className="flex flex-col mb-10 md:row-span-2 md:w-1/2"
           role="group"
@@ -145,6 +141,9 @@ const CarForm = ({ pageContext }) => {
               </label>
               <input
                 className="w-full h-10"
+                type="email"
+                id="name"
+                name="name"
                 value={email}
                 onChange={handleChange}
               />
@@ -163,6 +162,9 @@ const CarForm = ({ pageContext }) => {
               </label>
               <input
                 className="w-full h-10"
+                type="email"
+                id="name"
+                name="name"
                 value={email}
                 onChange={handleChange}
               />
@@ -189,6 +191,7 @@ const CarForm = ({ pageContext }) => {
                 value={phone}
                 onChange={phone => setPhone(phone)}
                 inputStyle={{ width: "100%", borderRadius: "0" }}
+                inputProps={{ name: "phoneNumber", type: "tel" }}
                 className="w-full h-10"
               />
             </div>
@@ -204,6 +207,7 @@ const CarForm = ({ pageContext }) => {
                 value={value}
                 onChange={changeHandler}
                 className="w-full h-10"
+                name="countrySelection"
               >
                 <option value="">Select...</option>
                 {countries.map(country => (
@@ -299,7 +303,7 @@ const CarForm = ({ pageContext }) => {
           </legend>
           <div className="flex flex-col justify-between pr-3">
             <label
-              htmlFor="selectedDate"
+              htmlFor="startDate"
               className="text-xl w-full my-2 font-black"
             >
               Selected Date:
@@ -311,13 +315,14 @@ const CarForm = ({ pageContext }) => {
               }}
               value={date}
               onChange={handleDateChange}
-              id="selectedDate"
+              name="StartDate"
+              id="startDate"
               className="w-full h-10 px-4 py-2"
             />
           </div>
           <div className="flex flex-col justify-between pr-3">
             <label
-              htmlFor="selectedTime"
+              htmlFor="startTime"
               className="text-xl w-full my-2 font-black"
             >
               Selected Time:
@@ -333,7 +338,8 @@ const CarForm = ({ pageContext }) => {
               }}
               value={time}
               onChange={handleTimeChange}
-              id="selectedTime"
+              name="StartTime"
+              id="startTime"
               className="w-full h-10 px-4 py-2"
             />
           </div>
@@ -397,6 +403,7 @@ const CarForm = ({ pageContext }) => {
               }}
               value={date}
               onChange={handleDateChange}
+              name="EndDate"
               id="selectedDate"
               className="w-full h-10 px-4 py-2"
             />
@@ -419,6 +426,7 @@ const CarForm = ({ pageContext }) => {
               }}
               value={time}
               onChange={handleTimeChange}
+              name="EndTime"
               id="selectedTime"
               className="w-full h-10 px-4 py-2"
             />
