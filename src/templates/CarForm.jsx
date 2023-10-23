@@ -9,28 +9,33 @@ import { useQuery } from "@apollo/client"
 import { Cars } from "../gql/carsByIdQuery"
 
 const CarForm = ({ pageContext }) => {
-  const { carName, remoteId } = pageContext
+  // const { carName, remoteId } = pageContext
 
   const [phone, setPhone] = useState("")
 
   const [value, setValue] = useState("")
 
-  const [time, setTime] = useState(new Date())
+  const [startDate, setStartDate] = useState(new Date())
+  const [startTime, setStartTime] = useState(new Date())
 
-  const handleTimeChange = selectedTime => {
-    setTime(selectedTime[0])
+  const handleTimeChange = (selectedTime, setState) => {
+    if (selectedTime && selectedTime.length > 0) {
+      setState(selectedTime[0])
+    }
   }
+
   const countries = useMemo(() => countryList().getData(), [])
 
   const changeHandler = e => {
     setValue(e.target.value)
   }
 
-  const [date, setDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
+  const [endTime, setEndTime] = useState(new Date())
 
-  const handleDateChange = selectedDates => {
-    if (selectedDates && selectedDates.length > 0) {
-      setDate(selectedDates[0])
+  const handleDateChange = (selectedDate, setState) => {
+    if (selectedDate && selectedDate.length > 0) {
+      setState(selectedDate[0])
     }
   }
 
@@ -57,25 +62,25 @@ const CarForm = ({ pageContext }) => {
     if (suggestion != null) setEmail(suggestion)
   }
 
-  const {
-    data: carsById,
-    loading: carsByIdQueryLoading,
-    error: carsByIdQueryError,
-  } = useQuery(Cars, {
-    variables: { internalId: remoteId, locale: ["en"] },
-  })
-  if (carsByIdQueryLoading) return <p>Loading...</p>
-  if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
+  // const {
+  //   data: carsById,
+  //   loading: carsByIdQueryLoading,
+  //   error: carsByIdQueryError,
+  // } = useQuery(Cars, {
+  //   variables: { internalId: remoteId, locale: ["en"] },
+  // })
+  // if (carsByIdQueryLoading) return <p>Loading...</p>
+  // if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
       <h1 className="mb-10 font-CarterOne lg:text-5xl">Get a Quote</h1>
       <p className="font-bold">
-        Your Car: <span className="font-normal">{carName}</span>
+        {/* Your Car: <span className="font-normal">{carName}</span> */}
       </p>
       <div className="flex ml-16 mb-10">
-        <img src={carsById.cars[0].carMainPhoto.url} className="w-64 mr-10" />
-        <table>
+        {/* <img src={carsById.cars[0].carMainPhoto.url} className="w-64 mr-10" /> */}
+        {/* <table>
           <thead>
             <tr className="text-xl text-left">
               <th>Season</th>
@@ -96,7 +101,7 @@ const CarForm = ({ pageContext }) => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
 
       <form
@@ -142,8 +147,8 @@ const CarForm = ({ pageContext }) => {
               <input
                 className="w-full h-10"
                 type="email"
-                id="name"
-                name="name"
+                id="email"
+                name="email"
                 value={email}
                 onChange={handleChange}
               />
@@ -151,20 +156,29 @@ const CarForm = ({ pageContext }) => {
             {suggestion && (
               <div>
                 Did you mean{" "}
-                <a href="#" onClick={acceptSuggestion}>
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
+                    acceptSuggestion() // Llama a tu función acceptSuggestion
+                  }}
+                >
                   {suggestion}
                 </a>
               </div>
             )}
             <div className="flex flex-col justify-between pr-3">
-              <label htmlFor="email" className="text-xl w-full my-2 font-black">
+              <label
+                htmlFor="emailConfirm"
+                className="text-xl w-full my-2 font-black"
+              >
                 Confirm Email Address*:
               </label>
               <input
                 className="w-full h-10"
                 type="email"
-                id="name"
-                name="name"
+                id="emailConfirm"
+                name="emailConfirm"
                 value={email}
                 onChange={handleChange}
               />
@@ -173,7 +187,13 @@ const CarForm = ({ pageContext }) => {
             {suggestion && (
               <div>
                 Did you mean{" "}
-                <a href="#" onClick={acceptSuggestion}>
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
+                    acceptSuggestion() // Llama a tu función acceptSuggestion
+                  }}
+                >
                   {suggestion}
                 </a>
               </div>
@@ -211,7 +231,7 @@ const CarForm = ({ pageContext }) => {
               >
                 <option value="">Select...</option>
                 {countries.map(country => (
-                  <option key={country.value} value={country.value}>
+                  <option key={country.value} value={country.label}>
                     {country.label}
                   </option>
                 ))}
@@ -306,26 +326,31 @@ const CarForm = ({ pageContext }) => {
               htmlFor="startDate"
               className="text-xl w-full my-2 font-black"
             >
-              Selected Date:
+              Takeover date <span className="text-red-500">*</span>:
             </label>
             <Flatpickr
               options={{
                 dateFormat: "F d, Y",
                 minDate: "today",
               }}
-              value={date}
-              onChange={handleDateChange}
+              value={startDate}
+              onChange={selectedDate =>
+                handleDateChange(selectedDate, setStartDate)
+              }
               name="StartDate"
               id="startDate"
               className="w-full h-10 px-4 py-2"
             />
+            <sub className="text-sm text-gray-500 mt-2">
+              Choose the pick-up date
+            </sub>
           </div>
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="startTime"
               className="text-xl w-full my-2 font-black"
             >
-              Selected Time:
+              Time:
             </label>
             <Flatpickr
               options={{
@@ -336,12 +361,17 @@ const CarForm = ({ pageContext }) => {
                 minTime: "6:00",
                 maxTime: "19:00",
               }}
-              value={time}
-              onChange={handleTimeChange}
+              value={startTime}
+              onChange={selectedTime =>
+                handleTimeChange(selectedTime, setStartTime)
+              }
               name="StartTime"
               id="startTime"
               className="w-full h-10 px-4 py-2"
             />
+            <sub className="text-sm text-gray-500 mt-2">
+              Choose the pick-up time
+            </sub>
           </div>
           <div className="col-[1/3] justify-between pr-3">
             <div className="mb-6">
@@ -394,26 +424,31 @@ const CarForm = ({ pageContext }) => {
               htmlFor="selectedDate"
               className="text-xl w-full my-2 font-black"
             >
-              Selected Date:
+              Return date <span className="text-red-500">*</span>:
             </label>
             <Flatpickr
               options={{
                 dateFormat: "F d, Y",
                 minDate: "today",
               }}
-              value={date}
-              onChange={handleDateChange}
+              value={endDate}
+              onChange={selectedDate =>
+                handleDateChange(selectedDate, setEndDate)
+              }
               name="EndDate"
-              id="selectedDate"
+              id="endDate"
               className="w-full h-10 px-4 py-2"
             />
+            <sub className="text-sm text-gray-500 mt-2">
+              Choose the drop-off date
+            </sub>
           </div>
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="selectedTime"
               className="text-xl w-full my-2 font-black"
             >
-              Selected Time:
+              Time:
             </label>
             <Flatpickr
               options={{
@@ -424,12 +459,17 @@ const CarForm = ({ pageContext }) => {
                 minTime: "6:00",
                 maxTime: "19:00",
               }}
-              value={time}
-              onChange={handleTimeChange}
+              value={endTime}
+              onChange={selectedTime =>
+                handleTimeChange(selectedTime, setEndTime)
+              }
               name="EndTime"
-              id="selectedTime"
+              id="endTime"
               className="w-full h-10 px-4 py-2"
             />
+            <sub className="text-sm text-gray-500 mt-2">
+              Choose the drop-off time
+            </sub>
           </div>
           <div className="col-[1/3] justify-between pr-3">
             <div className="mb-6">
@@ -486,7 +526,7 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="secondDriver"
                   name="secondDriver"
-                  value="Second driver (must be over 25 years old)"
+                  value="YES"
                 />
                 <label className="ml-2" htmlFor="secondDriver">
                   Second driver (must be over 25 years old)
@@ -497,7 +537,7 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="roofRack"
                   name="roofRack"
-                  value="Roof rack (consisting of 2 cross braces for surfboard or kayak transport)"
+                  value="YES"
                 />
                 <label className="ml-2" htmlFor="roofRack">
                   Roof rack (consisting of 2 cross braces for surfboard or kayak
@@ -509,7 +549,7 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="childSeats"
                   name="childSeats"
-                  value="Child seats (different sizes)"
+                  value="YES"
                 />
                 <label className="ml-2" htmlFor="childSeats">
                   Child seats (different sizes)
@@ -520,19 +560,14 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="seatElevations"
                   name="seatElevations"
-                  value="Seat elevations/Booster Seat"
+                  value="YES"
                 />
                 <label className="ml-2" htmlFor="seatElevations">
                   Seat elevations/Booster Seat
                 </label>
               </li>
               <li className="mb-2">
-                <input
-                  type="checkbox"
-                  id="cooler"
-                  name="cooler"
-                  value="Cooler"
-                />
+                <input type="checkbox" id="cooler" name="cooler" value="YES" />
                 <label className="ml-2" htmlFor="cooler">
                   Cooler
                 </label>
@@ -542,7 +577,7 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="beachChairs"
                   name="beachChairs"
-                  value="Beach chairs"
+                  value="YES"
                 />
                 <label className="ml-2" htmlFor="beachChairs">
                   Beach chairs
@@ -553,7 +588,7 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="phoneHolder"
                   name="phoneHolder"
-                  value="Phone holder"
+                  value="YES"
                 />
                 <label className="ml-2" htmlFor="phoneHolder">
                   Phone holder
@@ -624,11 +659,11 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="simpleSmartphone"
                   name="simpleSmartphone"
-                  value="(US$ 25.-) Simple smartphone (for navigation and local phone calls)."
+                  value="YES"
                 />
                 <label htmlFor="simpleSmartphone">
-                  (US$text-xl 25.-) Simple smartphone (for navigation and local
-                  phone calls).
+                  (US$ 25.-) Simple smartphone (for navigation and local phone
+                  calls).
                 </label>
               </li>
               <li className="mb-2">
@@ -636,12 +671,12 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="comprehensiveInsurance"
                   name="comprehensiveInsurance"
-                  value="Fully comprehensive insurance without excess / Zero deductible insurance /Full CDW (US$ 7.- to US$9,90.- depend on the car model)"
+                  value="YES"
                 />
                 <label htmlFor="comprehensiveInsurance">
-                  Fully comprehensivetext-xl insurance without excess / Zero
-                  deductible insurance /Full CDW (US$ 7.- to US$9,90.- depend on
-                  the car model)
+                  Fully comprehensive insurance without excess / Zero deductible
+                  insurance /Full CDW (US$ 7.- to US$9,90.- depend on the car
+                  model)
                 </label>
               </li>
               <li className="mb-2">
@@ -649,10 +684,10 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="kolbiSIMCard"
                   name="kolbiSIMCard"
-                  value="(US$ 15.-) KOLBI SIM phone card."
+                  value="YES"
                 />
                 <label htmlFor="kolbiSIMCard">
-                  (US$text-xl 15.-) KOLBI SIM phone card.
+                  (US$ 15.-) KOLBI SIM phone card.
                 </label>
               </li>
               <li className="mb-2">
@@ -660,11 +695,10 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="roofBasket"
                   name="roofBasket"
-                  value="A roof basket for additional items of luggage. (US$ 5.-/day)"
+                  value="YES"
                 />
                 <label htmlFor="roofBasket">
-                  A rooftext-xl basket for additional items of luggage. (US$
-                  5.-/day)
+                  A roof basket for additional items of luggage. (US$ 5.-/day)
                 </label>
               </li>
               <li className="mb-2">
@@ -672,33 +706,29 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="thirdDriver"
                   name="thirdDriver"
-                  value="Third  driver (US$ 5/day)"
+                  value="YES"
                 />
-                <label htmlFor="thirdDriver">
-                  Third drivertext-xl (US$ 5/day)
-                </label>
+                <label htmlFor="thirdDriver">Third driver (US$ 5/day)</label>
               </li>
               <li className="mb-2">
                 <input
                   type="checkbox"
                   id="fourthDriver"
                   name="fourthDriver"
-                  value="Fourth driver (US$ 5/day)"
+                  value="YES"
                 />
-                <label htmlFor="fourthDriver">
-                  Fourth drivertext-xl (US$ 5/day)
-                </label>
+                <label htmlFor="fourthDriver">Fourth driver (US$ 5/day)</label>
               </li>
               <li className="mb-2">
                 <input
                   type="checkbox"
                   id="supplementaryInsurance"
                   name="supplementaryInsurance"
-                  value="Supplementary insurance for drivers between the ages of 21 and 25. (UAS$ 6.-/day)"
+                  value="YES"
                 />
                 <label htmlFor="supplementaryInsurance">
-                  Supplementary insurancetext-xl for drivers between the ages of
-                  21 and 25. (UAS$ 6.-/day)
+                  Supplementary insurance for drivers between the ages of 21 and
+                  25. (UAS$ 6.-/day)
                 </label>
               </li>
               <li className="mb-2">
@@ -706,11 +736,11 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="pickupOrDropoffAtHotels"
                   name="pickupOrDropoffAtHotels"
-                  value="Pick-up or drop-off at hotels; RB&amp;B outside of Alajuela or San Jose. Price according to distance"
+                  value="YES"
                 />
                 <label htmlFor="pickupOrDropoffAtHotels">
-                  Pick-uptext-xl or drop-off at hotels; RB&amp;B outside of
-                  Alajuela or San Jose. Price according to distance
+                  Pick-up or drop-off at hotels; RB&amp;B outside of Alajuela or
+                  San Jose. Price according to distance
                 </label>
               </li>
               <li>
@@ -718,11 +748,11 @@ const CarForm = ({ pageContext }) => {
                   type="checkbox"
                   id="deliveryOrCollection"
                   name="deliveryOrCollection"
-                  value="Delivery or collection at different locations countrywide. Price according to distance"
+                  value="YES"
                 />
                 <label htmlFor="deliveryOrCollection">
-                  Delivery ortext-xl collection at different locations
-                  countrywide. Price according to distance
+                  Delivery or collection at different locations countrywide.
+                  Price according to distance
                 </label>
               </li>
             </ul>
