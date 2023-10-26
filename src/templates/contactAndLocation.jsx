@@ -1,11 +1,16 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useEffect, useState } from "react"
+import { useApolloClient, useQuery } from "@apollo/client"
+import { PhoneInput } from "react-international-phone"
+import mailcheck from "mailcheck"
 import ReCAPTCHA from "react-google-recaptcha"
 import parkingWR1 from "../images/Captura de pantalla 2023-09-06 124559(2).png"
 import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
+import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
 
 export default function useContactAndLocation({ pageContext }) {
   const captcha = useRef(null)
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
+  const [phone, setPhone] = useState("")
 
   const onChange = () => {
     if (captcha.current.getValue()) {
@@ -14,17 +19,58 @@ export default function useContactAndLocation({ pageContext }) {
     }
   }
 
+  const [email, setEmail] = useState(" ")
+  const [suggestion, setSuggestion] = useState(null)
+
+  useEffect(() => {
+    mailcheck.run({
+      email: email,
+      suggested(s) {
+        setSuggestion(s.full)
+      },
+      empty() {
+        setSuggestion(null)
+      },
+    })
+  }, [email])
+
+  const handleChange = e => {
+    setEmail(e.currentTarget.value)
+  }
+
+  const acceptSuggestion = e => {
+    if (suggestion != null) setEmail(suggestion)
+  }
+
+  const client = useApolloClient()
+  const {
+    data: ContactAndLocationData,
+    loading: ContactAndLocationDataQueryLoading,
+    error: ContactAndLocationDataQueryError,
+  } = useQuery(ContactContent, {
+    variables: {
+      // internalId: pageContext.remoteId,
+      locale: [pageContext.langKey],
+    },
+  })
+  client.refetchQueries({
+    include: [ContactContent],
+  })
+  if (ContactAndLocationDataQueryLoading) return <p>Loading...</p>
+
+  const pageData = ContactAndLocationData.contactAndLocations[0]
+
   return (
     <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
       <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] min-[2000px]:col-[1/4] min-[2000px]:row-[1/2]">
-        Contact & Location
+        {pageData.title}
       </h1>
       <form
         name="contact"
         method="post"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
-        className="m-2 md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
+        className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
       >
         {/* You still need to add the hidden input with the form name to your JSX form */}
         <p className="hidden">
@@ -44,13 +90,13 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="nombre"
               className="w-full my-2 font-black font-Poppins"
             >
-              Name*:
+              {pageData.contactForm.nameField}
+              <span className="text-red-500">*</span>:
             </label>
             <input
               type="text"
               id="nombre"
               name="nombre"
-              placeholder="Name"
               className="w-full h-10"
               required
             />
@@ -60,13 +106,13 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="surname"
               className="w-full my-2 font-black font-Poppins"
             >
-              Surname*:
+              {pageData.contactForm.surnameField}
+              <span className="text-red-500">*</span>:
             </label>
             <input
               type="text"
               id="surname"
               name="surname"
-              placeholder="Surname"
               className="w-full h-10"
               required
             />
@@ -74,41 +120,73 @@ export default function useContactAndLocation({ pageContext }) {
         </fieldset>
 
         <fieldset
-          className="flex flex-row"
+          className="md:flex md:flex-row"
           role="group"
           aria-label="Correo Electrónico"
         >
-          <div className="flex flex-col justify-between w-1/2 pr-3">
+          <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
             <label
-              htmlFor="correo"
+              htmlFor="email"
               className="w-full my-2 font-black font-Poppins"
             >
-              Email*:
+              {pageData.contactForm.emailField}{" "}
+              <span className="text-red-500">*</span>
             </label>
             <input
-              type="email"
-              id="correo"
-              name="correo"
               className="w-full h-10"
-              placeholder="Email"
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleChange}
               required
             />
+            {suggestion && (
+              <div>
+                Did you mean{" "}
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
+                    acceptSuggestion() // Llama a tu función acceptSuggestion
+                  }}
+                >
+                  {suggestion}
+                </a>
+              </div>
+            )}
           </div>
-          <div className="flex flex-col justify-between w-1/2 pl-3">
+          <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
             <label
-              htmlFor="correoconfirm"
+              htmlFor="emailConfirm"
               className="w-full my-2 font-black font-Poppins"
             >
-              Confirm Email*:
+              {pageData.contactForm.confirmEmailField}{" "}
+              <span className="text-red-500">*</span>
             </label>
             <input
-              type="email"
-              id="correoconfirm"
-              name="correoconfirm"
               className="w-full h-10"
-              placeholder="Confirm Email"
+              type="email"
+              id="emailConfirm"
+              name="emailConfirm"
+              value={email}
+              onChange={handleChange}
               required
             />
+            {suggestion && (
+              <div>
+                Did you mean{" "}
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
+                    acceptSuggestion() // Llama a tu función acceptSuggestion
+                  }}
+                >
+                  {suggestion}
+                </a>
+              </div>
+            )}
           </div>
         </fieldset>
 
@@ -117,36 +195,23 @@ export default function useContactAndLocation({ pageContext }) {
           role="group"
           aria-label="Número de Teléfono"
         >
-          <div className="flex flex-col justify-between w-1/2 pr-3">
+          <div className="flex flex-col justify-between w-full">
             <label
-              htmlFor="countryCode"
+              htmlFor="phoneNumber"
               className="w-full my-2 font-black font-Poppins"
             >
-              Country Code:
+              {pageData.contactForm.phoneNumberField}:
             </label>
-            <input
-              type="tel"
-              id="countryCode"
-              name="countryCode"
-              pattern="[0-3]{3}"
-              placeholder="+01"
-              className="w-full h-10"
-            />
-          </div>
-
-          <div className="flex flex-col justify-between w-1/2 pl-3">
-            <label
-              htmlFor="telefono"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              Phone number:
-            </label>
-            <input
-              type="tel"
-              id="telefono"
-              name="telefono"
-              pattern="[0-9]{10}"
-              placeholder="Ej. 1234567890"
+            <PhoneInput
+              defaultCountry="us"
+              value={phone}
+              onChange={phone => setPhone(phone)}
+              inputStyle={{ width: "100%", borderRadius: "0" }}
+              inputProps={{
+                name: "phoneNumber",
+                type: "tel",
+                id: "phoneNumber",
+              }}
               className="w-full h-10"
             />
           </div>
@@ -158,14 +223,14 @@ export default function useContactAndLocation({ pageContext }) {
           aria-label="Mensaje"
         >
           <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
-            Message*:
+            {pageData.contactForm.messageField}{" "}
+            <span className="text-red-500">*</span>:
           </label>
           <textarea
             id="mensaje"
             name="mensaje"
             rows="5"
             required
-            placeholder="Message"
             className="lg:h-16"
           ></textarea>
         </fieldset>
@@ -188,9 +253,9 @@ export default function useContactAndLocation({ pageContext }) {
         </div>
         <button
           type="submit"
-          className="bg-[#F6CC4D] text-white h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
+          className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
         >
-          SEND
+          {pageData.contactForm.sendButton}
         </button>
       </form>
 
@@ -235,16 +300,19 @@ export default function useContactAndLocation({ pageContext }) {
 
       <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
         <img
-          src={parkingWR1}
+          src={pageData.topImage.url}
           alt="Profile"
           className="mb-10 min-[2000px]:mx-auto"
         />
-        <img src={parkingWR2} alt="Profile" className="min-[2000px]:m-auto" />
+        <img
+          src={pageData.bottomImage.url}
+          alt="Profile"
+          className="min-[2000px]:m-auto"
+        />
       </div>
 
       <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
-        Calle Alajuela, behind City Mall, from “Molinos de Costa Rica” 300
-        meters South. Alajuela, Costa Rica
+        {pageData.address}
       </p>
 
       <iframe

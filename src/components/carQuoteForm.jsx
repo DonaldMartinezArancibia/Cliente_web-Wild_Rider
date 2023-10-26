@@ -130,7 +130,7 @@ const CarFormHtml = apolloData => {
           <div className="flex flex-col md:justify-between">
             <div className="w-full pr-3">
               <label htmlFor="name" className="text-xl w-full font-black">
-                Complete Name*:
+                Complete Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -143,7 +143,7 @@ const CarFormHtml = apolloData => {
             </div>
             <div className="flex flex-col justify-between pr-3">
               <label htmlFor="email" className="text-xl w-full my-2 font-black">
-                Email*:
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 className="w-full h-10"
@@ -173,7 +173,7 @@ const CarFormHtml = apolloData => {
                 htmlFor="emailConfirm"
                 className="text-xl w-full my-2 font-black"
               >
-                Confirm Email Address*:
+                Confirm Email Address <span className="text-red-500">*</span>
               </label>
               <input
                 className="w-full h-10"
@@ -212,7 +212,11 @@ const CarFormHtml = apolloData => {
                 value={phone}
                 onChange={phone => setPhone(phone)}
                 inputStyle={{ width: "100%", borderRadius: "0" }}
-                inputProps={{ name: "phoneNumber", type: "tel" }}
+                inputProps={{
+                  name: "phoneNumber",
+                  type: "tel",
+                  id: "phoneNumber",
+                }}
                 className="w-full h-10"
               />
             </div>
@@ -221,7 +225,7 @@ const CarFormHtml = apolloData => {
                 htmlFor="country"
                 className="text-xl w-full my-2 font-black"
               >
-                Your country of residence*:
+                Your country of residence:
               </label>
               <select
                 id="country"
@@ -245,7 +249,7 @@ const CarFormHtml = apolloData => {
               htmlFor="numberOfTravelers"
               className="text-xl w-full my-2 font-black"
             >
-              Number of travelers <span className="text-red-500">*</span>
+              Number of travelers <span className="text-red-500">*</span>{" "}
             </label>
             <select
               id="numberOfTravelers"
@@ -272,7 +276,7 @@ const CarFormHtml = apolloData => {
               htmlFor="vehicleSelection"
               className="text-xl w-full my-2 font-black"
             >
-              Vehicle selection*:
+              Vehicle selection <span className="text-red-500">*</span>
             </label>
             <select
               id="vehicleSelection"
@@ -327,7 +331,7 @@ const CarFormHtml = apolloData => {
               htmlFor="startDate"
               className="text-xl w-full my-2 font-black"
             >
-              Takeover date <span className="text-red-500">*</span>:
+              Takeover date <span className="text-red-500">*</span>
             </label>
             <Flatpickr
               options={{
@@ -380,7 +384,7 @@ const CarFormHtml = apolloData => {
                 htmlFor="takeoverPlace"
                 className="text-xl block font-semibold my-2"
               >
-                Takeover place <span className="text-red-500">*</span>:
+                Takeover place <span className="text-red-500">*</span>
               </label>
               <select
                 id="takeoverPlace"
@@ -425,7 +429,7 @@ const CarFormHtml = apolloData => {
               htmlFor="selectedDate"
               className="text-xl w-full my-2 font-black"
             >
-              Return date <span className="text-red-500">*</span>:
+              Return date <span className="text-red-500">*</span>
             </label>
             <Flatpickr
               options={{
@@ -478,7 +482,7 @@ const CarFormHtml = apolloData => {
                 htmlFor="returnPlace"
                 className="text-xl block font-semibold my-2"
               >
-                Return place <span className="text-red-500">*</span>:
+                Return place <span className="text-red-500">*</span>
               </label>
               <select
                 id="returnPlace"
