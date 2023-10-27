@@ -319,7 +319,7 @@ export default function useContactAndLocation({ pageContext }) {
         width="360"
         height="300"
         id="gmap_canvas"
-        src="https://maps.google.com/maps?q=wild%20rider&t=&z=18&ie=UTF8&iwloc=&output=embed"
+        src="https://maps.google.com/maps?q=wild%20rider%204x4&t=&z=18&ie=UTF8&iwloc=&output=embed"
         frameBorder="0"
         scrolling="no"
         marginHeight="0"
