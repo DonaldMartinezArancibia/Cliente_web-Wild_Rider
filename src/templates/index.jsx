@@ -4,7 +4,7 @@ import Storedata from "../components/storedata"
 import ImageSlider from "../components/imageSlider"
 import Example from "../components/popup"
 // import MapContainer from "../components/reviewsData"
-import MapContainer from "../components/reviewsHygraph"
+import { MapContainerLayoutB } from "../components/reviewsHygraph"
 import { StaticImage } from "gatsby-plugin-image"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { IndexContent } from "../gql/indexQuery"
@@ -16,7 +16,12 @@ export default function IndexPage({ pageContext }) {
     data: IndexContentData,
     loading: IndexContentDataQueryLoading,
     error: IndexContentDataQueryError,
-  } = useQuery(IndexContent)
+  } = useQuery(IndexContent, {
+    variables: {
+      // internalId: pageContext.remoteId,
+      locale: [pageContext.langKey],
+    },
+  })
   client.refetchQueries({
     include: [IndexContent],
   })
@@ -36,6 +41,24 @@ export default function IndexPage({ pageContext }) {
   //   return `/${language}/`
   //
 
+  function obtenerIdYouTube(url) {
+    const expresionesRegulares = [
+      /youtube\.com\/watch\?v=(\w{11})(&t=\w+)?/,
+      /youtu\.be\/(\w{11})\?(&t=\w+)?/,
+      /youtube\.com\/live\/(\w{11})/,
+    ]
+
+    for (const regex of expresionesRegulares) {
+      const match = url.match(regex)
+
+      if (match) {
+        return match[1]
+      }
+    }
+
+    return null // Si no se encontró ninguna coincidencia
+  }
+
   // const changeLanguage = (language, slug) => {
   //   const path = generateDynamicPagePath(slug, language)
   //   navigate(path)
@@ -52,9 +75,11 @@ export default function IndexPage({ pageContext }) {
           {IndexContentData.indices[0].mainTextBelow.markdown}
         </ReactMarkdown>
       </section>
-      <button className="bg-[#0833a2] text-white ml-16 py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg">
-        View Cars
-      </button>
+      <a href={IndexContentData.indices[0].viewCarsbuttonurl.slug}>
+        <button className="bg-[#0833a2] text-white block m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg md:ml-16">
+          {IndexContentData.indices[0].viewCarsButtonText}
+        </button>
+      </a>
       {/* <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
         — 25 Years of Costa Rica Experience
       </h4> */}
@@ -86,15 +111,17 @@ export default function IndexPage({ pageContext }) {
           for 1-5 travelers and fast communication with our travel experts.
         </p>
       </div> */}
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest pl-4 xl:pl-16 mb-4 mt-8">
-        — VIDEOS
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase pl-4 xl:pl-16 mb-4 mt-8">
+        — {IndexContentData.indices[0].videosSectionTitle}
       </h4>
       <div className="flex items-center justify-center px-4 video-container">
         <iframe
           title="YouTube video player"
           width="1007"
           height="570"
-          src="https://www.youtube.com/embed/4hY11BvySTk"
+          src={`https://www.youtube.com/embed/${obtenerIdYouTube(
+            IndexContentData.indices[0].youtubeUrlVideo
+          )}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className=" rounded-3xl"
@@ -316,8 +343,8 @@ export default function IndexPage({ pageContext }) {
           </div>
           </div>
         </div> */}
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-8 mt-16">
-        — OFFERS
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase px-4 xl:pl-16 mb-8 mt-16">
+        — {IndexContentData.indices[0].offersSectionTitle}
       </h4>
       <h1 className="max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne">
         Free Benefits
@@ -344,14 +371,19 @@ export default function IndexPage({ pageContext }) {
         <p className="col-span-1">Mountains Information</p>
         <p className="col-span-1">Free Insurance</p>
       </section>
-      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest px-4 xl:pl-16 mb-4 mt-8">
-        — TESTIMONIALS
+      <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase px-4 xl:pl-16 mb-8 mt-16">
+        — {IndexContentData.indices[0].testimonialsSectionTitle}
       </h4>
-      <MapContainer />
+      <section id="sectionBellowTestimonialsTitle">
+        <ReactMarkdown>
+          {IndexContentData.indices[0].testimonialSectionText.markdown}
+        </ReactMarkdown>
+      </section>
+      <MapContainerLayoutB pageContext={pageContext} />
       {/* <div className="mx-auto">{<ImageSlider images={images} />}</div> */}
       {/* <button onClick={() => changeLanguage("es", slug)}>Español</button> */}
       {/* <Example /> */}
-      <Showdata pageContext={pageContext} />
+      {/* <Showdata pageContext={pageContext} /> */}
       {/* <Storedata /> */}
     </main>
   )

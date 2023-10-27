@@ -6,9 +6,26 @@ const Testimonial = gql`
       localizations {
         slug
         locale
+        title
       }
     }
   }
 `
 
-export { Testimonial }
+const TestimonialPageContent = gql`
+  query Testimonial($locale: [Locale!]!) {
+    testimonials(locales: $locale) {
+      title
+      testimonialSectionText {
+        testimonialSectionText {
+          text
+          raw
+          markdown
+          html
+        }
+      }
+    }
+  }
+`
+
+export { Testimonial, TestimonialPageContent }

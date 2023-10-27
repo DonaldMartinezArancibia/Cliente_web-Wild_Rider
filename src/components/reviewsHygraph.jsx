@@ -228,14 +228,19 @@ const FacebookReviewsCarousel = ({
   )
 }
 
-const MapContainer = props => {
+const MapContainer = pageContext => {
   const [reviews, setReviews] = useState([])
   const client = useApolloClient()
   const {
     data: googleR,
     loading: googleRLoading,
     error: googleRError,
-  } = useQuery(GetAllReviews)
+  } = useQuery(GetAllReviews, {
+    variables: {
+      // internalId: pageContext.remoteId,
+      locale: [pageContext.pageContext.langKey],
+    },
+  })
   client.refetchQueries({
     include: [GetAllReviews],
   })
@@ -294,6 +299,62 @@ const MapContainer = props => {
   )
 }
 
+const ReviewsCarousel = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+}) => {
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 1023,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 599,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
+
+  return (
+    <Slider {...settings} className="!flex mb-5">
+      {reviews.map((review, index) => (
+        <Review
+          key={index}
+          review={review}
+          handleLinkClick={handleLinkClick}
+          imageMapping={imageMapping}
+          truncateReview={truncateReview}
+        />
+      ))}
+    </Slider>
+  )
+}
+
 // Componentes personalizados para las flechas
 const PrevArrow = props => (
   <button {...props} className="slick-arrow custom-prev-arrow">
@@ -307,4 +368,71 @@ const NextArrow = props => (
   </button>
 )
 
-export default MapContainer
+const MapContainerLayoutB = pageContext => {
+  console.log(pageContext)
+  const { data: allReviews, loading: allReviewsLoading } = useQuery(
+    GetAllReviews,
+    {
+      variables: {
+        // internalId: pageContext.remoteId,
+        locale: [pageContext.pageContext.langKey],
+      },
+    }
+  )
+
+  if (allReviewsLoading) return <p>Loading...</p>
+
+  const openReviewLink = url => {
+    window.open(url, "Data", "height=700px,width=600px")
+  }
+
+  const handleLinkClick = (e, url) => {
+    e.preventDefault()
+    openReviewLink(url)
+  }
+
+  const truncateReview = (review, length) => {
+    return review.length > length ? review.substring(0, length) + "..." : review
+  }
+
+  const imageMapping = {
+    TripAdvisor: TripAdvisor,
+    Google: Google,
+    Facebook: Facebook,
+    DefaultImage: null,
+  }
+
+  function shuffleArray(array) {
+    // Crea una copia del arreglo original para no modificarlo directamente
+    const shuffledArray = [...array]
+
+    // Baraja el arreglo utilizando el algoritmo de Fisher-Yates
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ]
+    }
+
+    return shuffledArray
+  }
+
+  // Obtén una copia aleatoria de todas las reseñas
+  const shuffledReviews = shuffleArray([
+    ...allReviews.googleReviews,
+    ...allReviews.tripAdvisorReviews,
+    ...allReviews.facebookReviews,
+  ])
+
+  return (
+    <ReviewsCarousel
+      reviews={shuffledReviews}
+      handleLinkClick={handleLinkClick}
+      imageMapping={imageMapping}
+      truncateReview={truncateReview}
+    />
+  )
+}
+
+export { MapContainer, MapContainerLayoutB }

@@ -45,6 +45,12 @@
   #sectionBellowHeader p:nth-of-type(2) > img {
     @apply xl:w-11/12;
   }
+  #sectionBellowTestimonialsTitle h2 {
+    @apply max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne;
+  }
+  #sectionBellowTestimonialsTitle p {
+    @apply mx-4 mb-5 xl:px-16;
+  }
   .dropdown:hover .dropdown-menu {
     display: block;
   }

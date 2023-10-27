@@ -12,12 +12,23 @@ const Index = gql`
 `
 
 const IndexContent = gql`
-  query IndexContent {
-    indices {
+  query IndexContent($locale: [Locale!]!) {
+    indices(locales: $locale) {
       id
-      mainTextBelowTitle
-      mainTitle
+      viewCarsButtonText
+      viewCarsbuttonurl {
+        slug
+      }
       mainTextBelow {
+        html
+        markdown
+        text
+      }
+      videosSectionTitle
+      youtubeUrlVideo
+      offersSectionTitle
+      testimonialsSectionTitle
+      testimonialSectionText {
         html
         markdown
         text

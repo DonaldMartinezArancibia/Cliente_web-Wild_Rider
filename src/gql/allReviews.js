@@ -1,21 +1,30 @@
 import { gql } from "@apollo/client"
 
 const GetAllReviews = gql`
-  query GoogleReviews {
-    googleReviews: googleReviews(where: { reviewOrigin: Google }) {
+  query GoogleReviews($locale: [Locale!]!) {
+    googleReviews: googleReviews(
+      where: { reviewOrigin: Google }
+      locales: $locale
+    ) {
       ...GoogleReviewFragment
     }
-    tripAdvisorReviews: googleReviews(where: { reviewOrigin: TripAdvisor }) {
+    tripAdvisorReviews: googleReviews(
+      where: { reviewOrigin: TripAdvisor }
+      locales: $locale
+    ) {
       ...GoogleReviewFragment
     }
-    facebookReviews: googleReviews(where: { reviewOrigin: Facebook }) {
+    facebookReviews: googleReviews(
+      where: { reviewOrigin: Facebook }
+      locales: $locale
+    ) {
       ...GoogleReviewFragment
     }
   }
 
   fragment GoogleReviewFragment on GoogleReview {
     reviewLink
-    reviewImage {
+    reviewImage(locales: en) {
       url
     }
     numberOfStars
