@@ -71,6 +71,22 @@ fragment Asset on Asset {
       stage
     }
   }
+  topImageContactAndLocation {
+    ... on ContactAndLocation {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  bottomImageContactAndLocation {
+    ... on ContactAndLocation {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename

@@ -7,6 +7,21 @@ fragment ContactAndLocation on ContactAndLocation {
   remoteId: id
   slug
   title
+  address
+  contactForm {
+    ... on ContactForm {
+      stage
+      locale
+      id
+      nameField
+      surnameField
+      emailField
+      confirmEmailField
+      phoneNumberField
+      messageField
+      sendButton
+    }
+  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -25,6 +40,22 @@ fragment ContactAndLocation on ContactAndLocation {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+  }
+  topImage {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  bottomImage {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }

@@ -28,6 +28,14 @@ fragment Testimonial on Testimonial {
       stage
     }
   }
+  testimonialSectionText {
+    ... on Index {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename
