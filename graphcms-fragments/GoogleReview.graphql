@@ -1,15 +1,15 @@
 fragment GoogleReview on GoogleReview {
   stage
   locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
   remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   reviewerName
   numberOfStars
   review
   reviewLink
-  publishedBy {
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -23,7 +23,7 @@ fragment GoogleReview on GoogleReview {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id

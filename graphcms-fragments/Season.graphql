@@ -1,13 +1,13 @@
 fragment Season on Season {
   stage
-  publishedAt
-  updatedAt
-  createdAt
   remoteId: id
+  createdAt
+  updatedAt
+  publishedAt
   seasonTitle
   startDate
   endDate
-  publishedBy {
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -21,7 +21,7 @@ fragment Season on Season {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id

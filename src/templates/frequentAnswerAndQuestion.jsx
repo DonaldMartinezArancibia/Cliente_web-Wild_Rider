@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { FrequentAnswersAndQuestions } from "../gql/allAnswersAndQuestions"
 import * as JsSearch from "js-search"
+import { FaqContent } from "../gql/faqPageQuery"
 
 export default function useFrequentAnswersAndQuestions({ pageContext }) {
   const client = useApolloClient()
@@ -36,6 +37,14 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
     }))
   }
 
+  const {
+    data: faqPageData,
+    loading: faqPageLoading,
+    error: faqPageError,
+  } = useQuery(FaqContent, {
+    variables: { locale: [pageContext.langKey] },
+  })
+
   useEffect(() => {
     if (!faqLoading && !faqError && faqData) {
       // Obtener el array de preguntas y respuestas
@@ -56,6 +65,8 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
       }
     }
   }, [faqData, faqLoading, faqError, searchTerm])
+
+  console.log(faqPageData)
 
   if (faqLoading) return <p>Loading...</p>
   if (faqError) return <p>Error: {faqError.message}</p>
@@ -79,7 +90,7 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
         <input
           type="text"
           id="FAQsearch"
-          placeholder="Search"
+          placeholder={faqPageData.faqs[0].searchInputPlaceholder}
           value={searchTerm}
           onChange={handleSearchChange}
           className="bg-white w-full h-10 py-7 px-5 rounded placeholder:text-black focus:outline-none focus:border-primary focus:ring focus:border-primary"

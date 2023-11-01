@@ -22,7 +22,6 @@ export default function useTestimonialsPage({ pageContext }) {
   if (TestimonialPageDataQueryLoading) return <p>Loading...</p>
 
   const pageData = TestimonialPageData.testimonials[0]
-  console.log(pageData)
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">

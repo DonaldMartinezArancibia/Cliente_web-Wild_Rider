@@ -6,9 +6,19 @@ const Faq = gql`
       localizations {
         slug
         locale
+        searchInputPlaceholder
       }
     }
   }
 `
 
-export { Faq }
+const FaqContent = gql`
+  query Faq($locale: [Locale!]!) {
+    faqs(locales: $locale) {
+      title
+      searchInputPlaceholder
+    }
+  }
+`
+
+export { Faq, FaqContent }

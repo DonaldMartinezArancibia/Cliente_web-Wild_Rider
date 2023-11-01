@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 
 const menuElements = gql`
   query menuElements($locale: [Locale!]!) {
-    menus(locales: $locale) {
+    menus(locales: $locale, stage: PUBLISHED) {
       menuElements {
         ... on Index {
           id

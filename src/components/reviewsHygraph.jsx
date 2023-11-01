@@ -369,7 +369,6 @@ const NextArrow = props => (
 )
 
 const MapContainerLayoutB = pageContext => {
-  console.log(pageContext)
   const { data: allReviews, loading: allReviewsLoading } = useQuery(
     GetAllReviews,
     {

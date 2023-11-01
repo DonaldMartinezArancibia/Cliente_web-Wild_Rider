@@ -1,10 +1,10 @@
 fragment Car on Car {
   stage
   locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
   remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   carName
   carDetails
   pricesOfCar {
@@ -21,7 +21,7 @@ fragment Car on Car {
       }
     }
   }
-  publishedBy {
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -35,7 +35,7 @@ fragment Car on Car {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id

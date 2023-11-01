@@ -60,6 +60,10 @@ export default function useContactAndLocation({ pageContext }) {
 
   const pageData = ContactAndLocationData.contactAndLocations[0]
 
+  const handleLinkClick = url => {
+    window.open(url, "Data", "height=700px,width=600px")
+  }
+
   return (
     <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
       <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] min-[2000px]:col-[1/4] min-[2000px]:row-[1/2]">
@@ -327,9 +331,10 @@ export default function useContactAndLocation({ pageContext }) {
         className="w-11/12 m-auto my-5 lg:col-[1/3] lg:w-[95%] rounded-xl shadow-md min-[2000px]:row-[2/3] min-[2000px]:col-[3/4] min-[2000px]:w-full min-[2000px]:h-full min-[2000px]:-mt-2"
       ></iframe>
       <a
-        target="_blank"
-        href="https://goo.gl/maps/KVoab3br7v4zSjoCA"
         className="lg:col-[1/3] min-[2000px]:col-[3/4] min-[2000px]:row-[3/4]"
+        onClick={e =>
+          handleLinkClick(e, "https://goo.gl/maps/KVoab3br7v4zSjoCA")
+        }
       >
         <button className="bg-[#0833a2] flex text-white m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg min-[2000px]:mt-2">
           Google Maps

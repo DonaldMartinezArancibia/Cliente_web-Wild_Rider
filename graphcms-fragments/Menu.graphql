@@ -1,10 +1,10 @@
 fragment Menu on Menu {
   stage
-  publishedAt
-  updatedAt
-  createdAt
   remoteId: id
-  publishedBy {
+  createdAt
+  updatedAt
+  publishedAt
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -18,7 +18,7 @@ fragment Menu on Menu {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id

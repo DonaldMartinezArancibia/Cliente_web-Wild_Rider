@@ -1,20 +1,13 @@
 fragment ScheduledOperation on ScheduledOperation {
   stage
-  rawPayload
-  errorMessage
-  description
-  publishedAt
-  updatedAt
-  createdAt
   remoteId: id
-  release {
-    ... on ScheduledRelease {
-      remoteTypeName: __typename
-      remoteId: id
-      stage
-    }
-  }
-  publishedBy {
+  createdAt
+  updatedAt
+  publishedAt
+  description
+  errorMessage
+  rawPayload
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -28,8 +21,15 @@ fragment ScheduledOperation on ScheduledOperation {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  release {
+    ... on ScheduledRelease {
       remoteTypeName: __typename
       remoteId: id
       stage

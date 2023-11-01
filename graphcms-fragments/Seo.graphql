@@ -1,12 +1,12 @@
 fragment Seo on Seo {
   stage
-  publishedAt
-  updatedAt
-  createdAt
   remoteId: id
+  createdAt
+  updatedAt
+  publishedAt
   title
   description
-  publishedBy {
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -20,7 +20,7 @@ fragment Seo on Seo {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
