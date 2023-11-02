@@ -44,6 +44,7 @@ export default function IndexPage({ pageContext }) {
   function obtenerIdYouTube(url) {
     const expresionesRegulares = [
       /youtube\.com\/watch\?v=(\w{11})(&t=\w+)?/,
+      /[?&]v=([^&]+)/,
       /youtu\.be\/(\w{11})\?(&t=\w+)?/,
       /youtube\.com\/live\/(\w{11})/,
     ]
@@ -75,7 +76,7 @@ export default function IndexPage({ pageContext }) {
           {IndexContentData.indices[0].mainTextBelow.markdown}
         </ReactMarkdown>
       </section>
-      <a href={IndexContentData.indices[0].viewCarsbuttonurl.slug}>
+      <a href={IndexContentData.indices[0].viewCarsbuttonurl?.slug}>
         <button className="bg-[#0833a2] text-white block m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg md:ml-16">
           {IndexContentData.indices[0].viewCarsButtonText}
         </button>

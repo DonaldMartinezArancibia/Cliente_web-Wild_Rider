@@ -37,8 +37,18 @@ export default function LanguageSelector({ pageContext }) {
   if (loading) return <p>Loading...</p>
   if (error) return console.log(error)
 
-  function getSlugByLocale(data) {
-    const indexData = data.index ? data.index.localizations[0] : undefined
+  // console.log(pageContext)
+  console.log(data)
+  function getSlugByLocale(data, lang) {
+    let indexData
+    console.log(lang)
+    console.log(data.index)
+    if (data.index) {
+      // Buscar una coincidencia con otroString
+      indexData = data.index.localizations.find(item => item.locale === lang)
+    }
+    // const indexData = data.index ? data.index.localizations : undefined
+    console.log(indexData)
     const aboutUsAndOurTeamData = data.aboutUsAndOurTeam
       ? data.aboutUsAndOurTeam.localizations[0]
       : undefined
@@ -124,11 +134,10 @@ export default function LanguageSelector({ pageContext }) {
               className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
-                navigate(`/${getSlugByLocale(data)}`)
+                navigate(`/${getSlugByLocale(data, "en")}`)
               }}
-              href="/"
             >
-              {pageContext.langKey === "en" ? "English" : "Español"}
+              {pageContext.langKey === "en" ? "yes English" : "English"}
             </a>
           </li>
           <li className="">
@@ -136,11 +145,10 @@ export default function LanguageSelector({ pageContext }) {
               className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
-                navigate(`/${getSlugByLocale(data)}`)
+                navigate(`/${getSlugByLocale(data, "de")}`)
               }}
-              href="/"
             >
-              {pageContext.langKey === "de" ? "Español" : "German"}
+              {pageContext.langKey === "de" ? "yes German" : "German"}
             </a>
           </li>
           <li className="">
@@ -148,11 +156,10 @@ export default function LanguageSelector({ pageContext }) {
               className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
-                navigate(`/${getSlugByLocale(data)}`)
+                navigate(`/${getSlugByLocale(data, "fr")}`)
               }}
-              href="/"
             >
-              {pageContext.langKey === "fr" ? "Español" : "Francés"}
+              {pageContext.langKey === "fr" ? "yes Francés" : "Francés"}
             </a>
           </li>
           <li className="">
@@ -160,11 +167,21 @@ export default function LanguageSelector({ pageContext }) {
               className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
               onClick={e => {
                 e.preventDefault()
-                navigate(`/${getSlugByLocale(data)}`)
+                navigate(`/${getSlugByLocale(data, "es")}`)
               }}
-              href="/"
             >
-              {pageContext.langKey === "es" ? "English" : "Español"}
+              {pageContext.langKey === "es" ? "yes Español" : "Español"}
+            </a>
+          </li>
+          <li className="">
+            <a
+              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+              onClick={e => {
+                e.preventDefault()
+                navigate(`/${getSlugByLocale(data, "other")}`)
+              }}
+            >
+              {pageContext.langKey === "other" ? "Yes italiano" : "italiano"}
             </a>
           </li>
         </ul>

@@ -17,7 +17,7 @@ exports.createPages = async ({ graphql, actions }) => {
     defer: true,
   })
 
-  const locales = ["es", "en"]
+  const locales = ["es", "en", "de", "fr", "other"]
 
   await Promise.all(
     locales.map(async locale => {

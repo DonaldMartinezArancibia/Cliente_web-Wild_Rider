@@ -50,7 +50,7 @@ module.exports = {
       options: {
         endpoint: process.env.GATSBY_GRAPHCMS_ENDPOINT,
         token: process.env.GATSBY_GRAPHCMS_TOKEN,
-        locales: ["en", "es"],
+        locales: ["en", "es", "de", "fr", "other"],
       },
     },
     // Add to gatsby-config.js
