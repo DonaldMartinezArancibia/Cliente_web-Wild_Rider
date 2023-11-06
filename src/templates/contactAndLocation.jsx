@@ -263,7 +263,7 @@ export default function useContactAndLocation({ pageContext }) {
         </button>
       </form>
 
-      <div className="grid mb-5 mx-3 min-[412px]:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
+      {/* <div className="grid mb-5 mx-3 min-[412px]:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
         <div className="flex items-center col-span-1">
           <svg className="h-8 mr-2 lg:h-12" viewBox="0 0 448 510">
             <path
@@ -300,6 +300,22 @@ export default function useContactAndLocation({ pageContext }) {
             <p>info@wildrider.com</p>
           </div>
         </div>
+      </div> */}
+
+      <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
+        {pageData.contactElements?.map((element, index) => (
+          <div className="flex items-center col-span-1" key={index}>
+            <img
+              className="h-8 mr-2 lg:h-12"
+              src={element?.elementIcon?.url}
+              alt={`${element.elementTitle} Icon`}
+            />
+            <div className="text-base">
+              <p className="font-bold">{element.elementTitle}</p>
+              <p>{element.elementValue}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
@@ -332,9 +348,7 @@ export default function useContactAndLocation({ pageContext }) {
       ></iframe>
       <a
         className="lg:col-[1/3] min-[2000px]:col-[3/4] min-[2000px]:row-[3/4]"
-        onClick={e =>
-          handleLinkClick(e, "https://goo.gl/maps/KVoab3br7v4zSjoCA")
-        }
+        onClick={() => handleLinkClick("https://goo.gl/maps/KVoab3br7v4zSjoCA")}
       >
         <button className="bg-[#0833a2] flex text-white m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg min-[2000px]:mt-2">
           Google Maps

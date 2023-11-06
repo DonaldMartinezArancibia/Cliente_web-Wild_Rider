@@ -31,6 +31,13 @@ const ContactContent = gql`
         sendButton
         surnameField
       }
+      contactElements {
+        elementTitle
+        elementIcon(locales: en) {
+          url
+        }
+        elementValue
+      }
     }
   }
 `

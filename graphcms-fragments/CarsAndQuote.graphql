@@ -7,6 +7,11 @@ fragment CarsAndQuote on CarsAndQuote {
   publishedAt(variation: COMBINED)
   slug
   title
+  carsInformationButtonText
+  seasonTitle
+  datesTitle
+  priceTitle
+  quoteButtonText
   createdBy {
     ... on User {
       remoteTypeName: __typename

@@ -1,4 +1,4 @@
-fragment GoogleReview on GoogleReview {
+fragment Review on Review {
   stage
   locale
   remoteId: id
@@ -32,6 +32,14 @@ fragment GoogleReview on GoogleReview {
   }
   reviewImage {
     ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  testimonial {
+    ... on Testimonial {
       remoteTypeName: __typename
       remoteId: id
       locale

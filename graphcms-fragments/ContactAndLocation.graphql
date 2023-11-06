@@ -22,6 +22,23 @@ fragment ContactAndLocation on ContactAndLocation {
       sendButton
     }
   }
+  contactElements {
+    ... on ContactElement {
+      stage
+      locale
+      id
+      elementTitle
+      elementValue
+      elementIcon {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
   createdBy {
     ... on User {
       remoteTypeName: __typename

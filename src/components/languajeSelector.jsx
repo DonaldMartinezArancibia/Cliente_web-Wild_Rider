@@ -37,21 +37,25 @@ export default function LanguageSelector({ pageContext }) {
   if (loading) return <p>Loading...</p>
   if (error) return console.log(error)
 
-  // console.log(pageContext)
-  console.log(data)
   function getSlugByLocale(data, lang) {
     let indexData
-    console.log(lang)
-    console.log(data.index)
+
     if (data.index) {
-      // Buscar una coincidencia con otroString
       indexData = data.index.localizations.find(item => item.locale === lang)
     }
-    // const indexData = data.index ? data.index.localizations : undefined
-    console.log(indexData)
-    const aboutUsAndOurTeamData = data.aboutUsAndOurTeam
-      ? data.aboutUsAndOurTeam.localizations[0]
-      : undefined
+    let aboutUsAndOurTeamData
+    if (data.aboutUsAndOurTeam) {
+      aboutUsAndOurTeamData = data.aboutUsAndOurTeam.localizations.find(
+        item => item.locale === lang
+      )
+    }
+    let contactData
+    console.log(data.contactAndLocations)
+    if (data.contactAndLocations) {
+      contactData = data.contactAndLocations[0].localizations.find(
+        item => item.locale === lang
+      )
+    }
     const rentalInfoData = data.rentalInfo
       ? data.rentalInfo.localizations[0]
       : undefined
@@ -61,9 +65,6 @@ export default function LanguageSelector({ pageContext }) {
     const faqData = data.faq ? data.faq.localizations[0] : undefined
     const carsAndQuotesData = data.carsAndQuotes
       ? data.carsAndQuotes[0].localizations[0]
-      : undefined
-    const contactData = data.contactAndLocations
-      ? data.contactAndLocations[0].localizations[0]
       : undefined
     const travelPlannerData = data.travelPlanner
       ? data.travelPlanner.localizations[0]

@@ -32,8 +32,8 @@ fragment Asset on Asset {
       stage
     }
   }
-  reviewImageGoogleReview {
-    ... on GoogleReview {
+  reviewImageReview {
+    ... on Review {
       remoteTypeName: __typename
       remoteId: id
       locale
