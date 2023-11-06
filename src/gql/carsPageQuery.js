@@ -11,4 +11,12 @@ const CarsAndQuote = gql`
   }
 `
 
-export { CarsAndQuote }
+const CarContent = gql`
+  query CarsAndQuotes($locale: [Locale!]!) {
+    carsAndQuotes(locales: $locale) {
+      title
+    }
+  }
+`
+
+export { CarsAndQuote, CarContent }

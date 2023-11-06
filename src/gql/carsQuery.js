@@ -5,7 +5,7 @@ const Car = gql`
     cars(locales: $locale) {
       carName
       id
-      carMainPhoto {
+      carMainPhoto(locales: en) {
         url
       }
     }
