@@ -66,21 +66,19 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
     }
   }, [faqData, faqLoading, faqError, searchTerm])
 
-  console.log(faqPageData)
-
   if (faqLoading) return <p>Loading...</p>
   if (faqError) return <p>Error: {faqError.message}</p>
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="font-CarterOne lg:text-5xl mb-10">FAQ</h1>
+      <h1 className="mb-10 font-CarterOne lg:text-5xl">FAQ</h1>
 
-      <div className="relative lg:w-1/2 mb-10">
+      <div className="relative mb-10 lg:w-1/2">
         {/* Input de búsqueda con estilos de Tailwind */}
         <label htmlFor="FAQsearch" className="absolute right-5 top-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-black"
+            className="w-5 h-5 text-black"
             viewBox="0 0 512 512"
             fill="currentColor"
           >
@@ -93,14 +91,14 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
           placeholder={faqPageData.faqs[0].searchInputPlaceholder}
           value={searchTerm}
           onChange={handleSearchChange}
-          className="bg-white w-full h-10 py-7 px-5 rounded placeholder:text-black focus:outline-none focus:border-primary focus:ring focus:border-primary"
+          className="w-full h-10 px-5 bg-white rounded py-7 placeholder:text-black focus:outline-none focus:border-primary focus:ring"
         />
         {/* Ícono de búsqueda con estilos de Tailwind */}
       </div>
 
       <ul>
         {searchResults.map((result, index) => (
-          <li key={index} className="lg:w-1/2 mb-10">
+          <li key={index} className="mb-10 lg:w-1/2">
             <h3
               onClick={() => toggleAnswerVisibility(index)}
               className="p-4 relative bg-white border-[2.9px] border-[#979797] rounded-2xl cursor-pointer z-10"

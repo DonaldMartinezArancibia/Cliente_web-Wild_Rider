@@ -27,6 +27,12 @@ export default function OpenModal({ carId, pageContext }) {
   } = useQuery(Cars, {
     variables: { internalId: carId, locale: [pageContext.langKey] },
   })
+  const [answerState, setAnswerState] = useState(false)
+
+  const toggleAnswerVisibility = () => {
+    setAnswerState(!answerState)
+  }
+
   if (carsByIdQueryLoading) return <p>Loading...</p>
   if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
 
@@ -36,11 +42,11 @@ export default function OpenModal({ carId, pageContext }) {
 
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center 2xl:col-[2/3] 2xl:row-[2/3]">
         <button
           type="button"
           onClick={openModal}
-          className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
+          className="bg-[#0833a2] text-white py-5 px-16 mt-4 hover:bg-blue-800 rounded-lg font-semibold text-lg"
         >
           {car.carsAndQuote.carsInformationButtonText}
         </button>
@@ -91,13 +97,8 @@ export default function OpenModal({ carId, pageContext }) {
                       <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                     </button>
                   </div>
-                  <div className="flex flex-col mt-4 md:flex-row 2xl:mt-12">
-                    <div className="mb-5 md:mr-12 2xl:mr-28">
-                      <ReactMarkdown>
-                        {car.carDetails[0]?.markdown}
-                      </ReactMarkdown>
-                    </div>
-                    <div className="overflow-x-auto">
+                  <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-12">
+                    <div className="overflow-x-auto xl:w-[40%]">
                       <table className="min-w-full">
                         <thead>
                           <tr className="text-xl">
@@ -127,6 +128,54 @@ export default function OpenModal({ carId, pageContext }) {
                           ))}
                         </tbody>
                       </table>
+                    </div>
+                    <div className="xl:w-3/5 2xl:mr-2">
+                      <div className="mb-10 lg:w-full">
+                        <h3
+                          onClick={toggleAnswerVisibility}
+                          className="p-4 relative bg-white border-[2.9px] border-[#979797] rounded-2xl cursor-pointer z-10"
+                        >
+                          <p>{car.carDetailsTitle}</p>
+                          <span className="absolute top-6 right-7">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className={`h-4 w-4 text-black transition-transform ${
+                                answerState ? "rotate-180" : ""
+                              }`}
+                              viewBox="0 0 512 512"
+                              fill="currentColor"
+                            >
+                              <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+                            </svg>
+                          </span>
+                        </h3>
+                        {answerState && (
+                          <div className="relative">
+                            <p className="bg-white p-4 pt-8 pb-20 border-[1px] border-[#979797] drop-shadow-[1px_0px_3px_rgba(80,80,80)] rounded-xl m-[0_0_-12px] relative bottom-3 z-0">
+                              <ReactMarkdown>
+                                {car.carDetails[0]?.markdown}
+                              </ReactMarkdown>
+                            </p>
+                            {/* Botón "Mostrar menos" como elemento hermano del párrafo */}
+                            <button
+                              onClick={toggleAnswerVisibility}
+                              className="right-[44%] text-primary hover:underline cursor-pointer absolute bottom-10 md:right[55%] lg:right-1/2 z-10 flex items-center"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={`h-3 w-3 mr-2 text-black transition-transform ${
+                                  answerState ? "rotate-180" : ""
+                                }`}
+                                viewBox="0 0 512 512"
+                                fill="currentColor"
+                              >
+                                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+                              </svg>
+                              Show less
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 

@@ -56,6 +56,12 @@ export default function LanguageSelector({ pageContext }) {
         item => item.locale === lang
       )
     }
+    let carsAndQuotesData
+    if (data.carsAndQuotes) {
+      carsAndQuotesData = data.carsAndQuotes[0].localizations.find(
+        item => item.locale === lang
+      )
+    }
     const rentalInfoData = data.rentalInfo
       ? data.rentalInfo.localizations[0]
       : undefined
@@ -63,9 +69,7 @@ export default function LanguageSelector({ pageContext }) {
       ? data.testimonial.localizations[0]
       : undefined
     const faqData = data.faq ? data.faq.localizations[0] : undefined
-    const carsAndQuotesData = data.carsAndQuotes
-      ? data.carsAndQuotes[0].localizations[0]
-      : undefined
+
     const travelPlannerData = data.travelPlanner
       ? data.travelPlanner.localizations[0]
       : undefined

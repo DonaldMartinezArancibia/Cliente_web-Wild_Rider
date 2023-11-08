@@ -31,6 +31,7 @@ const Cars = gql`
         carsInformationButtonText
         quoteButtonText
       }
+      carDetailsTitle
     }
   }
 `

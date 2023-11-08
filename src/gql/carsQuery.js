@@ -8,6 +8,11 @@ const Car = gql`
       carMainPhoto(locales: en) {
         url
       }
+      yearOfCarTitle
+      yearOfCarValue
+      passengersTitle
+      passengersOfCarValue
+      longTermRentalTitle
     }
   }
 `
