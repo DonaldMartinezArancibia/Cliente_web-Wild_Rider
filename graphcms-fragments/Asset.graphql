@@ -56,18 +56,18 @@ fragment Asset on Asset {
       stage
     }
   }
+  imageSeo {
+    ... on Seo {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
   coverPost {
     ... on Post {
       remoteTypeName: __typename
       remoteId: id
       locale
-      stage
-    }
-  }
-  imageSeo {
-    ... on Seo {
-      remoteTypeName: __typename
-      remoteId: id
       stage
     }
   }

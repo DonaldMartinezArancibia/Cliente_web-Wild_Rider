@@ -38,6 +38,12 @@ export default function OpenModal({ carId, pageContext }) {
 
   const car = carsById.cars[0]
 
+  const formatDate = dateString => {
+    const date = new Date(dateString)
+    const options = { year: "numeric", month: "short", day: "numeric" }
+    return date.toLocaleDateString(pageContext.langKey, options)
+  }
+
   // console.log(car.carDetails[0].markdown)
 
   return (
@@ -97,9 +103,156 @@ export default function OpenModal({ carId, pageContext }) {
                       <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                     </button>
                   </div>
-                  <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-12">
-                    <div className="overflow-x-auto xl:w-[40%]">
-                      <table className="min-w-full">
+                  {car.insuranceAndTaxInfo !== null &&
+                    car.insuranceAndTaxInfo !== undefined && (
+                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 rounded-md gap-x-2 bg-blue-50 mt-7 ring-1 ring-inset ring-blue-700/10">
+                        <svg
+                          className="w-2 fill-[#3b82f6]"
+                          viewBox="0 0 6 6"
+                          aria-hidden="true"
+                        >
+                          <circle cx="3" cy="3" r="3"></circle>
+                        </svg>
+                        {car.insuranceAndTaxInfo}
+                      </span>
+                    )}
+
+                  <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-4">
+                    <div className="overflow-x-auto xl:w-[40%] flex">
+                      {/* <div className="w-full overflow-x-auto">
+                        <table className="w-full border border-solid border-[#ccc] border-collapse m-0 p-0 table-fixed max-sm:border-0">
+                          <caption className="mb-3 m-[5px_0_10px] text-xl font-semibold max-sm:text-sm">
+                            Statement Summary
+                          </caption>
+                          <thead className="max-sm:absolute max-sm:w-1 max-sm:h-1 max-sm:p-0 max-sm:-m-1 max-sm:overflow-hidden max-sm:border-0">
+                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-200 border-[#ddd] border-solid border p-3">
+                              <th className="p-2 text-xs tracking-widest text-center uppercase">
+                                Account
+                              </th>
+                              <th className="p-2 text-xs tracking-widest text-center uppercase">
+                                Due Date
+                              </th>
+                              <th className="p-2 text-xs tracking-widest text-center uppercase">
+                                Amount
+                              </th>
+                              <th className="p-2 text-xs tracking-widest text-center uppercase">
+                                Period
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
+                              <td
+                                scope="row"
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Account"
+                              >
+                                Visa - 3412
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Due Date"
+                              >
+                                04/01/2016
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Amount"
+                              >
+                                $1,190
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Period"
+                              >
+                                03/01/2016 - 03/31/2016
+                              </td>
+                            </tr>
+                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
+                              <td
+                                scope="row"
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Account"
+                              >
+                                Visa - 6076
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Due Date"
+                              >
+                                03/01/2016
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Amount"
+                              >
+                                $2,443
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Period"
+                              >
+                                02/01/2016 - 02/29/2016
+                              </td>
+                            </tr>
+                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
+                              <td
+                                scope="row"
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Account"
+                              >
+                                Corporate AMEX
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Due Date"
+                              >
+                                03/01/2016
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Amount"
+                              >
+                                $1,181
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Period"
+                              >
+                                02/01/2016 - 02/29/2016
+                              </td>
+                            </tr>
+                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
+                              <td
+                                scope="row"
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Account"
+                              >
+                                Visa - 3412
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Due Date"
+                              >
+                                02/01/2016
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Amount"
+                              >
+                                $842
+                              </td>
+                              <td
+                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
+                                data-label="Period"
+                              >
+                                01/01/2016 - 01/31/2016
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div> */}
+                      <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
                         <thead>
                           <tr className="text-xl">
                             <th className="p-2">
@@ -120,12 +273,31 @@ export default function OpenModal({ carId, pageContext }) {
                                 {price.season.seasonTitle}
                               </td>
                               <td className="p-2">
-                                {price.season.startDate} |{" "}
-                                {price.season.endDate}
+                                {formatDate(price.season.startDate)}
+                                {" | "}
+                                {formatDate(price.season.endDate)}
                               </td>
                               <td className="p-2">${price.priceOfCar}</td>
                             </tr>
                           ))}
+                        </tbody>
+                      </table>
+                      <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
+                        <thead>
+                          <tr className="text-xl">
+                            <th className="p-2">
+                              {car.transmissionVariant?.transmissionPriceTitle}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {car.transmissionVariant?.priceOfCar?.map(
+                            (price, priceIndex) => (
+                              <tr key={priceIndex}>
+                                <td>${price.priceOfCar}</td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                     </div>

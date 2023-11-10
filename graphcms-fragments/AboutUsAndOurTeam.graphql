@@ -7,6 +7,14 @@ fragment AboutUsAndOurTeam on AboutUsAndOurTeam {
   publishedAt(variation: COMBINED)
   slug
   title
+  aboutUsMainContent {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
   theTeam {
     ... on OurTeam {
       stage

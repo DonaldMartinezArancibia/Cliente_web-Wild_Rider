@@ -24,6 +24,7 @@ const Cars = gql`
         markdown
         text
       }
+      insuranceAndTaxInfo
       carsAndQuote {
         datesTitle
         priceTitle
@@ -32,6 +33,12 @@ const Cars = gql`
         quoteButtonText
       }
       carDetailsTitle
+      transmissionVariant {
+        transmissionPriceTitle
+        priceOfCar {
+          priceOfCar
+        }
+      }
     }
   }
 `

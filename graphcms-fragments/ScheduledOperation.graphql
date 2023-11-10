@@ -111,6 +111,7 @@ fragment ScheduledOperation on ScheduledOperation {
     ... on Season {
       remoteTypeName: __typename
       remoteId: id
+      locale
       stage
     }
     ... on Seo {

@@ -6,6 +6,7 @@ fragment Car on Car {
   updatedAt(variation: COMBINED)
   publishedAt(variation: COMBINED)
   carName
+  carDetailsTitle
   carDetails {
     ... on RichText {
       raw
@@ -14,6 +15,12 @@ fragment Car on Car {
       text
     }
   }
+  yearOfCarTitle
+  yearOfCarValue
+  passengersTitle
+  passengersOfCarValue
+  longTermRentalTitle
+  insuranceAndTaxInfo
   pricesOfCar {
     ... on PriceCar {
       stage
@@ -23,7 +30,31 @@ fragment Car on Car {
         ... on Season {
           remoteTypeName: __typename
           remoteId: id
+          locale
           stage
+        }
+      }
+    }
+  }
+  transmissionVariant {
+    ... on TransmissionVariant {
+      stage
+      locale
+      id
+      transmissionPriceTitle
+      priceOfCar {
+        ... on PriceCar {
+          stage
+          id
+          priceOfCar
+          season {
+            ... on Season {
+              remoteTypeName: __typename
+              remoteId: id
+              locale
+              stage
+            }
+          }
         }
       }
     }

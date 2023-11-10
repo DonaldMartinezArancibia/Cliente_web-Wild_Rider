@@ -1,9 +1,10 @@
 fragment Season on Season {
   stage
+  locale
   remoteId: id
-  createdAt
-  updatedAt
-  publishedAt
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   seasonTitle
   startDate
   endDate
