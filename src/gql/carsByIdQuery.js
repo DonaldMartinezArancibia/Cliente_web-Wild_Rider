@@ -39,6 +39,9 @@ const Cars = gql`
           priceOfCar
         }
       }
+      carQuoteForm {
+        slug
+      }
     }
   }
 `

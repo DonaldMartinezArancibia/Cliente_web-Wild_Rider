@@ -2,12 +2,13 @@ import React from "react"
 import { Fragment, useRef, useState, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client"
 import { Cars } from "../gql/carsByIdQuery"
 import { Link } from "gatsby"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
 export default function OpenModal({ carId, pageContext }) {
+  const client = useApolloClient()
   const [isOpen, setIsOpen] = useState(false)
 
   const cancelButtonRef = useRef(null)
@@ -27,6 +28,9 @@ export default function OpenModal({ carId, pageContext }) {
   } = useQuery(Cars, {
     variables: { internalId: carId, locale: [pageContext.langKey] },
   })
+  client.refetchQueries({
+    include: [Cars],
+  })
   const [answerState, setAnswerState] = useState(false)
 
   const toggleAnswerVisibility = () => {
@@ -43,7 +47,8 @@ export default function OpenModal({ carId, pageContext }) {
     const options = { year: "numeric", month: "short", day: "numeric" }
     return date.toLocaleDateString(pageContext.langKey, options)
   }
-
+  // Tu lógica para obtener datos
+  const datos = "Hola desde el componente"
   // console.log(car.carDetails[0].markdown)
 
   return (
@@ -365,14 +370,10 @@ export default function OpenModal({ carId, pageContext }) {
                   </section>
 
                   <div className="flex justify-center">
-                    {/* Agrega un botón para ir al formulario */}
+                    {/* Contenido de tu componente */}
                     <Link
-                      // to={`/formulario/${carId}`} // URL dinámica que incluye el carId
-                      to={
-                        pageContext.langKey === "en"
-                          ? `/quote/${car.carName}`
-                          : `/${pageContext.langKey}/cotizar/${car.carName}`
-                      } // URL dinámica que incluye el carId
+                      to={`/${pageContext.langKey}/${car.carQuoteForm.slug}`}
+                      state={{ datos }}
                       className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
                     >
                       {car.carsAndQuote.quoteButtonText}
