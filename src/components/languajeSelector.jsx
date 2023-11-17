@@ -1,6 +1,6 @@
 import React from "react"
 import { navigate } from "gatsby"
-import { useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client"
 import { Post } from "../gql/allPost"
 import { Index } from "../gql/indexQuery"
 import { CarsAndQuote } from "../gql/carsPageQuery"
@@ -11,8 +11,11 @@ import { Faq } from "../gql/faqPageQuery"
 import { ContactAndLocation } from "../gql/contactQuery"
 import { TravelPlanner } from "../gql/travelPlannerPageQuery"
 import { Car } from "../gql/carsQuery"
+import { headerAndFooterElements } from "../gql/headerandfooterElements"
 
 export default function LanguageSelector({ pageContext }) {
+  const client = useApolloClient()
+
   const query = [
     Index,
     Post,
@@ -28,15 +31,33 @@ export default function LanguageSelector({ pageContext }) {
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
 
+  const {
+    data: headerAndFooterElementsData,
+    loading: headerAndFooterElementsQueryLoading,
+    error: headerAndFooterElementsQueryError,
+  } = useQuery(headerAndFooterElements, {
+    variables: { locale: [pageContext.langKey] },
+  })
+  client.refetchQueries({
+    include: [headerAndFooterElements],
+  })
+
+  console.log(headerAndFooterElementsData)
+
   const { data, loading, error } = useQuery(query, {
     variables: {
       internalId: pageContext.remoteId,
       locale: [pageContext.langKey],
     },
   })
+  if (headerAndFooterElementsQueryLoading) return <p>Loading...</p>
+  if (headerAndFooterElementsQueryError)
+    return console.log(headerAndFooterElementsQueryError)
   if (loading) return <p>Loading...</p>
   if (error) return console.log(error)
 
+  const langSelectorTitle =
+    headerAndFooterElementsData.headerAndFooterElements[0]
   function getSlugByLocale(data, lang) {
     let indexData
 
@@ -98,7 +119,7 @@ export default function LanguageSelector({ pageContext }) {
     if (travelPlannerData?.locale === "en") return travelPlannerData.slug
     if (travelPlannerData?.locale)
       return `${travelPlannerData.locale}/${travelPlannerData.slug}`
-    return `${postData.locale}/blog/${postData.slug}`
+    return `${postData?.locale}/blog/${postData?.slug}`
   }
 
   return (
@@ -110,7 +131,7 @@ export default function LanguageSelector({ pageContext }) {
           navigate(`/${getSlugByLocale(data)}`)
         }}
       >
-        {pageContext.langKey === "en" ? "Español" : "English"}
+        {langSelectorTitle}
       </button> */}
       <div className="relative inline-block">
         <svg
@@ -134,61 +155,71 @@ export default function LanguageSelector({ pageContext }) {
           </span>
         </button> */}
         <ul className="font-black text-center text-white transition-shadow duration-300 border-opacity-100 shadow-md left-1/4 hover:shadow-lg">
-          <li className="">
-            <a
-              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
-              onClick={e => {
-                e.preventDefault()
-                navigate(`/${getSlugByLocale(data, "en")}`)
-              }}
-            >
-              {pageContext.langKey === "en" ? "yes English" : "English"}
-            </a>
-          </li>
-          <li className="">
-            <a
-              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
-              onClick={e => {
-                e.preventDefault()
-                navigate(`/${getSlugByLocale(data, "de")}`)
-              }}
-            >
-              {pageContext.langKey === "de" ? "yes German" : "German"}
-            </a>
-          </li>
-          <li className="">
-            <a
-              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
-              onClick={e => {
-                e.preventDefault()
-                navigate(`/${getSlugByLocale(data, "fr")}`)
-              }}
-            >
-              {pageContext.langKey === "fr" ? "yes Francés" : "Francés"}
-            </a>
-          </li>
-          <li className="">
-            <a
-              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
-              onClick={e => {
-                e.preventDefault()
-                navigate(`/${getSlugByLocale(data, "es")}`)
-              }}
-            >
-              {pageContext.langKey === "es" ? "yes Español" : "Español"}
-            </a>
-          </li>
-          <li className="">
-            <a
-              className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
-              onClick={e => {
-                e.preventDefault()
-                navigate(`/${getSlugByLocale(data, "other")}`)
-              }}
-            >
-              {pageContext.langKey === "other" ? "Yes italiano" : "italiano"}
-            </a>
-          </li>
+          {pageContext.langKey !== "en" && (
+            <li className="">
+              <a
+                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                onClick={e => {
+                  e.preventDefault()
+                  navigate(`/${getSlugByLocale(data, "en")}`)
+                }}
+              >
+                {langSelectorTitle?.englishLangSelectorTitle}
+              </a>
+            </li>
+          )}
+          {pageContext.langKey !== "de" && (
+            <li className="">
+              <a
+                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                onClick={e => {
+                  e.preventDefault()
+                  navigate(`/${getSlugByLocale(data, "de")}`)
+                }}
+              >
+                {langSelectorTitle?.germanLangSelectorTitle}
+              </a>
+            </li>
+          )}
+          {pageContext.langKey !== "fr" && (
+            <li className="">
+              <a
+                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                onClick={e => {
+                  e.preventDefault()
+                  navigate(`/${getSlugByLocale(data, "fr")}`)
+                }}
+              >
+                {langSelectorTitle?.frenchLangSelectorTitle}
+              </a>
+            </li>
+          )}
+          {pageContext.langKey !== "es" && (
+            <li className="">
+              <a
+                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                onClick={e => {
+                  e.preventDefault()
+                  navigate(`/${getSlugByLocale(data, "es")}`)
+                }}
+              >
+                {langSelectorTitle?.spanishLangSelectorTitle}
+              </a>
+            </li>
+          )}
+          {pageContext.langKey !== "other" && (
+            <li className="">
+              <a
+                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                onClick={e => {
+                  e.preventDefault()
+                  navigate(`/${getSlugByLocale(data, "other")}`)
+                }}
+              >
+                {langSelectorTitle?.otherLangSelectorTitle}
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </>
@@ -238,7 +269,7 @@ export default function LanguageSelector({ pageContext }) {
         }}
         href="/"
       >
-        {pageContext.langKey === "en" ? "Español" : "English"}
+        {langSelectorTitle}
       </a>
     </li>
   </ul>
