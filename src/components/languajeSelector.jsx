@@ -11,10 +11,10 @@ import { Faq } from "../gql/faqPageQuery"
 import { ContactAndLocation } from "../gql/contactQuery"
 import { TravelPlanner } from "../gql/travelPlannerPageQuery"
 import { Car } from "../gql/carsQuery"
-import { headerAndFooterElements } from "../gql/headerandfooterElements"
+// import { headerAndFooterElements } from "../gql/headerandfooterElements"
 
-export default function LanguageSelector({ pageContext }) {
-  const client = useApolloClient()
+export default function LanguageSelector({ pageContext, langSelectorTitle }) {
+  // const client = useApolloClient()
 
   const query = [
     Index,
@@ -31,18 +31,18 @@ export default function LanguageSelector({ pageContext }) {
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
 
-  const {
-    data: headerAndFooterElementsData,
-    loading: headerAndFooterElementsQueryLoading,
-    error: headerAndFooterElementsQueryError,
-  } = useQuery(headerAndFooterElements, {
-    variables: { locale: [pageContext.langKey] },
-  })
-  client.refetchQueries({
-    include: [headerAndFooterElements],
-  })
+  // const {
+  //   data: headerAndFooterElementsData,
+  //   loading: headerAndFooterElementsQueryLoading,
+  //   error: headerAndFooterElementsQueryError,
+  // } = useQuery(headerAndFooterElements, {
+  //   variables: { locale: [pageContext.langKey] },
+  // })
+  // client.refetchQueries({
+  //   include: [headerAndFooterElements],
+  // })
 
-  console.log(headerAndFooterElementsData)
+  console.log(langSelectorTitle)
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -50,14 +50,14 @@ export default function LanguageSelector({ pageContext }) {
       locale: [pageContext.langKey],
     },
   })
-  if (headerAndFooterElementsQueryLoading) return <p>Loading...</p>
-  if (headerAndFooterElementsQueryError)
-    return console.log(headerAndFooterElementsQueryError)
+  // if (headerAndFooterElementsQueryLoading) return <p>Loading...</p>
+  // if (headerAndFooterElementsQueryError)
+  //   return console.log(headerAndFooterElementsQueryError)
   if (loading) return <p>Loading...</p>
   if (error) return console.log(error)
 
-  const langSelectorTitle =
-    headerAndFooterElementsData.headerAndFooterElements[0]
+  // const langSelectorTitle =
+  //   headerAndFooterElementsData.headerAndFooterElements[0]
   function getSlugByLocale(data, lang) {
     let indexData
 

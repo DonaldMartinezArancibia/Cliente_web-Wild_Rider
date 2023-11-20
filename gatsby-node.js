@@ -19,65 +19,65 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const locales = ["es", "en", "de", "fr", "other"]
 
-  await Promise.all(
-    locales.map(async locale => {
-      async function fetchContentByType(contentType, locale) {
-        const result = await graphql(
-          `
-        query ($locale: GraphCMS_Locale!) {
-          ${contentType}(filter: { locale: { eq: $locale } }) {
-            nodes {
-              remoteId
-              remoteTypeName
-              locale
-              carName
-            }
-          }
-        }
-      `,
-          { locale }
-        )
-        return result
-      }
+  // await Promise.all(
+  //   locales.map(async locale => {
+  //     async function fetchContentByType(contentType, locale) {
+  //       const result = await graphql(
+  //         `
+  //       query ($locale: GraphCMS_Locale!) {
+  //         ${contentType}(filter: { locale: { eq: $locale } }) {
+  //           nodes {
+  //             remoteId
+  //             remoteTypeName
+  //             locale
+  //             carName
+  //           }
+  //         }
+  //       }
+  //     `,
+  //         { locale }
+  //       )
+  //       return result
+  //     }
 
-      const [carsResult] = await Promise.all([
-        fetchContentByType("allGraphCmsCar", locale),
-      ])
+  //     const [carsResult] = await Promise.all([
+  //       fetchContentByType("allGraphCmsCar", locale),
+  //     ])
 
-      function createPagesForContent(
-        contentNodes,
-        urlPrefix,
-        componentPath,
-        excludeSlug
-      ) {
-        contentNodes.forEach(({ carName, remoteId, remoteTypeName }) => {
-          const path =
-            remoteTypeName === excludeSlug
-              ? urlPrefix
-              : `${urlPrefix}${carName}`
-          createPage({
-            path: path,
-            component: require.resolve(componentPath),
-            context: {
-              carName: carName,
-              remoteId: remoteId,
-              remoteTypeName: remoteTypeName,
-              langKey: locale,
-              pagePath: urlPrefix,
-            },
-          })
-        })
-      }
-      const urlPrefix = locale === "en" ? "/quote/" : `/${locale}/cotizar/`
+  //     function createPagesForContent(
+  //       contentNodes,
+  //       urlPrefix,
+  //       componentPath,
+  //       excludeSlug
+  //     ) {
+  //       contentNodes.forEach(({ carName, remoteId, remoteTypeName }) => {
+  //         const path =
+  //           remoteTypeName === excludeSlug
+  //             ? urlPrefix
+  //             : `${urlPrefix}${carName}`
+  //         createPage({
+  //           path: path,
+  //           component: require.resolve(componentPath),
+  //           context: {
+  //             carName: carName,
+  //             remoteId: remoteId,
+  //             remoteTypeName: remoteTypeName,
+  //             langKey: locale,
+  //             pagePath: urlPrefix,
+  //           },
+  //         })
+  //       })
+  //     }
+  //     const urlPrefix = locale === "en" ? "/quote/" : `/${locale}/cotizar/`
 
-      // Creación de páginas de los posts
-      createPagesForContent(
-        carsResult.data.allGraphCmsCar.nodes,
-        `${urlPrefix}`,
-        "./src/templates/CarForm.jsx"
-      )
-    })
-  )
+  //     // Creación de páginas de los posts
+  //     createPagesForContent(
+  //       carsResult.data.allGraphCmsCar.nodes,
+  //       `${urlPrefix}`,
+  //       "./src/templates/CarForm.jsx"
+  //     )
+  //   })
+  // )
 
   await Promise.all(
     locales.map(async locale => {
@@ -106,20 +106,22 @@ exports.createPages = async ({ graphql, actions }) => {
         contactPageResult,
         carsPageResult,
         aboutusPageResult,
-        rentalPageResult,
+        // rentalPageResult,
         testimonialPageResult,
         faqPageResult,
         travelPageResult,
+        carquotePageResult,
       ] = await Promise.all([
         fetchContentByType("allGraphCmsPost", locale),
         fetchContentByType("allGraphCmsIndex", locale),
         fetchContentByType("allGraphCmsContactAndLocation", locale),
         fetchContentByType("allGraphCmsCarsAndQuote", locale),
         fetchContentByType("allGraphCmsAboutUsAndOurTeam", locale),
-        fetchContentByType("allGraphCmsRentalInfo", locale),
+        // fetchContentByType("allGraphCmsRentalInfo", locale),
         fetchContentByType("allGraphCmsTestimonial", locale),
         fetchContentByType("allGraphCmsFaq", locale),
         fetchContentByType("allGraphCmsTravelPlanner", locale),
+        fetchContentByType("allGraphCmsCarQuoteForm", locale),
       ])
 
       function createPagesForContent(
@@ -184,11 +186,11 @@ exports.createPages = async ({ graphql, actions }) => {
       )
 
       // Creación de páginas para la información de renta en los diferentes idiomas
-      createPagesForContent(
-        rentalPageResult.data.allGraphCmsRentalInfo.nodes,
-        urlPrefix,
-        "./src/templates/using-dsg.jsx"
-      )
+      // createPagesForContent(
+      //   rentalPageResult.data.allGraphCmsRentalInfo.nodes,
+      //   urlPrefix,
+      //   "./src/templates/using-dsg.jsx"
+      // )
 
       // Creación de páginas de testimonios en los diferentes idiomas
       createPagesForContent(
@@ -209,6 +211,12 @@ exports.createPages = async ({ graphql, actions }) => {
         travelPageResult.data.allGraphCmsTravelPlanner.nodes,
         urlPrefix,
         "./src/templates/travelPlanner.jsx"
+      )
+
+      createPagesForContent(
+        carquotePageResult.data.allGraphCmsCarQuoteForm.nodes,
+        `${urlPrefix}`,
+        "./src/templates/CarForm.jsx"
       )
     })
   )

@@ -8,6 +8,16 @@ const headerAndFooterElements = gql`
       germanLangSelectorTitle
       spanishLangSelectorTitle
       otherLangSelectorTitle
+      contactElements {
+        elementTitle
+        elementIcon(locales: en) {
+          url
+        }
+        elementValue
+      }
+      displaySkypeTextAndNumber
+      textOverSkypeNumber
+      skypeNumber
     }
   }
 `

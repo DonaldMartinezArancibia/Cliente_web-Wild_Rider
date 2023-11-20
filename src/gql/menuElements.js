@@ -19,11 +19,11 @@ const menuElements = gql`
           slug
           title
         }
-        ... on RentalInfo {
-          id
-          slug
-          title
-        }
+        # ... on RentalInfo {
+        #   id
+        #   slug
+        #   title
+        # }
         ... on Testimonial {
           id
           slug
