@@ -55,6 +55,12 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on CarQuoteForm {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on CarsAndQuote {
       remoteTypeName: __typename
       remoteId: id
@@ -74,6 +80,12 @@ fragment ScheduledOperation on ScheduledOperation {
       stage
     }
     ... on FrequentAnswersAndQuestion {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on HeaderAndFooterElement {
       remoteTypeName: __typename
       remoteId: id
       locale

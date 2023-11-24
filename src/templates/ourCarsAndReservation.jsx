@@ -25,6 +25,9 @@ export default function useOurCarsAndReservation({ pageContext }) {
   if (carsQueryLoading) return <p>Loading...</p>
   if (carsPageDataLoading) return <p>Loading...</p>
 
+  // console.log(cars)
+  // console.log(carsPageData)
+
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-40rem_bottom_-40rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] xl:p-14">
       <h1 className="mb-10 font-CarterOne lg:text-5xl">

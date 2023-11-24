@@ -1,21 +1,33 @@
 import React from "react"
-import { useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from "@apollo/client"
 import { Cars } from "../gql/carsByIdQuery"
 import CarFormHtml from "./carQuoteForm"
 
 const CarQuoteQuery = pageContext => {
-  const { carName, remoteId } = pageContext.pageContext
-  //   console.log(remoteId)
+  const client = useApolloClient()
+
   const {
     data: carsById,
     loading: carsByIdQueryLoading,
     error: carsByIdQueryError,
   } = useQuery(Cars, {
-    variables: { internalId: remoteId, locale: ["en"] },
+    variables: {
+      internalId: pageContext.carId,
+      locale: [pageContext.pageContext.langKey],
+    },
+  })
+  client.refetchQueries({
+    include: [Cars],
   })
   if (carsByIdQueryLoading) return <p>Loading...</p>
   if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
 
-  return <div>{carsById && <CarFormHtml apolloData={carsById} />}</div>
+  return (
+    <div>
+      {carsById && (
+        <CarFormHtml apolloData={carsById} pageContext={pageContext} />
+      )}
+    </div>
+  )
 }
 export default CarQuoteQuery

@@ -6,6 +6,7 @@ import { useApolloClient, useQuery } from "@apollo/client"
 import { Cars } from "../gql/carsByIdQuery"
 import { Link } from "gatsby"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import { setDatos } from "./variableReactiva"
 
 export default function OpenModal({ carId, pageContext }) {
   const client = useApolloClient()
@@ -48,7 +49,9 @@ export default function OpenModal({ carId, pageContext }) {
     return date.toLocaleDateString(pageContext.langKey, options)
   }
   // Tu lógica para obtener datos
-  const datos = "Hola desde el componente"
+  const datos = car.id
+
+  setDatos(car.id)
   // console.log(car.carDetails[0].markdown)
 
   return (
@@ -372,7 +375,13 @@ export default function OpenModal({ carId, pageContext }) {
                   <div className="flex justify-center">
                     {/* Contenido de tu componente */}
                     <Link
-                      to={`/${pageContext.langKey}/${car.carQuoteForm.slug}`}
+                      to={
+                        pageContext.langKey === "en"
+                          ? `/${car.carQuoteForm.slug}`
+                          : `/${pageContext.langKey || ""}/${
+                              car.carQuoteForm.slug
+                            }`
+                      }
                       state={{ datos }}
                       className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
                     >

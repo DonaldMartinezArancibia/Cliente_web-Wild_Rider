@@ -1,20 +1,48 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useRef } from "react"
+import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import mailcheck from "mailcheck"
 import { PhoneInput } from "react-international-phone"
 import "react-international-phone/style.css"
 import countryList from "react-select-country-list"
 import "flatpickr/dist/themes/airbnb.css"
 import Flatpickr from "react-flatpickr"
+import { datosVar } from "./variableReactiva"
+import { useApolloClient, useQuery } from "@apollo/client"
+import { CarQuoteFormContent } from "../gql/carQuotePageQuery"
 
-const CarFormHtml = apolloData => {
+const CarFormHtml = ({ apolloData, pageContext }) => {
+  const client = useApolloClient()
+
+  const {
+    data: CarQuoteFormData,
+    loading: CarQuoteFormQueryLoading,
+    error: CarQuoteFormQueryError,
+  } = useQuery(CarQuoteFormContent, {
+    variables: {
+      locale: [pageContext.pageContext.langKey],
+    },
+  })
+  client.refetchQueries({
+    include: [CarQuoteFormContent],
+  })
+
+  // console.log(pageContext.pageContext.langKey)
+  const datos = apolloData
+  // console.log(datos)
+  // console.log(datosVar())
   // const { carName, remoteId } = pageContext
-  const carsById = apolloData.apolloData.cars[0]
-  console.log(carsById)
-  //   const { carsById } = apolloData.apolloData.carsById
+  const carsById = apolloData.cars[0]
+  // console.log(carsById)
+  // const { carsById } = apolloData.apolloData.carsById
 
   const [phone, setPhone] = useState("")
 
   const [value, setValue] = useState("")
+  const [formError, setFormError] = useState(null)
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [submissionError, setSubmissionError] = useState(null)
+
+  const formRef = useRef(null)
 
   const [startDate, setStartDate] = useState(new Date())
   const [startTime, setStartTime] = useState(new Date())
@@ -25,7 +53,19 @@ const CarFormHtml = apolloData => {
     }
   }
 
-  const countries = useMemo(() => countryList().getData(), [])
+  const [selectedCountry, setSelectedCountry] = useState("")
+
+  const handleCountryChange = e => {
+    setSelectedCountry(e.target.value)
+  }
+
+  const countryOptions = [
+    "Mexico",
+    "Colombia",
+    "Argentina",
+    "Canada",
+    // ... otros países
+  ]
 
   const changeHandler = e => {
     setValue(e.target.value)
@@ -40,8 +80,10 @@ const CarFormHtml = apolloData => {
     }
   }
 
-  const [email, setEmail] = useState("yourmail@mailclient.example")
+  const [email, setEmail] = useState("")
+  const [emailConfirm, setEmailConfirm] = useState("")
   const [suggestion, setSuggestion] = useState(null)
+  const [suggestionConfirm, setSuggestionConfirm] = useState(null)
 
   useEffect(() => {
     mailcheck.run({
@@ -55,13 +97,103 @@ const CarFormHtml = apolloData => {
     })
   }, [email])
 
-  const handleChange = e => {
-    setEmail(e.currentTarget.value)
+  useEffect(() => {
+    mailcheck.run({
+      email: emailConfirm,
+      suggested(s) {
+        setSuggestionConfirm(s.full)
+      },
+      empty() {
+        setSuggestionConfirm(null)
+      },
+    })
+  }, [emailConfirm])
+
+  const handleChange = (e, setEmailFunc, setSuggestionFunc) => {
+    const newValue = e.currentTarget.value
+    setEmailFunc(newValue)
+
+    // Run mailcheck for suggestions
+    mailcheck.run({
+      email: newValue,
+      suggested(s) {
+        setSuggestionFunc(s.full)
+      },
+      empty() {
+        setSuggestionFunc(null)
+      },
+    })
   }
 
-  const acceptSuggestion = e => {
-    if (suggestion != null) setEmail(suggestion)
+  const acceptSuggestion = (suggestion, setEmailFunc) => {
+    if (suggestion != null) setEmailFunc(suggestion)
   }
+  const formatDate = dateString => {
+    const date = new Date(dateString)
+    const options = { year: "numeric", month: "short", day: "numeric" }
+    return date.toLocaleDateString(pageContext.pageContext.langKey, options)
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    setFormError(null)
+    setSubmissionError(null)
+
+    const form = e.target
+
+    // Verificar que 'form.email' y 'form.emailConfirm' no sean undefined
+    if (!form.email || !form.emailConfirm) {
+      // Si aún no se han llenado los campos, simplemente regresa sin hacer nada
+      return
+    }
+
+    // Validación personalizada solo si ambos campos están llenos
+    const email = form.email.value.trim()
+    const emailConfirm = form.emailConfirm.value.trim()
+
+    if (email === "" || emailConfirm === "") {
+      setFormError("Email or Email Confirm element is empty.")
+      return
+    }
+
+    if (email !== emailConfirm) {
+      setFormError("Email and Confirm Email must match.")
+      return
+    }
+
+    // Resto del código para enviar la solicitud
+    const formData = new FormData(form)
+    fetch("/quote", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(formData).toString(),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        setFormSubmitted(true)
+      })
+      .then(data => {
+        console.log("Formulario enviado con éxito:", data)
+      })
+      .catch(error => {
+        setSubmissionError(`Error submitting form: ${error.message}`)
+      })
+
+    // Limpiar errores después de enviar el formulario con éxito
+    setFormError(null)
+    // Resto del código para manejar la respuesta del envío
+  }
+
+  if (CarQuoteFormQueryLoading) return <p>Loading...</p>
+  if (CarQuoteFormQueryError)
+    return <p>Error : {CarQuoteFormQueryError.message}</p>
+
+  // console.log(CarQuoteFormData.carQuoteForms[0])
+  const pageData = CarQuoteFormData.carQuoteForms[0]
 
   //   const {
   //     data: carsById,
@@ -75,42 +207,72 @@ const CarFormHtml = apolloData => {
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="mb-10 font-CarterOne lg:text-5xl">Get a Quote</h1>
+      <h1 className="mb-10 font-CarterOne lg:text-5xl">{pageData.title}</h1>
       <p className="font-bold">
-        {/* Your Car: <span className="font-normal">{carName}</span> */}
+        Your Car: <span className="font-normal">{carsById.carName}</span>
       </p>
-      <div className="flex ml-16 mb-10">
-        <img src={carsById.carMainPhoto.url} className="w-64 mr-10" />
-        <table>
-          <thead>
-            <tr className="text-xl text-left">
-              <th>Season</th>
-              <th>Dates</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {carsById.pricesOfCar.map((price, priceIndex) => (
-              <tr key={priceIndex}>
-                <td className="p-[0.5rem_2.5rem_0.5rem_0]">
-                  {price.season.seasonTitle}
-                </td>
-                <td className="p-[0.5rem_2.5rem_0.5rem_0]">
-                  {price.season.startDate} | {price.season.endDate}
-                </td>
-                <td>${price.priceOfCar}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="mb-10 md:ml-16 md:flex lg:ml-0">
+        <p className="2xl:w-1/5">
+          <ReactMarkdown>{pageData.welcomeText?.markdown}</ReactMarkdown>
+        </p>
+        <div className="flex flex-col xl:flex-row">
+          <div className="overflow-x-auto flex">
+            <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
+              <thead>
+                <tr className="text-xl">
+                  <th className="p-2">{carsById.carsAndQuote.seasonTitle}</th>
+                  <th className="p-2">{carsById.carsAndQuote.datesTitle}</th>
+                  <th className="p-2">{carsById.carsAndQuote.priceTitle}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {carsById.pricesOfCar.map((price, priceIndex) => (
+                  <tr key={priceIndex}>
+                    <td className="p-2">{price.season.seasonTitle}</td>
+                    <td className="p-2">
+                      {formatDate(price.season.startDate)}
+                      {" | "}
+                      {formatDate(price.season.endDate)}
+                    </td>
+                    <td className="p-2">${price.priceOfCar}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
+              <thead>
+                <tr className="text-xl">
+                  <th className="p-2">
+                    {carsById.transmissionVariant?.transmissionPriceTitle}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {carsById.transmissionVariant?.priceOfCar?.map(
+                  (price, priceIndex) => (
+                    <tr key={priceIndex}>
+                      <td>${price.priceOfCar}</td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <img
+          src={carsById.carMainPhoto.url}
+          className="w-full mr-10 lg:w-1/3"
+        />
       </div>
 
       <form
+        // ref={formRef}
         name="carquote"
         method="post"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
         className="font-Poppins md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
+        onSubmit={handleSubmit}
       >
         {/* You still need to add the hidden input with the form name to your JSX form */}
         <p className="hidden">
@@ -124,88 +286,97 @@ const CarFormHtml = apolloData => {
           role="group"
           aria-label="Datos personales"
         >
-          <legend className="text-3xl font-semibold mb-5">
-            Basic information
+          <legend className="mb-5 text-3xl font-semibold">
+            {pageData.basicInformationTitle}
           </legend>
           <div className="flex flex-col md:justify-between">
             <div className="w-full pr-3">
-              <label htmlFor="name" className="text-xl w-full font-black">
-                Complete Name <span className="text-red-500">*</span>
+              <label htmlFor="name" className="w-full text-xl font-black">
+                {pageData.completeNameField}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                placeholder="Name"
                 className="w-full h-10 my-2"
                 required
               />
             </div>
-            <div className="flex flex-col justify-between pr-3">
-              <label htmlFor="email" className="text-xl w-full my-2 font-black">
-                Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                className="w-full h-10"
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-              />
-            </div>
-            {suggestion && (
-              <div>
-                Did you mean{" "}
-                <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
-                    acceptSuggestion() // Llama a tu función acceptSuggestion
-                  }}
+            <div>
+              <div className="flex flex-col justify-between pr-3">
+                <label
+                  htmlFor="email"
+                  className="w-full my-2 text-xl font-black"
                 >
-                  {suggestion}
-                </a>
+                  {pageData.emailField}
+                  <span className="text-red-500">*</span>
+                </label>
+                <input
+                  className="w-full h-10"
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={email}
+                  onChange={e => handleChange(e, setEmail, setSuggestion)}
+                />
+                {suggestion && (
+                  <div>
+                    Did you mean{" "}
+                    <a
+                      href=""
+                      onClick={e => {
+                        e.preventDefault()
+                        acceptSuggestion(suggestion, setEmail)
+                      }}
+                    >
+                      {suggestion}
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
-            <div className="flex flex-col justify-between pr-3">
-              <label
-                htmlFor="emailConfirm"
-                className="text-xl w-full my-2 font-black"
-              >
-                Confirm Email Address <span className="text-red-500">*</span>
-              </label>
-              <input
-                className="w-full h-10"
-                type="email"
-                id="emailConfirm"
-                name="emailConfirm"
-                value={email}
-                onChange={handleChange}
-              />
-            </div>
 
-            {suggestion && (
-              <div>
-                Did you mean{" "}
-                <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
-                    acceptSuggestion() // Llama a tu función acceptSuggestion
-                  }}
+              <div className="flex flex-col justify-between pr-3">
+                <label
+                  htmlFor="emailConfirm"
+                  className="w-full my-2 text-xl font-black"
                 >
-                  {suggestion}
-                </a>
+                  {pageData.confirmEmailField}
+                  <span className="text-red-500">*</span>
+                </label>
+                <input
+                  className="w-full h-10"
+                  type="email"
+                  id="emailConfirm"
+                  name="emailConfirm"
+                  value={emailConfirm}
+                  onChange={e =>
+                    handleChange(e, setEmailConfirm, setSuggestionConfirm)
+                  }
+                />
+                {suggestionConfirm && (
+                  <div>
+                    Did you mean{" "}
+                    <a
+                      href=""
+                      onClick={e => {
+                        e.preventDefault()
+                        acceptSuggestion(suggestionConfirm, setEmailConfirm)
+                      }}
+                    >
+                      {suggestionConfirm}
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
 
             <div className="flex flex-col justify-between pr-3">
               <label
                 htmlFor="phoneNumber"
-                className="text-xl w-full my-2 font-black"
+                className="w-full my-2 text-xl font-black"
               >
-                Phone number (optional if you want):
+                {pageData.phoneNumberField}
               </label>
               <PhoneInput
                 defaultCountry="us"
@@ -223,21 +394,20 @@ const CarFormHtml = apolloData => {
             <div className="flex flex-col justify-between pr-3">
               <label
                 htmlFor="country"
-                className="text-xl w-full my-2 font-black"
+                className="w-full my-2 text-xl font-black"
               >
-                Your country of residence:
+                {pageData.countryResidenceField}
               </label>
               <select
                 id="country"
-                value={value}
-                onChange={changeHandler}
+                value={selectedCountry}
+                onChange={handleCountryChange}
                 className="w-full h-10"
                 name="countrySelection"
               >
-                <option value="">Select...</option>
-                {countries.map(country => (
-                  <option key={country.value} value={country.label}>
-                    {country.label}
+                {pageData.countriesOptions.map(country => (
+                  <option key={country} value={country}>
+                    {country}
                   </option>
                 ))}
               </select>
@@ -247,9 +417,10 @@ const CarFormHtml = apolloData => {
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="numberOfTravelers"
-              className="text-xl w-full my-2 font-black"
+              className="w-full my-2 text-xl font-black"
             >
-              Number of travelers <span className="text-red-500">*</span>{" "}
+              {pageData.numberOfTravelersField}
+              <span className="text-red-500">*</span>{" "}
             </label>
             <select
               id="numberOfTravelers"
@@ -257,24 +428,18 @@ const CarFormHtml = apolloData => {
               required
               className="w-full h-10"
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="More than 10">More than 10</option>
+              {pageData.numberOfTravelersOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="flex flex-col justify-between pr-3 mb-6">
+          {/* <div className="flex flex-col justify-between pr-3 mb-6">
             <label
               htmlFor="vehicleSelection"
-              className="text-xl w-full my-2 font-black"
+              className="w-full my-2 text-xl font-black"
             >
               Vehicle selection <span className="text-red-500">*</span>
             </label>
@@ -315,7 +480,7 @@ const CarFormHtml = apolloData => {
                 Renault Koleos with Automatic T. 2024 Model
               </option>
             </select>
-          </div>
+          </div> */}
         </fieldset>
 
         <fieldset
@@ -323,15 +488,16 @@ const CarFormHtml = apolloData => {
           role="group"
           aria-label="Detalles del Viaje"
         >
-          <legend className="text-3xl font-semibold mb-5">
-            Pick up information
+          <legend className="mb-5 text-3xl font-semibold">
+            {pageData.pickUpInformationTitle}
           </legend>
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="startDate"
-              className="text-xl w-full my-2 font-black"
+              className="w-full my-2 text-xl font-black"
             >
-              Takeover date <span className="text-red-500">*</span>
+              {pageData.takeoverDateField}
+              <span className="text-red-500">*</span>
             </label>
             <Flatpickr
               options={{
@@ -346,16 +512,16 @@ const CarFormHtml = apolloData => {
               id="startDate"
               className="w-full h-10 px-4 py-2"
             />
-            <sub className="text-sm text-gray-500 mt-2">
-              Choose the pick-up date
+            <sub className="mt-2 text-sm text-gray-500">
+              {pageData.subtextOfTakeoverDate}
             </sub>
           </div>
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="startTime"
-              className="text-xl w-full my-2 font-black"
+              className="w-full my-2 text-xl font-black"
             >
-              Time:
+              {pageData.takeoverHourField}
             </label>
             <Flatpickr
               options={{
@@ -374,17 +540,18 @@ const CarFormHtml = apolloData => {
               id="startTime"
               className="w-full h-10 px-4 py-2"
             />
-            <sub className="text-sm text-gray-500 mt-2">
-              Choose the pick-up time
+            <sub className="mt-2 text-sm text-gray-500">
+              {pageData.subtextOfTakeoverHour}
             </sub>
           </div>
           <div className="col-[1/3] justify-between pr-3">
             <div className="mb-6">
               <label
                 htmlFor="takeoverPlace"
-                className="text-xl block font-semibold my-2"
+                className="block my-2 text-xl font-semibold"
               >
-                Takeover place <span className="text-red-500">*</span>
+                {pageData.takeoverPlaceField}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="takeoverPlace"
@@ -392,44 +559,31 @@ const CarFormHtml = apolloData => {
                 className="w-full h-10"
                 required
               >
-                <option value="Direct Pick Up on the airport">
-                  Direct Pick Up on the airport
-                </option>
-                <option value="Pick Up on Alajuela Office">
-                  Pick Up on Alajuela Office
-                </option>
-                <option value="Pick Up in Alajuela Hotels/B&B (fees US$10-30)">
-                  Pick Up in Alajuela Hotels/B&B (fees US$10-30)
-                </option>
-                <option value="Pick Up in San Jose Hotels/B&B (fees US$20-40)">
-                  Pick Up in San Jose Hotels/B&B (fees US$20-40)
-                </option>
-                <option value="Guapiles (fees US$90)">
-                  Guapiles (fees US$90)
-                </option>
-                <option value="La Pavona (fees US$125)">
-                  La Pavona (fees US$125)
-                </option>
-                <option value="Other Location">Other Location</option>
+                {pageData.takeoverPlaceOptions.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
         </fieldset>
 
         <fieldset
-          className="grid grid-cols-2 mb-10 w-1/2"
+          className="grid grid-cols-2 mb-10 lg:w-1/2"
           role="group"
           aria-label="Detalles del Viaje"
         >
-          <legend className="text-3xl font-semibold mb-5">
-            Drop off information
+          <legend className="mb-5 text-3xl font-semibold">
+            {pageData.dropOffInformationTitle}
           </legend>
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="selectedDate"
-              className="text-xl w-full my-2 font-black"
+              className="w-full my-2 text-xl font-black"
             >
-              Return date <span className="text-red-500">*</span>
+              {pageData.returnDateField}
+              <span className="text-red-500">*</span>
             </label>
             <Flatpickr
               options={{
@@ -444,16 +598,16 @@ const CarFormHtml = apolloData => {
               id="endDate"
               className="w-full h-10 px-4 py-2"
             />
-            <sub className="text-sm text-gray-500 mt-2">
-              Choose the drop-off date
+            <sub className="mt-2 text-sm text-gray-500">
+              {pageData.subtextOfReturnDate}
             </sub>
           </div>
           <div className="flex flex-col justify-between pr-3">
             <label
               htmlFor="selectedTime"
-              className="text-xl w-full my-2 font-black"
+              className="w-full my-2 text-xl font-black"
             >
-              Time:
+              {pageData.returnHourField}
             </label>
             <Flatpickr
               options={{
@@ -472,17 +626,18 @@ const CarFormHtml = apolloData => {
               id="endTime"
               className="w-full h-10 px-4 py-2"
             />
-            <sub className="text-sm text-gray-500 mt-2">
-              Choose the drop-off time
+            <sub className="mt-2 text-sm text-gray-500">
+              {pageData.subtextOfReturnHour}
             </sub>
           </div>
           <div className="col-[1/3] justify-between pr-3">
             <div className="mb-6">
               <label
                 htmlFor="returnPlace"
-                className="text-xl block font-semibold my-2"
+                className="block my-2 text-xl font-semibold"
               >
-                Return place <span className="text-red-500">*</span>
+                {pageData.returnPlaceField}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="returnPlace"
@@ -490,26 +645,11 @@ const CarFormHtml = apolloData => {
                 className="w-full h-10"
                 required
               >
-                <option value="Direct Drop off on the airport (only between 19:00 and 6:00 overnight Parking US$5/hour)">
-                  Direct Drop off on the airport (only between 19:00 and 6:00
-                  overnight Parking US$5/hour)
-                </option>
-                <option value="Drop off in the Alajuela Office">
-                  Drop off in the Alajuela Office
-                </option>
-                <option value="Drop off in Alajuela Hotels/B&B (fees US$10-30)">
-                  Drop off in Alajuela Hotels/B&B (fees US$10-30)
-                </option>
-                <option value="Drop off in San Jose Hotels/B&B (fees US$20-40)">
-                  Drop off in San Jose Hotels/B&B (fees US$20-40)
-                </option>
-                <option value="Guapiles (fees US$90)">
-                  Guapiles (fees US$90)
-                </option>
-                <option value="La Pavona (fees US$125)">
-                  La Pavona (fees US$125)
-                </option>
-                <option value="Other Location">Other Location</option>
+                {pageData.returnPlaceOptions.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -520,11 +660,11 @@ const CarFormHtml = apolloData => {
           role="group"
           aria-label="Información de Recogida"
         >
-          <legend className="text-3xl font-semibold mb-5">
+          <legend className="mb-5 text-3xl font-semibold">
             Free additional services *
           </legend>
           <div className="mb-6">
-            <label className="text-xl block font-semibold">Services</label>
+            <label className="block text-xl font-semibold">Services</label>
             <ul>
               <li className="mb-2">
                 <input
@@ -602,7 +742,7 @@ const CarFormHtml = apolloData => {
             </ul>
           </div>
           <div className="md:w-1/2">
-            <label className="text-xl my-2 block font-semibold">
+            <label className="block my-2 text-xl font-semibold">
               Select the quantity of child seats you will need
             </label>
             <select
@@ -618,7 +758,7 @@ const CarFormHtml = apolloData => {
             </select>
           </div>
           <div className="md:w-1/2">
-            <label className="text-xl my-2 block font-semibold">
+            <label className="block my-2 text-xl font-semibold">
               Select the seat elevations/Booster Seat that you will need
             </label>
             <select
@@ -634,7 +774,7 @@ const CarFormHtml = apolloData => {
             </select>
           </div>
           <div className="md:w-1/2">
-            <label className="text-xl my-2 block font-semibold">
+            <label className="block my-2 text-xl font-semibold">
               Select the quantity of beach chairs you will need
             </label>
             <select
@@ -653,11 +793,11 @@ const CarFormHtml = apolloData => {
         </fieldset>
 
         <fieldset className="mb-10">
-          <legend className="text-3xl font-semibold mb-5">
+          <legend className="mb-5 text-3xl font-semibold">
             Paid additional services
           </legend>
           <div className="mb-6">
-            <label className="text-xl block font-semibold">Services</label>
+            <label className="block text-xl font-semibold">Services</label>
             <ul>
               <li className="mb-2">
                 <input
@@ -765,7 +905,7 @@ const CarFormHtml = apolloData => {
           <div className="mb-4 md:w-1/2">
             <label
               htmlFor="simpleSmartphoneQuantity"
-              className="text-xl my-2 block font-semibold"
+              className="block my-2 text-xl font-semibold"
             >
               Select the quantity of simple smartphone you will need
             </label>
@@ -785,7 +925,7 @@ const CarFormHtml = apolloData => {
           <div className="mb-4 md:w-1/2">
             <label
               htmlFor="kolbiSIMQuantity"
-              className="text-xl my-2 block font-semibold"
+              className="block my-2 text-xl font-semibold"
             >
               Select the quantity of KOLBI SIM you will need
             </label>
@@ -805,7 +945,7 @@ const CarFormHtml = apolloData => {
           <div className="mb-4 md:w-1/2">
             <label
               htmlFor="supplementaryInsuranceQuantity"
-              className="text-xl my-2 block font-semibold"
+              className="block my-2 text-xl font-semibold"
             >
               Select the supplementary insurance you will need for drivers
               between the ages of 21 and 25
@@ -825,13 +965,13 @@ const CarFormHtml = apolloData => {
         </fieldset>
 
         <fieldset className="mb-10 md:w-1/2">
-          <legend className="text-3xl font-semibold mb-5">
+          <legend className="mb-5 text-3xl font-semibold">
             Communication field
           </legend>
           <div>
             <label
               htmlFor="questions"
-              className="text-xl mb-5 block font-semibold"
+              className="block mb-5 text-xl font-semibold"
             >
               Write us your questions:
             </label>
@@ -844,6 +984,7 @@ const CarFormHtml = apolloData => {
             ></textarea>
           </div>
         </fieldset>
+        {formError && <p style={{ color: "red" }}>{formError}</p>}
 
         <button
           type="submit"
@@ -852,6 +993,15 @@ const CarFormHtml = apolloData => {
           REQUEST A QUOTE
         </button>
       </form>
+      {formSubmitted ? (
+        <div>
+          <h1>Thank you!</h1>
+          <p>Your form submission has been received.</p>
+        </div>
+      ) : (
+        <></>
+      )}
+      {submissionError && <p style={{ color: "red" }}>{submissionError}</p>}
     </main>
   )
 }

@@ -16,6 +16,12 @@ const ContactFormQuery = pageContext => {
   if (carsByIdQueryLoading) return <p>Loading...</p>
   if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
 
-  return <div>{carsById && <CarFormHtml apolloData={carsById} />}</div>
+  return (
+    <div>
+      {carsById && (
+        <CarFormHtml apolloData={carsById} pageContext={pageContext} />
+      )}
+    </div>
+  )
 }
 export default CarQuoteQuery

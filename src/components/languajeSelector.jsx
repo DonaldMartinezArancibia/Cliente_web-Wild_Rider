@@ -11,11 +11,13 @@ import { Faq } from "../gql/faqPageQuery"
 import { ContactAndLocation } from "../gql/contactQuery"
 import { TravelPlanner } from "../gql/travelPlannerPageQuery"
 import { Car } from "../gql/carsQuery"
+import { CarQuoteForm } from "../gql/carQuotePageQuery"
 // import { headerAndFooterElements } from "../gql/headerandfooterElements"
 
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // const client = useApolloClient()
 
+  console.log(pageContext.remoteTypeName)
   const query = [
     Index,
     Post,
@@ -27,6 +29,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     ContactAndLocation,
     TravelPlanner,
     Car,
+    CarQuoteForm,
   ].find(
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
@@ -41,8 +44,6 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // client.refetchQueries({
   //   include: [headerAndFooterElements],
   // })
-
-  console.log(langSelectorTitle)
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -83,6 +84,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
         item => item.locale === lang
       )
     }
+    let carQuotePageData
+    if (data.carQuoteForms) {
+      carQuotePageData = data.carQuoteForms[0].localizations.find(
+        item => item.locale === lang
+      )
+    }
     const rentalInfoData = data.rentalInfo
       ? data.rentalInfo.localizations[0]
       : undefined
@@ -106,6 +113,9 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       return aboutUsAndOurTeamData.slug
     if (aboutUsAndOurTeamData?.locale)
       return `${aboutUsAndOurTeamData.locale}/${aboutUsAndOurTeamData.slug}`
+    if (carQuotePageData?.locale === "en") return carQuotePageData.slug
+    if (carQuotePageData?.locale)
+      return `${carQuotePageData.locale}/${carQuotePageData.slug}`
     if (rentalInfoData?.locale === "en") return rentalInfoData.slug
     if (rentalInfoData?.locale)
       return `${rentalInfoData.locale}/${rentalInfoData.slug}`
