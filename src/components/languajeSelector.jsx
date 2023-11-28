@@ -17,7 +17,6 @@ import { CarQuoteForm } from "../gql/carQuotePageQuery"
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // const client = useApolloClient()
 
-  console.log(pageContext.remoteTypeName)
   const query = [
     Index,
     Post,

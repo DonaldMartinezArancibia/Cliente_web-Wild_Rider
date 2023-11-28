@@ -42,6 +42,23 @@ const CarQuoteFormContent = gql`
       subtextOfReturnHour
       returnPlaceField
       returnPlaceOptions
+      freeAdditionalServicesTitle
+      freeServicesSubtitle
+      freeServicesCheckboxOptions
+      freeServicesSelectors {
+        serviceSelectorTitle
+        serviceValues
+      }
+      paidAdditionalServicesTitle
+      paidServicesSubtitle
+      paidServicesCheckboxOptions
+      paidServicesSelectors {
+        serviceSelectorTitle
+        serviceValues
+      }
+      communicationFieldTitle
+      communicationFieldSubtitle
+      buttonText
     }
   }
 `
