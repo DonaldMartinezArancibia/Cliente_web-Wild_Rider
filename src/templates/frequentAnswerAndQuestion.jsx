@@ -88,7 +88,7 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
         <input
           type="text"
           id="FAQsearch"
-          placeholder={faqPageData.faqs[0].searchInputPlaceholder}
+          placeholder={faqPageData?.faqs[0]?.searchInputPlaceholder}
           value={searchTerm}
           onChange={handleSearchChange}
           className="w-full h-10 px-5 bg-white rounded py-7 placeholder:text-black focus:outline-none focus:border-primary focus:ring"

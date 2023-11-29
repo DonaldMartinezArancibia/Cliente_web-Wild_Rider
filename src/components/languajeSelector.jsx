@@ -71,31 +71,35 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       )
     }
     let contactData
-    console.log(data.contactAndLocations)
-    if (data.contactAndLocations) {
-      contactData = data.contactAndLocations[0].localizations.find(
+    if (data.contactAndLocation) {
+      contactData = data.contactAndLocation.localizations.find(
         item => item.locale === lang
       )
     }
     let carsAndQuotesData
-    if (data.carsAndQuotes) {
-      carsAndQuotesData = data.carsAndQuotes[0].localizations.find(
+    if (data.carsAndQuote) {
+      carsAndQuotesData = data.carsAndQuote.localizations.find(
         item => item.locale === lang
       )
     }
     let carQuotePageData
-    if (data.carQuoteForms) {
-      carQuotePageData = data.carQuoteForms[0].localizations.find(
+    if (data.carQuoteForm) {
+      carQuotePageData = data.carQuoteForm.localizations.find(
         item => item.locale === lang
       )
     }
-    const rentalInfoData = data.rentalInfo
-      ? data.rentalInfo.localizations[0]
-      : undefined
-    const testimonialData = data.testimonial
-      ? data.testimonial.localizations[0]
-      : undefined
-    const faqData = data.faq ? data.faq.localizations[0] : undefined
+
+    let testimonialData
+    if (data.testimonial) {
+      testimonialData = data.testimonial.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
+    let faqData
+    if (data.faq) {
+      faqData = data.faq.localizations.find(item => item.locale === lang)
+    }
 
     const travelPlannerData = data.travelPlanner
       ? data.travelPlanner.localizations[0]
@@ -115,9 +119,6 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     if (carQuotePageData?.locale === "en") return carQuotePageData.slug
     if (carQuotePageData?.locale)
       return `${carQuotePageData.locale}/${carQuotePageData.slug}`
-    if (rentalInfoData?.locale === "en") return rentalInfoData.slug
-    if (rentalInfoData?.locale)
-      return `${rentalInfoData.locale}/${rentalInfoData.slug}`
     if (testimonialData?.locale === "en") return testimonialData.slug
     if (testimonialData?.locale)
       return `${testimonialData.locale}/${testimonialData.slug}`

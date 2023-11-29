@@ -10,5 +10,15 @@ const AboutUsAndOurTeam = gql`
     }
   }
 `
+const AboutUsContent = gql`
+  query AboutUsAndOurTeams($locale: [Locale!]!) {
+    aboutUsAndOurTeams(locales: $locale) {
+      title
+      aboutUsMainContent {
+        raw
+      }
+    }
+  }
+`
 
-export { AboutUsAndOurTeam }
+export { AboutUsAndOurTeam, AboutUsContent }

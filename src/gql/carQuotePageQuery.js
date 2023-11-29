@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client"
 
 const CarQuoteForm = gql`
-  query CarQuoteForm($locale: [Locale!]!) {
-    carQuoteForms(locales: $locale) {
+  query CarQuoteForm($internalId: ID!, $locale: [Locale!]!) {
+    carQuoteForm(where: { id: $internalId }, locales: $locale) {
       localizations {
         slug
         locale
