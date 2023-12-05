@@ -25,8 +25,18 @@ const IndexContent = gql`
         text
       }
       videosSectionTitle
+      presentationVideos {
+        url
+        mimeType
+      }
       youtubeUrlVideo
       offersSectionTitle
+      freeBenefitsElements {
+        benefitImage(locales: en) {
+          url
+        }
+        benefitTitle
+      }
       testimonialsSectionTitle
       testimonialSectionText {
         html
