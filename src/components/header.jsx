@@ -84,8 +84,6 @@ export default function Header({ pageContext }) {
     include: [headerAndFooterElements],
   })
 
-  console.log(headerAndFooterElementsData)
-
   const {
     data: menuElementsData,
     loading: menuElementsDataQueryLoading,
@@ -102,8 +100,6 @@ export default function Header({ pageContext }) {
 
   const langSelectorTitle =
     headerAndFooterElementsData?.headerAndFooterElements[0]
-
-  console.log(langSelectorTitle)
 
   //Retira los slug de los diferentes idiomas solamente para la pagina index
   function transformMenuElements(data) {
@@ -150,10 +146,14 @@ export default function Header({ pageContext }) {
 
   return (
     <header className="w-full text-white font-Montserrat">
-      <div className="bg-[#4f5153] w-full lg:grid lg:grid-cols-[1fr_1fr_1fr_12%] lg:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
-        <img src={headerImg} alt="Profile" className="col-[1/5] w-full mb-4" />
+      <div className="bg-[#4f5153] w-full xl:grid xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
+        <img
+          src={langSelectorTitle?.imageOverLogo?.url}
+          alt="Profile"
+          className="col-[1/5] w-full mb-4"
+        />
         <div className="flex justify-between m-auto lg:m-0">
-          <Link
+          {/* <Link
             to={
               pageContext.langKey === "en"
                 ? "/"
@@ -162,13 +162,29 @@ export default function Header({ pageContext }) {
             className="self-center w-full"
           >
             <img src={logo} className="w-2/3 lg:w-full" alt="" />
-          </Link>
-          <div className="lg:m-auto xl:hidden">
+          </Link> */}
+          <h1 className="text-center text-[10vw] leading-none tracking-wide sm:w-2/5 sm:text-[5vw] xl:w-full xl:self-center">
+            <Link
+              to={
+                pageContext.langKey === "en"
+                  ? "/"
+                  : `/${pageContext.langKey || ""}`
+              }
+              className="font-bold text-[#f6cc4d] font-CarterOne"
+            >
+              {langSelectorTitle?.logoTextTitle}
+              <br />
+              <p className="font-InterTight text-[.3em] tracking-[.0001px] xl:text-[.39em]">
+                {langSelectorTitle?.logoTextSubtitle}
+              </p>
+            </Link>
+          </h1>
+          <div className="flex xl:m-auto xl:hidden">
             <button type="button" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 className="h-8 text-[#f6cc4d]"
                 fill="none"
-                viewBox="0 0 21 19"
+                viewBox="0 1 25 19"
                 stroke="currentColor"
               >
                 <path
@@ -193,7 +209,7 @@ export default function Header({ pageContext }) {
             </>
           ) : null}
         </div>
-        <div className="grid min-[412px]:grid-cols-2">
+        <div className="grid min-[412px]:grid-cols-2 md:justify-items-center lg:grid-cols-4 xl:grid-cols-2">
           {langSelectorTitle?.contactElements?.map((element, index) => (
             <div className="flex items-center col-span-1" key={index}>
               <img
@@ -217,12 +233,12 @@ export default function Header({ pageContext }) {
       </div>
       <div className="flex items-center bg-[#0833A2] xl:py-10 w-full justify-between">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
-          <Link to="/" className="font-bold text-black font-CarterOne">
-          Wild Rider
-          <br />
-          <p className="text-[10px] font-Inter tracking-[.001px]">
-          4x4 Car Rental & Travel Planner
-          </p>
+          <Link to="/" className="font-bold text-[#f6cc4d] font-CarterOne">
+            Wild Rider
+            <br />
+            <p className="text-base font-InterTight tracking-[.0001px]">
+              4×4 Car Rental & Travel Planner
+            </p>
           </Link>
         </h1> */}
         <ul className="items-center hidden m-auto space-x-8 text-xl font-bold font-Poppins xl:flex">

@@ -3,11 +3,14 @@ import { gql } from "@apollo/client"
 const headerAndFooterElements = gql`
   query headerAndFooterElements($locale: [Locale!]!) {
     headerAndFooterElements(locales: $locale) {
-      englishLangSelectorTitle
-      frenchLangSelectorTitle
-      germanLangSelectorTitle
-      spanishLangSelectorTitle
-      otherLangSelectorTitle
+      logoTextTitle
+      logoTextSubtitle
+      imageOverLogo(locales: en) {
+        url
+      }
+      displaySkypeTextAndNumber
+      textOverSkypeNumber
+      skypeNumber
       contactElements {
         elementTitle
         elementIcon(locales: en) {
@@ -15,9 +18,24 @@ const headerAndFooterElements = gql`
         }
         elementValue
       }
-      displaySkypeTextAndNumber
-      textOverSkypeNumber
-      skypeNumber
+      englishLangSelectorTitle
+      frenchLangSelectorTitle
+      germanLangSelectorTitle
+      spanishLangSelectorTitle
+      otherLangSelectorTitle
+      aboutUs
+      contact
+      explore
+      socialNetworks {
+        socialNetworkTitle
+        socialNetworkLogo(locales: en) {
+          url
+        }
+        urlToSocialNetwork
+      }
+      footerCopyright
+      termsOfService
+      privacyPolicy
     }
   }
 `
