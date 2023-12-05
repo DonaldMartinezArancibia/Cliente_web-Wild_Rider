@@ -340,6 +340,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           </label>
         </p>
         <input type="hidden" name="form-name" value="carquote" />
+        <input type="hidden" name="carName" value={carsById.carName} />
         <fieldset
           className="flex flex-col mb-10 md:row-span-2 lg:row-span-1 lg:w-1/2"
           role="group"
