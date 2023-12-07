@@ -275,15 +275,21 @@ export default function Header({ pageContext }) {
         <div className="p-8">
           <ul className="space-y-8 text-center font-Poppins">
             {links.map((link, index) => (
-              <li key={index} className={getLinkClass(link.to)}>
+              <li
+                key={index}
+                className={getLinkClass(link.to)}
+                onClick={() => setIsOpen(false)}
+              >
                 <Link to={link.to}>{link.text}</Link>
               </li>
             ))}
             {!isHidden && (
-              <LanguageSelector
-                pageContext={pageContext}
-                langSelectorTitle={langSelectorTitle}
-              />
+              <div onClick={() => setIsOpen(false)}>
+                <LanguageSelector
+                  pageContext={pageContext}
+                  langSelectorTitle={langSelectorTitle}
+                />
+              </div>
             )}
           </ul>
         </div>
