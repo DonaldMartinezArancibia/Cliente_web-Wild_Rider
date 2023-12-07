@@ -42,23 +42,23 @@ export default function useContactAndLocation({ pageContext }) {
     if (suggestion != null) setEmail(suggestion)
   }
 
-  // const client = useApolloClient()
-  // const {
-  //   data: ContactAndLocationData,
-  //   loading: ContactAndLocationDataQueryLoading,
-  //   error: ContactAndLocationDataQueryError,
-  // } = useQuery(ContactContent, {
-  //   variables: {
-  //     // internalId: pageContext.remoteId,
-  //     locale: [pageContext.langKey],
-  //   },
-  // })
-  // client.refetchQueries({
-  //   include: [ContactContent],
-  // })
-  // if (ContactAndLocationDataQueryLoading) return <p>Loading...</p>
+  const client = useApolloClient()
+  const {
+    data: ContactAndLocationData,
+    loading: ContactAndLocationDataQueryLoading,
+    error: ContactAndLocationDataQueryError,
+  } = useQuery(ContactContent, {
+    variables: {
+      // internalId: pageContext.remoteId,
+      locale: [pageContext.langKey],
+    },
+  })
+  client.refetchQueries({
+    include: [ContactContent],
+  })
+  if (ContactAndLocationDataQueryLoading) return <p>Loading...</p>
 
-  // const pageData = ContactAndLocationData.contactAndLocations[0]
+  const pageData = ContactAndLocationData.contactAndLocations[0]
 
   const handleLinkClick = url => {
     window.open(url, "Data", "height=700px,width=600px")
@@ -67,203 +67,203 @@ export default function useContactAndLocation({ pageContext }) {
   return (
     <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
       <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] min-[2000px]:col-[1/4] min-[2000px]:row-[1/2]">
-        {/* {pageData.title} */}
+        {pageData.title}
       </h1>
-      {/* {ContactAndLocationData && ( */}
-      <form
-        name="contact"
-        method="post"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
-        className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
-      >
-        {/* You still need to add the hidden input with the form name to your JSX form */}
-        <p className="hidden">
-          <label>
-            Don’t fill this out if you’re human: <input name="bot-field" />
-          </label>
-        </p>
-        <input type="hidden" name="form-name" value="contact" />
-
-        <fieldset
-          className="flex flex-row"
-          role="group"
-          aria-label="Datos personales"
+      {ContactAndLocationData && (
+        <form
+          name="contact"
+          method="post"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
         >
-          <div className="flex flex-col justify-between w-1/2 pr-3">
-            <label
-              htmlFor="nombre"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {/* {pageData.contactForm.nameField} */}
+          {/* You still need to add the hidden input with the form name to your JSX form */}
+          <p className="hidden">
+            <label>
+              Don’t fill this out if you’re human: <input name="bot-field" />
+            </label>
+          </p>
+          <input type="hidden" name="form-name" value="contact" />
+
+          <fieldset
+            className="flex flex-row"
+            role="group"
+            aria-label="Datos personales"
+          >
+            <div className="flex flex-col justify-between w-1/2 pr-3">
+              <label
+                htmlFor="nombre"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.nameField}
+                <span className="text-red-500">*</span>:
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                className="w-full h-10"
+                required
+              />
+            </div>
+            <div className="flex flex-col justify-between w-1/2 pl-3">
+              <label
+                htmlFor="surname"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.surnameField}
+                <span className="text-red-500">*</span>:
+              </label>
+              <input
+                type="text"
+                id="surname"
+                name="surname"
+                className="w-full h-10"
+                required
+              />
+            </div>
+          </fieldset>
+
+          <fieldset
+            className="md:flex md:flex-row"
+            role="group"
+            aria-label="Correo Electrónico"
+          >
+            <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
+              <label
+                htmlFor="email"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.emailField}{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full h-10"
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
+                required
+              />
+              {suggestion && (
+                <div>
+                  Did you mean{" "}
+                  <a
+                    href=""
+                    onClick={e => {
+                      e.preventDefault() // Previene el comportamiento predeterminado del enlace
+                      acceptSuggestion() // Llama a tu función acceptSuggestion
+                    }}
+                  >
+                    {suggestion}
+                  </a>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
+              <label
+                htmlFor="emailConfirm"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.confirmEmailField}{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full h-10"
+                type="email"
+                id="emailConfirm"
+                name="emailConfirm"
+                value={email}
+                onChange={handleChange}
+                required
+              />
+              {suggestion && (
+                <div>
+                  Did you mean{" "}
+                  <a
+                    href=""
+                    onClick={e => {
+                      e.preventDefault() // Previene el comportamiento predeterminado del enlace
+                      acceptSuggestion() // Llama a tu función acceptSuggestion
+                    }}
+                  >
+                    {suggestion}
+                  </a>
+                </div>
+              )}
+            </div>
+          </fieldset>
+
+          <fieldset
+            className="flex flex-row"
+            role="group"
+            aria-label="Número de Teléfono"
+          >
+            <div className="flex flex-col justify-between w-full">
+              <label
+                htmlFor="phoneNumber"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.phoneNumberField}:
+              </label>
+              <PhoneInput
+                defaultCountry="us"
+                value={phone}
+                onChange={phone => setPhone(phone)}
+                inputStyle={{ width: "100%", borderRadius: "0" }}
+                inputProps={{
+                  name: "phoneNumber",
+                  type: "tel",
+                  id: "phoneNumber",
+                }}
+                className="w-full h-10"
+              />
+            </div>
+          </fieldset>
+
+          <fieldset
+            className="flex flex-col md:row-span-2"
+            role="group"
+            aria-label="Mensaje"
+          >
+            <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
+              {pageData.contactForm.messageField}{" "}
               <span className="text-red-500">*</span>:
             </label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              className="w-full h-10"
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              rows="5"
               required
-            />
-          </div>
-          <div className="flex flex-col justify-between w-1/2 pl-3">
-            <label
-              htmlFor="surname"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {/* {pageData.contactForm.surnameField} */}
-              <span className="text-red-500">*</span>:
-            </label>
-            <input
-              type="text"
-              id="surname"
-              name="surname"
-              className="w-full h-10"
-              required
-            />
-          </div>
-        </fieldset>
+              className="lg:h-16"
+            ></textarea>
+          </fieldset>
 
-        <fieldset
-          className="md:flex md:flex-row"
-          role="group"
-          aria-label="Correo Electrónico"
-        >
-          <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
-            <label
-              htmlFor="email"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {/* {pageData.contactForm.emailField}{" "} */}
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              className="w-full h-10"
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              required
+          <div className="relative captcha">
+            <ReCAPTCHA
+              ref={captcha}
+              sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
+              onChange={onChange}
+              className="flex my-2 justify-evenly lg:justify-start"
             />
-            {suggestion && (
-              <div>
-                Did you mean{" "}
-                <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
-                    acceptSuggestion() // Llama a tu función acceptSuggestion
-                  }}
-                >
-                  {suggestion}
-                </a>
-              </div>
+            {!isCaptchaVerified && (
+              <input
+                type="checkbox"
+                className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
+                tabIndex="-1"
+                required
+              />
             )}
           </div>
-          <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
-            <label
-              htmlFor="emailConfirm"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {/* {pageData.contactForm.confirmEmailField}{" "} */}
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              className="w-full h-10"
-              type="email"
-              id="emailConfirm"
-              name="emailConfirm"
-              value={email}
-              onChange={handleChange}
-              required
-            />
-            {suggestion && (
-              <div>
-                Did you mean{" "}
-                <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault() // Previene el comportamiento predeterminado del enlace
-                    acceptSuggestion() // Llama a tu función acceptSuggestion
-                  }}
-                >
-                  {suggestion}
-                </a>
-              </div>
-            )}
-          </div>
-        </fieldset>
-
-        <fieldset
-          className="flex flex-row"
-          role="group"
-          aria-label="Número de Teléfono"
-        >
-          <div className="flex flex-col justify-between w-full">
-            <label
-              htmlFor="phoneNumber"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {/* {pageData.contactForm.phoneNumberField}: */}
-            </label>
-            <PhoneInput
-              defaultCountry="us"
-              value={phone}
-              onChange={phone => setPhone(phone)}
-              inputStyle={{ width: "100%", borderRadius: "0" }}
-              inputProps={{
-                name: "phoneNumber",
-                type: "tel",
-                id: "phoneNumber",
-              }}
-              className="w-full h-10"
-            />
-          </div>
-        </fieldset>
-
-        <fieldset
-          className="flex flex-col md:row-span-2"
-          role="group"
-          aria-label="Mensaje"
-        >
-          <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
-            {/* {pageData.contactForm.messageField}{" "} */}
-            <span className="text-red-500">*</span>:
-          </label>
-          <textarea
-            id="mensaje"
-            name="mensaje"
-            rows="5"
-            required
-            className="lg:h-16"
-          ></textarea>
-        </fieldset>
-
-        <div className="relative captcha">
-          <ReCAPTCHA
-            ref={captcha}
-            sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-            onChange={onChange}
-            className="flex my-2 justify-evenly lg:justify-start"
-          />
-          {!isCaptchaVerified && (
-            <input
-              type="checkbox"
-              className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
-              tabIndex="-1"
-              required
-            />
-          )}
-        </div>
-        <button
-          type="submit"
-          className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
-        >
-          {/* {pageData.contactForm.sendButton} */}
-        </button>
-      </form>
-      {/* )} */}
+          <button
+            type="submit"
+            className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
+          >
+            {pageData.contactForm.sendButton}
+          </button>
+        </form>
+      )}
       {/* <div className="grid mb-5 mx-3 min-[412px]:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
         <div className="flex items-center col-span-1">
           <svg className="h-8 mr-2 lg:h-12" viewBox="0 0 448 510">
@@ -302,7 +302,7 @@ export default function useContactAndLocation({ pageContext }) {
           </div>
         </div>
       </div> */}
-      {/* <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
+      <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
         {pageData.contactElements?.map((element, index) => (
           <div className="flex items-center col-span-1" key={index}>
             <img
@@ -316,8 +316,8 @@ export default function useContactAndLocation({ pageContext }) {
             </div>
           </div>
         ))}
-      </div> */}
-      {/* <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
+      </div>
+      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
         <img
           src={pageData.topImage.url}
           alt="Profile"
@@ -331,7 +331,7 @@ export default function useContactAndLocation({ pageContext }) {
       </div>
       <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
         {pageData.address}
-      </p> */}
+      </p>
       <iframe
         width="360"
         height="300"
