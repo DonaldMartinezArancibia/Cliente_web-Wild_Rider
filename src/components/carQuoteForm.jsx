@@ -9,29 +9,30 @@ import Flatpickr from "react-flatpickr"
 import { datosVar } from "./variableReactiva"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { CarQuoteFormContent } from "../gql/carQuotePageQuery"
+import { data } from "autoprefixer"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
-  const client = useApolloClient()
+  // const client = useApolloClient()
 
-  const {
-    data: CarQuoteFormData,
-    loading: CarQuoteFormQueryLoading,
-    error: CarQuoteFormQueryError,
-  } = useQuery(CarQuoteFormContent, {
-    variables: {
-      locale: [pageContext.pageContext.langKey],
-    },
-  })
-  client.refetchQueries({
-    include: [CarQuoteFormContent],
-  })
-
+  // const {
+  //   data: CarQuoteFormData,
+  //   loading: CarQuoteFormQueryLoading,
+  //   error: CarQuoteFormQueryError,
+  // } = useQuery(CarQuoteFormContent, {
+  //   variables: {
+  //     locale: [pageContext.pageContext.langKey],
+  //   },
+  // })
+  // client.refetchQueries({
+  //   include: [CarQuoteFormContent],
+  // })
+  // console.log(data)
   // console.log(pageContext.pageContext.langKey)
   const datos = apolloData
   // console.log(datos)
   // console.log(datosVar())
   // const { carName, remoteId } = pageContext
-  const carsById = apolloData.cars[0]
+  // const carsById = apolloData.cars[0]
   // console.log(carsById)
   // const { carsById } = apolloData.apolloData.carsById
 
@@ -237,12 +238,12 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     })
   }
 
-  if (CarQuoteFormQueryLoading) return <p>Loading...</p>
-  if (CarQuoteFormQueryError)
-    return <p>Error : {CarQuoteFormQueryError.message}</p>
+  // if (CarQuoteFormQueryLoading) return <p>Loading...</p>
+  // if (CarQuoteFormQueryError)
+  //   return <p>Error : {CarQuoteFormQueryError.message}</p>
 
-  // console.log(CarQuoteFormData.carQuoteForms[0])
-  const pageData = CarQuoteFormData.carQuoteForms[0]
+  // // console.log(CarQuoteFormData.carQuoteForms[0])
+  // const pageData = CarQuoteFormData.carQuoteForms[0]
 
   //   const {
   //     data: carsById,
@@ -268,14 +269,14 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="mb-4 font-CarterOne lg:text-5xl">{pageData.title}</h1>
+      {/* <h1 className="mb-4 font-CarterOne lg:text-5xl">{pageData.title}</h1> */}
       <div className="mb-10 lg:grid lg:grid-cols-2 lg:ml-0">
         <p className="mb-4 lg:col-span-2">
-          <ReactMarkdown>{pageData.welcomeText?.markdown}</ReactMarkdown>
+          {/* <ReactMarkdown>{pageData.welcomeText?.markdown}</ReactMarkdown> */}
         </p>
-        <h2 className="font-CarterOne lg:col-span-2">{carsById.carName}</h2>
+        {/* <h2 className="font-CarterOne lg:col-span-2">{carsById.carName}</h2> */}
         <img
-          src={carsById.carMainPhoto.url}
+          // src={carsById.carMainPhoto.url}
           className="w-full m-auto sm:w-4/5 lg:m-0 lg:col-[2/3]"
         />
         <div className="flex flex-col xl:flex-row lg:col-[1/2] lg:row-[3/4]">
@@ -283,13 +284,13 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
               <thead>
                 <tr className="text-xl">
-                  <th className="p-2">{carsById.carsAndQuote.seasonTitle}</th>
+                  {/* <th className="p-2">{carsById.carsAndQuote.seasonTitle}</th>
                   <th className="p-2">{carsById.carsAndQuote.datesTitle}</th>
-                  <th className="p-2">{carsById.carsAndQuote.priceTitle}</th>
+                  <th className="p-2">{carsById.carsAndQuote.priceTitle}</th> */}
                 </tr>
               </thead>
               <tbody>
-                {carsById.pricesOfCar.map((price, priceIndex) => (
+                {/* {carsById.pricesOfCar.map((price, priceIndex) => (
                   <tr key={priceIndex}>
                     <td className="p-2">{price.season.seasonTitle}</td>
                     <td className="p-2 text-center">
@@ -299,25 +300,25 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     </td>
                     <td className="p-2 text-center">${price.priceOfCar}</td>
                   </tr>
-                ))}
+                ))} */}
               </tbody>
             </table>
             <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
               <thead>
                 <tr className="text-xl">
                   <th className="p-2">
-                    {carsById.transmissionVariant?.transmissionPriceTitle}
+                    {/* {carsById.transmissionVariant?.transmissionPriceTitle} */}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {carsById.transmissionVariant?.priceOfCar?.map(
+                {/* {carsById.transmissionVariant?.priceOfCar?.map(
                   (price, priceIndex) => (
                     <tr key={priceIndex}>
                       <td className="text-center">${price.priceOfCar}</td>
                     </tr>
                   )
-                )}
+                )} */}
               </tbody>
             </table>
           </div>
@@ -326,7 +327,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
       <form
         // ref={formRef}
-        name="carquote"
+        name="carQuote"
         method="post"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
@@ -339,34 +340,44 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             Don’t fill this out if you’re human: <input name="bot-field" />
           </label>
         </p>
-        <input type="hidden" name="form-name" value="carquote" />
-        <input type="hidden" name="carName" value={carsById.carName} />
+        <input type="hidden" name="form-name" value="carQuote" />
         <fieldset
           className="flex flex-col mb-10 md:row-span-2 lg:row-span-1 lg:w-1/2"
           role="group"
           aria-label="Datos personales"
         >
           <legend className="mb-5 text-3xl font-semibold">
-            {pageData.basicInformationTitle}
+            {/* {pageData.basicInformationTitle} */}
           </legend>
           <div className="flex flex-col md:justify-between">
             <div className="w-full pr-3">
-              <ConditionalLabel
+              <input
+                name="carName"
+                style={{ height: "0px", width: "0px" }}
+                // value={carsById.carName}
+              />
+              <label
+                htmlFor="carName"
+                style={{ height: "0px", width: "0px", fontSize: "0px" }}
+              >
+                Car Name
+              </label>
+              {/* <ConditionalLabel
                 text={pageData.completeNameField}
                 htmlFor="name"
-              />
+              /> */}
               <input
                 type="text"
                 id="name"
                 name="name"
                 className="w-full h-10 my-2"
-                required={pageData.completeNameField?.includes("*")}
+                // required={pageData.completeNameField?.includes("*")}
               />
             </div>
 
             <div>
               <div className="flex flex-col justify-between pr-3">
-                <ConditionalLabel text={pageData.emailField} htmlFor="email" />
+                {/* <ConditionalLabel text={pageData.emailField} htmlFor="email" /> */}
                 <input
                   className="w-full h-10"
                   type="email"
@@ -374,7 +385,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   name="email"
                   value={email}
                   onChange={e => handleChange(e, setEmail, setSuggestion)}
-                  required={pageData.emailField?.includes("*")}
+                  // required={pageData.emailField?.includes("*")}
                 />
 
                 {suggestion && (
@@ -394,10 +405,10 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               </div>
 
               <div className="flex flex-col justify-between pr-3">
-                <ConditionalLabel
+                {/* <ConditionalLabel
                   text={pageData.confirmEmailField}
                   htmlFor="emailConfirm"
-                />
+                /> */}
                 <input
                   className="w-full h-10"
                   type="email"
@@ -407,7 +418,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   onChange={e =>
                     handleChange(e, setEmailConfirm, setSuggestionConfirm)
                   }
-                  required={pageData.confirmEmailField?.includes("*")}
+                  // required={pageData.confirmEmailField?.includes("*")}
                 />
 
                 {suggestionConfirm && (
@@ -428,10 +439,10 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             </div>
 
             <div className="flex flex-col justify-between pr-3">
-              <ConditionalLabel
+              {/* <ConditionalLabel
                 text={pageData.phoneNumberField}
                 htmlFor="phoneNumber"
-              />
+              /> */}
               <PhoneInput
                 defaultCountry="us"
                 value={phone}
@@ -443,48 +454,48 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   id: "phoneNumber",
                 }}
                 className="w-full h-10"
-                required={pageData.phoneNumberField?.includes("*")}
+                // required={pageData.phoneNumberField?.includes("*")}
               />
             </div>
             <div className="flex flex-col justify-between pr-3">
-              <ConditionalLabel
+              {/* <ConditionalLabel
                 text={pageData.countryResidenceField}
                 htmlFor="countrySelection"
-              />
-              <select
+              /> */}
+              {/* <select
                 id="country"
                 value={selectedCountry}
                 onChange={handleCountryChange}
                 className="w-full h-10"
                 name="countrySelection"
-                required={pageData.countryResidenceField?.includes("*")}
+                // required={pageData.countryResidenceField?.includes("*")}
               >
                 {pageData.countriesOptions.map(country => (
                   <option key={country} value={country}>
                     {country}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
           </div>
 
           <div className="flex flex-col justify-between pr-3">
-            <ConditionalLabel
+            {/* <ConditionalLabel
               text={pageData.numberOfTravelersField}
               htmlFor="numberOfTravelers"
-            />
+            /> */}
 
             <select
               id="numberOfTravelers"
               name="numberOfTravelers"
-              required={pageData.numberOfTravelersField?.includes("*")}
+              // required={pageData.numberOfTravelersField?.includes("*")}
               className="w-full h-10"
             >
-              {pageData.numberOfTravelersOptions.map((option, index) => (
+              {/* {pageData.numberOfTravelersOptions.map((option, index) => (
                 <option key={index} value={option}>
                   {option}
                 </option>
-              ))}
+              ))} */}
             </select>
           </div>
 
@@ -536,18 +547,18 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         </fieldset>
 
         <fieldset
-          className="lg:grid lg:grid-cols-2 mb-2 lg:col-span-1 lg:w-1/2"
+          className="mb-2 lg:grid lg:grid-cols-2 lg:col-span-1 lg:w-1/2"
           role="group"
           aria-label="Detalles del Viaje"
         >
           <legend className="mb-5 text-3xl font-semibold">
-            {pageData.pickUpInformationTitle}
+            {/* {pageData.pickUpInformationTitle} */}
           </legend>
           <div className="flex flex-col justify-between pr-3">
-            <ConditionalLabel
+            {/* <ConditionalLabel
               text={pageData.takeoverDateField}
               htmlFor="StartDate"
-            />
+            /> */}
             <Flatpickr
               options={{
                 dateFormat: "F d, Y",
@@ -560,64 +571,64 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               name="StartDate"
               id="startDate"
               className="w-full h-10 px-4 py-2"
-              required={pageData.takeoverDateField?.includes("*")}
+              // required={pageData.takeoverDateField?.includes("*")}
             />
             <sub className="mt-2 text-sm text-gray-500">
-              {pageData.subtextOfTakeoverDate}
+              {/* {pageData.subtextOfTakeoverDate} */}
             </sub>
           </div>
           <div className="flex flex-col justify-between pr-3">
-            <ConditionalLabel
+            {/* <ConditionalLabel
               text={pageData.takeoverHourField}
               htmlFor="StartTime"
-            />
+            /> */}
             <select
               name="StartTime"
               id="startTime"
               className="w-full h-10 px-4 py-2"
-              required={pageData.takeoverHourField?.includes("*")}
+              // required={pageData.takeoverHourField?.includes("*")}
             >
               {generateTimeOptions("6:00", "19:00")}
             </select>
             <sub className="mt-2 text-sm text-gray-500">
-              {pageData.subtextOfTakeoverHour}
+              {/* {pageData.subtextOfTakeoverHour} */}
             </sub>
           </div>
           <div className="col-[1/3] justify-between pr-3">
             <div className="mb-6">
-              <ConditionalLabel
+              {/* <ConditionalLabel
                 text={pageData.takeoverPlaceField}
                 htmlFor="takeoverPlace"
-              />
+              /> */}
               <select
                 id="takeoverPlace"
                 name="takeoverPlace"
                 className="w-full h-10"
-                required={pageData.takeoverPlaceField?.includes("*")}
+                // required={pageData.takeoverPlaceField?.includes("*")}
               >
-                {pageData.takeoverPlaceOptions.map((option, index) => (
+                {/* {pageData.takeoverPlaceOptions.map((option, index) => (
                   <option key={index} value={option}>
                     {option}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
           </div>
         </fieldset>
 
         <fieldset
-          className="lg:grid lg:grid-cols-2 mb-4 lg:w-1/2"
+          className="mb-4 lg:grid lg:grid-cols-2 lg:w-1/2"
           role="group"
           aria-label="Detalles del Viaje"
         >
           <legend className="mb-5 text-3xl font-semibold">
-            {pageData.dropOffInformationTitle}
+            {/* {pageData.dropOffInformationTitle} */}
           </legend>
           <div className="flex flex-col justify-between pr-3">
-            <ConditionalLabel
+            {/* <ConditionalLabel
               text={pageData.returnDateField}
               htmlFor="EndDate"
-            />
+            /> */}
             <Flatpickr
               options={{
                 dateFormat: "F d, Y",
@@ -628,46 +639,46 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               name="EndDate"
               id="endDate"
               className="w-full h-10 px-4 py-2"
-              required={pageData.returnDateField?.includes("*")}
+              // required={pageData.returnDateField?.includes("*")}
             />
             <sub className="mt-2 text-sm text-gray-500">
-              {pageData.subtextOfReturnDate}
+              {/* {pageData.subtextOfReturnDate} */}
             </sub>
           </div>
           <div className="flex flex-col justify-between pr-3">
-            <ConditionalLabel
+            {/* <ConditionalLabel
               text={pageData.returnHourField}
               htmlFor="endTime"
-            />
+            /> */}
             <select
               id="endTime"
               name="endTime"
               className="w-full h-10 px-4 py-2"
-              required={pageData.returnHourField?.includes("*")}
+              // required={pageData.returnHourField?.includes("*")}
             >
               {generateTimeOptions("6:00", "19:00")}
             </select>
             <sub className="mt-2 text-sm text-gray-500">
-              {pageData.subtextOfTakeoverHour}
+              {/* {pageData.subtextOfTakeoverHour} */}
             </sub>
           </div>
           <div className="col-[1/3] justify-between pr-3">
             <div className="mb-6">
-              <ConditionalLabel
+              {/* <ConditionalLabel
                 text={pageData.returnPlaceField}
                 htmlFor="returnPlace"
-              />
+              /> */}
               <select
                 id="returnPlace"
                 name="returnPlace"
                 className="w-full h-10"
-                required={pageData.returnPlaceField?.includes("*")}
+                // required={pageData.returnPlaceField?.includes("*")}
               >
-                {pageData.returnPlaceOptions.map((option, index) => (
+                {/* {pageData.returnPlaceOptions.map((option, index) => (
                   <option key={index} value={option}>
                     {option}
                   </option>
-                ))}
+                ))} */}
               </select>
             </div>
           </div>
@@ -679,14 +690,14 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           aria-label="Información de Recogida"
         >
           <legend className="mb-5 text-3xl font-semibold">
-            {pageData.freeAdditionalServicesTitle}
+            {/* {pageData.freeAdditionalServicesTitle} */}
           </legend>
           <div className="mb-6">
             <label className="block text-xl font-semibold">
-              {pageData.freeServicesSubtitle}
+              {/* {pageData.freeServicesSubtitle} */}
             </label>
             <ul>
-              {pageData.freeServicesCheckboxOptions.map((option, index) => (
+              {/* {pageData.freeServicesCheckboxOptions.map((option, index) => (
                 <li key={index} className="mb-2">
                   <input
                     type="checkbox"
@@ -698,9 +709,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     {option}
                   </label>
                 </li>
-              ))}
+              ))} */}
             </ul>
-            {pageData.freeServicesSelectors.map((selector, index) => (
+            {/* {pageData.freeServicesSelectors.map((selector, index) => (
               <div key={index} className="mb-6 lg:w-1/2">
                 <label className="block text-xl font-semibold">
                   {selector.serviceSelectorTitle}
@@ -717,20 +728,20 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   ))}
                 </select>
               </div>
-            ))}
+            ))} */}
           </div>
         </fieldset>
 
-        <fieldset className="mb-5 col-span-2">
+        <fieldset className="col-span-2 mb-5">
           <legend className="mb-5 text-3xl font-semibold">
-            {pageData.paidAdditionalServicesTitle}
+            {/* {pageData.paidAdditionalServicesTitle} */}
           </legend>
           <div className="mb-6">
             <label className="block text-xl font-semibold">
-              {pageData.paidServicesSubtitle}
+              {/* {pageData.paidServicesSubtitle} */}
             </label>
             <ul>
-              {pageData.paidServicesCheckboxOptions.map((option, index) => (
+              {/* {pageData.paidServicesCheckboxOptions.map((option, index) => (
                 <li key={index} className="mb-2">
                   <input
                     type="checkbox"
@@ -742,10 +753,10 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     {option}
                   </label>
                 </li>
-              ))}
+              ))} */}
             </ul>
           </div>
-          {pageData.paidServicesSelectors.map((selector, index) => (
+          {/* {pageData.paidServicesSelectors.map((selector, index) => (
             <div key={index} className="mb-6 lg:w-1/2">
               <label className="block text-xl font-semibold">
                 {selector.serviceSelectorTitle}
@@ -762,22 +773,22 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 ))}
               </select>
             </div>
-          ))}
+          ))} */}
         </fieldset>
 
-        <fieldset className="mb-10 col-span-2 lg:w-1/2">
+        <fieldset className="col-span-2 mb-10 lg:w-1/2">
           <legend className="mb-5 text-3xl font-semibold">
-            {pageData.communicationFieldTitle}
+            {/* {pageData.communicationFieldTitle} */}
           </legend>
           <div>
-            <ConditionalLabel
+            {/* <ConditionalLabel
               text={pageData.communicationFieldSubtitle}
               htmlFor="questions"
-            />
+            /> */}
             <textarea
               id="questions"
               name="questions"
-              required={pageData.communicationFieldSubtitle?.includes("*")}
+              // required={pageData.communicationFieldSubtitle?.includes("*")}
               className="w-full h-32 md:h-40"
             ></textarea>
           </div>
@@ -788,7 +799,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           type="submit"
           className="bg-[#F6CC4D] text-white h-14 font-bold text-lg w-full md:col-span-2 lg:w-1/2 lg:col-span-1"
         >
-          {pageData.buttonText}
+          {/* {pageData.buttonText} */}
         </button>
       </form>
       {formSubmitted ? (
