@@ -31,7 +31,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   // const datos = apolloData
   // console.log(datos)
   // console.log(datosVar())
-  const { carName, remoteId } = pageContext
+  // const { carName, remoteId } = pageContext
   const carsById = apolloData.cars[0]
   // console.log(carsById)
   // const { carsById } = apolloData.apolloData.carsById
@@ -708,6 +708,11 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   <label className="ml-2" htmlFor={option.replace(/\s+/g, "")}>
                     {option}
                   </label>
+                  <input
+                    type="hidden"
+                    name={`${option.replace(/\s+/g, "")}_hidden`}
+                    value="NO"
+                  />
                 </li>
               ))}
             </ul>
@@ -745,13 +750,18 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 <li key={index} className="mb-2">
                   <input
                     type="checkbox"
-                    id={option.replace(/\s+/g, "")} // Remove spaces from the option for the ID
-                    name={option.replace(/\s+/g, "")} // Remove spaces from the option for the name
+                    id={option.replace(/\s+/g, "")}
+                    name={option.replace(/\s+/g, "")}
                     value="YES"
                   />
                   <label className="ml-2" htmlFor={option.replace(/\s+/g, "")}>
                     {option}
                   </label>
+                  <input
+                    type="hidden"
+                    name={`${option.replace(/\s+/g, "")}_hidden`}
+                    value="NO"
+                  />
                 </li>
               ))}
             </ul>
@@ -802,6 +812,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           {pageData.buttonText}
         </button>
       </form>
+
       {formSubmitted ? (
         <div>
           <h1>Thank you!</h1>
