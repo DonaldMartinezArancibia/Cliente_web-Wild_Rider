@@ -6,6 +6,7 @@ import "react-international-phone/style.css"
 import countryList from "react-select-country-list"
 import "flatpickr/dist/themes/airbnb.css"
 import Flatpickr from "react-flatpickr"
+import { navigate } from "gatsby"
 import { datosVar } from "./variableReactiva"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { CarQuoteFormContent } from "../gql/carQuotePageQuery"
@@ -200,6 +201,11 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           throw new Error(`HTTP error! Status: ${response.status}`)
         }
         setFormSubmitted(true)
+        navigate(
+          pageContext.pageContext.langKey === "en"
+            ? "/"
+            : `/${pageContext.pageContext.langKey}`
+        )
       })
       .then(data => {
         console.log("Formulario enviado con éxito:", data)
@@ -274,12 +280,27 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         <p className="mb-4 lg:col-span-2">
           <ReactMarkdown>{pageData.welcomeText?.markdown}</ReactMarkdown>
         </p>
-        <h2 className="font-CarterOne lg:col-span-2">{carsById.carName}</h2>
+        <h2 className="row-start-2 font-CarterOne lg:col-span-2">
+          {carsById.carName}
+        </h2>
+        {carsById.insuranceAndTaxInfo !== null &&
+          carsById.insuranceAndTaxInfo !== undefined && (
+            <span className="inline-flex items-center row-[3/4] px-2 py-1 text-xs font-medium text-blue-700 rounded-md lg:col-[1/3] gap-x-2 bg-blue-50 mt-2 ring-1 ring-inset ring-blue-700/10">
+              <svg
+                className="w-2 fill-[#3b82f6]"
+                viewBox="0 0 6 6"
+                aria-hidden="true"
+              >
+                <circle cx="3" cy="3" r="3"></circle>
+              </svg>
+              {carsById.insuranceAndTaxInfo}
+            </span>
+          )}
         <img
           src={carsById.carMainPhoto.url}
           className="w-full m-auto sm:w-4/5 lg:m-0 lg:col-[2/3]"
         />
-        <div className="flex flex-col xl:flex-row lg:col-[1/2] lg:row-[3/4]">
+        <div className="flex flex-col xl:flex-row lg:col-[1/2] lg:row-[4/5]">
           <div className="overflow-x-auto flex sm:m-auto xl:m-[auto_0_auto_8%]">
             <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
               <thead>
