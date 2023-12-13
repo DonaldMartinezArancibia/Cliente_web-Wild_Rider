@@ -28,6 +28,9 @@ const CarQuoteFormContent = gql`
       countriesOptions
       numberOfTravelersField
       numberOfTravelersOptions
+      vehicleSelectionField
+      vehicleSelectionOptions
+      otherHour
       pickUpInformationTitle
       takeoverDateField
       subtextOfTakeoverDate
