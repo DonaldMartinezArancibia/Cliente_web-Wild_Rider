@@ -294,12 +294,15 @@ export default function OpenModal({ carId, pageContext }) {
                         <thead>
                           <tr className="text-xl">
                             <th className="p-2">
-                              {car.transmissionVariant?.transmissionPriceTitle}
+                              {
+                                car.automaticTransmission
+                                  ?.transmissionPriceTitle
+                              }
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {car.transmissionVariant?.priceOfCar?.map(
+                          {car.automaticTransmission?.priceOfCar?.map(
                             (price, priceIndex) => (
                               <tr key={priceIndex}>
                                 <td>${price.priceOfCar}</td>

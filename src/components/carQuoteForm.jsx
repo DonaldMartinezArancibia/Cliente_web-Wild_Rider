@@ -273,6 +273,12 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     )
   }
 
+  const matchingOption = pageData.vehicleSelectionOptions.find(option =>
+    carsById.carName.includes(option.charAt(0))
+  )
+
+  const defaultValue = matchingOption ? matchingOption : ""
+
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
       <h1 className="mb-4 font-CarterOne lg:text-5xl">{pageData.title}</h1>
@@ -328,12 +334,12 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <thead>
                 <tr className="text-xl">
                   <th className="p-2">
-                    {carsById.transmissionVariant?.transmissionPriceTitle}
+                    {carsById.automaticTransmission?.transmissionPriceTitle}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {carsById.transmissionVariant?.priceOfCar?.map(
+                {carsById.automaticTransmission?.priceOfCar?.map(
                   (price, priceIndex) => (
                     <tr key={priceIndex}>
                       <td className="text-center">${price.priceOfCar}</td>
@@ -529,6 +535,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               name="vehicleSelection"
               className="w-full h-10"
               required={pageData.vehicleSelectionField?.includes("*")}
+              value={defaultValue}
             >
               {pageData.vehicleSelectionOptions.map((option, index) => (
                 <option key={index} value={option}>

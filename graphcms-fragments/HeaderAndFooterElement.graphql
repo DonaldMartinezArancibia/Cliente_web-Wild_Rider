@@ -5,14 +5,22 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
+  logoTextTitle
+  logoTextSubtitle
+  textOverSkypeNumber
+  skypeNumber
+  displaySkypeTextAndNumber
   spanishLangSelectorTitle
   englishLangSelectorTitle
   frenchLangSelectorTitle
   germanLangSelectorTitle
   otherLangSelectorTitle
-  textOverSkypeNumber
-  skypeNumber
-  displaySkypeTextAndNumber
+  aboutUs
+  contact
+  explore
+  footerCopyright
+  termsOfService
+  privacyPolicy
   contactElements {
     ... on ContactElement {
       stage
@@ -21,6 +29,23 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
       elementTitle
       elementValue
       elementIcon {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
+  socialNetworks {
+    ... on SocialNetwork {
+      stage
+      locale
+      id
+      socialNetworkTitle
+      urlToSocialNetwork
+      socialNetworkLogo {
         ... on Asset {
           remoteTypeName: __typename
           remoteId: id
@@ -48,6 +73,14 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+  }
+  imageOverLogo {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }

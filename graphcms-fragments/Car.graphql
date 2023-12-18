@@ -36,7 +36,7 @@ fragment Car on Car {
       }
     }
   }
-  transmissionVariant {
+  automaticTransmission {
     ... on TransmissionVariant {
       stage
       locale

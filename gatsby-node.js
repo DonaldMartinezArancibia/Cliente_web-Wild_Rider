@@ -101,7 +101,7 @@ exports.createPages = async ({ graphql, actions }) => {
       }
 
       const [
-        postsPageResult,
+        // postsPageResult,
         indexResult,
         contactPageResult,
         carsPageResult,
@@ -112,7 +112,7 @@ exports.createPages = async ({ graphql, actions }) => {
         travelPageResult,
         carquotePageResult,
       ] = await Promise.all([
-        fetchContentByType("allGraphCmsPost", locale),
+        // fetchContentByType("allGraphCmsPost", locale),
         fetchContentByType("allGraphCmsIndex", locale),
         fetchContentByType("allGraphCmsContactAndLocation", locale),
         fetchContentByType("allGraphCmsCarsAndQuote", locale),
@@ -150,11 +150,11 @@ exports.createPages = async ({ graphql, actions }) => {
       const urlPrefix = locale === "en" ? "/" : `/${locale}/`
 
       // Creación de páginas de los posts
-      createPagesForContent(
+      /*createPagesForContent(
         postsPageResult.data.allGraphCmsPost.nodes,
         `${urlPrefix}blog/`,
         "./src/templates/Post.jsx"
-      )
+      )*/
 
       // Creación de páginas de inicio en los diferentes idiomas
       createPagesForContent(

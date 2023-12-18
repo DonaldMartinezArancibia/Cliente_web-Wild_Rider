@@ -33,7 +33,7 @@ const Cars = gql`
         quoteButtonText
       }
       carDetailsTitle
-      transmissionVariant {
+      automaticTransmission {
         transmissionPriceTitle
         priceOfCar {
           priceOfCar

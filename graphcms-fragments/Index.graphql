@@ -28,6 +28,22 @@ fragment Index on Index {
       text
     }
   }
+  freeBenefitsElements {
+    ... on FreeBenefitsElement {
+      stage
+      locale
+      id
+      benefitTitle
+      benefitImage {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
   createdBy {
     ... on User {
       remoteTypeName: __typename
@@ -51,6 +67,14 @@ fragment Index on Index {
   }
   viewCarsbuttonurl {
     ... on CarsAndQuote {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  presentationVideos {
+    ... on Asset {
       remoteTypeName: __typename
       remoteId: id
       locale

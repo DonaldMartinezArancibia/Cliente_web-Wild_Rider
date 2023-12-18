@@ -6,6 +6,7 @@ fragment CarQuoteForm on CarQuoteForm {
   createdAt(variation: COMBINED)
   remoteId: id
   slug
+  title
   welcomeText {
     ... on RichText {
       raw
@@ -23,6 +24,9 @@ fragment CarQuoteForm on CarQuoteForm {
   countriesOptions
   numberOfTravelersField
   numberOfTravelersOptions
+  vehicleSelectionField
+  vehicleSelectionOptions
+  otherHour
   pickUpInformationTitle
   takeoverDateField
   subtextOfTakeoverDate
@@ -37,7 +41,33 @@ fragment CarQuoteForm on CarQuoteForm {
   subtextOfReturnHour
   returnPlaceField
   returnPlaceOptions
-  title
+  freeAdditionalServicesTitle
+  freeServicesSubtitle
+  freeServicesCheckboxOptions
+  paidAdditionalServicesTitle
+  paidServicesSubtitle
+  paidServicesCheckboxOptions
+  communicationFieldTitle
+  communicationFieldSubtitle
+  buttonText
+  freeServicesSelectors {
+    ... on ServicesSelector {
+      stage
+      locale
+      id
+      serviceSelectorTitle
+      serviceValues
+    }
+  }
+  paidServicesSelectors {
+    ... on ServicesSelector {
+      stage
+      locale
+      id
+      serviceSelectorTitle
+      serviceValues
+    }
+  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename

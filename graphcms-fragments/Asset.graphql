@@ -87,6 +87,22 @@ fragment Asset on Asset {
       stage
     }
   }
+  presentationVideosIndex {
+    ... on Index {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  imageOverLogoHeaderAndFooterElement {
+    ... on HeaderAndFooterElement {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename
