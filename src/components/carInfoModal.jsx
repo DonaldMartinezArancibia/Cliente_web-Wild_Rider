@@ -7,6 +7,7 @@ import { Cars } from "../gql/carsByIdQuery"
 import { Link } from "gatsby"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { setDatos } from "./variableReactiva"
+import { navigate } from "gatsby"
 
 export default function OpenModal({ carId, pageContext }) {
   const client = useApolloClient()
@@ -21,6 +22,8 @@ export default function OpenModal({ carId, pageContext }) {
   function openModal() {
     setIsOpen(true)
   }
+
+  const [selectedTransmission, setSelectedTransmission] = useState("")
 
   const {
     data: carsById,
@@ -54,6 +57,29 @@ export default function OpenModal({ carId, pageContext }) {
   setDatos(car.id)
   // console.log(car.carDetails[0].markdown)
 
+  const handleTransmissionChange = event => {
+    setSelectedTransmission(event.target.value)
+  }
+
+  const handleButtonClick = () => {
+    // Realizar la redirección solo si se ha seleccionado una transmisión
+    console.log(
+      car.automaticTransmission === null || selectedTransmission !== ""
+    )
+    if (car.automaticTransmission === null || selectedTransmission !== "") {
+      navigate(
+        pageContext.langKey === "en"
+          ? `/${car.carQuoteForm.slug}`
+          : `/${pageContext.langKey || ""}/${car.carQuoteForm.slug}`,
+        { state: { datos } }
+      )
+    } else {
+      console.log(
+        "No se puede redirigir porque no se ha seleccionado una transmisión"
+      )
+    }
+  }
+  console.log(car.automaticTransmission)
   return (
     <>
       <div className="flex items-center justify-center 2xl:col-[2/3] 2xl:row-[2/3]">
@@ -111,7 +137,7 @@ export default function OpenModal({ carId, pageContext }) {
                       <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                     </button>
                   </div>
-                  {car.insuranceAndTaxInfo !== null &&
+                  {car.automaticTransmission !== null &&
                     car.insuranceAndTaxInfo !== undefined && (
                       <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 rounded-md gap-x-2 bg-blue-50 mt-7 ring-1 ring-inset ring-blue-700/10">
                         <svg
@@ -375,21 +401,44 @@ export default function OpenModal({ carId, pageContext }) {
                     )}
                   </section>
 
-                  <div className="flex justify-center">
-                    {/* Contenido de tu componente */}
-                    <Link
-                      to={
-                        pageContext.langKey === "en"
-                          ? `/${car.carQuoteForm.slug}`
-                          : `/${pageContext.langKey || ""}/${
-                              car.carQuoteForm.slug
-                            }`
-                      }
-                      state={{ datos }}
-                      className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
-                    >
-                      {car.carsAndQuote.quoteButtonText}
-                    </Link>
+                  <div>
+                    {/* Selector de transmisión */}
+                    {car.automaticTransmission !== null &&
+                      car.automaticTransmission !== undefined && (
+                        <div className="flex justify-center">
+                          <select
+                            id="transmissionSelector"
+                            name="transmissionSelector"
+                            className="w-full h-10"
+                            required
+                            value={selectedTransmission}
+                            onChange={handleTransmissionChange}
+                          >
+                            <option value="">Selecciona una transmisión</option>
+                            <option value="manual">Manual</option>
+                            <option value="automatic">Automática</option>
+                          </select>
+                        </div>
+                      )}
+
+                    {/* Botón de redirección */}
+                    <div className="flex justify-center mt-4">
+                      <button
+                        onClick={handleButtonClick}
+                        className={`bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg ${
+                          car.automaticTransmission !== null &&
+                          selectedTransmission === ""
+                            ? "cursor-not-allowed"
+                            : "cursor-pointer"
+                        }`}
+                        disabled={
+                          car.automaticTransmission !== null &&
+                          selectedTransmission === ""
+                        }
+                      >
+                        {car.carsAndQuote.quoteButtonText}
+                      </button>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
