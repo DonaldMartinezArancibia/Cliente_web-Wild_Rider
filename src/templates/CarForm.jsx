@@ -3,11 +3,21 @@ import CarQuoteQuery from "../components/carQuoteQuery"
 import { datosVar } from "../components/variableReactiva"
 
 const CarForm = ({ pageContext, location }) => {
-  // const datos = location.state ? location.state.datos : null
+  // Obtén el objeto datos desde la variable reactiva
   const datos = datosVar()
+
+  // Obtén el valor de selectedTransmission desde location.state
+  const selectedTransmission = location.state?.datos?.selectedTransmission
+
+  // Crea un nuevo objeto pageContext y agrega el valor de selectedTransmission
+  const newPageContext = {
+    ...pageContext,
+    selectedTransmission: selectedTransmission,
+  }
+
   return (
     <div>
-      <CarQuoteQuery pageContext={pageContext} carId={datos} />
+      <CarQuoteQuery pageContext={newPageContext} carId={datos} />
     </div>
   )
 }

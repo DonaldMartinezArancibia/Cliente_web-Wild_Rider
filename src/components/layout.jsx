@@ -19,7 +19,6 @@ export const Layout = ({ children, pageContext }) => {
   client.refetchQueries({
     include: [headerAndFooterElements],
   })
-  console.log(headerAndFooterElementsData)
   return (
     <>
       <Header pageContext={pageContext} />

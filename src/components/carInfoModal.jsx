@@ -63,15 +63,18 @@ export default function OpenModal({ carId, pageContext }) {
 
   const handleButtonClick = () => {
     // Realizar la redirección solo si se ha seleccionado una transmisión
-    console.log(
-      car.automaticTransmission === null || selectedTransmission !== ""
-    )
     if (car.automaticTransmission === null || selectedTransmission !== "") {
+      // Agregar el valor de la transmisión al objeto datos
+      const datosConTransmision = {
+        ...datos, // Copiar los datos existentes
+        selectedTransmission: selectedTransmission,
+      }
+      // Realizar la navegación con el nuevo objeto datos
       navigate(
         pageContext.langKey === "en"
           ? `/${car.carQuoteForm.slug}`
           : `/${pageContext.langKey || ""}/${car.carQuoteForm.slug}`,
-        { state: { datos } }
+        { state: { datos: datosConTransmision } }
       )
     } else {
       console.log(
@@ -79,7 +82,6 @@ export default function OpenModal({ carId, pageContext }) {
       )
     }
   }
-  console.log(car.automaticTransmission)
   return (
     <>
       <div className="flex items-center justify-center 2xl:col-[2/3] 2xl:row-[2/3]">

@@ -5,6 +5,7 @@ import CarFormHtml from "./carQuoteForm"
 
 const CarQuoteQuery = pageContext => {
   const client = useApolloClient()
+  console.log(pageContext)
 
   const {
     data: carsById,

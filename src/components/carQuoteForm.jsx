@@ -14,7 +14,7 @@ import { data } from "autoprefixer"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   const client = useApolloClient()
-
+  console.log(pageContext.pageContext.selectedTransmission)
   const {
     data: CarQuoteFormData,
     loading: CarQuoteFormQueryLoading,
@@ -248,7 +248,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   if (CarQuoteFormQueryError)
     return <p>Error : {CarQuoteFormQueryError.message}</p>
 
-  console.log(CarQuoteFormData.carQuoteForms[0])
   const pageData = CarQuoteFormData.carQuoteForms[0]
 
   // const {
@@ -273,9 +272,35 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     )
   }
 
-  const matchingOption = pageData.vehicleSelectionOptions.find(option =>
-    carsById.carName.includes(option.charAt(0))
-  )
+  const selectedTransmission =
+    pageContext.pageContext.selectedTransmission || "manual"
+
+  const matchingOption = pageData.vehicleSelectionOptions.find(option => {
+    const carName = carsById.carName.toLowerCase().trim()
+    const optionValue = option.toLowerCase()
+
+    console.log("carName:", carName)
+    console.log("optionValue:", optionValue)
+
+    // Verificar coincidencia exacta de marca y modelo
+    if (carName === optionValue.split(" with ")[0]) {
+      console.log("Marca y modelo coinciden.")
+
+      // Verificar coincidencia de transmisión
+      const transmission = optionValue.split(" with ")[1].split(" ")[0]
+      console.log("Transmisión:", transmission)
+
+      if (selectedTransmission === transmission) {
+        console.log("Coincidencia de transmisión.")
+        return true
+      }
+    }
+
+    console.log("No hay coincidencia.")
+    return false
+  })
+
+  console.log("matchingOption:", matchingOption)
 
   const defaultValue = matchingOption ? matchingOption : ""
 
