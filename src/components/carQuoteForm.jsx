@@ -47,6 +47,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
   const [startDate, setStartDate] = useState(new Date())
   const [startTime, setStartTime] = useState(new Date())
+  const [defaultValue, setDefaultValue] = useState("")
 
   const handleTimeChange = (selectedTime, setState) => {
     if (selectedTime && selectedTime.length > 0) {
@@ -218,6 +219,8 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     // Resto del código para manejar la respuesta del envío
   }
 
+  const pageData = CarQuoteFormData?.carQuoteForms[0]
+
   function generateTimeOptions(minTime, maxTime) {
     const options = []
     let currentTime = new Date(`2000-01-01 ${minTime}`)
@@ -243,11 +246,25 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     })
   }
 
+  const selectedTransmission = pageContext.pageContext.selectedTransmission
+
+  useEffect(() => {
+    const matchingOption = pageData?.vehicleSelectionOptions.find(option => {
+      const carName = selectedTransmission?.toLowerCase().trim()
+      const optionValue = option.toLowerCase()
+
+      // Verificar coincidencia exacta de marca y modelo
+      return carName === optionValue
+    })
+
+    // Asignar el valor predeterminado basado en la opción coincidente
+    const defaultOption = matchingOption ? matchingOption : ""
+    setDefaultValue(defaultOption)
+  }, [selectedTransmission, pageData?.vehicleSelectionOptions])
+
   if (CarQuoteFormQueryLoading) return <p>Loading...</p>
   if (CarQuoteFormQueryError)
     return <p>Error : {CarQuoteFormQueryError.message}</p>
-
-  const pageData = CarQuoteFormData.carQuoteForms[0]
 
   // const {
   //   data: carsById,
@@ -270,21 +287,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       </label>
     )
   }
-
-  const selectedTransmission = pageContext.pageContext.selectedTransmission
-
-  const matchingOption = pageData.vehicleSelectionOptions.find(option => {
-    const carName = selectedTransmission?.toLowerCase().trim()
-    const optionValue = option.toLowerCase()
-    // Verificar coincidencia exacta de marca y modelo
-    if (carName === optionValue) {
-      return true
-    }
-
-    return false
-  })
-
-  const defaultValue = matchingOption ? matchingOption : ""
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
@@ -543,43 +545,47 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10"
               required={pageData.vehicleSelectionField?.includes("*")}
               value={defaultValue}
+              onChange={e => setDefaultValue(e.target.value)}
             >
-              {pageData.cars.map((car, index) => {
-                // Filtrar transmisiones nulas
-                const manualTransmissionValue =
-                  car.manualTransmission?.carTransmissionSelectorValue
-                const automaticTransmissionValue =
-                  car.automaticTransmission?.carTransmissionSelectorValue
+              {pageData.cars
+                .map((car, index) => {
+                  // Filtrar transmisiones nulas
+                  const manualTransmissionValue =
+                    car.manualTransmission?.carTransmissionSelectorValue
+                  const automaticTransmissionValue =
+                    car.automaticTransmission?.carTransmissionSelectorValue
 
-                // Crear opciones solo si las transmisiones no son nulas
-                const options = []
+                  // Crear opciones solo si las transmisiones no son nulas
+                  const options = []
 
-                if (
-                  manualTransmissionValue !== null &&
-                  manualTransmissionValue !== undefined
-                ) {
-                  options.push({
-                    value: manualTransmissionValue,
-                    label: manualTransmissionValue,
-                  })
-                }
+                  if (
+                    manualTransmissionValue !== null &&
+                    manualTransmissionValue !== undefined
+                  ) {
+                    options.push({
+                      value: manualTransmissionValue,
+                      label: manualTransmissionValue,
+                    })
+                  }
 
-                if (
-                  automaticTransmissionValue !== null &&
-                  automaticTransmissionValue !== undefined
-                ) {
-                  options.push({
-                    value: automaticTransmissionValue,
-                    label: automaticTransmissionValue,
-                  })
-                }
+                  if (
+                    automaticTransmissionValue !== null &&
+                    automaticTransmissionValue !== undefined
+                  ) {
+                    options.push({
+                      value: automaticTransmissionValue,
+                      label: automaticTransmissionValue,
+                    })
+                  }
 
-                return options.map((option, innerIndex) => (
-                  <option key={`${index}-${innerIndex}`} value={option.value}>
+                  return options
+                })
+                .flat() // Aplanar el array de arrays
+                .map((option, innerIndex) => (
+                  <option key={innerIndex} value={option.value}>
                     {option.label}
                   </option>
-                ))
-              })}
+                ))}
             </select>
           </div>
         </fieldset>
