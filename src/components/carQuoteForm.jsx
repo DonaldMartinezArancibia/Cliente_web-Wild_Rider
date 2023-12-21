@@ -743,7 +743,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     type="checkbox"
                     id={option.replace(/\s+/g, "")} // Remove spaces from the option for the ID
                     name={option.replace(/\s+/g, "")} // Remove spaces from the option for the name
-                    value="YES"
+                    value={option}
                   />
                   <label className="ml-2" htmlFor={option.replace(/\s+/g, "")}>
                     {option}
@@ -787,7 +787,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     type="checkbox"
                     id={option.replace(/\s+/g, "")} // Remove spaces from the option for the ID
                     name={option.replace(/\s+/g, "")} // Remove spaces from the option for the name
-                    value="YES"
+                    value={option}
                   />
                   <label className="ml-2" htmlFor={option.replace(/\s+/g, "")}>
                     {option}
