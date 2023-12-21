@@ -11,6 +11,11 @@ const Cars = gql`
       carPhotos(locales: en) {
         url
       }
+      carDetails {
+        html
+        markdown
+        text
+      }
       pricesOfCar {
         priceOfCar
         season {
@@ -18,11 +23,6 @@ const Cars = gql`
           startDate
           endDate
         }
-      }
-      carDetails {
-        html
-        markdown
-        text
       }
       insuranceAndTaxInfo
       carsAndQuote {
@@ -35,9 +35,22 @@ const Cars = gql`
       carDetailsTitle
       automaticTransmission {
         transmissionPriceTitle
+        carTransmissionSelectorValue
         priceOfCar {
           priceOfCar
         }
+      }
+      manualTransmission {
+        priceOfCar {
+          priceOfCar
+          season {
+            seasonTitle
+            startDate
+            endDate
+          }
+        }
+        transmissionPriceTitle
+        carTransmissionSelectorValue
       }
       carQuoteForm {
         slug

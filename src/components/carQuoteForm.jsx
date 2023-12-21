@@ -14,7 +14,6 @@ import { data } from "autoprefixer"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   const client = useApolloClient()
-  console.log(pageContext.pageContext.selectedTransmission)
   const {
     data: CarQuoteFormData,
     loading: CarQuoteFormQueryLoading,
@@ -272,35 +271,18 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     )
   }
 
-  const selectedTransmission =
-    pageContext.pageContext.selectedTransmission || "manual"
+  const selectedTransmission = pageContext.pageContext.selectedTransmission
 
   const matchingOption = pageData.vehicleSelectionOptions.find(option => {
-    const carName = carsById.carName.toLowerCase().trim()
+    const carName = selectedTransmission?.toLowerCase().trim()
     const optionValue = option.toLowerCase()
-
-    console.log("carName:", carName)
-    console.log("optionValue:", optionValue)
-
     // Verificar coincidencia exacta de marca y modelo
-    if (carName === optionValue.split(" with ")[0]) {
-      console.log("Marca y modelo coinciden.")
-
-      // Verificar coincidencia de transmisión
-      const transmission = optionValue.split(" with ")[1].split(" ")[0]
-      console.log("Transmisión:", transmission)
-
-      if (selectedTransmission === transmission) {
-        console.log("Coincidencia de transmisión.")
-        return true
-      }
+    if (carName === optionValue) {
+      return true
     }
 
-    console.log("No hay coincidencia.")
     return false
   })
-
-  console.log("matchingOption:", matchingOption)
 
   const defaultValue = matchingOption ? matchingOption : ""
 
@@ -562,11 +544,42 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               required={pageData.vehicleSelectionField?.includes("*")}
               value={defaultValue}
             >
-              {pageData.vehicleSelectionOptions.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
+              {pageData.cars.map((car, index) => {
+                // Filtrar transmisiones nulas
+                const manualTransmissionValue =
+                  car.manualTransmission?.carTransmissionSelectorValue
+                const automaticTransmissionValue =
+                  car.automaticTransmission?.carTransmissionSelectorValue
+
+                // Crear opciones solo si las transmisiones no son nulas
+                const options = []
+
+                if (
+                  manualTransmissionValue !== null &&
+                  manualTransmissionValue !== undefined
+                ) {
+                  options.push({
+                    value: manualTransmissionValue,
+                    label: manualTransmissionValue,
+                  })
+                }
+
+                if (
+                  automaticTransmissionValue !== null &&
+                  automaticTransmissionValue !== undefined
+                ) {
+                  options.push({
+                    value: automaticTransmissionValue,
+                    label: automaticTransmissionValue,
+                  })
+                }
+
+                return options.map((option, innerIndex) => (
+                  <option key={`${index}-${innerIndex}`} value={option.value}>
+                    {option.label}
+                  </option>
+                ))
+              })}
             </select>
           </div>
         </fieldset>

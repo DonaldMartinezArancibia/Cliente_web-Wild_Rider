@@ -28,6 +28,15 @@ const CarQuoteFormContent = gql`
       countriesOptions
       numberOfTravelersField
       numberOfTravelersOptions
+      cars {
+        id
+        manualTransmission {
+          carTransmissionSelectorValue
+        }
+        automaticTransmission {
+          carTransmissionSelectorValue
+        }
+      }
       vehicleSelectionField
       vehicleSelectionOptions
       otherHour

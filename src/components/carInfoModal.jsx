@@ -62,26 +62,37 @@ export default function OpenModal({ carId, pageContext }) {
   }
 
   const handleButtonClick = () => {
-    // Realizar la redirección solo si se ha seleccionado una transmisión
-    if (car.automaticTransmission === null || selectedTransmission !== "") {
-      // Agregar el valor de la transmisión al objeto datos
-      const datosConTransmision = {
-        ...datos, // Copiar los datos existentes
-        selectedTransmission: selectedTransmission,
-      }
-      // Realizar la navegación con el nuevo objeto datos
-      navigate(
-        pageContext.langKey === "en"
-          ? `/${car.carQuoteForm.slug}`
-          : `/${pageContext.langKey || ""}/${car.carQuoteForm.slug}`,
-        { state: { datos: datosConTransmision } }
-      )
-    } else {
-      console.log(
-        "No se puede redirigir porque no se ha seleccionado una transmisión"
-      )
+    // Obtener las transmisiones disponibles
+    const automaticTransmissionValue =
+      car.automaticTransmission?.carTransmissionSelectorValue
+    const manualTransmissionValue =
+      car.manualTransmission?.carTransmissionSelectorValue
+
+    // Seleccionar una transmisión si selectedTransmission es ""
+    const selectedTransmissionToUse =
+      selectedTransmission !== ""
+        ? selectedTransmission
+        : automaticTransmissionValue !== undefined
+        ? automaticTransmissionValue
+        : manualTransmissionValue !== undefined
+        ? manualTransmissionValue
+        : ""
+
+    // Agregar el valor de la transmisión al objeto datos
+    const datosConTransmision = {
+      ...datos, // Copiar los datos existentes
+      selectedTransmission: selectedTransmissionToUse,
     }
+
+    // Realizar la navegación con el nuevo objeto datos
+    navigate(
+      pageContext.langKey === "en"
+        ? `/${car.carQuoteForm.slug}`
+        : `/${pageContext.langKey || ""}/${car.carQuoteForm.slug}`,
+      { state: { datos: datosConTransmision } }
+    )
   }
+
   return (
     <>
       <div className="flex items-center justify-center 2xl:col-[2/3] 2xl:row-[2/3]">
@@ -139,19 +150,18 @@ export default function OpenModal({ carId, pageContext }) {
                       <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                     </button>
                   </div>
-                  {car.automaticTransmission !== null &&
-                    car.insuranceAndTaxInfo !== undefined && (
-                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 rounded-md gap-x-2 bg-blue-50 mt-7 ring-1 ring-inset ring-blue-700/10">
-                        <svg
-                          className="w-2 fill-[#3b82f6]"
-                          viewBox="0 0 6 6"
-                          aria-hidden="true"
-                        >
-                          <circle cx="3" cy="3" r="3"></circle>
-                        </svg>
-                        {car.insuranceAndTaxInfo}
-                      </span>
-                    )}
+                  {car.insuranceAndTaxInfo !== undefined && (
+                    <span className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 rounded-md gap-x-2 bg-blue-50 mt-7 ring-1 ring-inset ring-blue-700/10">
+                      <svg
+                        className="w-2 fill-[#3b82f6]"
+                        viewBox="0 0 6 6"
+                        aria-hidden="true"
+                      >
+                        <circle cx="3" cy="3" r="3"></circle>
+                      </svg>
+                      {car.insuranceAndTaxInfo}
+                    </span>
+                  )}
 
                   <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-4">
                     <div className="overflow-x-auto xl:w-[40%] flex">
@@ -303,19 +313,21 @@ export default function OpenModal({ carId, pageContext }) {
                           </tr>
                         </thead>
                         <tbody>
-                          {car.pricesOfCar.map((price, priceIndex) => (
-                            <tr key={priceIndex}>
-                              <td className="p-2">
-                                {price.season.seasonTitle}
-                              </td>
-                              <td className="p-2">
-                                {formatDate(price.season.startDate)}
-                                {" | "}
-                                {formatDate(price.season.endDate)}
-                              </td>
-                              <td className="p-2">${price.priceOfCar}</td>
-                            </tr>
-                          ))}
+                          {car.manualTransmission?.priceOfCar?.map(
+                            (price, priceIndex) => (
+                              <tr key={priceIndex}>
+                                <td className="p-2">
+                                  {price.season.seasonTitle}
+                                </td>
+                                <td className="p-2">
+                                  {formatDate(price.season.startDate)}
+                                  {" | "}
+                                  {formatDate(price.season.endDate)}
+                                </td>
+                                <td className="p-2">${price.priceOfCar}</td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                       <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
@@ -417,8 +429,32 @@ export default function OpenModal({ carId, pageContext }) {
                             onChange={handleTransmissionChange}
                           >
                             <option value="">Selecciona una transmisión</option>
-                            <option value="manual">Manual</option>
-                            <option value="automatic">Automática</option>
+                            <option
+                              value={
+                                car.automaticTransmission
+                                  .carTransmissionSelectorValue
+                              }
+                            >
+                              {
+                                car.automaticTransmission
+                                  .carTransmissionSelectorValue
+                              }
+                            </option>
+                            {/* Agrega una opción similar para la transmisión manual */}
+                            {car.manualTransmission !== null &&
+                              car.manualTransmission !== undefined && (
+                                <option
+                                  value={
+                                    car.manualTransmission
+                                      .carTransmissionSelectorValue
+                                  }
+                                >
+                                  {
+                                    car.manualTransmission
+                                      .carTransmissionSelectorValue
+                                  }
+                                </option>
+                              )}
                           </select>
                         </div>
                       )}

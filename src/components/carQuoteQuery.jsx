@@ -5,7 +5,6 @@ import CarFormHtml from "./carQuoteForm"
 
 const CarQuoteQuery = pageContext => {
   const client = useApolloClient()
-  console.log(pageContext)
 
   const {
     data: carsById,
@@ -22,8 +21,6 @@ const CarQuoteQuery = pageContext => {
   })
   if (carsByIdQueryLoading) return <p>Loading...</p>
   if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
-
-  console.log(carsById)
 
   return (
     <div>{<CarFormHtml apolloData={carsById} pageContext={pageContext} />}</div>
