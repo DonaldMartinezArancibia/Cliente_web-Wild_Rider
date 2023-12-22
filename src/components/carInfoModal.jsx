@@ -308,49 +308,65 @@ export default function OpenModal({ carId, pageContext }) {
                               {car.carsAndQuote.datesTitle}
                             </th>
                             <th className="p-2">
-                              {car.carsAndQuote.priceTitle}
+                              {car.carsAndQuote.priceTitleManual}
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {car.manualTransmission?.priceOfCar?.map(
-                            (price, priceIndex) => (
-                              <tr key={priceIndex}>
-                                <td className="p-2">
-                                  {price.season.seasonTitle}
-                                </td>
-                                <td className="p-2">
-                                  {formatDate(price.season.startDate)}
-                                  {" | "}
-                                  {formatDate(price.season.endDate)}
-                                </td>
-                                <td className="p-2">${price.priceOfCar}</td>
-                              </tr>
-                            )
-                          )}
+                          {car.manualTransmission?.priceOfCar?.length > 0
+                            ? car.manualTransmission.priceOfCar.map(
+                                (price, priceIndex) => (
+                                  <tr key={priceIndex}>
+                                    <td className="p-2">
+                                      {price.season.seasonTitle}
+                                    </td>
+                                    <td className="p-2">
+                                      {formatDate(price.season.startDate)} |{" "}
+                                      {formatDate(price.season.endDate)}
+                                    </td>
+                                    <td className="p-2">${price.priceOfCar}</td>
+                                  </tr>
+                                )
+                              )
+                            : car.automaticTransmission?.priceOfCar?.map(
+                                (price, priceIndex) => (
+                                  <tr key={priceIndex}>
+                                    <td className="p-2">
+                                      {price.season?.seasonTitle}
+                                    </td>
+                                    <td className="p-2">
+                                      {formatDate(price.season?.startDate)} |{" "}
+                                      {formatDate(price.season?.endDate)}
+                                    </td>
+                                    <td className="p-2">${price.priceOfCar}</td>
+                                  </tr>
+                                )
+                              )}
                         </tbody>
                       </table>
-                      <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
-                        <thead>
-                          <tr className="text-xl">
-                            <th className="p-2">
-                              {
-                                car.automaticTransmission
-                                  ?.transmissionPriceTitle
-                              }
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {car.automaticTransmission?.priceOfCar?.map(
-                            (price, priceIndex) => (
-                              <tr key={priceIndex}>
-                                <td>${price.priceOfCar}</td>
+                      {car.manualTransmission?.priceOfCar?.length > 0 &&
+                        car.automaticTransmission?.priceOfCar?.length > 0 && (
+                          <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
+                            <thead>
+                              <tr className="text-xl">
+                                <th className="p-2">
+                                  {car.carsAndQuote?.priceTitleAutomatic}
+                                </th>
                               </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
+                            </thead>
+                            <tbody>
+                              {car.automaticTransmission?.priceOfCar?.map(
+                                (price, priceIndex) => (
+                                  <tr key={priceIndex}>
+                                    <td className="text-center">
+                                      ${price.priceOfCar}
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                        )}
                     </div>
                     <div className="xl:w-3/5 2xl:mr-2">
                       <div className="mb-10 lg:w-full">
@@ -417,8 +433,14 @@ export default function OpenModal({ carId, pageContext }) {
 
                   <div>
                     {/* Selector de transmisión */}
-                    {car.automaticTransmission !== null &&
-                      car.automaticTransmission !== undefined && (
+                    {car.automaticTransmission?.carTransmissionSelectorValue !==
+                      null &&
+                      car.automaticTransmission
+                        ?.carTransmissionSelectorValue !== undefined &&
+                      car.manualTransmission?.carTransmissionSelectorValue !==
+                        null &&
+                      car.manualTransmission?.carTransmissionSelectorValue !==
+                        undefined && (
                         <div className="flex justify-center">
                           <select
                             id="transmissionSelector"
@@ -464,13 +486,27 @@ export default function OpenModal({ carId, pageContext }) {
                       <button
                         onClick={handleButtonClick}
                         className={`bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg ${
-                          car.automaticTransmission !== null &&
+                          car.automaticTransmission
+                            ?.carTransmissionSelectorValue !== null &&
+                          car.automaticTransmission
+                            ?.carTransmissionSelectorValue !== undefined &&
+                          car.manualTransmission
+                            ?.carTransmissionSelectorValue !== null &&
+                          car.manualTransmission
+                            ?.carTransmissionSelectorValue !== undefined &&
                           selectedTransmission === ""
                             ? "cursor-not-allowed"
                             : "cursor-pointer"
                         }`}
                         disabled={
-                          car.automaticTransmission !== null &&
+                          car.automaticTransmission
+                            ?.carTransmissionSelectorValue !== null &&
+                          car.automaticTransmission
+                            ?.carTransmissionSelectorValue !== undefined &&
+                          car.manualTransmission
+                            ?.carTransmissionSelectorValue !== null &&
+                          car.manualTransmission
+                            ?.carTransmissionSelectorValue !== undefined &&
                           selectedTransmission === ""
                         }
                       >

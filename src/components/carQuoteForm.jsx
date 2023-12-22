@@ -322,41 +322,60 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 <tr className="text-xl">
                   <th className="p-2">{carsById.carsAndQuote.seasonTitle}</th>
                   <th className="p-2">{carsById.carsAndQuote.datesTitle}</th>
-                  <th className="p-2">{carsById.carsAndQuote.priceTitle}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {carsById.pricesOfCar.map((price, priceIndex) => (
-                  <tr key={priceIndex}>
-                    <td className="p-2">{price.season.seasonTitle}</td>
-                    <td className="p-2 text-center">
-                      {formatDate(price.season.startDate)}
-                      {" | "}
-                      {formatDate(price.season.endDate)}
-                    </td>
-                    <td className="p-2 text-center">${price.priceOfCar}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
-              <thead>
-                <tr className="text-xl">
                   <th className="p-2">
-                    {carsById.automaticTransmission?.transmissionPriceTitle}
+                    {carsById.carsAndQuote.priceTitleManual}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {carsById.automaticTransmission?.priceOfCar?.map(
-                  (price, priceIndex) => (
-                    <tr key={priceIndex}>
-                      <td className="text-center">${price.priceOfCar}</td>
-                    </tr>
-                  )
-                )}
+                {carsById.manualTransmission?.priceOfCar?.length > 0
+                  ? carsById.manualTransmission.priceOfCar.map(
+                      (price, priceIndex) => (
+                        <tr key={priceIndex}>
+                          <td className="p-2">{price.season.seasonTitle}</td>
+                          <td className="p-2">
+                            {formatDate(price.season.startDate)} |{" "}
+                            {formatDate(price.season.endDate)}
+                          </td>
+                          <td className="p-2">${price.priceOfCar}</td>
+                        </tr>
+                      )
+                    )
+                  : carsById.automaticTransmission?.priceOfCar?.map(
+                      (price, priceIndex) => (
+                        <tr key={priceIndex}>
+                          <td className="p-2">{price.season?.seasonTitle}</td>
+                          <td className="p-2">
+                            {formatDate(price.season?.startDate)} |{" "}
+                            {formatDate(price.season?.endDate)}
+                          </td>
+                          <td className="p-2">${price.priceOfCar}</td>
+                        </tr>
+                      )
+                    )}
               </tbody>
             </table>
+            {carsById?.manualTransmission?.priceOfCar?.length > 0 &&
+              carsById.automaticTransmission?.priceOfCar?.length > 0 && (
+                <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
+                  <thead>
+                    <tr className="text-xl">
+                      <th className="p-2">
+                        {carsById.carsAndQuote.priceTitleAutomatic}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {carsById.automaticTransmission?.priceOfCar?.map(
+                      (price, priceIndex) => (
+                        <tr key={priceIndex}>
+                          <td className="text-center">${price.priceOfCar}</td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+              )}
           </div>
         </div>
       </div>

@@ -9,8 +9,9 @@ fragment CarsAndQuote on CarsAndQuote {
   title
   carsInformationButtonText
   seasonTitle
+  priceTitleAutomatic
   datesTitle
-  priceTitle
+  priceTitleManual
   quoteButtonText
   createdBy {
     ... on User {

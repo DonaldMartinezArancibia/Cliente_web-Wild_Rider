@@ -27,17 +27,22 @@ const Cars = gql`
       insuranceAndTaxInfo
       carsAndQuote {
         datesTitle
-        priceTitle
+        priceTitleManual
+        priceTitleAutomatic
         seasonTitle
         carsInformationButtonText
         quoteButtonText
       }
       carDetailsTitle
       automaticTransmission {
-        transmissionPriceTitle
         carTransmissionSelectorValue
         priceOfCar {
           priceOfCar
+          season {
+            seasonTitle
+            startDate
+            endDate
+          }
         }
       }
       manualTransmission {
@@ -49,7 +54,6 @@ const Cars = gql`
             endDate
           }
         }
-        transmissionPriceTitle
         carTransmissionSelectorValue
       }
       carQuoteForm {
