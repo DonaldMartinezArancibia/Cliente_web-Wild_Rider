@@ -25,7 +25,7 @@ const IndexContent = gql`
         text
       }
       videosSectionTitle
-      presentationVideos {
+      presentationVideos(locales: en) {
         url
         mimeType
       }

@@ -73,25 +73,16 @@ export default function IndexPage({ pageContext }) {
   // const videos = presentationVideos.map(video => ({
   //   sources: [{ src: video.url, type: video.mimeType }],
   // }))
-  const videos = [
-    {
+  // Verifica si los datos de los videos están disponibles y no hay errores en la consulta
+  const videos =
+    IndexContentData.indices[0]?.presentationVideos?.map(video => ({
       sources: [
         {
-          src: "https://media.graphassets.com/cL2b82MdSsGBJhJLQDRo?_gl=1*swmt7w*_ga*MTA3MTIwNzM5MS4xNjg3OTg5MDQ1*_ga_G6FYGSYGZ4*MTcwMTI4MzQ4OC4xOTQuMS4xNzAxMjgzNDkxLjU3LjAuMA..",
-          type: "video/mp4",
+          src: video.url,
+          type: video.mimeType,
         },
       ],
-    },
-    {
-      sources: [
-        {
-          src: "https://media.graphassets.com/2Y16o4DgSZO8kA6VFWWr?_gl=1*xadswo*_ga*MTA3MTIwNzM5MS4xNjg3OTg5MDQ1*_ga_G6FYGSYGZ4*MTcwMTI4MzQ4OC4xOTQuMS4xNzAxMjg0NTA5LjYwLjAuMA..",
-          type: "video/mp4",
-        },
-      ],
-    },
-  ]
-  console.log(videos)
+    })) || []
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       {/* <div
@@ -143,8 +134,8 @@ export default function IndexPage({ pageContext }) {
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase pl-4 xl:pl-16 mb-4 mt-8">
         — {IndexContentData.indices[0].videosSectionTitle}
       </h4>
-      <div className="flex items-center justify-center w-5/6 px-4 m-auto video-container">
-        <VideoPlayer sources={videos} />
+      <div className="items-center justify-center w-5/6 px-4 m-auto video-container">
+        <VideoPlayer videos={videos} />
         {/* <iframe
           title="YouTube video player"
           width="1007"

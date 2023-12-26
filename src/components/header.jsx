@@ -147,12 +147,33 @@ export default function Header({ pageContext }) {
   return (
     <header className="w-full text-white font-Montserrat">
       <div className="bg-[#4f5153] w-full xl:grid xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
-        <img
-          src={langSelectorTitle?.imageOverLogo?.url}
-          alt="Profile"
-          className="col-[1/5] w-full mb-4"
-        />
-        <div className="flex justify-between m-auto lg:m-0">
+        <div className="relative xl:col-[1/5]">
+          <img
+            src={langSelectorTitle?.imageOverLogo?.url}
+            alt="Profile"
+            className="w-full mb-4"
+          />
+
+          <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">
+            <button type="button" onClick={() => setIsOpen(!isOpen)}>
+              <svg
+                className="h-8 text-[#f6cc4d]"
+                fill="none"
+                viewBox="0 1 25 19"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div className="flex justify-center m-auto lg:m-0">
           {/* <Link
             to={
               pageContext.langKey === "en"
@@ -179,23 +200,6 @@ export default function Header({ pageContext }) {
               </p>
             </Link>
           </h1>
-          <div className="flex xl:m-auto xl:hidden">
-            <button type="button" onClick={() => setIsOpen(!isOpen)}>
-              <svg
-                className="h-8 text-[#f6cc4d]"
-                fill="none"
-                viewBox="0 1 25 19"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
-          </div>
         </div>
         <div className="self-center mt-2 overflow-hidden text-center">
           {langSelectorTitle?.displaySkypeTextAndNumber ? (
@@ -209,7 +213,7 @@ export default function Header({ pageContext }) {
             </>
           ) : null}
         </div>
-        <div className="grid min-[412px]:grid-cols-2 md:justify-items-center lg:grid-cols-4 xl:grid-cols-2">
+        <div className="grid min-[412px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
           {langSelectorTitle?.contactElements?.map((element, index) => (
             <div className="flex items-center col-span-1" key={index}>
               <img
@@ -265,12 +269,12 @@ export default function Header({ pageContext }) {
       <Transition
         show={isOpen}
         enter="transition-transform transform duration-150"
-        enterFrom="translate-x-full"
+        enterFrom="-translate-x-full"
         enterTo="translate-x-0"
         leave="transition-transform transform duration-150"
         leaveFrom="translate-x-0"
-        leaveTo="translate-x-full"
-        className="fixed top-0 right-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-opacity-50 bg-stone-700 w-80"
+        leaveTo="-translate-x-full"
+        className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-opacity-50 bg-stone-700 w-80"
       >
         <div className="p-8">
           <ul className="space-y-8 text-center font-Poppins">

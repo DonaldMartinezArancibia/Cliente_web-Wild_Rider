@@ -41,7 +41,10 @@
     "react-markdown": "^8.0.5",
     "react-select-country-list": "^2.2.3",
     "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "video-react": "^0.16.0",
+    "videojs-playlist": "^5.1.0",
+    "videojs-playlist-ui": "^5.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

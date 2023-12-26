@@ -168,11 +168,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
           {pageContext.langKey !== "en" && (
             <li className="">
               <a
-                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
                 onClick={e => {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "en")}`)
                 }}
+                title="English"
               >
                 {langSelectorTitle?.englishLangSelectorTitle}
               </a>
@@ -181,11 +182,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
           {pageContext.langKey !== "de" && (
             <li className="">
               <a
-                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
                 onClick={e => {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "de")}`)
                 }}
+                title="German"
               >
                 {langSelectorTitle?.germanLangSelectorTitle}
               </a>
@@ -194,11 +196,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
           {pageContext.langKey !== "fr" && (
             <li className="">
               <a
-                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
                 onClick={e => {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "fr")}`)
                 }}
+                title="French"
               >
                 {langSelectorTitle?.frenchLangSelectorTitle}
               </a>
@@ -207,11 +210,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
           {pageContext.langKey !== "es" && (
             <li className="">
               <a
-                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
                 onClick={e => {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "es")}`)
                 }}
+                title="Spanish"
               >
                 {langSelectorTitle?.spanishLangSelectorTitle}
               </a>
@@ -220,11 +224,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
           {pageContext.langKey !== "other" && (
             <li className="">
               <a
-                className="block px-4 py-1 text-white whitespace-no-wrap hover:bg-gray-400 text"
+                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
                 onClick={e => {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "other")}`)
                 }}
+                title="Other"
               >
                 {langSelectorTitle?.otherLangSelectorTitle}
               </a>
