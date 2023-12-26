@@ -68,20 +68,15 @@ export default function OpenModal({ carId, pageContext }) {
     const manualTransmissionValue =
       car.manualTransmission?.carTransmissionSelectorValue
 
-    // Seleccionar una transmisión si selectedTransmission es ""
-    const selectedTransmissionToUse =
-      selectedTransmission !== ""
-        ? selectedTransmission
-        : automaticTransmissionValue !== undefined
-        ? automaticTransmissionValue
-        : manualTransmissionValue !== undefined
-        ? manualTransmissionValue
-        : ""
-
     // Agregar el valor de la transmisión al objeto datos
     const datosConTransmision = {
       ...datos, // Copiar los datos existentes
-      selectedTransmission: selectedTransmissionToUse,
+      selectedTransmission:
+        manualTransmissionValue !== undefined
+          ? manualTransmissionValue
+          : automaticTransmissionValue !== undefined
+          ? automaticTransmissionValue
+          : "",
     }
 
     // Realizar la navegación con el nuevo objeto datos
@@ -432,83 +427,22 @@ export default function OpenModal({ carId, pageContext }) {
                   </section>
 
                   <div>
-                    {/* Selector de transmisión */}
-                    {car.automaticTransmission?.carTransmissionSelectorValue !==
-                      null &&
-                      car.automaticTransmission
-                        ?.carTransmissionSelectorValue !== undefined &&
-                      car.manualTransmission?.carTransmissionSelectorValue !==
-                        null &&
-                      car.manualTransmission?.carTransmissionSelectorValue !==
-                        undefined && (
-                        <div className="flex justify-center">
-                          <select
-                            id="transmissionSelector"
-                            name="transmissionSelector"
-                            className="w-full h-10"
-                            required
-                            value={selectedTransmission}
-                            onChange={handleTransmissionChange}
-                          >
-                            <option value="">Selecciona una transmisión</option>
-                            <option
-                              value={
-                                car.automaticTransmission
-                                  .carTransmissionSelectorValue
-                              }
-                            >
-                              {
-                                car.automaticTransmission
-                                  .carTransmissionSelectorValue
-                              }
-                            </option>
-                            {/* Agrega una opción similar para la transmisión manual */}
-                            {car.manualTransmission !== null &&
-                              car.manualTransmission !== undefined && (
-                                <option
-                                  value={
-                                    car.manualTransmission
-                                      .carTransmissionSelectorValue
-                                  }
-                                >
-                                  {
-                                    car.manualTransmission
-                                      .carTransmissionSelectorValue
-                                  }
-                                </option>
-                              )}
-                          </select>
-                        </div>
-                      )}
-
                     {/* Botón de redirección */}
                     <div className="flex justify-center mt-4">
                       <button
                         onClick={handleButtonClick}
-                        className={`bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg ${
-                          car.automaticTransmission
-                            ?.carTransmissionSelectorValue !== null &&
-                          car.automaticTransmission
-                            ?.carTransmissionSelectorValue !== undefined &&
-                          car.manualTransmission
-                            ?.carTransmissionSelectorValue !== null &&
-                          car.manualTransmission
-                            ?.carTransmissionSelectorValue !== undefined &&
-                          selectedTransmission === ""
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                        }`}
-                        disabled={
-                          car.automaticTransmission
-                            ?.carTransmissionSelectorValue !== null &&
-                          car.automaticTransmission
-                            ?.carTransmissionSelectorValue !== undefined &&
-                          car.manualTransmission
-                            ?.carTransmissionSelectorValue !== null &&
-                          car.manualTransmission
-                            ?.carTransmissionSelectorValue !== undefined &&
-                          selectedTransmission === ""
-                        }
+                        className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
+                        // disabled={
+                        //   car.automaticTransmission
+                        //     ?.carTransmissionSelectorValue !== null &&
+                        //   car.automaticTransmission
+                        //     ?.carTransmissionSelectorValue !== undefined &&
+                        //   car.manualTransmission
+                        //     ?.carTransmissionSelectorValue !== null &&
+                        //   car.manualTransmission
+                        //     ?.carTransmissionSelectorValue !== undefined &&
+                        //   selectedTransmission === ""
+                        // }
                       >
                         {car.carsAndQuote.quoteButtonText}
                       </button>
