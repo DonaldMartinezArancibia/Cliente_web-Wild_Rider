@@ -11,7 +11,15 @@ import "video-react/dist/video-react.css"
 const VideoPlayer = ({ videos }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
+  const [isAudioMuted, setIsAudioMuted] = useState(true)
   const playerRef = useRef(null)
+
+  useEffect(() => {
+    // Comienza la reproducción cuando el componente se monta
+    if (isFocused) {
+      playerRef.current.play()
+    }
+  }, [isFocused])
 
   const handleEnded = () => {
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
@@ -31,26 +39,22 @@ const VideoPlayer = ({ videos }) => {
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
   }
 
+  const handleToggleAudio = () => {
+    // Cambia el estado de isAudioMuted
+    setIsAudioMuted(prev => !prev)
+    // Actualiza el estado del reproductor de audio
+    playerRef.current.muted = !playerRef.current.muted
+  }
+
   const handlePlayerFocus = () => {
     setIsFocused(true)
   }
 
   const handlePlayerBlur = () => {
     setIsFocused(false)
+    // Pausa la reproducción cuando pierde el foco
+    playerRef.current.pause()
   }
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (playerRef.current) {
-        playerRef.current.play()
-        console.log("Video iniciado después de 5 segundos")
-      }
-    }, 1000)
-
-    return () => clearTimeout(timeout)
-  }, [])
-
-  console.log(videos)
 
   return (
     <div
@@ -68,63 +72,80 @@ const VideoPlayer = ({ videos }) => {
           poster={videos[currentVideoIndex].poster}
           src={videos[currentVideoIndex].sources[0].src}
           onEnded={handleEnded}
-          startTime={1}
+          autoPlay
+          muted={isAudioMuted}
           onError={e => console.error("Error al cargar el video", e)}
+          className="!font-Poppins"
         >
           <BigPlayButton position="center" />
-          {isFocused && (
-            <div className="absolute z-10 flex items-center space-x-4 transform -translate-y-1/2 left-3 top-1/2">
-              <button
-                className="px-4 py-2 text-white bg-blue-500 rounded-full"
-                onClick={playPreviousVideo}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-            </div>
-          )}
-          {isFocused && (
-            <div className="absolute z-10 flex items-center space-x-4 transform -translate-y-1/2 right-3 top-1/2">
-              <button
-                className="px-4 py-2 text-white bg-blue-500 rounded-full"
-                onClick={playNextVideo}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          )}
           <ControlBar autoHide={!isFocused}>
             <CurrentTimeDisplay order={4.1} />
             <TimeDivider order={4.2} />
           </ControlBar>
+          {/* Botón para activar/desactivar el audio */}
+          {/* {isAudioMuted && (
+            <div className="absolute z-10 top-4 left-[48%]">
+              <button
+                className="px-4 py-2 text-white bg-gray-700 bg-opacity-70"
+                onClick={handleToggleAudio}
+                onTouchStart={handleToggleAudio}
+              >
+                Activar Audio
+              </button>
+            </div>
+          )} */}
         </Player>
       ) : (
         <p>No se encontró un enlace de video válido.</p>
+      )}
+      {/* Botones de reproducción */}
+      {isFocused && (
+        <div className="absolute z-10 flex items-center space-x-4 transform -translate-y-1/2 left-3 top-1/2">
+          <button
+            className="px-4 py-2 text-white bg-gray-700 bg-opacity-70"
+            onClick={playPreviousVideo}
+            onTouchStart={playPreviousVideo}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
+      {isFocused && (
+        <div className="absolute z-10 flex items-center space-x-4 transform -translate-y-1/2 right-3 top-1/2">
+          <button
+            className="px-4 py-2 text-white bg-gray-700 bg-opacity-70"
+            onClick={playNextVideo}
+            onTouchStart={playNextVideo}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
       )}
     </div>
   )
