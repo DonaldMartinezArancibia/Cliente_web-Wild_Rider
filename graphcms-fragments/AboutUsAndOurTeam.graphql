@@ -7,14 +7,6 @@ fragment AboutUsAndOurTeam on AboutUsAndOurTeam {
   publishedAt(variation: COMBINED)
   slug
   title
-  aboutUsMainContent {
-    ... on RichText {
-      raw
-      html
-      markdown
-      text
-    }
-  }
   theTeam {
     ... on OurTeam {
       stage
@@ -28,6 +20,29 @@ fragment AboutUsAndOurTeam on AboutUsAndOurTeam {
           remoteId: id
           locale
           stage
+        }
+      }
+    }
+  }
+  toggleContent {
+    ... on ToggleContent {
+      stage
+      locale
+      id
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
         }
       }
     }

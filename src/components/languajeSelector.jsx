@@ -173,7 +173,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "en")}`)
                 }}
-                title="English"
+                title={langSelectorTitle?.englishLangTooltipText}
               >
                 {langSelectorTitle?.englishLangSelectorTitle}
               </a>
@@ -187,7 +187,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "de")}`)
                 }}
-                title="German"
+                title={langSelectorTitle?.germanLangTooltipText}
               >
                 {langSelectorTitle?.germanLangSelectorTitle}
               </a>
@@ -201,7 +201,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "fr")}`)
                 }}
-                title="French"
+                title={langSelectorTitle?.frenchLangTooltipText}
               >
                 {langSelectorTitle?.frenchLangSelectorTitle}
               </a>
@@ -215,7 +215,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "es")}`)
                 }}
-                title="Spanish"
+                title={langSelectorTitle?.spanishLangTooltipText}
               >
                 {langSelectorTitle?.spanishLangSelectorTitle}
               </a>
@@ -229,7 +229,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
                   e.preventDefault()
                   navigate(`/${getSlugByLocale(data, "other")}`)
                 }}
-                title="Other"
+                title={langSelectorTitle?.otherLangTooltipText}
               >
                 {langSelectorTitle?.otherLangSelectorTitle}
               </a>

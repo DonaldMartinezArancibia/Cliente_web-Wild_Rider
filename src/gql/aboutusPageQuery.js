@@ -14,8 +14,14 @@ const AboutUsContent = gql`
   query AboutUsAndOurTeams($locale: [Locale!]!) {
     aboutUsAndOurTeams(locales: $locale) {
       title
-      aboutUsMainContent {
-        raw
+      toggleContent {
+        displayContent {
+          markdown
+        }
+        extendedContent {
+          markdown
+          raw
+        }
       }
     }
   }

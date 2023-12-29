@@ -8,6 +8,7 @@ const headerAndFooterElements = gql`
       imageOverLogo(locales: en) {
         url
       }
+      imageOverLogoAlt
       displaySkypeTextAndNumber
       textOverSkypeNumber
       skypeNumber
@@ -23,6 +24,11 @@ const headerAndFooterElements = gql`
       germanLangSelectorTitle
       spanishLangSelectorTitle
       otherLangSelectorTitle
+      frenchLangTooltipText
+      germanLangTooltipText
+      englishLangTooltipText
+      otherLangTooltipText
+      spanishLangTooltipText
       aboutUs
       contact
       explore

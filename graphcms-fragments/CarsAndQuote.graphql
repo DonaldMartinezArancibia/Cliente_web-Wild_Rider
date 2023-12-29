@@ -8,10 +8,10 @@ fragment CarsAndQuote on CarsAndQuote {
   slug
   title
   carsInformationButtonText
-  seasonTitle
-  priceTitleAutomatic
-  datesTitle
   priceTitleManual
+  priceTitleAutomatic
+  seasonTitle
+  datesTitle
   quoteButtonText
   createdBy {
     ... on User {

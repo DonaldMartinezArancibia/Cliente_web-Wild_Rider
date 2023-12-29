@@ -15,12 +15,18 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   frenchLangSelectorTitle
   germanLangSelectorTitle
   otherLangSelectorTitle
+  spanishLangTooltipText
+  englishLangTooltipText
+  frenchLangTooltipText
+  germanLangTooltipText
+  otherLangTooltipText
   aboutUs
   contact
   explore
   footerCopyright
   termsOfService
   privacyPolicy
+  imageOverLogoAlt
   contactElements {
     ... on ContactElement {
       stage

@@ -31,6 +31,11 @@ const IndexContent = gql`
       }
       youtubeUrlVideo
       offersSectionTitle
+      offersSectionText {
+        html
+        markdown
+        text
+      }
       freeBenefitsElements {
         benefitImage(locales: en) {
           url

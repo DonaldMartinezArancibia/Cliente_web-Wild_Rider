@@ -150,7 +150,7 @@ export default function Header({ pageContext }) {
         <div className="relative xl:col-[1/5]">
           <img
             src={langSelectorTitle?.imageOverLogo?.url}
-            alt="Profile"
+            alt={langSelectorTitle?.imageOverLogoAlt}
             className="w-full mb-4"
           />
 

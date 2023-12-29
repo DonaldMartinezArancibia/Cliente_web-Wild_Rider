@@ -105,9 +105,11 @@ export default function IndexPage({ pageContext }) {
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase px-4 xl:pl-16 mb-8 mt-16">
         — {IndexContentData.indices[0].offersSectionTitle}
       </h4>
-      <h1 className="max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne">
-        Free Benefits
-      </h1>
+      <section id="sectionBellowTestimonialsTitle">
+        <ReactMarkdown>
+          {IndexContentData.indices[0].offersSectionText?.markdown}
+        </ReactMarkdown>
+      </section>
       <section className="grid font-bold justify-items-center sm:grid-cols-2 lg:grid-cols-3 gap-y-3 md:gap-y-7 lg:gap-y-10 md:mx-4 md:my-12 md:justify-items-center md:text-center xl:px-16">
         {IndexContentData.indices[0].freeBenefitsElements.map(
           (benefit, index) => (
