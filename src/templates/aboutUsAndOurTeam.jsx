@@ -108,7 +108,7 @@ const ContentToggle = ({ content, index }) => {
   const renderedContent = processRawContent(content.extendedContent?.raw)
 
   return (
-    <div className="mb-4">
+    <section id="toggleContent" className="mb-4 col-[1/4]">
       <div className="mb-2">
         <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
       </div>
@@ -131,7 +131,7 @@ const ContentToggle = ({ content, index }) => {
           {isExtendedContentVisible ? "Show Less" : "Show More"}
         </button>
       )}
-    </div>
+    </section>
   )
 }
 

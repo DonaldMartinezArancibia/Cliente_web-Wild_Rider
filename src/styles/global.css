@@ -66,6 +66,14 @@
   #modalOfCar div div > p strong {
     @apply font-bold;
   }
+  #toggleContent > div h1,
+  #toggleContent div h2,
+  #toggleContent div h3,
+  #toggleContent div h4,
+  #toggleContent div h5,
+  #toggleContent div h6 {
+    @apply font-CarterOne;
+  }
 }
 
 /* custom-styles.css */
