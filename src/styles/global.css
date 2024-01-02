@@ -74,6 +74,9 @@
   #toggleContent div h6 {
     @apply font-CarterOne;
   }
+  #toggleContent div a {
+    @apply text-blue-500 hover:text-blue-700 transition duration-300;
+  }
 }
 
 /* custom-styles.css */

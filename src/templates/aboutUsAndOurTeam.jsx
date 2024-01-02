@@ -36,7 +36,7 @@ const AboutUs = ({ pageContext }) => {
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="mb-10 font-CarterOne lg:text-5xl">About us & Our team</h1>
+      <h1 className="mb-10 font-CarterOne lg:text-5xl">{ourTeamPage.title}</h1>
 
       {aboutUsMainContent && ReactHtmlParser(aboutUsMainContent)}
 
@@ -60,6 +60,7 @@ const AboutUs = ({ pageContext }) => {
             key={contentIndex}
             content={content}
             index={contentIndex}
+            ourTeamPage={ourTeamPage}
           />
         ))}
       </div>
@@ -67,37 +68,7 @@ const AboutUs = ({ pageContext }) => {
   )
 }
 
-const processRawContent = rawContent => {
-  if (!rawContent || !rawContent.children) {
-    return null
-  }
-
-  return rawContent.children.map((child, index) => {
-    if (child.type === "paragraph") {
-      return <p key={index}>{child.children[0].text}</p>
-    } else if (child.type === "class") {
-      return (
-        <div className={child.className} key={index}>
-          {/* Handle class content */}
-        </div>
-      )
-    } else if (child.type === "image") {
-      return (
-        <img
-          key={index}
-          src={child.src}
-          alt={child.title}
-          width={child.width}
-          height={child.height}
-        />
-      )
-    }
-
-    return null
-  })
-}
-
-const ContentToggle = ({ content, index }) => {
+const ContentToggle = ({ content, index, ourTeamPage }) => {
   const [isExtendedContentVisible, setIsExtendedContentVisible] =
     useState(false)
 
@@ -105,10 +76,8 @@ const ContentToggle = ({ content, index }) => {
     setIsExtendedContentVisible(prev => !prev)
   }
 
-  const renderedContent = processRawContent(content.extendedContent?.raw)
-
   return (
-    <section id="toggleContent" className="mb-4 col-[1/4]">
+    <section id="toggleContent" className="mb-14 col-[1/4]">
       <div className="mb-2">
         <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
       </div>
@@ -119,8 +88,7 @@ const ContentToggle = ({ content, index }) => {
             isExtendedContentVisible ? "" : "hidden"
           }`}
         >
-          {/* <ReactMarkdown>{content.extendedContent.markdown}</ReactMarkdown> */}
-          {renderedContent}
+          <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
         </div>
       )}
       {content.extendedContent && (
@@ -128,7 +96,9 @@ const ContentToggle = ({ content, index }) => {
           className="text-[#0833a2] hover:underline"
           onClick={handleToggleContent}
         >
-          {isExtendedContentVisible ? "Show Less" : "Show More"}
+          {isExtendedContentVisible
+            ? ourTeamPage.hideText
+            : ourTeamPage.showText}
         </button>
       )}
     </section>

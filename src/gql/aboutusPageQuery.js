@@ -23,6 +23,8 @@ const AboutUsContent = gql`
           raw
         }
       }
+      showText
+      hideText
     }
   }
 `
