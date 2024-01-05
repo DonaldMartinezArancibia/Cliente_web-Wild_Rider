@@ -7,6 +7,8 @@ fragment AboutUsAndOurTeam on AboutUsAndOurTeam {
   publishedAt(variation: COMBINED)
   slug
   title
+  showText
+  hideText
   theTeam {
     ... on OurTeam {
       stage

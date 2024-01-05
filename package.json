@@ -15,7 +15,10 @@
     "@netlify/functions": "^2.1.0",
     "@tailwindcss/typography": "^0.5.9",
     "gatsby": "^5.3.3",
+    "gatsby-cookie-notice": "^1.0.6",
     "gatsby-plugin-apollo": "^4.0.3",
+    "gatsby-plugin-cookie-though": "^1.0.0",
+    "gatsby-plugin-gdpr-cookies": "^2.0.9",
     "gatsby-plugin-i18n": "^1.0.1",
     "gatsby-plugin-image": "^3.3.2",
     "gatsby-plugin-manifest": "^5.3.1",
@@ -42,6 +45,7 @@
     "react-select-country-list": "^2.2.3",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
+    "update": "^0.7.4",
     "video-react": "^0.16.0",
     "videojs-playlist": "^5.1.0",
     "videojs-playlist-ui": "^5.0.0"

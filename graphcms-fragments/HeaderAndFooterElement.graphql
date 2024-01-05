@@ -5,6 +5,7 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
+  imageOverLogoAlt
   logoTextTitle
   logoTextSubtitle
   textOverSkypeNumber
@@ -26,7 +27,6 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   footerCopyright
   termsOfService
   privacyPolicy
-  imageOverLogoAlt
   contactElements {
     ... on ContactElement {
       stage

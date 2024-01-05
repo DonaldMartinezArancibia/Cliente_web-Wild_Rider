@@ -48,6 +48,13 @@ const IndexContent = gql`
         markdown
         text
       }
+      textOfCookies {
+        html
+        markdown
+        text
+      }
+      acceptCookieButton
+      declineCookieButton
     }
   }
 `

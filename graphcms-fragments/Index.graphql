@@ -36,6 +36,16 @@ fragment Index on Index {
       text
     }
   }
+  textOfCookies {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  acceptCookieButton
+  declineCookieButton
   freeBenefitsElements {
     ... on FreeBenefitsElement {
       stage

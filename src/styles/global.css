@@ -66,7 +66,7 @@
   #modalOfCar div div > p strong {
     @apply font-bold;
   }
-  #toggleContent > div h1,
+  #toggleContent div h1,
   #toggleContent div h2,
   #toggleContent div h3,
   #toggleContent div h4,
@@ -76,6 +76,17 @@
   }
   #toggleContent div a {
     @apply text-blue-500 hover:text-blue-700 transition duration-300;
+  }
+  #cookie h1,
+  #cookie h2,
+  #cookie h3,
+  #cookie h4,
+  #cookie h5,
+  #cookie h6 {
+    @apply font-medium leading-6 text-gray-900;
+  }
+  #cookie a {
+    @apply text-blue-700 underline;
   }
 }
 
