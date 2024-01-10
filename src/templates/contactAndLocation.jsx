@@ -3,6 +3,7 @@ import { useApolloClient, useQuery } from "@apollo/client"
 import { PhoneInput } from "react-international-phone"
 import mailcheck from "mailcheck"
 import ReCAPTCHA from "react-google-recaptcha"
+import { navigate } from "gatsby"
 import parkingWR1 from "../images/Captura de pantalla 2023-09-06 124559(2).png"
 import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
 import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
@@ -19,8 +20,10 @@ export default function useContactAndLocation({ pageContext }) {
     }
   }
 
-  const [email, setEmail] = useState(" ")
+  const [email, setEmail] = useState("")
+  const [emailConfirm, setEmailConfirm] = useState("")
   const [suggestion, setSuggestion] = useState(null)
+  const [suggestionConfirm, setSuggestionConfirm] = useState(null)
 
   useEffect(() => {
     mailcheck.run({
@@ -34,12 +37,110 @@ export default function useContactAndLocation({ pageContext }) {
     })
   }, [email])
 
-  const handleChange = e => {
-    setEmail(e.currentTarget.value)
+  useEffect(() => {
+    mailcheck.run({
+      email: emailConfirm,
+      suggested(s) {
+        setSuggestionConfirm(s.full)
+      },
+      empty() {
+        setSuggestionConfirm(null)
+      },
+    })
+  }, [emailConfirm])
+
+  const handleChange = (e, setEmailFunc, setSuggestionFunc) => {
+    const newValue = e.currentTarget.value
+    setEmailFunc(newValue)
+
+    // Run mailcheck for suggestions
+    mailcheck.run({
+      email: newValue,
+      suggested(s) {
+        setSuggestionFunc(s.full)
+      },
+      empty() {
+        setSuggestionFunc(null)
+      },
+    })
   }
 
-  const acceptSuggestion = e => {
-    if (suggestion != null) setEmail(suggestion)
+  const acceptSuggestion = (suggestion, setEmailFunc) => {
+    if (suggestion != null) setEmailFunc(suggestion)
+  }
+  const [submissionError, setSubmissionError] = useState(null)
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [formError, setFormError] = useState(null)
+
+  const handleSubmit = async e => {
+    try {
+      e.preventDefault()
+      setFormError(null)
+      setSubmissionError(null)
+      console.log("Submit button clicked!")
+
+      const form = e.target
+
+      // Verificar que 'form.email' y 'form.emailConfirm' no sean undefined
+      if (!form.email || !form.emailConfirm) {
+        // Si aún no se han llenado los campos, simplemente regresa sin hacer nada
+        console.log("Email fields are empty.")
+        return
+      }
+
+      // Validación personalizada solo si ambos campos están llenos
+      const email = form.email.value.trim()
+      const emailConfirm = form.emailConfirm.value.trim()
+
+      if (email === "" || emailConfirm === "") {
+        console.log("Email or Email Confirm element is empty.")
+        setFormError("Email or Email Confirm element is empty.")
+        return
+      }
+
+      if (email !== emailConfirm) {
+        console.log("Email and Confirm Email must match.")
+        setFormError("Email and Confirm Email must match.")
+        return
+      }
+
+      const formData = new FormData(form)
+
+      console.log("Sending form data...")
+      const response = await fetch(
+        "https://hooks.zapier.com/hooks/catch/17251260/3w2jvjy/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams(formData).toString(),
+        }
+      )
+
+      if (!response.ok) {
+        console.log(`HTTP error! Status: ${response.status}`)
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
+      console.log("Form submitted successfully!")
+      setFormSubmitted(true)
+      navigate(
+        pageContext.pageContext.langKey === "en"
+          ? "/"
+          : `/${pageContext.pageContext.langKey}`
+      )
+    } catch (error) {
+      console.error("Error submitting form:", error.message)
+      setSubmissionError(`Error submitting form: ${error.message}`)
+      // Limpiar errores después de enviar el formulario con éxito
+      setFormError(
+        "There was an error submitting the form. Please try again later."
+      )
+    }
+    // Limpiar errores después de enviar el formulario con éxito
+    setFormError(null)
+    // Resto del código para manejar la respuesta del envío
   }
 
   const client = useApolloClient()
@@ -66,242 +167,212 @@ export default function useContactAndLocation({ pageContext }) {
 
   return (
     <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
-      <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] min-[2000px]:col-[1/4] min-[2000px]:row-[1/2]">
+      <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] ...">
         {pageData.title}
       </h1>
-      {ContactAndLocationData && (
-        <form
-          name="contact"
-          method="post"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
-          className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
+      <form
+        name="contact"
+        onSubmit={handleSubmit}
+        method="post"
+        data-netlify="true"
+        data-netlify-honeypot="bot-field"
+        className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
+      >
+        {/* You still need to add the hidden input with the form name to your JSX form */}
+        <p className="hidden">
+          <label>
+            Don’t fill this out if you’re human: <input name="bot-field" />
+          </label>
+        </p>
+        <input type="hidden" name="form-name" value="contact" />
+
+        <fieldset
+          className="flex flex-row"
+          role="group"
+          aria-label="Datos personales"
         >
-          {/* You still need to add the hidden input with the form name to your JSX form */}
-          <p className="hidden">
-            <label>
-              Don’t fill this out if you’re human: <input name="bot-field" />
-            </label>
-          </p>
-          <input type="hidden" name="form-name" value="contact" />
-
-          <fieldset
-            className="flex flex-row"
-            role="group"
-            aria-label="Datos personales"
-          >
-            <div className="flex flex-col justify-between w-1/2 pr-3">
-              <label
-                htmlFor="nombre"
-                className="w-full my-2 font-black font-Poppins"
-              >
-                {pageData.contactForm.nameField}
-                <span className="text-red-500">*</span>:
-              </label>
-              <input
-                type="text"
-                id="nombre"
-                name="nombre"
-                className="w-full h-10"
-                required
-              />
-            </div>
-            <div className="flex flex-col justify-between w-1/2 pl-3">
-              <label
-                htmlFor="surname"
-                className="w-full my-2 font-black font-Poppins"
-              >
-                {pageData.contactForm.surnameField}
-                <span className="text-red-500">*</span>:
-              </label>
-              <input
-                type="text"
-                id="surname"
-                name="surname"
-                className="w-full h-10"
-                required
-              />
-            </div>
-          </fieldset>
-
-          <fieldset
-            className="md:flex md:flex-row"
-            role="group"
-            aria-label="Correo Electrónico"
-          >
-            <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
-              <label
-                htmlFor="email"
-                className="w-full my-2 font-black font-Poppins"
-              >
-                {pageData.contactForm.emailField}{" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <input
-                className="w-full h-10"
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-                required
-              />
-              {suggestion && (
-                <div>
-                  Did you mean{" "}
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault() // Previene el comportamiento predeterminado del enlace
-                      acceptSuggestion() // Llama a tu función acceptSuggestion
-                    }}
-                  >
-                    {suggestion}
-                  </a>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
-              <label
-                htmlFor="emailConfirm"
-                className="w-full my-2 font-black font-Poppins"
-              >
-                {pageData.contactForm.confirmEmailField}{" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <input
-                className="w-full h-10"
-                type="email"
-                id="emailConfirm"
-                name="emailConfirm"
-                value={email}
-                onChange={handleChange}
-                required
-              />
-              {suggestion && (
-                <div>
-                  Did you mean{" "}
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault() // Previene el comportamiento predeterminado del enlace
-                      acceptSuggestion() // Llama a tu función acceptSuggestion
-                    }}
-                  >
-                    {suggestion}
-                  </a>
-                </div>
-              )}
-            </div>
-          </fieldset>
-
-          <fieldset
-            className="flex flex-row"
-            role="group"
-            aria-label="Número de Teléfono"
-          >
-            <div className="flex flex-col justify-between w-full">
-              <label
-                htmlFor="phoneNumber"
-                className="w-full my-2 font-black font-Poppins"
-              >
-                {pageData.contactForm.phoneNumberField}:
-              </label>
-              <PhoneInput
-                defaultCountry="us"
-                value={phone}
-                onChange={phone => setPhone(phone)}
-                inputStyle={{ width: "100%", borderRadius: "0" }}
-                inputProps={{
-                  name: "phoneNumber",
-                  type: "tel",
-                  id: "phoneNumber",
-                }}
-                className="w-full h-10"
-              />
-            </div>
-          </fieldset>
-
-          <fieldset
-            className="flex flex-col md:row-span-2"
-            role="group"
-            aria-label="Mensaje"
-          >
-            <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
-              {pageData.contactForm.messageField}{" "}
+          <div className="flex flex-col justify-between w-1/2 pr-3">
+            <label
+              htmlFor="nombre"
+              className="w-full my-2 font-black font-Poppins"
+            >
+              {pageData.contactForm.nameField}
               <span className="text-red-500">*</span>:
             </label>
-            <textarea
-              id="mensaje"
-              name="mensaje"
-              rows="5"
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              className="w-full h-10"
               required
-              className="lg:h-16"
-            ></textarea>
-          </fieldset>
-
-          <div className="relative captcha">
-            <ReCAPTCHA
-              ref={captcha}
-              sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-              onChange={onChange}
-              className="flex my-2 justify-evenly lg:justify-start"
             />
-            {!isCaptchaVerified && (
-              <input
-                type="checkbox"
-                className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
-                tabIndex="-1"
-                required
-              />
+          </div>
+          <div className="flex flex-col justify-between w-1/2 pl-3">
+            <label
+              htmlFor="surname"
+              className="w-full my-2 font-black font-Poppins"
+            >
+              {pageData.contactForm.surnameField}
+              <span className="text-red-500">*</span>:
+            </label>
+            <input
+              type="text"
+              id="surname"
+              name="surname"
+              className="w-full h-10"
+              required
+            />
+          </div>
+        </fieldset>
+
+        <fieldset
+          className="md:flex md:flex-row"
+          role="group"
+          aria-label="Correo Electrónico"
+        >
+          <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
+            <label
+              htmlFor="email"
+              className="w-full my-2 font-black font-Poppins"
+            >
+              {pageData.contactForm.emailField}{" "}
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              className="w-full h-10"
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={e => handleChange(e, setEmail, setSuggestion)}
+              required
+            />
+            {suggestion && (
+              <div>
+                Did you mean{" "}
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault()
+                    acceptSuggestion(suggestion, setEmail)
+                  }}
+                >
+                  {suggestion}
+                </a>
+              </div>
             )}
           </div>
-          <button
-            type="submit"
-            className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
-          >
-            {pageData.contactForm.sendButton}
-          </button>
-        </form>
-      )}
-      {/* <div className="grid mb-5 mx-3 min-[412px]:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
-        <div className="flex items-center col-span-1">
-          <svg className="h-8 mr-2 lg:h-12" viewBox="0 0 448 510">
-            <path
-              fill="#000"
-              d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"
+          <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
+            <label
+              htmlFor="emailConfirm"
+              className="w-full my-2 font-black font-Poppins"
+            >
+              {pageData.contactForm.confirmEmailField}{" "}
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              className="w-full h-10"
+              type="email"
+              id="emailConfirm"
+              name="emailConfirm"
+              value={emailConfirm}
+              onChange={e =>
+                handleChange(e, setEmailConfirm, setSuggestionConfirm)
+              }
+              required
             />
-          </svg>
-          <div className="text-base">
-            <p className="font-bold">Whatsapp</p>
-            <p>+506-8973-2759</p>
+            {suggestionConfirm && (
+              <div>
+                Did you mean{" "}
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault()
+                    acceptSuggestion(suggestionConfirm, setEmailConfirm)
+                  }}
+                >
+                  {suggestionConfirm}
+                </a>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="flex items-center col-span-1">
-          <svg className="mr-2 h-7 lg:h-10" viewBox="0 0 585 610">
-            <path
-              fill="#000"
-              d="M160 48c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H160zM104.6 32C115.6 12.9 136.3 0 160 0h48c23.7 0 44.4 12.9 55.4 32H320h24 24H512c35.3 0 64 28.7 64 64v48 24 24V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32h40.6zM96 80H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H512c8.8 0 16-7.2 16-16V192H360c-22.1 0-40-17.9-40-40V80H272V352c0 35.3-28.7 64-64 64H160c-35.3 0-64-28.7-64-64V80zm272 0v64H528V96c0-8.8-7.2-16-16-16H368zm16 192a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM352 400a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM480 272a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM448 400a32 32 0 1 1 0-64 32 32 0 1 1 0 64z"
+        </fieldset>
+
+        <fieldset
+          className="flex flex-row"
+          role="group"
+          aria-label="Número de Teléfono"
+        >
+          <div className="flex flex-col justify-between w-full">
+            <label
+              htmlFor="phoneNumber"
+              className="w-full my-2 font-black font-Poppins"
+            >
+              {pageData.contactForm.phoneNumberField}:
+            </label>
+            <PhoneInput
+              defaultCountry="us"
+              value={phone}
+              onChange={phone => setPhone(phone)}
+              inputStyle={{ width: "100%", borderRadius: "0" }}
+              inputProps={{
+                name: "phoneNumber",
+                type: "tel",
+                id: "phoneNumber",
+              }}
+              className="w-full h-10"
             />
-          </svg>
-          <div className="text-base">
-            <p className="font-bold">Central Time</p>
-            <p>8:00 - 18:00</p>
           </div>
-        </div>
-        <div className="flex items-center col-span-1">
-          <svg className="mr-2 h-7" viewBox="0 0 500 525">
-            <path
-              fill="#000"
-              d="M112 48V215.6L64 183V48 0h48H400h48V48 183l-48 32.6V48H112zM256 410l-27-18.3L48 268.9V464H464V268.9L283 391.7 256 410zM464 210.9l48-32.6v58V464v48H464 48 0V464 236.3v-58l48 32.6L256 352 464 210.9zM184 96H328h24v48H328 184 160V96h24zm0 80H328h24v48H328 184 160V176h24z"
+        </fieldset>
+
+        <fieldset
+          className="flex flex-col md:row-span-2"
+          role="group"
+          aria-label="Mensaje"
+        >
+          <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
+            {pageData.contactForm.messageField}{" "}
+            <span className="text-red-500">*</span>:
+          </label>
+          <textarea
+            id="mensaje"
+            name="mensaje"
+            rows="5"
+            required
+            className="lg:h-16"
+          ></textarea>
+        </fieldset>
+
+        <div className="relative captcha">
+          <ReCAPTCHA
+            ref={captcha}
+            sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
+            onChange={onChange}
+            className="flex my-2 justify-evenly lg:justify-start"
+          />
+          {!isCaptchaVerified && (
+            <input
+              type="checkbox"
+              className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
+              tabIndex="-1"
+              required
             />
-          </svg>
-          <div className="text-base">
-            <p className="font-bold">Email</p>
-            <p>info@wildrider.com</p>
-          </div>
+          )}
         </div>
-      </div> */}
+        <button
+          type="submit"
+          className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
+        >
+          {pageData.contactForm.sendButton}
+        </button>
+        {formSubmitted && (
+          <div>
+            <h1>Thank you!</h1>
+            <p>Your form submission has been received.</p>
+          </div>
+        )}
+        {formError && <p style={{ color: "red" }}>Form Error: {formError}</p>}
+      </form>
       <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
         {pageData.contactElements?.map((element, index) => (
           <div className="flex items-center col-span-1" key={index}>
