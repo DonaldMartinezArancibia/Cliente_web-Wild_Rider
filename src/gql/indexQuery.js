@@ -15,14 +15,14 @@ const IndexContent = gql`
   query IndexContent($locale: [Locale!]!) {
     indices(locales: $locale) {
       id
-      viewCarsButtonText
-      viewCarsbuttonurl {
-        slug
-      }
       mainTextBelow {
         html
         markdown
         text
+      }
+      viewCarsButtonText
+      viewCarsbuttonurl {
+        slug
       }
       videosSectionTitle
       presentationVideos(locales: en) {

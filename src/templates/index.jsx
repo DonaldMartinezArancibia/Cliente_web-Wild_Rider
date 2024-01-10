@@ -121,7 +121,7 @@ export default function IndexPage({ pageContext }) {
         //   },
         // ]}
       >
-        <div className="text-gray-700 mb-3" id="cookie">
+        <div className="mb-3 text-gray-700" id="cookie">
           {/* <h4 className="text-lg font-medium leading-6 text-gray-900">
             This websites uses cookies.
           </h4>

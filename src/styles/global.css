@@ -36,14 +36,14 @@
   #sectionBellowHeader p:nth-of-type(1) {
     @apply md:col-[1/2] 2xl:pl-8 md:mt-8 2xl:pr-64;
   }
-  #sectionBellowHeader p:nth-of-type(1) strong:nth-of-type(2) {
-    @apply mt-2 block;
+  #sectionBellowHeader p:nth-of-type(1) br {
+    @apply block content-[''] mt-5;
   }
   #sectionBellowHeader p:nth-of-type(2) {
-    @apply lg:col-[2/3] lg:row-[1/3] flex justify-center;
+    @apply lg:col-[2/3] lg:row-[1/3] m-auto w-full justify-center;
   }
   #sectionBellowHeader p:nth-of-type(2) > img {
-    @apply xl:w-11/12;
+    @apply m-auto xl:w-11/12;
   }
   #sectionBellowTestimonialsTitle h2 {
     @apply max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne;
