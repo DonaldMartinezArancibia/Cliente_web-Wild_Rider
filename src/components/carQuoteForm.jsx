@@ -56,6 +56,35 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   }
 
   const [selectedCountry, setSelectedCountry] = useState("")
+  const [selectedPaidServices, setSelectedPaidServices] = useState([])
+  const [selectedFreeServices, setSelectedFreeServices] = useState([])
+
+  const handlePaidServicesChange = e => {
+    const serviceName = e.target.value
+    if (selectedPaidServices.includes(serviceName)) {
+      // Remove the service if it was already selected
+      setSelectedPaidServices(prevSelected =>
+        prevSelected.filter(service => service !== serviceName)
+      )
+    } else {
+      // Add the service if it was not selected
+      setSelectedPaidServices(prevSelected => [...prevSelected, serviceName])
+    }
+  }
+
+  // Función para manejar los cambios en los servicios gratuitos
+  const handleFreeServicesChange = e => {
+    const serviceName = e.target.value
+    if (e.target.checked) {
+      // Agregar el servicio seleccionado al array de servicios seleccionados
+      setSelectedFreeServices([...selectedFreeServices, serviceName])
+    } else {
+      // Remover el servicio deseleccionado del array de servicios seleccionados
+      setSelectedFreeServices(
+        selectedFreeServices.filter(service => service !== serviceName)
+      )
+    }
+  }
 
   const handleCountryChange = e => {
     setSelectedCountry(e.target.value)
@@ -91,7 +120,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   // Calcular la fecha mínima permitida para endDate
   const calculateMinEndDate = () => {
     const minEndDate = new Date(startDate)
-    minEndDate.setDate(startDate.getDate() + 1)
+    minEndDate.setDate(startDate.getDate() + 4)
     return minEndDate
   }
 
@@ -160,16 +189,25 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     return date.toLocaleDateString(pageContext.pageContext.langKey, options)
   }
 
-  const handleSubmit = e => {
+  const [redirecting, setRedirecting] = useState(false)
+
+  const handleSubmit = async e => {
     e.preventDefault()
     setFormError(null)
     setSubmissionError(null)
 
     const form = e.target
+    const fullName = form.name.value.trim()
 
     // Verificar que 'form.email' y 'form.emailConfirm' no sean undefined
     if (!form.email || !form.emailConfirm) {
       // Si aún no se han llenado los campos, simplemente regresa sin hacer nada
+      return
+    }
+
+    // Verificar que haya al menos un espacio en blanco en el nombre completo
+    if (!fullName.includes(" ")) {
+      setFormError("Please enter at least a name and a last name.")
       return
     }
 
@@ -187,32 +225,43 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       return
     }
 
-    // Resto del código para enviar la solicitud
     const formData = new FormData(form)
-    fetch("/quote/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams(formData).toString(),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+    formData.append("selectedPaidServices", selectedPaidServices.join("<br>"))
+    formData.append("selectedFreeServices", selectedFreeServices.join("<br>"))
+
+    try {
+      const response = await fetch(
+        "https://hooks.zapier.com/hooks/catch/17251260/3f91vun",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams(formData).toString(),
         }
-        setFormSubmitted(true)
+      )
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
+      setFormSubmitted(true)
+      setRedirecting(true)
+
+      setTimeout(() => {
+        setRedirecting(false)
         navigate(
           pageContext.pageContext.langKey === "en"
             ? "/"
             : `/${pageContext.pageContext.langKey}`
         )
-      })
-      .then(data => {
-        console.log("Formulario enviado con éxito:", data)
-      })
-      .catch(error => {
-        setSubmissionError(`Error submitting form: ${error.message}`)
-      })
+      }, 5000) // 5000 milisegundos = 5 segundos
+
+      // Limpiar errores después de enviar el formulario con éxito
+      setFormError(null)
+    } catch (error) {
+      setSubmissionError(`Error submitting form: ${error.message}`)
+    }
 
     // Limpiar errores después de enviar el formulario con éxito
     setFormError(null)
@@ -262,19 +311,19 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     setDefaultValue(defaultOption)
   }, [selectedTransmission, pageData?.vehicleSelectionOptions])
 
+  const languageMapping = {}
+  // Itera sobre las opciones en inglés y alemán y crea el mapeo
+  pageData?.paidServicesCheckboxOptions.forEach((option, index) => {
+    const germanOption =
+      pageData.localizations[0]?.paidServicesCheckboxOptions[index]
+    languageMapping[option] = germanOption
+  })
+  console.log(pageData)
+  console.log(languageMapping)
+
   if (CarQuoteFormQueryLoading) return <p>Loading...</p>
   if (CarQuoteFormQueryError)
     return <p>Error : {CarQuoteFormQueryError.message}</p>
-
-  // const {
-  //   data: carsById,
-  //   loading: carsByIdQueryLoading,
-  //   error: carsByIdQueryError,
-  // } = useQuery(Cars, {
-  //   variables: { internalId: remoteId, locale: ["en"] },
-  // })
-  // if (carsByIdQueryLoading) return <p>Loading...</p>
-  // if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
 
   const ConditionalLabel = ({ text, htmlFor }) => {
     const hasAsterisk = text?.includes("*")
@@ -425,7 +474,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 type="text"
                 id="name"
                 name="name"
-                className="w-full h-10 my-2"
+                className="w-full h-10 p-2 my-2"
                 required={pageData.completeNameField?.includes("*")}
               />
             </div>
@@ -434,7 +483,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <div className="flex flex-col justify-between pr-3">
                 <ConditionalLabel text={pageData.emailField} htmlFor="email" />
                 <input
-                  className="w-full h-10"
+                  className="w-full h-10 p-2"
                   type="email"
                   id="email"
                   name="email"
@@ -465,7 +514,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   htmlFor="emailConfirm"
                 />
                 <input
-                  className="w-full h-10"
+                  className="w-full h-10 p-2"
                   type="email"
                   id="emailConfirm"
                   name="emailConfirm"
@@ -766,9 +815,11 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 <li key={index} className="mb-2">
                   <input
                     type="checkbox"
-                    id={option.replace(/\s+/g, "")} // Remove spaces from the option for the ID
-                    name={option.replace(/\s+/g, "")} // Remove spaces from the option for the name
+                    id={option.replace(/\s+/g, "")}
+                    name={option.replace(/\s+/g, "")}
                     value={option}
+                    checked={selectedFreeServices.includes(option)}
+                    onChange={handleFreeServicesChange}
                   />
                   <label className="ml-2" htmlFor={option.replace(/\s+/g, "")}>
                     {option}
@@ -782,8 +833,8 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   {selector.serviceSelectorTitle}
                 </label>
                 <select
-                  id={selector.serviceSelectorTitle?.replace(/\s+/g, "")} // Remove spaces from the title for the ID
-                  name={selector.serviceSelectorTitle?.replace(/\s+/g, "")} // Remove spaces from the title for the name
+                  id={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
+                  name={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                   className="w-full h-10"
                 >
                   {selector.serviceValues.map((value, valueIndex) => (
@@ -813,6 +864,8 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     id={option.replace(/\s+/g, "")} // Remove spaces from the option for the ID
                     name={option.replace(/\s+/g, "")} // Remove spaces from the option for the name
                     value={option}
+                    checked={selectedPaidServices.includes(option)}
+                    onChange={handlePaidServicesChange}
                   />
                   <label className="ml-2" htmlFor={option.replace(/\s+/g, "")}>
                     {option}
@@ -827,8 +880,8 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 {selector.serviceSelectorTitle}
               </label>
               <select
-                id={selector.serviceSelectorTitle?.replace(/\s+/g, "")} // Remove spaces from the title for the ID
-                name={selector.serviceSelectorTitle?.replace(/\s+/g, "")} // Remove spaces from the title for the name
+                id={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
+                name={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                 className="w-full h-10"
               >
                 {selector.serviceValues.map((value, valueIndex) => (
@@ -854,7 +907,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               id="questions"
               name="questions"
               required={pageData.communicationFieldSubtitle?.includes("*")}
-              className="w-full h-32 md:h-40"
+              className="w-full h-32 p-2 md:h-40"
             ></textarea>
           </div>
         </fieldset>
@@ -872,6 +925,11 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         <div>
           <h1>Thank you!</h1>
           <p>Your form submission has been received.</p>
+          {redirecting && (
+            <div>
+              <p>Redirecting to the home page...</p>
+            </div>
+          )}
         </div>
       ) : (
         <></>

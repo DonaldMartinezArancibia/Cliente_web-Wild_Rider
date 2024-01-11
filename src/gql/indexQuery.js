@@ -29,7 +29,7 @@ const IndexContent = gql`
         url
         mimeType
       }
-      youtubeUrlVideo
+      # youtubeUrlVideo
       offersSectionTitle
       offersSectionText {
         html

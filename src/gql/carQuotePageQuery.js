@@ -64,6 +64,9 @@ const CarQuoteFormContent = gql`
       paidAdditionalServicesTitle
       paidServicesSubtitle
       paidServicesCheckboxOptions
+      localizations(locales: en) {
+        paidServicesCheckboxOptions
+      }
       paidServicesSelectors {
         serviceSelectorTitle
         serviceValues

@@ -17,7 +17,6 @@ fragment Index on Index {
   }
   viewCarsButtonText
   videosSectionTitle
-  youtubeUrlVideo
   offersSectionText {
     ... on RichText {
       raw
