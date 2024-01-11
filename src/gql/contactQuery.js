@@ -15,7 +15,11 @@ const ContactContent = gql`
   query ContactAndLocation($locale: [Locale!]!) {
     contactAndLocations(locales: $locale) {
       title
+      titleOfAddress
       address
+      localizations(locales: es) {
+        address
+      }
       topImage(locales: en) {
         url
       }

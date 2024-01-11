@@ -71,20 +71,18 @@ export default function useContactAndLocation({ pageContext }) {
   const [submissionError, setSubmissionError] = useState(null)
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [formError, setFormError] = useState(null)
+  const [redirecting, setRedirecting] = useState(false)
 
   const handleSubmit = async e => {
     try {
       e.preventDefault()
       setFormError(null)
       setSubmissionError(null)
-      console.log("Submit button clicked!")
 
       const form = e.target
 
       // Verificar que 'form.email' y 'form.emailConfirm' no sean undefined
       if (!form.email || !form.emailConfirm) {
-        // Si aún no se han llenado los campos, simplemente regresa sin hacer nada
-        console.log("Email fields are empty.")
         return
       }
 
@@ -93,20 +91,17 @@ export default function useContactAndLocation({ pageContext }) {
       const emailConfirm = form.emailConfirm.value.trim()
 
       if (email === "" || emailConfirm === "") {
-        console.log("Email or Email Confirm element is empty.")
         setFormError("Email or Email Confirm element is empty.")
         return
       }
 
       if (email !== emailConfirm) {
-        console.log("Email and Confirm Email must match.")
         setFormError("Email and Confirm Email must match.")
         return
       }
 
       const formData = new FormData(form)
 
-      console.log("Sending form data...")
       const response = await fetch(
         "https://hooks.zapier.com/hooks/catch/17251260/3w2jvjy/",
         {
@@ -119,19 +114,17 @@ export default function useContactAndLocation({ pageContext }) {
       )
 
       if (!response.ok) {
-        console.log(`HTTP error! Status: ${response.status}`)
         throw new Error(`HTTP error! Status: ${response.status}`)
       }
 
-      console.log("Form submitted successfully!")
       setFormSubmitted(true)
-      navigate(
-        pageContext.pageContext.langKey === "en"
-          ? "/"
-          : `/${pageContext.pageContext.langKey}`
-      )
+      setRedirecting(true)
+
+      setTimeout(() => {
+        setRedirecting(false)
+        navigate(pageContext.langKey === "en" ? "/" : `/${pageContext.langKey}`)
+      }, 5000) // 5000 milisegundos = 5 segundos
     } catch (error) {
-      console.error("Error submitting form:", error.message)
       setSubmissionError(`Error submitting form: ${error.message}`)
       // Limpiar errores después de enviar el formulario con éxito
       setFormError(
@@ -203,7 +196,7 @@ export default function useContactAndLocation({ pageContext }) {
               type="text"
               id="nombre"
               name="nombre"
-              className="w-full h-10"
+              className="w-full h-10 p-2"
               required
             />
           </div>
@@ -219,7 +212,7 @@ export default function useContactAndLocation({ pageContext }) {
               type="text"
               id="surname"
               name="surname"
-              className="w-full h-10"
+              className="w-full h-10 p-2"
               required
             />
           </div>
@@ -239,7 +232,7 @@ export default function useContactAndLocation({ pageContext }) {
               <span className="text-red-500">*</span>
             </label>
             <input
-              className="w-full h-10"
+              className="w-full h-10 p-2"
               type="email"
               id="email"
               name="email"
@@ -271,7 +264,7 @@ export default function useContactAndLocation({ pageContext }) {
               <span className="text-red-500">*</span>
             </label>
             <input
-              className="w-full h-10"
+              className="w-full h-10 p-2"
               type="email"
               id="emailConfirm"
               name="emailConfirm"
@@ -339,7 +332,7 @@ export default function useContactAndLocation({ pageContext }) {
             name="mensaje"
             rows="5"
             required
-            className="lg:h-16"
+            className="p-2 lg:h-16"
           ></textarea>
         </fieldset>
 
@@ -372,6 +365,11 @@ export default function useContactAndLocation({ pageContext }) {
           </div>
         )}
         {formError && <p style={{ color: "red" }}>Form Error: {formError}</p>}
+        {redirecting && (
+          <div>
+            <p>Redirecting to the home page...</p>
+          </div>
+        )}
       </form>
       <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
         {pageData.contactElements?.map((element, index) => (
@@ -401,8 +399,13 @@ export default function useContactAndLocation({ pageContext }) {
         />
       </div>
       <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
+        <h1>{pageData.titleOfAddress}</h1>
         {pageData.address}
+        <br />
+        <br />
+        {pageData.localizations[0]?.address}
       </p>
+      <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center"></p>
       <iframe
         width="360"
         height="300"
