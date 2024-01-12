@@ -183,6 +183,15 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
   const [redirecting, setRedirecting] = useState(false)
 
+  const [selectedServices, setSelectedServices] = useState({})
+
+  const handleServiceSelection = (selectorTitle, selectedValue) => {
+    setSelectedServices(prevState => ({
+      ...prevState,
+      [selectorTitle]: selectedValue,
+    }))
+  }
+
   const handleSubmit = async e => {
     e.preventDefault()
     setFormError(null)
@@ -220,6 +229,17 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     const formData = new FormData(form)
     formData.append("selectedPaidServices", selectedPaidServices.join("<br>"))
     formData.append("selectedFreeServices", selectedFreeServices.join("<br>"))
+    formData.append("selectedServicesText", selectedServicesText)
+
+    // Generar el texto con las selecciones
+    const selectedServicesText = Object.entries(selectedServices)
+      .map(
+        ([selectorTitle, selectedValue]) =>
+          `${selectorTitle} : ${selectedValue}`
+      )
+      .join(", ")
+
+    console.log("Selected Services:", selectedServicesText)
 
     try {
       const response = await fetch(
@@ -872,6 +892,12 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 id={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                 name={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                 className="w-full h-10"
+                onChange={e =>
+                  handleServiceSelection(
+                    selector.serviceSelectorTitle,
+                    e.target.value
+                  )
+                }
               >
                 {selector.serviceValues.map((value, valueIndex) => (
                   <option key={valueIndex} value={value}>
