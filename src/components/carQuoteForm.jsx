@@ -90,14 +90,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     setSelectedCountry(e.target.value)
   }
 
-  const countries = [
-    "Mexico",
-    "Colombia",
-    "Argentina",
-    "Canada",
-    // ... otros países
-  ]
-
   const changeHandler = e => {
     setValue(e.target.value)
   }
@@ -296,20 +288,20 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   }
 
   const selectedTransmission = pageContext.pageContext.selectedTransmission
+  // console.log(selectedTransmission)
 
-  useEffect(() => {
-    const matchingOption = pageData?.vehicleSelectionOptions.find(option => {
-      const carName = selectedTransmission?.toLowerCase().trim()
-      const optionValue = option.toLowerCase()
+  // useEffect(() => {
+  //   const matchingOption = pageData?.vehicleSelectionOptions.find(option => {
+  //     const carName = selectedTransmission?.toLowerCase().trim()
+  //     const optionValue = option.toLowerCase()
 
-      // Verificar coincidencia exacta de marca y modelo
-      return carName === optionValue
-    })
+  //     return carName === optionValue
+  //   })
 
-    // Asignar el valor predeterminado basado en la opción coincidente
-    const defaultOption = matchingOption ? matchingOption : ""
-    setDefaultValue(defaultOption)
-  }, [selectedTransmission, pageData?.vehicleSelectionOptions])
+  //   const defaultOption = matchingOption ? matchingOption : ""
+
+  //   setDefaultValue(defaultOption)
+  // }, [selectedTransmission, pageData?.vehicleSelectionOptions])
 
   const languageMapping = {}
   // Itera sobre las opciones en inglés y alemán y crea el mapeo
@@ -318,8 +310,32 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       pageData.localizations[0]?.paidServicesCheckboxOptions[index]
     languageMapping[option] = germanOption
   })
-  console.log(pageData)
-  console.log(languageMapping)
+  const getTransmissionOptions = car =>
+    [car.manualTransmission, car.automaticTransmission].flatMap(transmission =>
+      transmission
+        ? [
+            {
+              value: transmission.carTransmissionSelectorValue,
+              label: transmission.carTransmissionSelectorValue,
+            },
+          ]
+        : []
+    )
+  const getDefaultOption = (transmissionOptions, selectedTransmission) =>
+    transmissionOptions?.find(
+      option =>
+        selectedTransmission?.toLowerCase().trim() ===
+        option.value.toLowerCase()
+    ) || ""
+
+  useEffect(() => {
+    const transmissionOptions = pageData?.cars.flatMap(getTransmissionOptions)
+    const defaultOption = getDefaultOption(
+      transmissionOptions,
+      selectedTransmission
+    )
+    setDefaultValue(defaultOption)
+  }, [selectedTransmission, pageData?.cars])
 
   if (CarQuoteFormQueryLoading) return <p>Loading...</p>
   if (CarQuoteFormQueryError)
@@ -612,45 +628,18 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               name="vehicleSelection"
               className="w-full h-10"
               required={pageData.vehicleSelectionField?.includes("*")}
-              value={defaultValue}
-              onChange={e => setDefaultValue(e.target.value)}
+              value={defaultValue.value}
+              onChange={e =>
+                setDefaultValue({
+                  value: e.target.value,
+                  label: e.target.value,
+                })
+              }
             >
               {pageData.cars
-                .map((car, index) => {
-                  // Filtrar transmisiones nulas
-                  const manualTransmissionValue =
-                    car.manualTransmission?.carTransmissionSelectorValue
-                  const automaticTransmissionValue =
-                    car.automaticTransmission?.carTransmissionSelectorValue
-
-                  // Crear opciones solo si las transmisiones no son nulas
-                  const options = []
-
-                  if (
-                    manualTransmissionValue !== null &&
-                    manualTransmissionValue !== undefined
-                  ) {
-                    options.push({
-                      value: manualTransmissionValue,
-                      label: manualTransmissionValue,
-                    })
-                  }
-
-                  if (
-                    automaticTransmissionValue !== null &&
-                    automaticTransmissionValue !== undefined
-                  ) {
-                    options.push({
-                      value: automaticTransmissionValue,
-                      label: automaticTransmissionValue,
-                    })
-                  }
-
-                  return options
-                })
-                .flat() // Aplanar el array de arrays
-                .map((option, innerIndex) => (
-                  <option key={innerIndex} value={option.value}>
+                .flatMap(getTransmissionOptions)
+                .map((option, index) => (
+                  <option key={index} value={option.value}>
                     {option.label}
                   </option>
                 ))}
