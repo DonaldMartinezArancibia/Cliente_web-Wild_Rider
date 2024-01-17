@@ -184,12 +184,26 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   const [redirecting, setRedirecting] = useState(false)
 
   const [selectedServices, setSelectedServices] = useState({})
+  const [customSelectedFreeServices, setCustomSelectedFreeServices] = useState(
+    {}
+  )
 
-  const handleServiceSelection = (selectorTitle, selectedValue) => {
-    setSelectedServices(prevState => ({
-      ...prevState,
-      [selectorTitle]: selectedValue,
-    }))
+  const handleServiceSelection = (
+    selectorTitle,
+    selectedValue,
+    isFreeService
+  ) => {
+    if (isFreeService) {
+      setCustomSelectedFreeServices(prevState => ({
+        ...prevState,
+        [selectorTitle]: selectedValue,
+      }))
+    } else {
+      setSelectedServices(prevState => ({
+        ...prevState,
+        [selectorTitle]: selectedValue,
+      }))
+    }
   }
 
   const handleSubmit = async e => {
@@ -225,13 +239,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       setFormError("Email and Confirm Email must match.")
       return
     }
-
-    const formData = new FormData(form)
-    formData.append("selectedPaidServices", selectedPaidServices.join("<br>"))
-    formData.append("selectedFreeServices", selectedFreeServices.join("<br>"))
-    formData.append("selectedServicesText", selectedServicesText)
-
-    // Generar el texto con las selecciones
+    // Generar el texto con las selecciones de servicios pagados
     const selectedServicesText = Object.entries(selectedServices)
       .map(
         ([selectorTitle, selectedValue]) =>
@@ -240,6 +248,30 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       .join(", ")
 
     console.log("Selected Services:", selectedServicesText)
+
+    // Generar el texto con las selecciones de servicios gratuitos
+    const customSelectedFreeServicesText = Object.entries(
+      customSelectedFreeServices
+    )
+      .map(
+        ([selectorTitle, selectedValue]) =>
+          `${selectorTitle} : ${selectedValue}`
+      )
+      .join(", ")
+
+    console.log(
+      "Custom Selected Free Services:",
+      customSelectedFreeServicesText
+    )
+
+    const formData = new FormData(form)
+    formData.append("selectedPaidServices", selectedPaidServices.join("<br>"))
+    formData.append("selectedFreeServices", selectedFreeServices.join("<br>"))
+    formData.append("quantityOfSelectedPaidServices", selectedServicesText)
+    formData.append(
+      "customSelectedFreeServices",
+      customSelectedFreeServicesText
+    )
 
     try {
       const response = await fetch(
@@ -836,6 +868,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 </li>
               ))}
             </ul>
+            {/* Selectores de servicios gratuitos */}
             {pageData.freeServicesSelectors.map((selector, index) => (
               <div key={index} className="mb-6 lg:w-1/2">
                 <label className="block text-xl font-semibold">
@@ -845,6 +878,13 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   id={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                   name={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                   className="w-full h-10"
+                  onChange={e =>
+                    handleServiceSelection(
+                      selector.serviceSelectorTitle,
+                      e.target.value,
+                      true
+                    )
+                  }
                 >
                   {selector.serviceValues.map((value, valueIndex) => (
                     <option key={valueIndex} value={value}>
