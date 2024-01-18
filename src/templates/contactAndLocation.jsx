@@ -103,7 +103,7 @@ export default function useContactAndLocation({ pageContext }) {
       const formData = new FormData(form)
 
       const response = await fetch(
-        "https://hooks.zapier.com/hooks/catch/17251260/3w2jvjy/",
+        "https://hooks.zapier.com/hooks/catch/17251260/3wu1vz2/",
         {
           method: "POST",
           headers: {
