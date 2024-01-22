@@ -377,7 +377,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     transmissionOptions?.find(
       option =>
         selectedTransmission?.toLowerCase().trim() ===
-        option.value.toLowerCase()
+        option?.value?.toLowerCase()
     ) || ""
 
   useEffect(() => {
