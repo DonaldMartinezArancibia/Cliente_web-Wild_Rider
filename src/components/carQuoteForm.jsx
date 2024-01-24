@@ -245,7 +245,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         ([selectorTitle, selectedValue]) =>
           `${selectorTitle} : ${selectedValue}`
       )
-      .join(", ")
+      .join("<br>")
 
     console.log("Selected Services:", selectedServicesText)
 
@@ -257,7 +257,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         ([selectorTitle, selectedValue]) =>
           `${selectorTitle} : ${selectedValue}`
       )
-      .join(", ")
+      .join("<br>")
 
     console.log(
       "Custom Selected Free Services:",
