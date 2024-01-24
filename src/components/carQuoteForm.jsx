@@ -247,8 +247,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       )
       .join("<br>")
 
-    console.log("Selected Services:", selectedServicesText)
-
     // Generar el texto con las selecciones de servicios gratuitos
     const customSelectedFreeServicesText = Object.entries(
       customSelectedFreeServices
@@ -259,12 +257,36 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       )
       .join("<br>")
 
-    console.log(
-      "Custom Selected Free Services:",
-      customSelectedFreeServicesText
+    const formData = new FormData(form)
+
+    // Obtener las fechas y horas seleccionadas
+    const startDateValue = document.getElementById("startDate").value
+    const startTimeValue = document.getElementById("startTime").value
+
+    const endDateValue = document.getElementById("endDate").value
+    const endTimeValue = document.getElementById("endTime").value
+
+    // Crear objetos Date para las fechas y horas seleccionadas
+    const startDateObject = new Date(`${startDateValue} ${startTimeValue}`)
+    const endDateObject = new Date(`${endDateValue} ${endTimeValue}`)
+
+    // Calcular la diferencia en milisegundos
+    const timeDifference = endDateObject - startDateObject
+
+    // Calcular la diferencia en días, horas y minutos
+    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+    const remainingHours = Math.floor(
+      (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    )
+    const remainingMinutes = Math.floor(
+      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
     )
 
-    const formData = new FormData(form)
+    formData.append(
+      "timeDifference",
+      `${daysDifference} Days, ${remainingHours} hours and ${remainingMinutes} minutes`
+    )
+
     formData.append("selectedPaidServices", selectedPaidServices.join("<br>"))
     formData.append("selectedFreeServices", selectedFreeServices.join("<br>"))
     formData.append("quantityOfSelectedPaidServices", selectedServicesText)
