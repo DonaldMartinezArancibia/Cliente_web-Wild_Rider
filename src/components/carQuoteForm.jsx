@@ -6,6 +6,7 @@ import "react-international-phone/style.css"
 import countryList from "react-select-country-list"
 import "flatpickr/dist/themes/airbnb.css"
 import Flatpickr from "react-flatpickr"
+import ReCAPTCHA from "react-google-recaptcha"
 import { navigate } from "gatsby"
 import { datosVar } from "./variableReactiva"
 import { useApolloClient, useQuery } from "@apollo/client"
@@ -26,6 +27,8 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   client.refetchQueries({
     include: [CarQuoteFormContent],
   })
+  const captcha = useRef(null)
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
   // console.log(data)
   // console.log(pageContext.pageContext.langKey)
   // const datos = apolloData
@@ -205,7 +208,11 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       }))
     }
   }
-
+  const onChange = () => {
+    if (captcha.current.getValue()) {
+      setIsCaptchaVerified(true) // Marcar como verificado cuando se obtenga una respuesta válida
+    }
+  }
   const handleSubmit = async e => {
     e.preventDefault()
     setFormError(null)
@@ -239,25 +246,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       setFormError("Email and Confirm Email must match.")
       return
     }
-    // Generar el texto con las selecciones de servicios pagados
-    const selectedServicesText = Object.entries(selectedServices)
-      .map(
-        ([selectorTitle, selectedValue]) =>
-          `${selectorTitle} : ${selectedValue}`
-      )
-      .join("<br>")
-
-    // Generar el texto con las selecciones de servicios gratuitos
-    const customSelectedFreeServicesText = Object.entries(
-      customSelectedFreeServices
-    )
-      .map(
-        ([selectorTitle, selectedValue]) =>
-          `${selectorTitle} : ${selectedValue}`
-      )
-      .join("<br>")
-
-    const formData = new FormData(form)
 
     // Obtener las fechas y horas seleccionadas
     const startDateValue = document.getElementById("startDate").value
@@ -282,14 +270,43 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
     )
 
+    // Generar el texto con las selecciones de servicios pagados
+    const selectedServicesText = Object.entries(selectedServices)
+      .map(
+        ([selectorTitle, selectedValue]) =>
+          `${selectorTitle}:<br><strong>${selectedValue}</strong>`
+      )
+      .join("<br><br>")
+
+    // Generar el texto con las selecciones de servicios gratuitos
+    const customSelectedFreeServicesText = Object.entries(
+      customSelectedFreeServices
+    )
+      .map(
+        ([selectorTitle, selectedValue]) =>
+          `${selectorTitle}:<br><strong>${selectedValue}</strong>`
+      )
+      .join("<br><br>")
+
+    const formData = new FormData(form)
+
     formData.append(
       "timeDifference",
       `${daysDifference} Days, ${remainingHours} hours and ${remainingMinutes} minutes`
     )
 
-    formData.append("selectedPaidServices", selectedPaidServices.join("<br>"))
-    formData.append("selectedFreeServices", selectedFreeServices.join("<br>"))
+    formData.append(
+      "selectedPaidServices",
+      selectedPaidServices.join("<br><br>")
+    )
+
+    formData.append(
+      "selectedFreeServices",
+      selectedFreeServices.join("<br><br>")
+    )
+
     formData.append("quantityOfSelectedPaidServices", selectedServicesText)
+
     formData.append(
       "customSelectedFreeServices",
       customSelectedFreeServicesText
@@ -385,16 +402,16 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     languageMapping[option] = germanOption
   })
   const getTransmissionOptions = car =>
-    [car.manualTransmission, car.automaticTransmission].flatMap(transmission =>
-      transmission
-        ? [
-            {
-              value: transmission.carTransmissionSelectorValue,
-              label: transmission.carTransmissionSelectorValue,
-            },
-          ]
-        : []
-    )
+    [car.manualTransmission, car.automaticTransmission]
+      .filter(
+        transmission =>
+          transmission && transmission.carTransmissionSelectorValue
+      )
+      .flatMap(transmission => ({
+        value: transmission.carTransmissionSelectorValue,
+        label: transmission.carTransmissionSelectorValue,
+      }))
+
   const getDefaultOption = (transmissionOptions, selectedTransmission) =>
     transmissionOptions?.find(
       option =>
@@ -404,6 +421,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
   useEffect(() => {
     const transmissionOptions = pageData?.cars.flatMap(getTransmissionOptions)
+    console.log(transmissionOptions)
     const defaultOption = getDefaultOption(
       transmissionOptions,
       selectedTransmission
@@ -989,6 +1007,23 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           </div>
         </fieldset>
         {formError && <p style={{ color: "red" }}>{formError}</p>}
+
+        <div className="relative captcha">
+          <ReCAPTCHA
+            ref={captcha}
+            sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
+            onChange={onChange}
+            className="flex my-2 justify-evenly lg:justify-start"
+          />
+          {!isCaptchaVerified && (
+            <input
+              type="checkbox"
+              className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
+              tabIndex="-1"
+              required
+            />
+          )}
+        </div>
 
         <button
           type="submit"

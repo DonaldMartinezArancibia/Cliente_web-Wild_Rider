@@ -15,7 +15,6 @@ export default function useContactAndLocation({ pageContext }) {
 
   const onChange = () => {
     if (captcha.current.getValue()) {
-      console.log("Usuario real")
       setIsCaptchaVerified(true) // Marcar como verificado cuando se obtenga una respuesta válida
     }
   }
