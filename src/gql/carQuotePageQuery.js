@@ -38,7 +38,6 @@ const CarQuoteFormContent = gql`
         }
       }
       vehicleSelectionField
-      vehicleSelectionOptions
       otherHour
       pickUpInformationTitle
       takeoverDateField
