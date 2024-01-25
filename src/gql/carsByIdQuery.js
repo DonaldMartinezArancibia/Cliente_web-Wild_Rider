@@ -16,14 +16,6 @@ const Cars = gql`
         markdown
         text
       }
-      pricesOfCar {
-        priceOfCar
-        season {
-          seasonTitle
-          startDate
-          endDate
-        }
-      }
       insuranceAndTaxInfo
       carsAndQuote {
         datesTitle
