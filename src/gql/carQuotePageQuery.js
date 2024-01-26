@@ -73,6 +73,7 @@ const CarQuoteFormContent = gql`
       communicationFieldTitle
       communicationFieldSubtitle
       buttonText
+      formOnSubmitMessage
     }
   }
 `

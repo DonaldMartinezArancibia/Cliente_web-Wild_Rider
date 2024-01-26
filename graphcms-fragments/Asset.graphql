@@ -48,10 +48,11 @@ fragment Asset on Asset {
       stage
     }
   }
-  imageSeo {
-    ... on Seo {
+  carPhotosCar {
+    ... on Car {
       remoteTypeName: __typename
       remoteId: id
+      locale
       stage
     }
   }
@@ -63,11 +64,10 @@ fragment Asset on Asset {
       stage
     }
   }
-  carPhotosCar {
-    ... on Car {
+  imageSeo {
+    ... on Seo {
       remoteTypeName: __typename
       remoteId: id
-      locale
       stage
     }
   }

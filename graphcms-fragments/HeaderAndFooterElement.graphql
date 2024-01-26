@@ -5,6 +5,7 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
+  langKey
   imageOverLogoAlt
   logoTextTitle
   logoTextSubtitle
@@ -34,6 +35,14 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
       id
       elementTitle
       elementValue
+      elementText {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
       elementIcon {
         ... on Asset {
           remoteTypeName: __typename

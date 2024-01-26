@@ -2,7 +2,7 @@ import React from "react"
 import CarQuoteQuery from "../components/carQuoteQuery"
 import { datosVar } from "../components/variableReactiva"
 
-const CarForm = ({ pageContext, location }) => {
+const CarForm = ({ pageContext, location, headerAndFooterData }) => {
   // Obtén el objeto datos desde la variable reactiva
   const datos = datosVar()
 
@@ -13,6 +13,7 @@ const CarForm = ({ pageContext, location }) => {
   const newPageContext = {
     ...pageContext,
     selectedTransmission: selectedTransmission,
+    headerAndFooterData: headerAndFooterData,
   }
 
   return (

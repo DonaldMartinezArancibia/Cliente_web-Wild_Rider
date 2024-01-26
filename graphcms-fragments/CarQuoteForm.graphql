@@ -49,6 +49,7 @@ fragment CarQuoteForm on CarQuoteForm {
   communicationFieldTitle
   communicationFieldSubtitle
   buttonText
+  formOnSubmitMessage
   freeServicesSelectors {
     ... on ServicesSelector {
       stage

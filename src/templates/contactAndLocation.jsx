@@ -9,7 +9,10 @@ import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
 import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
-export default function useContactAndLocation({ pageContext }) {
+export default function useContactAndLocation({
+  pageContext,
+  headerAndFooterData,
+}) {
   const captcha = useRef(null)
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
   const [phone, setPhone] = useState("")
@@ -340,7 +343,7 @@ export default function useContactAndLocation({ pageContext }) {
           <ReCAPTCHA
             ref={captcha}
             sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-            hl={pageContext.langKey}
+            hl={headerAndFooterData}
             onChange={onChange}
             className="flex my-2 justify-evenly lg:justify-start"
           />

@@ -42,6 +42,7 @@ const headerAndFooterElements = gql`
       footerCopyright
       termsOfService
       privacyPolicy
+      langKey
     }
   }
 `

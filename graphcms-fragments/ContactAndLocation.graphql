@@ -9,6 +9,9 @@ fragment ContactAndLocation on ContactAndLocation {
   title
   titleOfAddress
   address
+  urlSourceFrame
+  googleMapsUrlButton
+  googleMapsButtonText
   contactForm {
     ... on ContactForm {
       stage
@@ -30,6 +33,14 @@ fragment ContactAndLocation on ContactAndLocation {
       id
       elementTitle
       elementValue
+      elementText {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
       elementIcon {
         ... on Asset {
           remoteTypeName: __typename
