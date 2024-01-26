@@ -7,6 +7,7 @@ import { navigate } from "gatsby"
 import parkingWR1 from "../images/Captura de pantalla 2023-09-06 124559(2).png"
 import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
 import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
+import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
 export default function useContactAndLocation({ pageContext }) {
   const captcha = useRef(null)
@@ -227,7 +228,7 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="email"
               className="w-full my-2 font-black font-Poppins"
             >
-              {pageData.contactForm.emailField}{" "}
+              {pageData.contactForm.emailField}
               <span className="text-red-500">*</span>
             </label>
             <input
@@ -241,7 +242,7 @@ export default function useContactAndLocation({ pageContext }) {
             />
             {suggestion && (
               <div>
-                Did you mean{" "}
+                Did you mean
                 <a
                   href=""
                   onClick={e => {
@@ -275,7 +276,7 @@ export default function useContactAndLocation({ pageContext }) {
             />
             {suggestionConfirm && (
               <div>
-                Did you mean{" "}
+                Did you mean
                 <a
                   href=""
                   onClick={e => {
@@ -329,9 +330,9 @@ export default function useContactAndLocation({ pageContext }) {
           <textarea
             id="mensaje"
             name="mensaje"
-            rows="5"
+            rows="15"
             required
-            className="p-2 lg:h-16"
+            className="p-2"
           ></textarea>
         </fieldset>
 
@@ -339,6 +340,7 @@ export default function useContactAndLocation({ pageContext }) {
           <ReCAPTCHA
             ref={captcha}
             sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
+            hl={pageContext.langKey}
             onChange={onChange}
             className="flex my-2 justify-evenly lg:justify-start"
           />
@@ -380,7 +382,7 @@ export default function useContactAndLocation({ pageContext }) {
             />
             <div className="text-base">
               <p className="font-bold">{element.elementTitle}</p>
-              <p>{element.elementValue}</p>
+              <ReactMarkdown>{element.elementText?.markdown}</ReactMarkdown>
             </div>
           </div>
         ))}
@@ -409,7 +411,7 @@ export default function useContactAndLocation({ pageContext }) {
         width="360"
         height="300"
         id="gmap_canvas"
-        src="https://maps.google.com/maps?q=wild%20rider%204x4&t=&z=18&ie=UTF8&iwloc=&output=embed"
+        src={pageData.urlSourceFrame}
         frameBorder="0"
         scrolling="no"
         marginHeight="0"
@@ -418,10 +420,10 @@ export default function useContactAndLocation({ pageContext }) {
       ></iframe>
       <a
         className="lg:col-[1/3] min-[2000px]:col-[3/4] min-[2000px]:row-[3/4]"
-        onClick={() => handleLinkClick("https://goo.gl/maps/KVoab3br7v4zSjoCA")}
+        onClick={() => handleLinkClick(pageData.googleMapsUrlButton)}
       >
         <button className="bg-[#0833a2] flex text-white m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg min-[2000px]:mt-2">
-          Google Maps
+          {pageData.googleMapsButtonText}
           <svg className="h-6 ml-2" viewBox="0 0 448 510">
             <path
               fill="#fff"

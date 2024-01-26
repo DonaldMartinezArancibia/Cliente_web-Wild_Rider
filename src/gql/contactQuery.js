@@ -41,7 +41,15 @@ const ContactContent = gql`
           url
         }
         elementValue
+        elementText {
+          html
+          markdown
+          text
+        }
       }
+      urlSourceFrame
+      googleMapsUrlButton
+      googleMapsButtonText
     }
   }
 `
