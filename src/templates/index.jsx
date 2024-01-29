@@ -167,19 +167,20 @@ export default function IndexPage({ pageContext }) {
           {IndexContentData.indices[0].offersSectionText?.markdown}
         </ReactMarkdown>
       </section>
-      <section className="grid font-bold justify-items-center sm:grid-cols-2 lg:grid-cols-3 gap-y-3 md:gap-y-7 lg:gap-y-10 md:mx-4 md:my-12 md:justify-items-center md:text-center xl:px-16">
+      <section className="grid px-5 font-bold sm:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-y-7 lg:gap-y-10 md:mx-4 md:my-12 justify-items-start md:text-center xl:px-16">
         {IndexContentData.indices[0].freeBenefitsElements.map(
           (benefit, index) => (
             <div
               key={index}
-              className="flex flex-row-reverse items-center justify-end"
+              // className="flex flex-row-reverse items-center justify-end"
+              className="flex items-center"
             >
               <img
                 src={benefit.benefitImage.url}
                 alt={`Benefit ${index}`}
                 className="h-12"
               />
-              <p className="col-span-1 mr-9">{benefit.benefitTitle}</p>
+              <p className="col-span-1 ml-5">{benefit.benefitTitle}</p>
             </div>
           )
         )}

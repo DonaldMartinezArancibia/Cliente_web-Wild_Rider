@@ -29,14 +29,13 @@ const IndexContent = gql`
         url
         mimeType
       }
-      # youtubeUrlVideo
       offersSectionTitle
       offersSectionText {
         html
         markdown
         text
       }
-      freeBenefitsElements {
+      freeBenefitsElements(last: 100) {
         benefitImage(locales: en) {
           url
         }
