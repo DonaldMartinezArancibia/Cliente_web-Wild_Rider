@@ -26,7 +26,6 @@ fragment Car on Car {
       stage
       locale
       id
-      transmissionPriceTitle
       carTransmissionSelectorValue
       priceOfCar {
         ... on PriceCar {
@@ -50,7 +49,6 @@ fragment Car on Car {
       stage
       locale
       id
-      transmissionPriceTitle
       carTransmissionSelectorValue
       priceOfCar {
         ... on PriceCar {

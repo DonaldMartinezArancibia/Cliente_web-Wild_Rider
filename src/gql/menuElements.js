@@ -39,7 +39,17 @@ const menuElements = gql`
           slug
           title
         }
-        ... on TravelPlanner {
+        # ... on TravelPlanner {
+        #   id
+        #   slug
+        #   title
+        # }
+        ... on TermsOfServicePage {
+          id
+          slug
+          title
+        }
+        ... on PrivacyPolicyPage {
           id
           slug
           title

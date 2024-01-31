@@ -63,7 +63,13 @@ fragment Menu on Menu {
       locale
       stage
     }
-    ... on RentalInfo {
+    ... on PrivacyPolicyPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on TermsOfServicePage {
       remoteTypeName: __typename
       remoteId: id
       locale

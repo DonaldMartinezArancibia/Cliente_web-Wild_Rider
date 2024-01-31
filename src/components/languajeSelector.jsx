@@ -12,10 +12,13 @@ import { ContactAndLocation } from "../gql/contactQuery"
 import { TravelPlanner } from "../gql/travelPlannerPageQuery"
 import { Car } from "../gql/carsQuery"
 import { CarQuoteForm } from "../gql/carQuotePageQuery"
+import { PrivacyPolicyPage } from "../gql/privacyPage"
+import { TermsOfServicePage } from "../gql/termsPage"
 // import { headerAndFooterElements } from "../gql/headerandfooterElements"
 
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // const client = useApolloClient()
+  console.log(pageContext.remoteTypeName)
 
   const query = [
     Index,
@@ -29,9 +32,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     TravelPlanner,
     Car,
     CarQuoteForm,
+    PrivacyPolicyPage,
+    TermsOfServicePage,
   ].find(
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
+  console.log(query)
 
   // const {
   //   data: headerAndFooterElementsData,
@@ -101,6 +107,13 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       faqData = data.faq.localizations.find(item => item.locale === lang)
     }
 
+    let policyData
+    if (data.privacyPolicyPages) {
+      policyData = data.privacyPolicyPages.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
     const travelPlannerData = data.travelPlanner
       ? data.travelPlanner.localizations[0]
       : undefined
@@ -126,6 +139,8 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     if (faqData?.locale) return `${faqData.locale}/${faqData.slug}`
     if (contactData?.locale === "en") return contactData.slug
     if (contactData?.locale) return `${contactData.locale}/${contactData.slug}`
+    if (policyData?.locale === "en") return policyData.slug
+    if (policyData?.locale) return `${policyData.locale}/${policyData.slug}`
     if (travelPlannerData?.locale === "en") return travelPlannerData.slug
     if (travelPlannerData?.locale)
       return `${travelPlannerData.locale}/${travelPlannerData.slug}`

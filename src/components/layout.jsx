@@ -2,6 +2,7 @@ import * as React from "react"
 import Header from "./header"
 import Footer from "./footer"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
+import { menuElements } from "../gql/menuElements"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { StaticImage } from "gatsby-plugin-image"
 
@@ -21,6 +22,17 @@ export const Layout = ({ children, pageContext }) => {
     include: [headerAndFooterElements],
   })
 
+  const {
+    data: menuElementsData,
+    loading: menuElementsDataQueryLoading,
+    error: menuElementsDataQueryError,
+  } = useQuery(menuElements, {
+    variables: { locale: [langKey] },
+  })
+  client.refetchQueries({
+    include: [menuElements],
+  })
+
   // Puedes clonar el elemento children y pasarle datos adicionales utilizando React.cloneElement
   const childrenWithProps = React.Children.map(children, child => {
     return React.cloneElement(child, {
@@ -36,6 +48,8 @@ export const Layout = ({ children, pageContext }) => {
       {headerAndFooterElementsData && (
         <Footer
           footerData={headerAndFooterElementsData.headerAndFooterElements[0]}
+          footerMenus={menuElementsData}
+          pageContext={pageContext}
         />
       )}
     </>
