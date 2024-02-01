@@ -13,7 +13,7 @@ const VideoPlayer = ({ videos }) => {
   const [isFocused, setIsFocused] = useState(false)
   const [isAudioMuted, setIsAudioMuted] = useState(true)
   const playerRef = useRef(null)
-
+  console.log(videos)
   useEffect(() => {
     // Comienza la reproducción cuando el componente se monta
     if (isFocused) {
@@ -69,10 +69,9 @@ const VideoPlayer = ({ videos }) => {
           ref={playerRef}
           fluid
           aspectRatio="16:9"
-          poster={videos[currentVideoIndex].poster}
+          poster={videos[currentVideoIndex].cover?.url}
           src={videos[currentVideoIndex].sources[0].src}
           onEnded={handleEnded}
-          autoPlay
           muted={isAudioMuted}
           onError={e => console.error("Error al cargar el video", e)}
           className="!font-Poppins"

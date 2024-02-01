@@ -25,6 +25,9 @@ const IndexContent = gql`
         slug
       }
       videosSectionTitle
+      coverOfVideo(locales: en) {
+        url
+      }
       presentationVideos(locales: en) {
         url
         mimeType

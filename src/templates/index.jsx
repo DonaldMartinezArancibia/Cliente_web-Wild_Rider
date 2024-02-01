@@ -72,18 +72,6 @@ export default function IndexPage({ pageContext }) {
     return null // Si no se encontró ninguna coincidencia
   }
 
-  // const changeLanguage = (language, slug) => {
-  //   const path = generateDynamicPagePath(slug, language)
-  //   navigate(path)
-  // }
-  // Obtén los videos del objeto presentationVideos
-  const presentationVideos = IndexContentData.indices[0].presentationVideos
-
-  // Mapea el objeto presentationVideos a la estructura esperada por VideoPlayer
-  // const videos = presentationVideos.map(video => ({
-  //   sources: [{ src: video.url, type: video.mimeType }],
-  // }))
-  // Verifica si los datos de los videos están disponibles y no hay errores en la consulta
   const videos =
     IndexContentData.indices[0]?.presentationVideos?.map(video => ({
       sources: [
@@ -93,6 +81,16 @@ export default function IndexPage({ pageContext }) {
         },
       ],
     })) || []
+
+  const coverOfVideo = IndexContentData.indices[0]?.coverOfVideo || []
+
+  const videosWithCovers = videos.map((video, index) => ({
+    ...video,
+    cover: coverOfVideo[index], // Añadir el elemento correspondiente de coverOfVideo al objeto video
+  }))
+
+  console.log(videosWithCovers)
+
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <CookieNotice
@@ -156,7 +154,7 @@ export default function IndexPage({ pageContext }) {
         — {IndexContentData.indices[0].videosSectionTitle}
       </h4>
       <div className="items-center justify-center px-4 m-auto md:w-5/6 video-container">
-        <VideoPlayer videos={videos} />
+        <VideoPlayer videos={videosWithCovers} />
       </div>
 
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase px-4 xl:pl-16 mb-8 mt-16">

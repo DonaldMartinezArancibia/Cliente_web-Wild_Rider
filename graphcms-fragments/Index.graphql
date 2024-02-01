@@ -98,6 +98,14 @@ fragment Index on Index {
       stage
     }
   }
+  coverOfVideo {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename
