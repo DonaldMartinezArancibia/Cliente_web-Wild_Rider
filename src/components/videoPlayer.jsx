@@ -59,10 +59,10 @@ const VideoPlayer = ({ videos }) => {
   return (
     <div
       className="relative"
-      onMouseEnter={handlePlayerFocus}
-      onMouseLeave={handlePlayerBlur}
-      onFocus={handlePlayerFocus}
-      onBlur={handlePlayerBlur}
+      // onMouseEnter={handlePlayerFocus}
+      // onMouseLeave={handlePlayerBlur}
+      // onFocus={handlePlayerFocus}
+      // onBlur={handlePlayerBlur}
     >
       {videos[currentVideoIndex].sources[0].src ? (
         <Player

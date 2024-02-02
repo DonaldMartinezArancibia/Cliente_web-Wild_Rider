@@ -12,6 +12,14 @@ fragment ContactAndLocation on ContactAndLocation {
   urlSourceFrame
   googleMapsUrlButton
   googleMapsButtonText
+  formOnSubmitMessage {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
   contactForm {
     ... on ContactForm {
       stage

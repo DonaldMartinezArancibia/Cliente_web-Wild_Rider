@@ -35,6 +35,11 @@ const ContactContent = gql`
         sendButton
         surnameField
       }
+      formOnSubmitMessage {
+        html
+        markdown
+        text
+      }
       contactElements {
         elementTitle
         elementIcon(locales: en) {

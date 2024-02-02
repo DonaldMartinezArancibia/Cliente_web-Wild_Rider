@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react"
+import React, { useRef, useEffect, useState, Fragment } from "react"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { PhoneInput } from "react-international-phone"
 import mailcheck from "mailcheck"
@@ -7,12 +7,16 @@ import { navigate } from "gatsby"
 import parkingWR1 from "../images/Captura de pantalla 2023-09-06 124559(2).png"
 import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
 import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
+import { Dialog, Transition } from "@headlessui/react"
+import { XMarkIcon } from "@heroicons/react/24/outline"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
 export default function useContactAndLocation({
   pageContext,
   headerAndFooterData,
 }) {
+  let [open, setOpen] = useState(true)
+  const cancelButtonRef = useRef(null)
   const captcha = useRef(null)
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
   const [phone, setPhone] = useState("")
@@ -107,6 +111,7 @@ export default function useContactAndLocation({
 
       const response = await fetch(
         "https://hooks.zapier.com/hooks/catch/17251260/3wu1vz2/",
+        // "https://hooks.zapier.com/hooks/catch/293849384/2938479283/", Para pruebas de envio
         {
           method: "POST",
           headers: {
@@ -121,12 +126,14 @@ export default function useContactAndLocation({
       }
 
       setFormSubmitted(true)
-      setRedirecting(true)
+      // setRedirecting(true)
+      setOpen(true)
+      e.target.reset()
 
-      setTimeout(() => {
-        setRedirecting(false)
-        navigate(pageContext.langKey === "en" ? "/" : `/${pageContext.langKey}`)
-      }, 5000) // 5000 milisegundos = 5 segundos
+      // setTimeout(() => {
+      //   setRedirecting(false)
+      //   navigate(pageContext.langKey === "en" ? "/" : `/${pageContext.langKey}`)
+      // }, 5000) // 5000 milisegundos = 5 segundos
     } catch (error) {
       setSubmissionError(`Error submitting form: ${error.message}`)
       // Limpiar errores después de enviar el formulario con éxito
@@ -363,10 +370,71 @@ export default function useContactAndLocation({
           {pageData.contactForm.sendButton}
         </button>
         {formSubmitted && (
-          <div>
-            <h1>Thank you!</h1>
-            <p>Your form submission has been received.</p>
-          </div>
+          <Transition.Root show={open} as={Fragment}>
+            <Dialog
+              as="div"
+              className="relative z-10"
+              initialFocus={cancelButtonRef}
+              onClose={setOpen}
+            >
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+              </Transition.Child>
+
+              <div className="fixed inset-0 z-10 overflow-y-auto">
+                <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  >
+                    <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
+                      <div className="px-1 pt-5 pb-4 bg-white">
+                        <div className="sm:flex sm:items-start">
+                          <button
+                            type="button"
+                            ref={cancelButtonRef}
+                            className="inline-flex justify-center w-full p-1 text-base font-medium text-red-600 border border-transparent rounded-md shadow-sm bg-white-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm hover:text-white"
+                            onClick={() => setOpen(false)}
+                          >
+                            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                          </button>
+                          <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div className="mt-2">
+                              <ReactMarkdown>
+                                {pageData?.formOnSubmitMessage?.markdown}
+                              </ReactMarkdown>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                          onClick={() => setOpen(false)}
+                        >
+                          ok
+                        </button>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition.Root>
         )}
         {formError && <p style={{ color: "red" }}>Form Error: {formError}</p>}
         {redirecting && (
