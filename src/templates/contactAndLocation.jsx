@@ -146,6 +146,14 @@ export default function useContactAndLocation({
     // Resto del código para manejar la respuesta del envío
   }
 
+  const handleInputChange = (event, customMessage) => {
+    if (!event.target.value.trim()) {
+      event.target.setCustomValidity(customMessage || "Este campo es requerido")
+    } else {
+      event.target.setCustomValidity("")
+    }
+  }
+
   const client = useApolloClient()
   const {
     data: ContactAndLocationData,
@@ -207,6 +215,7 @@ export default function useContactAndLocation({
               id="nombre"
               name="nombre"
               className="w-full h-10 p-2"
+              onInvalid={e => handleInputChange(e, "Ingrese un nombre válido")}
               required
             />
           </div>
@@ -223,6 +232,9 @@ export default function useContactAndLocation({
               id="surname"
               name="surname"
               className="w-full h-10 p-2"
+              onInvalid={e =>
+                handleInputChange(e, "Ingrese un apellido válido")
+              }
               required
             />
           </div>
@@ -248,6 +260,9 @@ export default function useContactAndLocation({
               name="email"
               value={email}
               onChange={e => handleChange(e, setEmail, setSuggestion)}
+              onInvalid={e =>
+                handleInputChange(e, "Ingrese un correo electronico")
+              }
               required
             />
             {suggestion && (
@@ -281,6 +296,12 @@ export default function useContactAndLocation({
               value={emailConfirm}
               onChange={e =>
                 handleChange(e, setEmailConfirm, setSuggestionConfirm)
+              }
+              onInvalid={e =>
+                handleInputChange(
+                  e,
+                  "Ingrese la confirmacion del correo electronico"
+                )
               }
               required
             />
@@ -342,6 +363,9 @@ export default function useContactAndLocation({
             name="mensaje"
             rows="15"
             required
+            onInvalid={e =>
+              handleInputChange(e, "Por favor escriba su mensaje")
+            }
             className="p-2"
           ></textarea>
         </fieldset>
@@ -359,6 +383,12 @@ export default function useContactAndLocation({
               type="checkbox"
               className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
               tabIndex="-1"
+              onInvalid={e =>
+                handleInputChange(
+                  e,
+                  "Marque la casilla de verificación, por favor"
+                )
+              }
               required
             />
           )}
