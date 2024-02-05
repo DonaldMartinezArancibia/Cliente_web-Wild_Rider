@@ -26,12 +26,19 @@ fragment ContactAndLocation on ContactAndLocation {
       locale
       id
       nameField
+      nameFieldErrorMessage
       surnameField
+      surnameFieldErrorMessage
       emailField
+      emailFieldErrorMessage
       confirmEmailField
+      confirmEmailFieldErrorMessage
       phoneNumberField
+      phoneNumberFieldErrorMessage
       messageField
+      messageFieldErrorMessage
       sendButton
+      reCaptchaErrorMessage
     }
   }
   contactElements {

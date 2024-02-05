@@ -111,7 +111,7 @@ export default function useContactAndLocation({
 
       const response = await fetch(
         "https://hooks.zapier.com/hooks/catch/17251260/3wu1vz2/",
-        // "https://hooks.zapier.com/hooks/catch/293849384/2938479283/", Para pruebas de envio
+        // "https://hooks.zapier.com/hooks/catch/293849384/2938479283/" /*Para pruebas de envio*/,
         {
           method: "POST",
           headers: {
@@ -129,6 +129,16 @@ export default function useContactAndLocation({
       // setRedirecting(true)
       setOpen(true)
       e.target.reset()
+
+      // Resetear input de correo electrónico y mensajes de validación
+      setEmail("")
+      setEmailConfirm("")
+      setSuggestion(null)
+      setSuggestionConfirm(null)
+
+      if (captcha.current) {
+        captcha.current.reset()
+      }
 
       // setTimeout(() => {
       //   setRedirecting(false)
@@ -148,7 +158,7 @@ export default function useContactAndLocation({
 
   const handleInputChange = (event, customMessage) => {
     if (!event.target.value.trim()) {
-      event.target.setCustomValidity(customMessage || "Este campo es requerido")
+      event.target.setCustomValidity(customMessage || "This field is required")
     } else {
       event.target.setCustomValidity("")
     }
@@ -215,7 +225,9 @@ export default function useContactAndLocation({
               id="nombre"
               name="nombre"
               className="w-full h-10 p-2"
-              onInvalid={e => handleInputChange(e, "Ingrese un nombre válido")}
+              onInvalid={e =>
+                handleInputChange(e, pageData.contactForm.nameFieldErrorMessage)
+              }
               required
             />
           </div>
@@ -233,7 +245,10 @@ export default function useContactAndLocation({
               name="surname"
               className="w-full h-10 p-2"
               onInvalid={e =>
-                handleInputChange(e, "Ingrese un apellido válido")
+                handleInputChange(
+                  e,
+                  pageData.contactForm.surnameFieldErrorMessage
+                )
               }
               required
             />
@@ -261,7 +276,10 @@ export default function useContactAndLocation({
               value={email}
               onChange={e => handleChange(e, setEmail, setSuggestion)}
               onInvalid={e =>
-                handleInputChange(e, "Ingrese un correo electronico")
+                handleInputChange(
+                  e,
+                  pageData.contactForm.emailFieldErrorMessage
+                )
               }
               required
             />
@@ -300,7 +318,7 @@ export default function useContactAndLocation({
               onInvalid={e =>
                 handleInputChange(
                   e,
-                  "Ingrese la confirmacion del correo electronico"
+                  pageData.contactForm.confirmEmailFieldErrorMessage
                 )
               }
               required
@@ -355,7 +373,7 @@ export default function useContactAndLocation({
           aria-label="Mensaje"
         >
           <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
-            {pageData.contactForm.messageField}{" "}
+            {pageData.contactForm.messageField}
             <span className="text-red-500">*</span>:
           </label>
           <textarea
@@ -364,7 +382,10 @@ export default function useContactAndLocation({
             rows="15"
             required
             onInvalid={e =>
-              handleInputChange(e, "Por favor escriba su mensaje")
+              handleInputChange(
+                e,
+                pageData.contactForm.messageFieldErrorMessage
+              )
             }
             className="p-2"
           ></textarea>
@@ -384,10 +405,7 @@ export default function useContactAndLocation({
               className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
               tabIndex="-1"
               onInvalid={e =>
-                handleInputChange(
-                  e,
-                  "Marque la casilla de verificación, por favor"
-                )
+                handleInputChange(e, pageData.contactForm.reCaptchaErrorMessage)
               }
               required
             />

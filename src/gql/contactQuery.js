@@ -28,12 +28,18 @@ const ContactContent = gql`
       }
       contactForm {
         nameField
+        nameFieldErrorMessage
         messageField
+        messageFieldErrorMessage
         emailField
+        emailFieldErrorMessage
         confirmEmailField
+        confirmEmailFieldErrorMessage
         phoneNumberField
         sendButton
         surnameField
+        surnameFieldErrorMessage
+        reCaptchaErrorMessage
       }
       formOnSubmitMessage {
         html
