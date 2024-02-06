@@ -319,6 +319,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     try {
       const response = await fetch(
         "https://hooks.zapier.com/hooks/catch/17251260/3f91vun",
+        // "https://hooks.zapier.com/hooks/catch/alnf92837492/q983749q2832q",
         {
           method: "POST",
           headers: {
@@ -336,6 +337,16 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       setFormSubmitted(true)
       setOpen(true)
       e.target.reset()
+
+      // Resetear input de correo electrónico y mensajes de validación
+      setEmail("")
+      setEmailConfirm("")
+      setSuggestion(null)
+      setSuggestionConfirm(null)
+
+      if (captcha.current) {
+        captcha.current.reset()
+      }
 
       // setTimeout(() => {
       //   setRedirecting(false)
@@ -382,6 +393,14 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       minute: "numeric",
       hour12: false,
     })
+  }
+
+  const handleInputChange = (event, customMessage) => {
+    if (!event.target.value.trim()) {
+      event.target.setCustomValidity(customMessage || "This field is required")
+    } else {
+      event.target.setCustomValidity("")
+    }
   }
 
   const selectedTransmission = pageContext.pageContext.selectedTransmission
@@ -589,6 +608,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 name="name"
                 className="w-full h-10 p-2 my-2"
                 required={pageData.completeNameField?.includes("*")}
+                onInvalid={e =>
+                  handleInputChange(e, pageData.nameFieldErrorMessage)
+                }
               />
             </div>
 
@@ -603,6 +625,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   value={email}
                   onChange={e => handleChange(e, setEmail, setSuggestion)}
                   required={pageData.emailField?.includes("*")}
+                  onInvalid={e =>
+                    handleInputChange(e, pageData.emailFieldErrorMessage)
+                  }
                 />
 
                 {suggestion && (
@@ -636,6 +661,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                     handleChange(e, setEmailConfirm, setSuggestionConfirm)
                   }
                   required={pageData.confirmEmailField?.includes("*")}
+                  onInvalid={e =>
+                    handleInputChange(e, pageData.confirmEmailFieldErrorMessage)
+                  }
                 />
 
                 {suggestionConfirm && (
@@ -1027,6 +1055,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
               tabIndex="-1"
               required
+              onInvalid={e =>
+                handleInputChange(e, pageData.reCaptchaErrorMessage)
+              }
             />
           )}
         </div>

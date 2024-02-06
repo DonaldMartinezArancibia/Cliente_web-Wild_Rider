@@ -17,8 +17,11 @@ fragment CarQuoteForm on CarQuoteForm {
   }
   basicInformationTitle
   completeNameField
+  completeNameFieldErrorMessage
   emailField
+  emailFieldErrorMessage
   confirmEmailField
+  confirmEmailFieldErrorMessage
   phoneNumberField
   countryResidenceField
   countriesOptions
@@ -50,6 +53,7 @@ fragment CarQuoteForm on CarQuoteForm {
   communicationFieldSubtitle
   buttonText
   formOnSubmitMessage
+  reCaptchaErrorMessage
   freeServicesSelectors {
     ... on ServicesSelector {
       stage

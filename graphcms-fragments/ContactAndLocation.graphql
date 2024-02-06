@@ -34,11 +34,10 @@ fragment ContactAndLocation on ContactAndLocation {
       confirmEmailField
       confirmEmailFieldErrorMessage
       phoneNumberField
-      phoneNumberFieldErrorMessage
       messageField
       messageFieldErrorMessage
-      sendButton
       reCaptchaErrorMessage
+      sendButton
     }
   }
   contactElements {
