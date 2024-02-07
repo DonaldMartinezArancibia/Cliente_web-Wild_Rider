@@ -159,7 +159,7 @@ export default function OpenModal({ carId, pageContext }) {
                   )}
 
                   <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-4">
-                    <div className="overflow-x-auto xl:w-[40%] flex">
+                    <div className="overflow-x-auto xl:w-[50%] flex">
                       {/* <div className="w-full overflow-x-auto">
                         <table className="w-full border border-solid border-[#ccc] border-collapse m-0 p-0 table-fixed max-sm:border-0">
                           <caption className="mb-3 m-[5px_0_10px] text-xl font-semibold max-sm:text-sm">
