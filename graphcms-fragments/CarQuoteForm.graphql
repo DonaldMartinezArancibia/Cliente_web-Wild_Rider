@@ -52,8 +52,8 @@ fragment CarQuoteForm on CarQuoteForm {
   communicationFieldTitle
   communicationFieldSubtitle
   buttonText
-  formOnSubmitMessage
   reCaptchaErrorMessage
+  formOnSubmitMessage
   freeServicesSelectors {
     ... on ServicesSelector {
       stage

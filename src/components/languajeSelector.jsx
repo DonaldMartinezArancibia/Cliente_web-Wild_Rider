@@ -18,7 +18,7 @@ import { TermsOfServicePage } from "../gql/termsPage"
 
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // const client = useApolloClient()
-  console.log(pageContext.remoteTypeName)
+  // console.log(pageContext.remoteTypeName)
 
   const query = [
     Index,
@@ -37,7 +37,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   ].find(
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
-  console.log(query)
+  // console.log(query)
 
   // const {
   //   data: headerAndFooterElementsData,
@@ -180,76 +180,82 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
           </span>
         </button> */}
         <ul className="font-black text-center text-white transition-shadow duration-300 border-opacity-100 shadow-md left-1/4 hover:shadow-lg">
-          {pageContext.langKey !== "en" && (
-            <li className="">
-              <a
-                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
-                onClick={e => {
-                  e.preventDefault()
-                  navigate(`/${getSlugByLocale(data, "en")}`)
-                }}
-                title={langSelectorTitle?.englishLangTooltipText}
-              >
-                {langSelectorTitle?.englishLangSelectorTitle}
-              </a>
-            </li>
-          )}
-          {pageContext.langKey !== "de" && (
-            <li className="">
-              <a
-                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
-                onClick={e => {
-                  e.preventDefault()
-                  navigate(`/${getSlugByLocale(data, "de")}`)
-                }}
-                title={langSelectorTitle?.germanLangTooltipText}
-              >
-                {langSelectorTitle?.germanLangSelectorTitle}
-              </a>
-            </li>
-          )}
-          {pageContext.langKey !== "fr" && (
-            <li className="">
-              <a
-                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
-                onClick={e => {
-                  e.preventDefault()
-                  navigate(`/${getSlugByLocale(data, "fr")}`)
-                }}
-                title={langSelectorTitle?.frenchLangTooltipText}
-              >
-                {langSelectorTitle?.frenchLangSelectorTitle}
-              </a>
-            </li>
-          )}
-          {pageContext.langKey !== "es" && (
-            <li className="">
-              <a
-                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
-                onClick={e => {
-                  e.preventDefault()
-                  navigate(`/${getSlugByLocale(data, "es")}`)
-                }}
-                title={langSelectorTitle?.spanishLangTooltipText}
-              >
-                {langSelectorTitle?.spanishLangSelectorTitle}
-              </a>
-            </li>
-          )}
-          {pageContext.langKey !== "other" && (
-            <li className="">
-              <a
-                className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
-                onClick={e => {
-                  e.preventDefault()
-                  navigate(`/${getSlugByLocale(data, "other")}`)
-                }}
-                title={langSelectorTitle?.otherLangTooltipText}
-              >
-                {langSelectorTitle?.otherLangSelectorTitle}
-              </a>
-            </li>
-          )}
+          {pageContext.langKey !== "en" &&
+            langSelectorTitle?.displayEnglishLangSelectorTitle !== false && (
+              <li className="">
+                <a
+                  className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
+                  onClick={e => {
+                    e.preventDefault()
+                    navigate(`/${getSlugByLocale(data, "en")}`)
+                  }}
+                  title={langSelectorTitle?.englishLangTooltipText}
+                >
+                  {langSelectorTitle?.englishLangSelectorTitle}
+                </a>
+              </li>
+            )}
+          {pageContext.langKey !== "de" &&
+            langSelectorTitle?.displayGermanLangSelectorTitle !== false && (
+              <li className="">
+                <a
+                  className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
+                  onClick={e => {
+                    e.preventDefault()
+                    navigate(`/${getSlugByLocale(data, "de")}`)
+                  }}
+                  title={langSelectorTitle?.germanLangTooltipText}
+                >
+                  {langSelectorTitle?.germanLangSelectorTitle}
+                </a>
+              </li>
+            )}
+          {pageContext.langKey !== "fr" &&
+            langSelectorTitle?.displayFrenchLangSelectorTitle !== false && (
+              <li className="">
+                <a
+                  className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
+                  onClick={e => {
+                    e.preventDefault()
+                    navigate(`/${getSlugByLocale(data, "fr")}`)
+                  }}
+                  title={langSelectorTitle?.frenchLangTooltipText}
+                >
+                  {langSelectorTitle?.frenchLangSelectorTitle}
+                </a>
+              </li>
+            )}
+
+          {pageContext.langKey !== "es" &&
+            langSelectorTitle?.displaySpanishLangSelectorTitle !== false && (
+              <li className="">
+                <a
+                  className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
+                  onClick={e => {
+                    e.preventDefault()
+                    navigate(`/${getSlugByLocale(data, "es")}`)
+                  }}
+                  title={langSelectorTitle?.spanishLangTooltipText}
+                >
+                  {langSelectorTitle?.spanishLangSelectorTitle}
+                </a>
+              </li>
+            )}
+          {pageContext.langKey !== "other" &&
+            langSelectorTitle?.displayOtherLangSelectorTitle !== false && (
+              <li className="">
+                <a
+                  className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
+                  onClick={e => {
+                    e.preventDefault()
+                    navigate(`/${getSlugByLocale(data, "other")}`)
+                  }}
+                  title={langSelectorTitle?.otherLangTooltipText}
+                >
+                  {langSelectorTitle?.otherLangSelectorTitle}
+                </a>
+              </li>
+            )}
         </ul>
       </div>
     </>

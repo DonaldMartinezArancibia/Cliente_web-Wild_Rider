@@ -13,9 +13,13 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   skypeNumber
   displaySkypeTextAndNumber
   spanishLangSelectorTitle
+  displaySpanishLangSelectorTitle
   englishLangSelectorTitle
+  displayEnglishLangSelectorTitle
   frenchLangSelectorTitle
+  displayFrenchLangSelectorTitle
   germanLangSelectorTitle
+  displayGermanLangSelectorTitle
   otherLangSelectorTitle
   spanishLangTooltipText
   englishLangTooltipText
@@ -28,6 +32,7 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   footerCopyright
   termsOfService
   privacyPolicy
+  displayOtherLangSelectorTitle
   contactElements {
     ... on ContactElement {
       stage

@@ -20,10 +20,15 @@ const headerAndFooterElements = gql`
         elementValue
       }
       englishLangSelectorTitle
+      displayEnglishLangSelectorTitle
       frenchLangSelectorTitle
+      displayFrenchLangSelectorTitle
       germanLangSelectorTitle
+      displayGermanLangSelectorTitle
       spanishLangSelectorTitle
+      displaySpanishLangSelectorTitle
       otherLangSelectorTitle
+      displayOtherLangSelectorTitle
       frenchLangTooltipText
       germanLangTooltipText
       englishLangTooltipText
