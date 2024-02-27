@@ -68,11 +68,18 @@ export default function OpenModal({ carId, pageContext }) {
     const manualTransmissionValue =
       car.manualTransmission?.carTransmissionSelectorValue
 
+    console.log(
+      "Valor de automaticTransmissionValue:",
+      automaticTransmissionValue
+    )
+    console.log("Valor de manualTransmissionValue:", manualTransmissionValue)
+
     // Agregar el valor de la transmisión al objeto datos
     const datosConTransmision = {
       ...datos, // Copiar los datos existentes
       selectedTransmission:
-        manualTransmissionValue !== undefined
+        manualTransmissionValue !== undefined &&
+        manualTransmissionValue !== null
           ? manualTransmissionValue
           : automaticTransmissionValue !== undefined
           ? automaticTransmissionValue
@@ -80,6 +87,7 @@ export default function OpenModal({ carId, pageContext }) {
     }
 
     // Realizar la navegación con el nuevo objeto datos
+    console.log(datosConTransmision)
     navigate(
       pageContext.langKey === "en"
         ? `/${car.carQuoteForm.slug}`

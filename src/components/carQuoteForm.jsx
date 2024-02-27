@@ -404,6 +404,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   }
 
   const selectedTransmission = pageContext.pageContext.selectedTransmission
+  // console.log(pageContext.pageContext)
   // console.log(selectedTransmission)
 
   // useEffect(() => {
@@ -436,7 +437,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         value: transmission.carTransmissionSelectorValue,
         label: transmission.carTransmissionSelectorValue,
       }))
-
   const getDefaultOption = (transmissionOptions, selectedTransmission) =>
     transmissionOptions?.find(
       option =>
@@ -444,12 +444,16 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
         option?.value?.toLowerCase()
     ) || ""
 
+  // console.log(getDefaultOption())
+
   useEffect(() => {
     const transmissionOptions = pageData?.cars.flatMap(getTransmissionOptions)
+    // console.log(transmissionOptions)
     const defaultOption = getDefaultOption(
       transmissionOptions,
       selectedTransmission
     )
+    // console.log(defaultOption)
     setDefaultValue(defaultOption)
   }, [selectedTransmission, pageData?.cars])
 
