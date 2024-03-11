@@ -44,6 +44,42 @@ export default function useContactAndLocation({
     })
   }, [email])
 
+  // function getCountry() {
+  //   const countries = {
+  //     AD: "Andorra",
+  //     AE: "United Arab Emirates",
+  //     AF: "Afghanistan",
+  //     // ... otras definiciones de países
+  //   }
+
+  //   const timezones = {
+  //     // ... definiciones de zonas horarias
+  //   }
+
+  //   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+  //   if (timezone === "" || !timezone) {
+  //     return null
+  //   }
+
+  //   const _country = timezones[timezone]?.c?.[0]
+  //   const country = countries[_country]
+  //   return country
+  // }
+
+  // function getState() {
+  //   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+  //   if (timezone === "" || !timezone) {
+  //     return null
+  //   }
+
+  //   const state = timezone.split("/")[1].replace("_", " ")
+  //   return state
+  // }
+
+  // console.log(getState, getCountry)
+
   useEffect(() => {
     mailcheck.run({
       email: emailConfirm,
@@ -103,7 +139,12 @@ export default function useContactAndLocation({
       }
 
       if (email !== emailConfirm) {
-        setFormError("Email and Confirm Email must match.")
+        const errorMessage = pageData.contactForm
+          .emailAndEmailConfirmNotEqualErrorMessage
+          ? pageData.contactForm.emailAndEmailConfirmNotEqualErrorMessage
+          : "Email and Confirm Email must match."
+
+        setFormError(errorMessage)
         return
       }
 
@@ -484,7 +525,7 @@ export default function useContactAndLocation({
             </Dialog>
           </Transition.Root>
         )}
-        {formError && <p style={{ color: "red" }}>Form Error: {formError}</p>}
+        {formError && <p style={{ color: "red" }}>{formError}</p>}
         {redirecting && (
           <div>
             <p>Redirecting to the home page...</p>

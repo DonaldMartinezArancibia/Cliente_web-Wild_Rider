@@ -21,8 +21,12 @@ const CarQuoteFormContent = gql`
       }
       basicInformationTitle
       completeNameField
+      completeNameFieldErrorMessage
       emailField
+      emailFieldErrorMessage
       confirmEmailField
+      confirmEmailFieldErrorMessage
+      emailAndEmailConfirmNotEqualErrorMessage
       phoneNumberField
       countryResidenceField
       countriesOptions
@@ -73,6 +77,7 @@ const CarQuoteFormContent = gql`
       communicationFieldTitle
       communicationFieldSubtitle
       buttonText
+      reCaptchaErrorMessage
       formOnSubmitMessage
     }
   }

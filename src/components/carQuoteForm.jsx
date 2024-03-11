@@ -247,7 +247,11 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     }
 
     if (email !== emailConfirm) {
-      setFormError("Email and Confirm Email must match.")
+      const errorMessage = pageData.emailAndEmailConfirmNotEqualErrorMessage
+        ? pageData.emailAndEmailConfirmNotEqualErrorMessage
+        : "Email and Confirm Email must match."
+
+      setFormError(pageData.emailAndEmailConfirmNotEqualErrorMessage)
       return
     }
 

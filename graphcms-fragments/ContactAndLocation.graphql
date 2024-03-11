@@ -33,6 +33,7 @@ fragment ContactAndLocation on ContactAndLocation {
       emailFieldErrorMessage
       confirmEmailField
       confirmEmailFieldErrorMessage
+      emailAndEmailConfirmNotEqualErrorMessage
       phoneNumberField
       messageField
       messageFieldErrorMessage

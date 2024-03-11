@@ -54,6 +54,7 @@ fragment CarQuoteForm on CarQuoteForm {
   buttonText
   reCaptchaErrorMessage
   formOnSubmitMessage
+  emailAndEmailConfirmNotEqualErrorMessage
   freeServicesSelectors {
     ... on ServicesSelector {
       stage

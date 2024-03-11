@@ -35,6 +35,7 @@ const ContactContent = gql`
         emailFieldErrorMessage
         confirmEmailField
         confirmEmailFieldErrorMessage
+        emailAndEmailConfirmNotEqualErrorMessage
         phoneNumberField
         sendButton
         surnameField

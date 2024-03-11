@@ -21,6 +21,7 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   germanLangSelectorTitle
   displayGermanLangSelectorTitle
   otherLangSelectorTitle
+  displayOtherLangSelectorTitle
   spanishLangTooltipText
   englishLangTooltipText
   frenchLangTooltipText
@@ -32,7 +33,6 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   footerCopyright
   termsOfService
   privacyPolicy
-  displayOtherLangSelectorTitle
   contactElements {
     ... on ContactElement {
       stage
