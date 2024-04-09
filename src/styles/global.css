@@ -45,6 +45,20 @@
   #sectionBellowHeader p:nth-of-type(2) > img {
     @apply m-auto xl:w-11/12;
   }
+  #contentBelowVideo > h2 {
+    @apply font-bold text-2xl mb-4 md:mt-12 !font-CarterOne;
+  }
+  #contentBelowVideo > * {
+    @apply m-2;
+  }
+  #contentBelowVideo > h1,
+  #contentBelowVideo > h2,
+  #contentBelowVideo > h3,
+  #contentBelowVideo > h4,
+  #contentBelowVideo > h5,
+  #contentBelowVideo > h6 {
+    @apply font-bold mb-4 md:mt-12 !font-CarterOne;
+  }
   #sectionBellowTestimonialsTitle h2 {
     @apply max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne;
   }

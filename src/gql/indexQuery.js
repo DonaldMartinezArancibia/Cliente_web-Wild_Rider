@@ -32,6 +32,11 @@ const IndexContent = gql`
         url
         mimeType
       }
+      contentBelowVideo {
+        html
+        markdown
+        text
+      }
       offersSectionTitle
       offersSectionText {
         html

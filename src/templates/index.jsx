@@ -89,7 +89,7 @@ export default function IndexPage({ pageContext }) {
     cover: coverOfVideo[index], // Añadir el elemento correspondiente de coverOfVideo al objeto video
   }))
 
-  console.log(videosWithCovers)
+  // console.log(videosWithCovers)
 
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
@@ -153,9 +153,18 @@ export default function IndexPage({ pageContext }) {
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase pl-4 xl:pl-16 mb-8 mt-8">
         — {IndexContentData.indices[0].videosSectionTitle}
       </h4>
-      <div className="items-center justify-center px-4 m-auto md:w-5/6 video-container">
+      <div className="items-center justify-center px-4 m-auto mb-8 md:w-5/6 video-container">
         <VideoPlayer videos={videosWithCovers} />
       </div>
+
+      <section
+        id="contentBelowVideo"
+        className="!max-w-full !text-base px-2 md:px-4 md:mx-4 md:mb-8 md:mt-16 prose lg:prose-lg xl:prose-xl xl:px-16"
+      >
+        {IndexContentData.indices[0].contentBelowVideo.map((item, index) => (
+          <ReactMarkdown key={index}>{item.markdown}</ReactMarkdown>
+        ))}
+      </section>
 
       <h4 className="text-[#0833a2] font-black font-Inter tracking-widest uppercase px-4 xl:pl-16 mb-8 mt-16">
         — {IndexContentData.indices[0].offersSectionTitle}

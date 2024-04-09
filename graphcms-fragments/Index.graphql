@@ -61,6 +61,29 @@ fragment Index on Index {
       }
     }
   }
+  toggleContent {
+    ... on ToggleContent {
+      stage
+      locale
+      id
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+    }
+  }
   createdBy {
     ... on User {
       remoteTypeName: __typename

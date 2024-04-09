@@ -22,6 +22,7 @@ fragment CarQuoteForm on CarQuoteForm {
   emailFieldErrorMessage
   confirmEmailField
   confirmEmailFieldErrorMessage
+  emailAndEmailConfirmNotEqualErrorMessage
   phoneNumberField
   countryResidenceField
   countriesOptions
@@ -54,7 +55,6 @@ fragment CarQuoteForm on CarQuoteForm {
   buttonText
   reCaptchaErrorMessage
   formOnSubmitMessage
-  emailAndEmailConfirmNotEqualErrorMessage
   freeServicesSelectors {
     ... on ServicesSelector {
       stage
