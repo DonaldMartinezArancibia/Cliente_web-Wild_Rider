@@ -113,6 +113,8 @@ exports.createPages = async ({ graphql, actions }) => {
         carquotePageResult,
         termsPage,
         privacyPage,
+        roadPage,
+        insurancePage,
       ] = await Promise.all([
         // fetchContentByType("allGraphCmsPost", locale),
         fetchContentByType("allGraphCmsIndex", locale),
@@ -126,6 +128,8 @@ exports.createPages = async ({ graphql, actions }) => {
         fetchContentByType("allGraphCmsCarQuoteForm", locale),
         fetchContentByType("allGraphCmsTermsOfServicePage", locale),
         fetchContentByType("allGraphCmsPrivacyPolicyPage", locale),
+        fetchContentByType("allGraphCmsRoadSafety", locale),
+        fetchContentByType("allGraphCmsInsurance", locale),
       ])
 
       function createPagesForContent(
@@ -233,6 +237,18 @@ exports.createPages = async ({ graphql, actions }) => {
         privacyPage.data.allGraphCmsPrivacyPolicyPage.nodes,
         `${urlPrefix}`,
         "./src/templates/onConstructionPage.jsx"
+      )
+
+      createPagesForContent(
+        insurancePage.data.allGraphCmsInsurance.nodes,
+        `${urlPrefix}`,
+        "./src/templates/insurance.jsx"
+      )
+
+      createPagesForContent(
+        roadPage.data.allGraphCmsRoadSafety.nodes,
+        `${urlPrefix}`,
+        "./src/templates/roadSafety.jsx"
       )
     })
   )

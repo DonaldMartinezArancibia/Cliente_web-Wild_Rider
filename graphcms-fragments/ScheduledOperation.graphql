@@ -97,6 +97,12 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on Insurance {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on Menu {
       remoteTypeName: __typename
       remoteId: id
@@ -121,6 +127,12 @@ fragment ScheduledOperation on ScheduledOperation {
       stage
     }
     ... on Review {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on RoadSafety {
       remoteTypeName: __typename
       remoteId: id
       locale

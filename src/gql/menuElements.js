@@ -54,6 +54,16 @@ const menuElements = gql`
           slug
           title
         }
+        ... on Insurance {
+          id
+          slug
+          title
+        }
+        ... on RoadSafety {
+          id
+          slug
+          title
+        }
       }
     }
   }

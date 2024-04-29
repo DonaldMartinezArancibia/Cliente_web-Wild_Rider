@@ -63,7 +63,19 @@ fragment Menu on Menu {
       locale
       stage
     }
+    ... on Insurance {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on PrivacyPolicyPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on RoadSafety {
       remoteTypeName: __typename
       remoteId: id
       locale

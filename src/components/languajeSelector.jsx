@@ -14,6 +14,8 @@ import { Car } from "../gql/carsQuery"
 import { CarQuoteForm } from "../gql/carQuotePageQuery"
 import { PrivacyPolicyPage } from "../gql/privacyPage"
 import { TermsOfServicePage } from "../gql/termsPage"
+import { Insurance } from "../gql/insurancePageQuery"
+import { RoadSafety } from "../gql/roadSafetyPageQuery"
 // import { headerAndFooterElements } from "../gql/headerandfooterElements"
 
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
@@ -34,6 +36,8 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     CarQuoteForm,
     PrivacyPolicyPage,
     TermsOfServicePage,
+    Insurance,
+    RoadSafety,
   ].find(
     query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
@@ -119,6 +123,20 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       : undefined
     const postData = data.posts ? data.posts[0].localizations[0] : undefined
 
+    let insuranceData
+    if (data.insurance) {
+      insuranceData = data.insurance.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
+    let roadSafetyData
+    if (data.roadSafety) {
+      roadSafetyData = data.roadSafety.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
     if (indexData?.locale === "en") return ""
     if (indexData?.locale) return indexData.locale
     if (postData?.locale === "en") return `blog/${postData.slug}`
@@ -141,6 +159,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     if (contactData?.locale) return `${contactData.locale}/${contactData.slug}`
     if (policyData?.locale === "en") return policyData.slug
     if (policyData?.locale) return `${policyData.locale}/${policyData.slug}`
+    if (insuranceData?.locale === "en") return insuranceData.slug
+    if (insuranceData?.locale)
+      return `${insuranceData.locale}/${insuranceData.slug}`
+    if (roadSafetyData?.locale === "en") return roadSafetyData.slug
+    if (roadSafetyData?.locale)
+      return `${roadSafetyData.locale}/${roadSafetyData.slug}`
     if (travelPlannerData?.locale === "en") return travelPlannerData.slug
     if (travelPlannerData?.locale)
       return `${travelPlannerData.locale}/${travelPlannerData.slug}`

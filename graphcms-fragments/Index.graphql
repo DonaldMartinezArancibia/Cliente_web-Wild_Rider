@@ -16,6 +16,14 @@ fragment Index on Index {
     }
   }
   viewCarsButtonText
+  contentBelowVideo {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
   videosSectionTitle
   offersSectionText {
     ... on RichText {
@@ -45,22 +53,6 @@ fragment Index on Index {
   }
   acceptCookieButton
   declineCookieButton
-  freeBenefitsElements {
-    ... on FreeBenefitsElement {
-      stage
-      locale
-      id
-      benefitTitle
-      benefitImage {
-        ... on Asset {
-          remoteTypeName: __typename
-          remoteId: id
-          locale
-          stage
-        }
-      }
-    }
-  }
   toggleContent {
     ... on ToggleContent {
       stage
@@ -80,6 +72,22 @@ fragment Index on Index {
           html
           markdown
           text
+        }
+      }
+    }
+  }
+  freeBenefitsElements {
+    ... on FreeBenefitsElement {
+      stage
+      locale
+      id
+      benefitTitle
+      benefitImage {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
         }
       }
     }
