@@ -21,6 +21,7 @@ fragment Car on Car {
   passengersOfCarValue
   longTermRentalTitle
   insuranceAndTaxInfo
+  numberOfOrder
   manualTransmission {
     ... on TransmissionVariant {
       stage

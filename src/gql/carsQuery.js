@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 
 const Car = gql`
   query Car($locale: [Locale!]!) {
-    cars(locales: $locale) {
+    cars(locales: $locale, orderBy: numberOfOrder_ASC) {
       carName
       id
       carMainPhoto(locales: en) {

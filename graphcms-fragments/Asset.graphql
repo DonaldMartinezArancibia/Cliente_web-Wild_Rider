@@ -55,16 +55,16 @@ fragment Asset on Asset {
       stage
     }
   }
-  coverPost {
-    ... on Post {
+  carPhotosCar {
+    ... on Car {
       remoteTypeName: __typename
       remoteId: id
       locale
       stage
     }
   }
-  carPhotosCar {
-    ... on Car {
+  coverPost {
+    ... on Post {
       remoteTypeName: __typename
       remoteId: id
       locale
