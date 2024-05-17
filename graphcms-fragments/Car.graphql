@@ -5,6 +5,7 @@ fragment Car on Car {
   createdAt(variation: COMBINED)
   updatedAt(variation: COMBINED)
   publishedAt(variation: COMBINED)
+  numberOfOrder
   carName
   carDetailsTitle
   carDetails {
@@ -21,7 +22,6 @@ fragment Car on Car {
   passengersOfCarValue
   longTermRentalTitle
   insuranceAndTaxInfo
-  numberOfOrder
   manualTransmission {
     ... on TransmissionVariant {
       stage

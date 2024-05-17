@@ -13,6 +13,7 @@ fragment CarsAndQuote on CarsAndQuote {
   seasonTitle
   datesTitle
   quoteButtonText
+  iconOfLongTermRental
   createdBy {
     ... on User {
       remoteTypeName: __typename

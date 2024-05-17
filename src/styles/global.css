@@ -23,6 +23,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Carter+One&family=Montserrat&family=Inter&family=Poppins:wght@400;700&family=Inter+Tight:wght@700&display=swap");
+@import "~@fortawesome/fontawesome-free/css/all.css";
 @layer components {
   #sectionBellowHeader {
     @apply grid grid-cols-1 p-2 md:grid-cols-[55%_45%] md:p-6 xl:pt-20;
