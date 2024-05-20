@@ -14,7 +14,7 @@ const AboutUsContent = gql`
   query AboutUsAndOurTeams($locale: [Locale!]!) {
     aboutUsAndOurTeams(locales: $locale) {
       title
-      toggleContent {
+      toggleContent(last: 2000) {
         displayContent {
           markdown
         }
