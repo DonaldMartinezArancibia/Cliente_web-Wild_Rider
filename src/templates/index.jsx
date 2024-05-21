@@ -13,6 +13,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import VideoPlayer from "../components/videoPlayer"
 import { CookieNotice } from "gatsby-cookie-notice"
 import { useRef, useState, useEffect } from "react"
+import IubendaPolicies from "../components/IconoVariable"
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -122,7 +123,7 @@ export default function IndexPage({ pageContext }) {
         <div className="mb-3 text-gray-700" id="cookie">
           {/* <h4 className="text-lg font-medium leading-6 text-gray-900">
             This websites uses cookies.
-          </h4>
+            </h4>
           <p className="mb-4 text-sm">
             Everybody wants to show his best side - and so do we. That’s why we
             use cookies to guarantee you a better experience.
@@ -130,7 +131,7 @@ export default function IndexPage({ pageContext }) {
           <p className="mb-4 text-[13px]">
             Please review our{" "}
             <a href="/privacy-policy" className="text-blue-500 underline">
-              Privacy Policy{" "}
+            Privacy Policy{" "}
             </a>
             for more information.
           </p> */}
@@ -139,6 +140,7 @@ export default function IndexPage({ pageContext }) {
           </ReactMarkdown>
         </div>
       </CookieNotice>
+      <IubendaPolicies />
 
       <section id="sectionBellowHeader">
         <ReactMarkdown>
