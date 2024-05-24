@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
+import { IubendaPrivacyPolicy } from "./iubendaComponent"
 
 const Footer = ({ footerData, footerMenus, pageContext }) => {
   const currentYear = new Date().getFullYear()
@@ -79,21 +80,22 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
         {/* <ul className="flex items-center w-full justify-evenly lg:w-auto lg:space-x-8">
           <li>
             <a href="#" rel="noopener noreferrer">
-              {footerData.termsOfService}
+            {footerData.termsOfService}
             </a>
           </li>
           <li>
             <a href="#" rel="noopener noreferrer">
               {footerData.privacyPolicy}
             </a>
-          </li>
-        </ul> */}
+            </li>
+          </ul> */}
         <ul className="flex items-center mb-1 space-x-8 sm:mb-0">
-          {menu3Data?.map((link, index) => (
+          <IubendaPrivacyPolicy />
+          {/* {menu3Data?.map((link, index) => (
             <li key={index} className={getLinkClass(link.to)}>
               <Link to={`/${link.slug}`}>{link.title}</Link>
             </li>
-          ))}
+          ))} */}
         </ul>
         <p>
           &copy; {"1998 - " + currentYear + " " + footerData.footerCopyright}

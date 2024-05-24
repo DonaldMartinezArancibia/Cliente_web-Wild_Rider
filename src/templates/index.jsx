@@ -13,7 +13,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import VideoPlayer from "../components/videoPlayer"
 import { CookieNotice } from "gatsby-cookie-notice"
 import { useRef, useState, useEffect } from "react"
-import IubendaPolicies from "../components/IconoVariable"
+import { IubendaCookiePolicy } from "../components/iubendaComponent"
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -94,15 +94,15 @@ export default function IndexPage({ pageContext }) {
 
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
-      <CookieNotice
-        backgroundWrapperClasses="fixed bg-[#e0e0e0] bg-[#F6CC4D] min-[480px]:w-2/3 min-[640px]:w-1/2 lg:w-1/3 p-4 right-4 left-4 bottom-5 flex items-center justify-center z-50 border-opacity-100 border-gray-300 rounded-xl shadow-md"
-        buttonWrapperClasses="max-w-md mx-auto bg-white rounded p-4 shadow-md"
-        acceptButtonText={IndexContentData.indices[0]?.acceptCookieButton}
-        acceptButtonClasses="w-full bg-[#0833a2] text-white p-2 rounded mt-4 hover:bg-blue-600"
-        declineButtonClasses="w-full bg-gray-300 text-gray-700 p-2 rounded mt-2 hover:bg-gray-400"
-        declineButtonText={IndexContentData.indices[0]?.declineCookieButton}
-        personalizeButtonClasses="hidden w-full bg-gray-300 text-gray-700 p-2 rounded mt-2 hover:bg-gray-400"
-        personalizeButtonText="I want to choose my cookies !"
+      {/* <CookieNotice
+        // backgroundWrapperClasses="fixed bg-[#e0e0e0] bg-[#F6CC4D] min-[480px]:w-2/3 min-[640px]:w-1/2 lg:w-1/3 p-4 right-4 left-4 bottom-5 flex items-center justify-center z-50 border-opacity-100 border-gray-300 rounded-xl shadow-md"
+        // buttonWrapperClasses="max-w-md mx-auto bg-white rounded p-4 shadow-md"
+        // acceptButtonText={IndexContentData.indices[0]?.acceptCookieButton}
+        // acceptButtonClasses="w-full bg-[#0833a2] text-white p-2 rounded mt-4 hover:bg-blue-600"
+        // declineButtonClasses="w-full bg-gray-300 text-gray-700 p-2 rounded mt-2 hover:bg-gray-400"
+        // declineButtonText={IndexContentData.indices[0]?.declineCookieButton}
+        // personalizeButtonClasses="hidden w-full bg-gray-300 text-gray-700 p-2 rounded mt-2 hover:bg-gray-400"
+        // personalizeButtonText="I want to choose my cookies !"
         // cookies={[
         //   {
         //     name: "necessary",
@@ -119,9 +119,9 @@ export default function IndexPage({ pageContext }) {
         //     text: "Google Analytics is a statistical tool of Google allowing to measure the audience of the website.",
         //   },
         // ]}
-      >
-        <div className="mb-3 text-gray-700" id="cookie">
-          {/* <h4 className="text-lg font-medium leading-6 text-gray-900">
+      > */}
+      {/* <div className="mb-3 text-gray-700" id="cookie"> */}
+      {/* <h4 className="text-lg font-medium leading-6 text-gray-900">
             This websites uses cookies.
             </h4>
           <p className="mb-4 text-sm">
@@ -135,12 +135,12 @@ export default function IndexPage({ pageContext }) {
             </a>
             for more information.
           </p> */}
-          <ReactMarkdown>
+      {/* <ReactMarkdown>
             {IndexContentData.indices[0]?.textOfCookies.markdown}
-          </ReactMarkdown>
-        </div>
-      </CookieNotice>
-      <IubendaPolicies />
+          </ReactMarkdown> */}
+      {/* </div>  */}
+      {/* </CookieNotice> */}
+      <IubendaCookiePolicy />
 
       <section id="sectionBellowHeader">
         <ReactMarkdown>
