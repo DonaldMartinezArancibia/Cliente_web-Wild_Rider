@@ -547,7 +547,7 @@ export default function useContactAndLocation({
           </div>
         ))}
       </div>
-      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
+      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
         <img
           src={pageData.topImage.url}
           alt="Profile"

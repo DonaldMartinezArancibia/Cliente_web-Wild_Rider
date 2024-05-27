@@ -8,6 +8,14 @@ fragment Faq on Faq {
   slug
   title
   searchInputPlaceholder
+  faqSubtitleText {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
   createdBy {
     ... on User {
       remoteTypeName: __typename
