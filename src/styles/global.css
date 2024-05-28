@@ -114,6 +114,9 @@
   #cookie a {
     @apply text-blue-700 underline;
   }
+  #iubenda-cs-banner > div > div:nth-of-type(2) > a {
+    display: none !important;
+  }
 }
 
 /* custom-styles.css */

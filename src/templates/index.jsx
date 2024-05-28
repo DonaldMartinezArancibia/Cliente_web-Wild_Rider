@@ -14,6 +14,7 @@ import VideoPlayer from "../components/videoPlayer"
 import { CookieNotice } from "gatsby-cookie-notice"
 import { useRef, useState, useEffect } from "react"
 import { IubendaCookiePolicy } from "../components/iubendaComponent"
+import { IubendaCookieConsent } from "../components/iubendaComponent"
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -140,7 +141,8 @@ export default function IndexPage({ pageContext }) {
           </ReactMarkdown> */}
       {/* </div>  */}
       {/* </CookieNotice> */}
-      <IubendaCookiePolicy />
+      {/* <IubendaCookiePolicy /> */}
+      <IubendaCookieConsent />
 
       <section id="sectionBellowHeader">
         <ReactMarkdown>

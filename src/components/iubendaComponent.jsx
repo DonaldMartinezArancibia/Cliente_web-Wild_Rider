@@ -98,4 +98,115 @@ const IubendaCookiePolicy = () => {
   )
 }
 
-export { IubendaPrivacyPolicy, IubendaCookiePolicy }
+const IubendaCookieConsent = () => {
+  useEffect(() => {
+    const scriptAutoBlocking = document.createElement("script")
+    scriptAutoBlocking.src = "https://cs.iubenda.com/autoblocking/3641787.js"
+    scriptAutoBlocking.async = true
+    document.body.appendChild(scriptAutoBlocking)
+
+    const scriptStub = document.createElement("script")
+    scriptStub.src = "//cdn.iubenda.com/cs/gpp/stub.js"
+    scriptStub.async = true
+    document.body.appendChild(scriptStub)
+
+    const scriptCs = document.createElement("script")
+    scriptCs.src = "//cdn.iubenda.com/cs/iubenda_cs.js"
+    scriptCs.async = true
+    document.body.appendChild(scriptCs)
+
+    const iubendaConfig = document.createElement("script")
+    iubendaConfig.type = "text/javascript"
+    iubendaConfig.text = `
+      var _iub = _iub || [];
+      _iub.csConfiguration = {
+        "askConsentAtCookiePolicyUpdate": true,
+        "enableFadp": true,
+        "enableLgpd": true,
+        "enableUspr": true,
+        "fadpApplies": true,
+        "floatingPreferencesButtonDisplay": "bottom-right",
+        "lang": "en",
+        "perPurposeConsent": true,
+        "preferenceCookie": { "expireAfter": 180 },
+        "siteId": 3641787,
+        "usprApplies": true,
+        "whitelabel": false,
+        "cookiePolicyId": 51628910,
+        "banner": {
+          "acceptButtonDisplay": true,
+          "closeButtonDisplay": false,
+          "customizeButtonDisplay": true,
+          "explicitWithdrawal": true,
+          "listPurposes": true,
+          "ownerName": "develop--wild-rider.netlify.app/",
+          "position": "float-bottom-center",
+          "rejectButtonDisplay": true,
+          "showTitle": false,
+          "showTotalNumberOfProviders": true
+        }
+      };
+    `
+    document.body.appendChild(iubendaConfig)
+
+    return () => {
+      document.body.removeChild(scriptAutoBlocking)
+      document.body.removeChild(scriptStub)
+      document.body.removeChild(scriptCs)
+      document.body.removeChild(iubendaConfig)
+    }
+  }, [])
+
+  return (
+    <Helmet>
+      <script type="text/javascript">
+        {`
+          var _iub = _iub || [];
+          _iub.csConfiguration = {
+            "askConsentAtCookiePolicyUpdate": true,
+            "enableFadp": true,
+            "enableLgpd": true,
+            "enableUspr": true,
+            "fadpApplies": true,
+            "floatingPreferencesButtonDisplay": "bottom-right",
+            "lang": "en",
+            "perPurposeConsent": true,
+            "preferenceCookie": { "expireAfter": 180 },
+            "siteId": 3641787,
+            "usprApplies": true,
+            "whitelabel": false,
+            "cookiePolicyId": 51628910,
+            "banner": {
+              "acceptButtonDisplay": true,
+              "closeButtonDisplay": false,
+              "customizeButtonDisplay": true,
+              "explicitWithdrawal": true,
+              "listPurposes": true,
+              "ownerName": "develop--wild-rider.netlify.app/",
+              "position": "float-bottom-center",
+              "rejectButtonDisplay": true,
+              "showTitle": false,
+              "showTotalNumberOfProviders": true
+            }
+          };
+        `}
+      </script>
+      <script
+        type="text/javascript"
+        src="https://cs.iubenda.com/autoblocking/3641787.js"
+      ></script>
+      <script
+        type="text/javascript"
+        src="//cdn.iubenda.com/cs/gpp/stub.js"
+      ></script>
+      <script
+        type="text/javascript"
+        src="//cdn.iubenda.com/cs/iubenda_cs.js"
+        charset="UTF-8"
+        async
+      ></script>
+    </Helmet>
+  )
+}
+
+export { IubendaPrivacyPolicy, IubendaCookiePolicy, IubendaCookieConsent }
