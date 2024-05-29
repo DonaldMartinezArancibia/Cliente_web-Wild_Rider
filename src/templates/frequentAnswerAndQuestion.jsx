@@ -3,6 +3,7 @@ import { useApolloClient, useQuery } from "@apollo/client"
 import { FrequentAnswersAndQuestions } from "../gql/allAnswersAndQuestions"
 import * as JsSearch from "js-search"
 import { FaqContent } from "../gql/faqPageQuery"
+import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
 export default function useFrequentAnswersAndQuestions({ pageContext }) {
   const client = useApolloClient()
@@ -68,7 +69,13 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="mb-10 font-CarterOne lg:text-5xl">FAQ</h1>
+      <h1 className="font-CarterOne lg:text-5xl">FAQ</h1>
+
+      <section className="my-10">
+        <ReactMarkdown>
+          {faqPageData?.faqs[0]?.faqSubtitleText.markdown}
+        </ReactMarkdown>
+      </section>
 
       <div className="relative mb-10 lg:w-1/2">
         <label htmlFor="FAQsearch" className="absolute right-5 top-5">

@@ -117,6 +117,9 @@
   #iubenda-cs-banner > div > div:nth-of-type(2) > a {
     display: none !important;
   }
+  #iubenda-iframe > div:nth-of-type(2) {
+    display: none !important;
+  }
 }
 
 /* custom-styles.css */

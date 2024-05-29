@@ -6,7 +6,6 @@ const Faq = gql`
       localizations {
         slug
         locale
-        searchInputPlaceholder
       }
     }
   }
@@ -17,6 +16,11 @@ const FaqContent = gql`
     faqs(locales: $locale) {
       title
       searchInputPlaceholder
+      faqSubtitleText {
+        html
+        markdown
+        text
+      }
     }
   }
 `
