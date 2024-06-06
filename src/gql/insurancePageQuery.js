@@ -14,7 +14,7 @@ const InsuranceContent = gql`
   query Insurances($locale: [Locale!]!) {
     insurances(locales: $locale) {
       title
-      toggleContent {
+      toggleContent(last: 2000) {
         displayContent {
           markdown
         }

@@ -14,7 +14,7 @@ const RoadSafetyContent = gql`
   query roadSafeties($locale: [Locale!]!) {
     roadSafeties(locales: $locale) {
       title
-      toggleContent {
+      toggleContent(last: 2000) {
         displayContent {
           markdown
         }
