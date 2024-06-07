@@ -30,6 +30,9 @@ const Cars = gql`
         carTransmissionSelectorValue
         priceOfCar {
           priceOfCar
+          unsetPriceMessage {
+            html
+          }
           season {
             seasonTitle
             startDate
@@ -40,6 +43,9 @@ const Cars = gql`
       manualTransmission {
         priceOfCar {
           priceOfCar
+          unsetPriceMessage {
+            html
+          }
           season {
             seasonTitle
             startDate

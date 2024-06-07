@@ -8,6 +8,7 @@ import { Link } from "gatsby"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { setDatos } from "./variableReactiva"
 import { navigate } from "gatsby"
+import he from "he" // Importar la biblioteca para desescapar HTML
 
 export default function OpenModal({ carId, pageContext }) {
   const client = useApolloClient()
@@ -327,7 +328,21 @@ export default function OpenModal({ carId, pageContext }) {
                                       {formatDate(price.season.startDate)} |{" "}
                                       {formatDate(price.season.endDate)}
                                     </td>
-                                    <td className="p-2">${price.priceOfCar}</td>
+                                    <td>
+                                      {price.priceOfCar !== 0 ? (
+                                        <>${price.priceOfCar}</>
+                                      ) : (
+                                        price.unsetPriceMessage?.html && (
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: he.decode(
+                                                price.unsetPriceMessage.html
+                                              ),
+                                            }}
+                                          />
+                                        )
+                                      )}
+                                    </td>
                                   </tr>
                                 )
                               )
@@ -341,7 +356,18 @@ export default function OpenModal({ carId, pageContext }) {
                                       {formatDate(price.season?.startDate)} |{" "}
                                       {formatDate(price.season?.endDate)}
                                     </td>
-                                    <td className="p-2">${price.priceOfCar}</td>
+                                    <td className="p-2">
+                                      ${price.priceOfCar}
+                                      {price.unsetPriceMessage?.html && (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: he.decode(
+                                              price.unsetPriceMessage.html
+                                            ),
+                                          }}
+                                        />
+                                      )}
+                                    </td>
                                   </tr>
                                 )
                               )}
@@ -363,6 +389,15 @@ export default function OpenModal({ carId, pageContext }) {
                                   <tr key={priceIndex}>
                                     <td className="text-center">
                                       ${price.priceOfCar}
+                                      {price.unsetPriceMessage?.html && (
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: he.decode(
+                                              price.unsetPriceMessage.html
+                                            ),
+                                          }}
+                                        />
+                                      )}
                                     </td>
                                   </tr>
                                 )
