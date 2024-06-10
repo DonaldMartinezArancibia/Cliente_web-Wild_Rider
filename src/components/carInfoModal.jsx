@@ -328,7 +328,7 @@ export default function OpenModal({ carId, pageContext }) {
                                       {formatDate(price.season.startDate)} |{" "}
                                       {formatDate(price.season.endDate)}
                                     </td>
-                                    <td>
+                                    <td className="flex justify-center">
                                       {price.priceOfCar !== 0 ? (
                                         <>${price.priceOfCar}</>
                                       ) : (
