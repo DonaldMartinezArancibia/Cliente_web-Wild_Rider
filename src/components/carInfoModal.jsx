@@ -53,7 +53,7 @@ export default function OpenModal({ carId, pageContext }) {
     return date.toLocaleDateString(pageContext.langKey, options)
   }
   // Tu lógica para obtener datos
-  const datos = car.id
+  const datos = car?.id
 
   setDatos(car.id)
   // console.log(car.carDetails[0].markdown)
@@ -314,66 +314,74 @@ export default function OpenModal({ carId, pageContext }) {
                             <th className="p-2">
                               {car.carsAndQuote.priceTitleManual}
                             </th>
+                            <th className="p-2">
+                              {car.carsAndQuote.priceTitleAutomatic}
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {car.manualTransmission?.priceOfCar?.length > 0
-                            ? car.manualTransmission.priceOfCar.map(
-                                (price, priceIndex) => (
-                                  <tr key={priceIndex}>
-                                    <td className="p-2">
-                                      {price.season.seasonTitle}
-                                    </td>
-                                    <td className="p-2">
-                                      {formatDate(price.season.startDate)} |{" "}
-                                      {formatDate(price.season.endDate)}
-                                    </td>
-                                    <td className="flex justify-center">
-                                      {price.priceOfCar !== 0 ? (
-                                        <>${price.priceOfCar}</>
-                                      ) : (
-                                        price.unsetPriceMessage?.html && (
-                                          <div
-                                            dangerouslySetInnerHTML={{
-                                              __html: he.decode(
-                                                price.unsetPriceMessage.html
-                                              ),
-                                            }}
-                                          />
-                                        )
-                                      )}
-                                    </td>
-                                  </tr>
-                                )
-                              )
-                            : car.automaticTransmission?.priceOfCar?.map(
-                                (price, priceIndex) => (
-                                  <tr key={priceIndex}>
-                                    <td className="p-2">
-                                      {price.season?.seasonTitle}
-                                    </td>
-                                    <td className="p-2">
-                                      {formatDate(price.season?.startDate)} |{" "}
-                                      {formatDate(price.season?.endDate)}
-                                    </td>
-                                    <td className="p-2">
-                                      ${price.priceOfCar}
-                                      {price.unsetPriceMessage?.html && (
+                          <>
+                            {car.manualTransmission.priceOfCar.map(
+                              (manualPrice, priceIndex) => (
+                                <tr key={priceIndex}>
+                                  <td className="p-2">
+                                    {manualPrice.season?.seasonTitle}
+                                  </td>
+                                  <td className="p-2">
+                                    {formatDate(manualPrice.season?.startDate)}{" "}
+                                    | {formatDate(manualPrice.season?.endDate)}
+                                  </td>
+                                  <td className="text-center">
+                                    {manualPrice.priceOfCar !== 0 ? (
+                                      <>${manualPrice.priceOfCar}</>
+                                    ) : (
+                                      manualPrice.unsetPriceMessage?.html && (
                                         <div
                                           dangerouslySetInnerHTML={{
                                             __html: he.decode(
-                                              price.unsetPriceMessage.html
+                                              manualPrice.unsetPriceMessage.html
                                             ),
                                           }}
                                         />
-                                      )}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
+                                      )
+                                    )}
+                                  </td>
+                                  {car.automaticTransmission?.priceOfCar?.[
+                                    priceIndex
+                                  ] && (
+                                    <>
+                                      <td className="text-center">
+                                        $
+                                        {
+                                          car.automaticTransmission.priceOfCar[
+                                            priceIndex
+                                          ].priceOfCar
+                                        }
+                                      </td>
+                                      <td className="p-2">
+                                        {car.automaticTransmission.priceOfCar[
+                                          priceIndex
+                                        ].unsetPriceMessage?.html && (
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: he.decode(
+                                                car.automaticTransmission
+                                                  .priceOfCar[priceIndex]
+                                                  .unsetPriceMessage.html
+                                              ),
+                                            }}
+                                          />
+                                        )}
+                                      </td>
+                                    </>
+                                  )}
+                                </tr>
+                              )
+                            )}
+                          </>
                         </tbody>
                       </table>
-                      {car.manualTransmission?.priceOfCar?.length > 0 &&
+                      {/* {car.manualTransmission?.priceOfCar?.length > 0 &&
                         car.automaticTransmission?.priceOfCar?.length > 0 && (
                           <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
                             <thead>
@@ -404,7 +412,7 @@ export default function OpenModal({ carId, pageContext }) {
                               )}
                             </tbody>
                           </table>
-                        )}
+                        )} */}
                     </div>
                     <div className="xl:w-3/5 2xl:mr-2">
                       <div className="mb-10 lg:w-full">
