@@ -350,29 +350,33 @@ export default function OpenModal({ carId, pageContext }) {
                                     priceIndex
                                   ] && (
                                     <>
-                                      <td className="text-center">
-                                        $
-                                        {
-                                          car.automaticTransmission.priceOfCar[
+                                      {car.automaticTransmission.priceOfCar[
+                                        priceIndex
+                                      ].priceOfCar !== 0 ? (
+                                        <td className="text-center">
+                                          $
+                                          {
+                                            car.automaticTransmission
+                                              .priceOfCar[priceIndex].priceOfCar
+                                          }
+                                        </td>
+                                      ) : (
+                                        <td className="text-center">
+                                          {car.automaticTransmission.priceOfCar[
                                             priceIndex
-                                          ].priceOfCar
-                                        }
-                                      </td>
-                                      <td className="p-2">
-                                        {car.automaticTransmission.priceOfCar[
-                                          priceIndex
-                                        ].unsetPriceMessage?.html && (
-                                          <div
-                                            dangerouslySetInnerHTML={{
-                                              __html: he.decode(
-                                                car.automaticTransmission
-                                                  .priceOfCar[priceIndex]
-                                                  .unsetPriceMessage.html
-                                              ),
-                                            }}
-                                          />
-                                        )}
-                                      </td>
+                                          ].unsetPriceMessage?.html && (
+                                            <div
+                                              dangerouslySetInnerHTML={{
+                                                __html: he.decode(
+                                                  car.automaticTransmission
+                                                    .priceOfCar[priceIndex]
+                                                    .unsetPriceMessage.html
+                                                ),
+                                              }}
+                                            />
+                                          )}
+                                        </td>
+                                      )}
                                     </>
                                   )}
                                 </tr>

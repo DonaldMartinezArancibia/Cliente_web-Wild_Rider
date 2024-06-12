@@ -32,7 +32,7 @@ const IndexContent = gql`
         url
         mimeType
       }
-      contentBelowVideo {
+      contentBelowVideo(last: 2000) {
         html
         markdown
         text
