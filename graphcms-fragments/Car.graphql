@@ -31,8 +31,17 @@ fragment Car on Car {
       priceOfCar {
         ... on PriceCar {
           stage
+          locale
           id
           priceOfCar
+          unsetPriceMessage {
+            ... on RichText {
+              raw
+              html
+              markdown
+              text
+            }
+          }
           season {
             ... on Season {
               remoteTypeName: __typename
@@ -54,8 +63,17 @@ fragment Car on Car {
       priceOfCar {
         ... on PriceCar {
           stage
+          locale
           id
           priceOfCar
+          unsetPriceMessage {
+            ... on RichText {
+              raw
+              html
+              markdown
+              text
+            }
+          }
           season {
             ... on Season {
               remoteTypeName: __typename

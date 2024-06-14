@@ -53,29 +53,6 @@ fragment Index on Index {
   }
   acceptCookieButton
   declineCookieButton
-  toggleContent {
-    ... on ToggleContent {
-      stage
-      locale
-      id
-      displayContent {
-        ... on RichText {
-          raw
-          html
-          markdown
-          text
-        }
-      }
-      extendedContent {
-        ... on RichText {
-          raw
-          html
-          markdown
-          text
-        }
-      }
-    }
-  }
   freeBenefitsElements {
     ... on FreeBenefitsElement {
       stage
