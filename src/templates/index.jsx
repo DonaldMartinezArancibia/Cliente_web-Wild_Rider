@@ -13,8 +13,8 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import VideoPlayer from "../components/videoPlayer"
 import { CookieNotice } from "gatsby-cookie-notice"
 import { useRef, useState, useEffect } from "react"
-import { IubendaCookiePolicy } from "../components/iubendaComponent"
-import { IubendaCookieConsent } from "../components/iubendaComponent"
+// import { IubendaCookiePolicy } from "../components/iubendaComponent"
+// import { IubendaCookieConsent } from "../components/iubendaComponent"
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -142,7 +142,7 @@ export default function IndexPage({ pageContext }) {
       {/* </div>  */}
       {/* </CookieNotice> */}
       {/* <IubendaCookiePolicy /> */}
-      <IubendaCookieConsent />
+      {/* <IubendaCookieConsent /> */}
 
       <section id="sectionBellowHeader">
         <ReactMarkdown>
