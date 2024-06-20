@@ -14,6 +14,7 @@ import { CarQuoteFormContent } from "../gql/carQuotePageQuery"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { data } from "autoprefixer"
+import { addMinutes, format, parse } from "date-fns"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   let [open, setOpen] = useState(true)
@@ -374,18 +375,36 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
   const pageData = CarQuoteFormData?.carQuoteForms[0]
 
-  function generateTimeOptions(minTime, maxTime) {
-    const options = []
-    let currentTime = new Date(`2000-01-01 ${minTime}`)
+  // function generateTimeOptions(minTime, maxTime) {
+  //   const options = []
+  //   let currentTime = new Date(`2000-01-01 ${minTime}`)
 
-    while (currentTime <= new Date(`2000-01-01 ${maxTime}`)) {
+  //   while (currentTime <= new Date(`2000-01-01 ${maxTime}`)) {
+  //     options.push(
+  //       <option key={currentTime.toISOString()} value={formatTime(currentTime)}>
+  //         {formatTime(currentTime)}
+  //       </option>
+  //     )
+
+  //     currentTime.setMinutes(currentTime.getMinutes() + 15) // Puedes ajustar el intervalo de tiempo según tus necesidades
+  //   }
+
+  //   return options
+  // }
+  function generateTimeOptions2(minTime, maxTime) {
+    const options = []
+    let currentTime = parse(minTime, "HH:mm", new Date(2000, 0, 1))
+    const endTime = parse(maxTime, "HH:mm", new Date(2000, 0, 1))
+
+    while (currentTime <= endTime) {
+      const formattedTime = format(currentTime, "HH:mm")
       options.push(
-        <option key={currentTime.toISOString()} value={formatTime(currentTime)}>
-          {formatTime(currentTime)}
+        <option key={formattedTime} value={formattedTime}>
+          {formattedTime}
         </option>
       )
 
-      currentTime.setMinutes(currentTime.getMinutes() + 15) // Puedes ajustar el intervalo de tiempo según tus necesidades
+      currentTime = addMinutes(currentTime, 15) // Puedes ajustar el intervalo de tiempo según tus necesidades
     }
 
     return options
@@ -822,7 +841,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10 px-4 py-2"
               required={pageData.takeoverHourField?.includes("*")}
             >
-              {generateTimeOptions("6:00", "20:00")}
+              {generateTimeOptions2("6:00", "20:00")}
               <option value={pageData.otherHour}>{pageData.otherHour}</option>
             </select>
             <sub className="mt-2 text-sm text-gray-500">
@@ -891,7 +910,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10 px-4 py-2"
               required={pageData.returnHourField?.includes("*")}
             >
-              {generateTimeOptions("6:00", "20:00")}
+              {generateTimeOptions2("6:00", "20:00")}
               <option value={pageData.otherHour}>{pageData.otherHour}</option>
             </select>
             <sub className="mt-2 text-sm text-gray-500">
