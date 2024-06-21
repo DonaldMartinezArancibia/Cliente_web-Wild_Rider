@@ -1131,14 +1131,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
                     <div className="px-1 pt-5 pb-4 bg-white">
                       <div className="sm:flex sm:items-start">
-                        <button
-                          type="button"
-                          ref={cancelButtonRef}
-                          className="inline-flex justify-center w-full p-1 text-base font-medium text-red-600 border border-transparent rounded-md shadow-sm bg-white-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm hover:text-white"
-                          onClick={() => setOpen(false)}
-                        >
-                          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
-                        </button>
                         <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                           <div className="mt-2">
                             <ReactMarkdown>

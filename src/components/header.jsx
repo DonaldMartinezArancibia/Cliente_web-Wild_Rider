@@ -165,7 +165,7 @@ export default function Header({ pageContext }) {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={4}
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
