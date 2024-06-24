@@ -32,7 +32,7 @@ const CarQuoteFormContent = gql`
       countriesOptions
       numberOfTravelersField
       numberOfTravelersOptions
-      cars {
+      cars(last: 500) {
         id
         manualTransmission {
           carTransmissionSelectorValue
