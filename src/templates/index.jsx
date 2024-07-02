@@ -15,6 +15,7 @@ import { CookieNotice } from "gatsby-cookie-notice"
 import { useRef, useState, useEffect } from "react"
 // import { IubendaCookiePolicy } from "../components/iubendaComponent"
 // import { IubendaCookieConsent } from "../components/iubendaComponent"
+import { CarQuoteFormSlugs } from "../gql/carQuotePageQuery"
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -23,6 +24,15 @@ export default function IndexPage({ pageContext }) {
       setOpen(true)
     }, 3000)
   }, [])
+
+  const { data, loading, error } = useQuery(CarQuoteFormSlugs, {
+    variables: {
+      internalId: pageContext.remoteId,
+      locale: [pageContext.langKey],
+    },
+  })
+
+  console.log(data?.carQuoteForms[0])
 
   const cancelButtonRef = useRef(null)
   const client = useApolloClient()
@@ -95,6 +105,11 @@ export default function IndexPage({ pageContext }) {
 
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <Link to={data?.carQuoteForms[0].localizations[0]?.slug}>
+        <button className="bg-[#0833a2] text-white block m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg md:ml-16">
+          {IndexContentData.indices[0].viewCarsButtonText}
+        </button>
+      </Link>
       {/* <CookieNotice
         // backgroundWrapperClasses="fixed bg-[#e0e0e0] bg-[#F6CC4D] min-[480px]:w-2/3 min-[640px]:w-1/2 lg:w-1/3 p-4 right-4 left-4 bottom-5 flex items-center justify-center z-50 border-opacity-100 border-gray-300 rounded-xl shadow-md"
         // buttonWrapperClasses="max-w-md mx-auto bg-white rounded p-4 shadow-md"
