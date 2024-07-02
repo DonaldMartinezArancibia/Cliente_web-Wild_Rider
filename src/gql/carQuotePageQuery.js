@@ -10,6 +10,16 @@ const CarQuoteForm = gql`
     }
   }
 `
+const CarQuoteFormSlugs = gql`
+  query CarQuoteForms($locale: [Locale!]!) {
+    carQuoteForms(locales: $locale) {
+      localizations {
+        slug
+        locale
+      }
+    }
+  }
+`
 const CarQuoteFormContent = gql`
   query CarQuoteForm($locale: [Locale!]!) {
     carQuoteForms(locales: $locale) {
@@ -83,4 +93,4 @@ const CarQuoteFormContent = gql`
   }
 `
 
-export { CarQuoteForm, CarQuoteFormContent }
+export { CarQuoteForm, CarQuoteFormSlugs, CarQuoteFormContent }
