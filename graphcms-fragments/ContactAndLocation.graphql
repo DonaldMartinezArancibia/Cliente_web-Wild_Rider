@@ -1,13 +1,72 @@
 fragment ContactAndLocation on ContactAndLocation {
   stage
   locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
   remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   slug
   title
-  publishedBy {
+  titleOfAddress
+  address
+  urlSourceFrame
+  googleMapsUrlButton
+  googleMapsButtonText
+  formOnSubmitMessage {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  contactForm {
+    ... on ContactForm {
+      stage
+      locale
+      id
+      nameField
+      nameFieldErrorMessage
+      surnameField
+      surnameFieldErrorMessage
+      emailField
+      emailFieldErrorMessage
+      confirmEmailField
+      confirmEmailFieldErrorMessage
+      emailAndEmailConfirmNotEqualErrorMessage
+      phoneNumberField
+      messageField
+      messageFieldErrorMessage
+      reCaptchaErrorMessage
+      sendButton
+    }
+  }
+  contactElements {
+    ... on ContactElement {
+      stage
+      locale
+      id
+      elementTitle
+      elementValue
+      elementText {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      elementIcon {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -21,10 +80,26 @@ fragment ContactAndLocation on ContactAndLocation {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+  }
+  topImage {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  bottomImage {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }

@@ -1,62 +1,256 @@
 import React, { useState, useEffect } from "react"
-import { StarIcon } from "@heroicons/react/24/solid"
+import Slider from "react-slick" // Importa la biblioteca de carruseles
+import "slick-carousel/slick/slick.css" // Importa los estilos CSS de slick-carousel
+import "slick-carousel/slick/slick-theme.css" // Importa los estilos del tema de slick-carousel
+import {
+  StarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/solid"
 import { GetAllReviews } from "../gql/allReviews"
 import { useApolloClient, useQuery } from "@apollo/client"
+import TripAdvisor from "../images/tripadvisor-logo.svg"
+import Google from "../images/google-logo.svg"
+import Facebook from "../images/facebook-logo.svg"
 
-const MapContainer = props => {
-  // const reviews2 = [...googleR.googleReviews, ...newReviews]
-  const [currentIndex2, setCurrentIndex2] = useState(0)
+// Componente Review
+const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
+  <div className="m-1 p-4 border-opacity-100 border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
+    <a
+      href="view-original-review"
+      onClick={e => handleLinkClick(e, review.reviewLink)}
+      className="flex"
+    >
+      <img
+        src={review.reviewImage.url}
+        alt="Profile"
+        className="w-12 h-12 mr-4 rounded-full"
+      />
+      <div>
+        <h2 className="mb-2 text-lg font-bold">{review.reviewerName}</h2>
+        <div className="flex items-center mb-2">
+          {Array.from(Array(5), (_, i) => (
+            <StarIcon
+              key={i}
+              className={`h-4 w-4 ${
+                review.numberOfStars >= i + 1
+                  ? "text-yellow-500"
+                  : "text-gray-400"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+      <img
+        src={imageMapping[review.reviewOrigin]}
+        alt={`${review.reviewOrigin} Logo`}
+        className="ml-auto"
+      />
+    </a>
+    <p className="text-[#1a1a1a]">
+      {truncateReview(review.review, 250)}
+      {review.review.length > 250 && (
+        <a
+          href={review.reviewLink}
+          onClick={e => handleLinkClick(e, review.reviewLink)}
+          className="text-[#0833a2] ml-1 hover:underline"
+        >
+          {review.testimonial.reviewsLinkText}
+        </a>
+      )}
+    </p>
+  </div>
+)
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentIndex2(prevIndex =>
-  //       prevIndex === reviews2.length - 1 ? 0 : prevIndex + 1
-  //     )
-  //   }, 3000)
+const GoogleReviewsCarousel = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+}) => {
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
+    slidesToScroll: 3,
+    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 1023,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 599,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
 
-  //   return () => clearInterval(interval)
-  // }, [reviews2.length])
-  const [currentIndex, setCurrentIndex] = useState(0)
+  return (
+    <Slider {...settings} className="!flex mb-5">
+      {reviews.map((review, index) => (
+        <Review
+          key={index}
+          review={review}
+          handleLinkClick={handleLinkClick}
+          imageMapping={imageMapping}
+          truncateReview={truncateReview}
+        />
+      ))}
+    </Slider>
+  )
+}
+const TripAdvisorReviewsCarousel = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+}) => {
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
+    slidesToScroll: 3,
+    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 1023,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 599,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
 
-  const images = [
-    "https://picsum.photos/id/45/720/405",
-    "https://picsum.photos/id/8/720/405",
-    "https://picsum.photos/id/47/720/405",
-    "https://picsum.photos/id/37/720/405",
-    "https://picsum.photos/id/87/720/405",
-    "https://picsum.photos/id/55/720/405",
-    "https://picsum.photos/id/67/720/405",
-    "https://picsum.photos/id/60/720/405",
-    "https://picsum.photos/id/57/720/405",
-    "https://picsum.photos/id/83/720/405",
-  ]
+  return (
+    <Slider {...settings} className="!flex mb-10">
+      {reviews.map((review, index) => (
+        <Review
+          key={index}
+          review={review}
+          handleLinkClick={handleLinkClick}
+          imageMapping={imageMapping}
+          truncateReview={truncateReview}
+        />
+      ))}
+    </Slider>
+  )
+}
+const FacebookReviewsCarousel = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+}) => {
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
+    slidesToScroll: 3,
+    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 1023,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 599,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prevIndex =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      )
-    }, 3000)
+  return (
+    <Slider {...settings} className="!flex mb-10">
+      {reviews.map((review, index) => (
+        <Review
+          key={index}
+          review={review}
+          handleLinkClick={handleLinkClick}
+          imageMapping={imageMapping}
+          truncateReview={truncateReview}
+        />
+      ))}
+    </Slider>
+  )
+}
 
-    return () => clearInterval(interval)
-  }, [images.length])
-
+const MapContainer = pageContext => {
   const [reviews, setReviews] = useState([])
-
   const client = useApolloClient()
   const {
     data: googleR,
     loading: googleRLoading,
     error: googleRError,
-  } = useQuery(GetAllReviews)
+  } = useQuery(GetAllReviews, {
+    variables: {
+      // internalId: pageContext.remoteId,
+      locale: [pageContext.pageContext.langKey],
+    },
+  })
   client.refetchQueries({
     include: [GetAllReviews],
   })
+
   if (googleRLoading) return <p>Loading...</p>
 
   const openReviewLink = url => {
     window.open(url, "Data", "height=700px,width=600px")
   }
+
   const handleLinkClick = (e, url) => {
     e.preventDefault()
     openReviewLink(url)
@@ -65,195 +259,179 @@ const MapContainer = props => {
   const truncateReview = (review, length) => {
     return review.length > length ? review.substring(0, length) + "..." : review
   }
+
+  // Define la variable newReviews aquí
   const newReviews = []
-  // newReviews.push(
-  //   {
-  //     reviewLink: "https://goo.gl/maps/9BXFm7Uv5Yg4sFWa6",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/gdn8a0NpmKuydK2GJ7bE",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 4,
-  //     reviewerName: "John Smith",
-  //     review:
-  //       "Had a great experience with this company. The staff was friendly and helpful. The car we rented was in excellent condition and made our trip enjoyable. Would definitely recommend!",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/joKg6vscYsEheKqc6",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/AUjDvYUjJXs2DvXK6KTR",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 5,
-  //     reviewerName: "Sophia Johnson",
-  //     review:
-  //       "Outstanding service! The team at this company went above and beyond to make sure our car rental experience was smooth and hassle-free. The vehicle was clean and comfortable. Highly recommended!",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/Xb9xDpW7w4eFT2wm8",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/SF0d3R4JzC0lDMX69Wtc",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 3,
-  //     reviewerName: "David Anderson",
-  //     review:
-  //       "Decent service overall. The car we rented was in decent condition, but there were some issues with the booking process. It took longer than expected to pick up the vehicle. Average experience.",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/rn5RXsZuehLZGyKB9",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/z3GJ1iul6ZCzm1T8FvTw",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 5,
-  //     reviewerName: "Emma Thompson",
-  //     review:
-  //       "Excellent rental experience! The staff was friendly and professional. The car was clean and well-maintained. We had a smooth trip thanks to this company. Highly recommended!",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/5caKfW68rNY8MzMt9",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/ldjA7vTt9J2zKcYXvF1Q",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 4,
-  //     reviewerName: "Michael Davis",
-  //     review:
-  //       "Good service overall. The car we rented was comfortable and reliable. The staff was helpful and provided all the necessary information. Satisfied with our experience.",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/USG9QnqzAYNn4smX7",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/83JmLr4b7kHmycXjAA12",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 5,
-  //     reviewerName: "Olivia Martinez",
-  //     review:
-  //       "Amazing service! The team at this company was incredibly helpful and made our car rental process seamless. The vehicle was in great condition and we had no issues during our trip. Highly recommended!",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/czi4TJmS6t6E2Mab9",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/7nTlKt9aKsLhfyVmjF7T",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 4,
-  //     reviewerName: "James Wilson",
-  //     review:
-  //       "Good rental experience. The staff was friendly and the car was clean. We had a minor issue with the car's air conditioning, but it was promptly resolved. Overall, satisfied with the service.",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/2mN2zS5azqX1srsy9",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/6Fc5JXx2e3O4p1mUY5PO",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 5,
-  //     reviewerName: "Mia Rodriguez",
-  //     review:
-  //       "Exceptional service! The team at this company went above and beyond to accommodate our needs. The car was spotless and performed well throughout our trip. Will definitely rent from them again!",
-  //     __typename: "GoogleReview",
-  //   },
-  //   {
-  //     reviewLink: "https://goo.gl/maps/Za6bRf3Q1UAdscod8",
-  //     reviewImage: {
-  //       url: "https://media.graphassets.com/4MGo0SkgkPmQ2d0xZiqG",
-  //       __typename: "Asset",
-  //     },
-  //     numberOfStars: 4,
-  //     reviewerName: "Alexander Lee",
-  //     review:
-  //       "Overall, a positive experience. The car was clean and comfortable. The staff was polite and provided helpful information. We encountered a minor issue with the car's tire, but it was quickly resolved. Would recommend.",
-  //     __typename: "GoogleReview",
-  //   }
-  // )
+
+  // Define el mapeo de imágenes aquí
+  const imageMapping = {
+    TripAdvisor: TripAdvisor,
+    Google: Google,
+    Facebook: Facebook,
+    DefaultImage: null,
+  }
 
   return (
-    <div className="mx-4 xl:px-16">
-      {/* <div className="relative overflow-hidden">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${currentIndex * 50}%)`,
-          }}
-        >
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Image ${index + 1}`}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </div> */}
-      <h1 className="max-w-3xl mb-4 text-3xl font-CarterOne">
-        Hear what our clients say
-      </h1>
-      <p>
-        Don’t just take our word for it. Here are a few (of many) reviews of
-        WildRider.
-      </p>
-      <div className="grid grid-cols-1 gap-4 my-8 sm:grid-cols-3">
-        {[...googleR.googleReviews, ...newReviews].map((review, index) => (
-          <div
-            key={index}
-            className="p-4 border-opacity-100 border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
-          >
-            <a
-              href="view-original-review"
-              onClick={e => handleLinkClick(e, review.reviewLink)}
-              className="flex"
-            >
-              <img
-                src={review.reviewImage.url}
-                alt="Profile"
-                className="w-12 h-12 mr-4 rounded-full"
-              />
-              <div>
-                <h2 className="mb-2 text-lg font-bold">
-                  {review.reviewerName}
-                </h2>
-                <div className="flex items-center mb-2">
-                  {Array.from(Array(5), (_, i) => (
-                    <StarIcon
-                      key={i}
-                      className={`h-4 w-4 ${
-                        review.numberOfStars >= i + 1
-                          ? "text-yellow-500"
-                          : "text-gray-400"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </a>
-            <p className="text-[#1a1a1a]">
-              {truncateReview(review.review, 250)}
-              {review.review.length > 250 && (
-                <a
-                  href={review.reviewLink}
-                  onClick={e => handleLinkClick(e, review.reviewLink)}
-                  className="text-[#0833a2] ml-1 hover:underline"
-                >
-                  Leer más
-                </a>
-              )}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      {/* Utiliza el componente GoogleReviewsCarousel para mostrar las reseñas de Google */}
+      <GoogleReviewsCarousel
+        reviews={[...googleR.googleReviews, ...newReviews]}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+      />
+
+      {/* Agrega un carrusel similar para las reseñas de TripAdvisor */}
+      <TripAdvisorReviewsCarousel
+        reviews={[...googleR.tripAdvisorReviews, ...newReviews]}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+      />
+      {/* Agrega un carrusel similar para las reseñas de TripAdvisor */}
+      <FacebookReviewsCarousel
+        reviews={[...googleR.facebookReviews, ...newReviews]}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+      />
+    </>
   )
 }
 
-export default MapContainer
+const ReviewsCarousel = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+}) => {
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 1023,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 599,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  }
+
+  return (
+    <Slider {...settings} className="!flex mb-5">
+      {reviews.map((review, index) => (
+        <Review
+          key={index}
+          review={review}
+          handleLinkClick={handleLinkClick}
+          imageMapping={imageMapping}
+          truncateReview={truncateReview}
+        />
+      ))}
+    </Slider>
+  )
+}
+
+// Componentes personalizados para las flechas
+const PrevArrow = props => (
+  <button {...props} className="slick-arrow custom-prev-arrow">
+    <ChevronLeftIcon className="w-10 md:w-16" />
+  </button>
+)
+
+const NextArrow = props => (
+  <button {...props} className="slick-arrow custom-next-arrow">
+    <ChevronRightIcon className="w-10 md:w-16" />
+  </button>
+)
+
+const MapContainerLayoutB = pageContext => {
+  const { data: allReviews, loading: allReviewsLoading } = useQuery(
+    GetAllReviews,
+    {
+      variables: {
+        // internalId: pageContext.remoteId,
+        locale: [pageContext.pageContext.langKey],
+      },
+    }
+  )
+
+  if (allReviewsLoading) return <p>Loading...</p>
+
+  const openReviewLink = url => {
+    window.open(url, "Data", "height=700px,width=600px")
+  }
+
+  const handleLinkClick = (e, url) => {
+    e.preventDefault()
+    openReviewLink(url)
+  }
+
+  const truncateReview = (review, length) => {
+    return review.length > length ? review.substring(0, length) + "..." : review
+  }
+
+  const imageMapping = {
+    TripAdvisor: TripAdvisor,
+    Google: Google,
+    Facebook: Facebook,
+    DefaultImage: null,
+  }
+
+  function shuffleArray(array) {
+    // Crea una copia del arreglo original para no modificarlo directamente
+    const shuffledArray = [...array]
+
+    // Baraja el arreglo utilizando el algoritmo de Fisher-Yates
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ]
+    }
+
+    return shuffledArray
+  }
+
+  // Obtén una copia aleatoria de todas las reseñas
+  const shuffledReviews = shuffleArray([
+    ...allReviews.googleReviews,
+    ...allReviews.tripAdvisorReviews,
+    ...allReviews.facebookReviews,
+  ])
+
+  return (
+    <ReviewsCarousel
+      reviews={shuffledReviews}
+      handleLinkClick={handleLinkClick}
+      imageMapping={imageMapping}
+      truncateReview={truncateReview}
+    />
+  )
+}
+
+export { MapContainer, MapContainerLayoutB }

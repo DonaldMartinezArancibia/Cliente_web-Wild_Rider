@@ -14,6 +14,7 @@ import {
 } from "@apollo/client"
 import { MDXProvider } from "@mdx-js/react"
 import fetch from "isomorphic-fetch"
+import { datosVar } from "./src/components/variableReactiva"
 
 import "./src/components/layout.css"
 import Layout from "./src/components/layout"

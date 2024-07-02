@@ -12,16 +12,56 @@ const Index = gql`
 `
 
 const IndexContent = gql`
-  query IndexContent {
-    indices {
+  query IndexContent($locale: [Locale!]!) {
+    indices(locales: $locale) {
       id
-      mainTextBelowTitle
-      mainTitle
       mainTextBelow {
         html
         markdown
         text
       }
+      viewCarsButtonText
+      viewCarsbuttonurl {
+        slug
+      }
+      videosSectionTitle
+      coverOfVideo(locales: en) {
+        url
+      }
+      presentationVideos(locales: en) {
+        url
+        mimeType
+      }
+      contentBelowVideo {
+        html
+        markdown
+        text
+      }
+      offersSectionTitle
+      offersSectionText {
+        html
+        markdown
+        text
+      }
+      freeBenefitsElements(last: 100) {
+        benefitImage(locales: en) {
+          url
+        }
+        benefitTitle
+      }
+      testimonialsSectionTitle
+      testimonialSectionText {
+        html
+        markdown
+        text
+      }
+      textOfCookies {
+        html
+        markdown
+        text
+      }
+      acceptCookieButton
+      declineCookieButton
     }
   }
 `

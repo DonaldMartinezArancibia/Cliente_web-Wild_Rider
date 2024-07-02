@@ -1,10 +1,10 @@
 fragment Menu on Menu {
   stage
-  publishedAt
-  updatedAt
-  createdAt
   remoteId: id
-  publishedBy {
+  createdAt
+  updatedAt
+  publishedAt
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -18,7 +18,7 @@ fragment Menu on Menu {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -63,7 +63,25 @@ fragment Menu on Menu {
       locale
       stage
     }
-    ... on RentalInfo {
+    ... on Insurance {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on PrivacyPolicyPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on RoadSafety {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on TermsOfServicePage {
       remoteTypeName: __typename
       remoteId: id
       locale

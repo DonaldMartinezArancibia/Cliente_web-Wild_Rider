@@ -20,7 +20,7 @@ export default function Example() {
     loading: postBySlugQueryLoading,
     error: postBySlugQueryError,
   } = useQuery(Post, {
-    variables: { internalId: "clddedal2k35b0biod66xakxk", locale: ["en"] },
+    variables: { internalId: "clcqdqrwqm5uo0ak25chb6wzy", locale: ["en"] },
   })
   if (postBySlugQueryLoading) return <p>Loading...</p>
   if (postBySlugQueryError) return <p>Error : {postBySlugQueryError.message}</p>

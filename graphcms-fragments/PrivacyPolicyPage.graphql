@@ -1,14 +1,12 @@
-fragment GoogleReview on GoogleReview {
+fragment PrivacyPolicyPage on PrivacyPolicyPage {
   stage
   locale
   publishedAt(variation: COMBINED)
   updatedAt(variation: COMBINED)
   createdAt(variation: COMBINED)
   remoteId: id
-  reviewerName
-  numberOfStars
-  review
-  reviewLink
+  slug
+  title
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -30,16 +28,15 @@ fragment GoogleReview on GoogleReview {
       stage
     }
   }
-  reviewImage {
-    ... on Asset {
+  scheduledIn {
+    ... on ScheduledOperation {
       remoteTypeName: __typename
       remoteId: id
-      locale
       stage
     }
   }
-  scheduledIn {
-    ... on ScheduledOperation {
+  menu {
+    ... on Menu {
       remoteTypeName: __typename
       remoteId: id
       stage

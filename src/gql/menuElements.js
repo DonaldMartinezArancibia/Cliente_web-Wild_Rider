@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 
 const menuElements = gql`
   query menuElements($locale: [Locale!]!) {
-    menus(locales: $locale) {
+    menus(locales: $locale, stage: PUBLISHED) {
       menuElements {
         ... on Index {
           id
@@ -19,11 +19,11 @@ const menuElements = gql`
           slug
           title
         }
-        ... on RentalInfo {
-          id
-          slug
-          title
-        }
+        # ... on RentalInfo {
+        #   id
+        #   slug
+        #   title
+        # }
         ... on Testimonial {
           id
           slug
@@ -39,7 +39,27 @@ const menuElements = gql`
           slug
           title
         }
-        ... on TravelPlanner {
+        # ... on TravelPlanner {
+        #   id
+        #   slug
+        #   title
+        # }
+        ... on TermsOfServicePage {
+          id
+          slug
+          title
+        }
+        ... on PrivacyPolicyPage {
+          id
+          slug
+          title
+        }
+        ... on Insurance {
+          id
+          slug
+          title
+        }
+        ... on RoadSafety {
           id
           slug
           title

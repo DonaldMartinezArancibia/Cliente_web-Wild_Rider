@@ -1,20 +1,13 @@
 fragment ScheduledOperation on ScheduledOperation {
   stage
-  rawPayload
-  errorMessage
-  description
-  publishedAt
-  updatedAt
-  createdAt
   remoteId: id
-  release {
-    ... on ScheduledRelease {
-      remoteTypeName: __typename
-      remoteId: id
-      stage
-    }
-  }
-  publishedBy {
+  createdAt
+  updatedAt
+  publishedAt
+  description
+  errorMessage
+  rawPayload
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -28,8 +21,15 @@ fragment ScheduledOperation on ScheduledOperation {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  release {
+    ... on ScheduledRelease {
       remoteTypeName: __typename
       remoteId: id
       stage
@@ -52,6 +52,13 @@ fragment ScheduledOperation on ScheduledOperation {
     ... on Car {
       remoteTypeName: __typename
       remoteId: id
+      locale
+      stage
+    }
+    ... on CarQuoteForm {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
     ... on CarsAndQuote {
@@ -72,13 +79,25 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
-    ... on GoogleReview {
+    ... on FrequentAnswersAndQuestion {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on HeaderAndFooterElement {
       remoteTypeName: __typename
       remoteId: id
       locale
       stage
     }
     ... on Index {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on Insurance {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -95,7 +114,31 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on PrivacyPolicyPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on RentalInfo {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on Review {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on RoadSafety {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on Season {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -104,6 +147,12 @@ fragment ScheduledOperation on ScheduledOperation {
     ... on Seo {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+    ... on TermsOfServicePage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
     ... on Testimonial {

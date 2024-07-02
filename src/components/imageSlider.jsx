@@ -43,13 +43,13 @@ const ImageSlider = ({ images }) => {
         onMouseLeave={handleMouseLeave}
       />
       <button
-        className="absolute top-1/2 left-10 -ml-8 -mt-8 p-2 rounded-full bg-gray-600 text-white hover:bg-gray-800"
+        className="absolute p-2 -mt-8 -ml-8 text-white bg-gray-600 rounded-full top-1/2 left-10 hover:bg-gray-800"
         onClick={handlePrevClick}
       >
         Prev
       </button>
       <button
-        className="absolute top-1/2 right-10 -mr-8 -mt-8 p-2 rounded-full bg-gray-600 text-white hover:bg-gray-800"
+        className="absolute p-2 -mt-8 -mr-8 text-white bg-gray-600 rounded-full top-1/2 right-10 hover:bg-gray-800"
         onClick={handleNextClick}
       >
         Next

@@ -1,30 +1,244 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useEffect, useState, Fragment } from "react"
+import { useApolloClient, useQuery } from "@apollo/client"
+import { PhoneInput } from "react-international-phone"
+import mailcheck from "mailcheck"
 import ReCAPTCHA from "react-google-recaptcha"
+import { navigate } from "gatsby"
 import parkingWR1 from "../images/Captura de pantalla 2023-09-06 124559(2).png"
 import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
+import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
+import { Dialog, Transition } from "@headlessui/react"
+import { XMarkIcon } from "@heroicons/react/24/outline"
+import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 
-export default function useContactAndLocation({ pageContext }) {
+export default function useContactAndLocation({
+  pageContext,
+  headerAndFooterData,
+}) {
+  let [open, setOpen] = useState(true)
+  const cancelButtonRef = useRef(null)
   const captcha = useRef(null)
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
+  const [phone, setPhone] = useState("")
 
   const onChange = () => {
     if (captcha.current.getValue()) {
-      console.log("Usuario real")
       setIsCaptchaVerified(true) // Marcar como verificado cuando se obtenga una respuesta válida
     }
   }
 
+  const [email, setEmail] = useState("")
+  const [emailConfirm, setEmailConfirm] = useState("")
+  const [suggestion, setSuggestion] = useState(null)
+  const [suggestionConfirm, setSuggestionConfirm] = useState(null)
+
+  useEffect(() => {
+    mailcheck.run({
+      email: email,
+      suggested(s) {
+        setSuggestion(s.full)
+      },
+      empty() {
+        setSuggestion(null)
+      },
+    })
+  }, [email])
+
+  // function getCountry() {
+  //   const countries = {
+  //     AD: "Andorra",
+  //     AE: "United Arab Emirates",
+  //     AF: "Afghanistan",
+  //     // ... otras definiciones de países
+  //   }
+
+  //   const timezones = {
+  //     // ... definiciones de zonas horarias
+  //   }
+
+  //   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+  //   if (timezone === "" || !timezone) {
+  //     return null
+  //   }
+
+  //   const _country = timezones[timezone]?.c?.[0]
+  //   const country = countries[_country]
+  //   return country
+  // }
+
+  // function getState() {
+  //   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+  //   if (timezone === "" || !timezone) {
+  //     return null
+  //   }
+
+  //   const state = timezone.split("/")[1].replace("_", " ")
+  //   return state
+  // }
+
+  // console.log(getState, getCountry)
+
+  useEffect(() => {
+    mailcheck.run({
+      email: emailConfirm,
+      suggested(s) {
+        setSuggestionConfirm(s.full)
+      },
+      empty() {
+        setSuggestionConfirm(null)
+      },
+    })
+  }, [emailConfirm])
+
+  const handleChange = (e, setEmailFunc, setSuggestionFunc) => {
+    const newValue = e.currentTarget.value
+    setEmailFunc(newValue)
+
+    // Run mailcheck for suggestions
+    mailcheck.run({
+      email: newValue,
+      suggested(s) {
+        setSuggestionFunc(s.full)
+      },
+      empty() {
+        setSuggestionFunc(null)
+      },
+    })
+  }
+
+  const acceptSuggestion = (suggestion, setEmailFunc) => {
+    if (suggestion != null) setEmailFunc(suggestion)
+  }
+  const [submissionError, setSubmissionError] = useState(null)
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [formError, setFormError] = useState(null)
+  const [redirecting, setRedirecting] = useState(false)
+
+  const handleSubmit = async e => {
+    try {
+      e.preventDefault()
+      setFormError(null)
+      setSubmissionError(null)
+
+      const form = e.target
+
+      // Verificar que 'form.email' y 'form.emailConfirm' no sean undefined
+      if (!form.email || !form.emailConfirm) {
+        return
+      }
+
+      // Validación personalizada solo si ambos campos están llenos
+      const email = form.email.value.trim()
+      const emailConfirm = form.emailConfirm.value.trim()
+
+      if (email === "" || emailConfirm === "") {
+        setFormError("Email or Email Confirm element is empty.")
+        return
+      }
+
+      if (email !== emailConfirm) {
+        const errorMessage = pageData.contactForm
+          .emailAndEmailConfirmNotEqualErrorMessage
+          ? pageData.contactForm.emailAndEmailConfirmNotEqualErrorMessage
+          : "Email and Confirm Email must match."
+
+        setFormError(errorMessage)
+        return
+      }
+
+      const formData = new FormData(form)
+
+      const response = await fetch(
+        "https://hooks.zapier.com/hooks/catch/17251260/3wu1vz2/",
+        // "https://hooks.zapier.com/hooks/catch/293849384/2938479283/" /*Para pruebas de envio*/,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams(formData).toString(),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
+      setFormSubmitted(true)
+      // setRedirecting(true)
+      setOpen(true)
+      e.target.reset()
+
+      // Resetear input de correo electrónico y mensajes de validación
+      setEmail("")
+      setEmailConfirm("")
+      setSuggestion(null)
+      setSuggestionConfirm(null)
+
+      if (captcha.current) {
+        captcha.current.reset()
+      }
+
+      // setTimeout(() => {
+      //   setRedirecting(false)
+      //   navigate(pageContext.langKey === "en" ? "/" : `/${pageContext.langKey}`)
+      // }, 5000) // 5000 milisegundos = 5 segundos
+    } catch (error) {
+      setSubmissionError(`Error submitting form: ${error.message}`)
+      // Limpiar errores después de enviar el formulario con éxito
+      setFormError(
+        "There was an error submitting the form. Please try again later."
+      )
+    }
+    // Limpiar errores después de enviar el formulario con éxito
+    setFormError(null)
+    // Resto del código para manejar la respuesta del envío
+  }
+
+  const handleInputChange = (event, customMessage) => {
+    if (!event.target.value.trim()) {
+      event.target.setCustomValidity(customMessage || "This field is required")
+    } else {
+      event.target.setCustomValidity("")
+    }
+  }
+
+  const client = useApolloClient()
+  const {
+    data: ContactAndLocationData,
+    loading: ContactAndLocationDataQueryLoading,
+    error: ContactAndLocationDataQueryError,
+  } = useQuery(ContactContent, {
+    variables: {
+      // internalId: pageContext.remoteId,
+      locale: [pageContext.langKey],
+    },
+  })
+  client.refetchQueries({
+    include: [ContactContent],
+  })
+  if (ContactAndLocationDataQueryLoading) return <p>Loading...</p>
+
+  const pageData = ContactAndLocationData.contactAndLocations[0]
+
+  const handleLinkClick = url => {
+    window.open(url, "Data", "height=700px,width=600px")
+  }
+
   return (
     <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
-      <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] min-[2000px]:col-[1/4] min-[2000px]:row-[1/2]">
-        Contact & Location
+      <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] ...">
+        {pageData.title}
       </h1>
       <form
         name="contact"
+        onSubmit={handleSubmit}
         method="post"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
-        className="m-2 md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
+        className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
       >
         {/* You still need to add the hidden input with the form name to your JSX form */}
         <p className="hidden">
@@ -42,73 +256,128 @@ export default function useContactAndLocation({ pageContext }) {
           <div className="flex flex-col justify-between w-1/2 pr-3">
             <label
               htmlFor="nombre"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
-              Name*:
+              {pageData.contactForm.nameField}
+              <span className="text-red-500">*</span>:
             </label>
             <input
               type="text"
               id="nombre"
               name="nombre"
-              placeholder="Name"
-              className="h-10 w-full"
+              className="w-full h-10 p-2"
+              onInvalid={e =>
+                handleInputChange(e, pageData.contactForm.nameFieldErrorMessage)
+              }
               required
             />
           </div>
           <div className="flex flex-col justify-between w-1/2 pl-3">
             <label
               htmlFor="surname"
-              className="my-2 font-black font-Poppins w-full"
+              className="w-full my-2 font-black font-Poppins"
             >
-              Surname*:
+              {pageData.contactForm.surnameField}
+              <span className="text-red-500">*</span>:
             </label>
             <input
               type="text"
               id="surname"
               name="surname"
-              placeholder="Surname"
-              className="h-10 w-full"
+              className="w-full h-10 p-2"
+              onInvalid={e =>
+                handleInputChange(
+                  e,
+                  pageData.contactForm.surnameFieldErrorMessage
+                )
+              }
               required
             />
           </div>
         </fieldset>
 
         <fieldset
-          className="flex flex-row"
+          className="md:flex md:flex-row"
           role="group"
           aria-label="Correo Electrónico"
         >
-          <div className="flex flex-col justify-between w-1/2 pr-3">
+          <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
             <label
-              htmlFor="correo"
-              className="my-2 font-black font-Poppins w-full"
+              htmlFor="email"
+              className="w-full my-2 font-black font-Poppins"
             >
-              Email*:
+              {pageData.contactForm.emailField}
+              <span className="text-red-500">*</span>
             </label>
             <input
+              className="w-full h-10 p-2"
               type="email"
-              id="correo"
-              name="correo"
-              className="h-10 w-full"
-              placeholder="Email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={e => handleChange(e, setEmail, setSuggestion)}
+              onInvalid={e =>
+                handleInputChange(
+                  e,
+                  pageData.contactForm.emailFieldErrorMessage
+                )
+              }
               required
             />
+            {suggestion && (
+              <div>
+                Did you mean
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault()
+                    acceptSuggestion(suggestion, setEmail)
+                  }}
+                >
+                  {suggestion}
+                </a>
+              </div>
+            )}
           </div>
-          <div className="flex flex-col justify-between w-1/2 pl-3">
+          <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
             <label
-              htmlFor="correoconfirm"
-              className="my-2 font-black font-Poppins w-full"
+              htmlFor="emailConfirm"
+              className="w-full my-2 font-black font-Poppins"
             >
-              Confirm Email*:
+              {pageData.contactForm.confirmEmailField}{" "}
+              <span className="text-red-500">*</span>
             </label>
             <input
+              className="w-full h-10 p-2"
               type="email"
-              id="correoconfirm"
-              name="correoconfirm"
-              className="h-10 w-full"
-              placeholder="Confirm Email"
+              id="emailConfirm"
+              name="emailConfirm"
+              value={emailConfirm}
+              onChange={e =>
+                handleChange(e, setEmailConfirm, setSuggestionConfirm)
+              }
+              onInvalid={e =>
+                handleInputChange(
+                  e,
+                  pageData.contactForm.confirmEmailFieldErrorMessage
+                )
+              }
               required
             />
+            {suggestionConfirm && (
+              <div>
+                Did you mean
+                <a
+                  href=""
+                  onClick={e => {
+                    e.preventDefault()
+                    acceptSuggestion(suggestionConfirm, setEmailConfirm)
+                  }}
+                >
+                  {suggestionConfirm}
+                </a>
+              </div>
+            )}
           </div>
         </fieldset>
 
@@ -117,37 +386,24 @@ export default function useContactAndLocation({ pageContext }) {
           role="group"
           aria-label="Número de Teléfono"
         >
-          <div className="flex flex-col justify-between w-1/2 pr-3">
+          <div className="flex flex-col justify-between w-full">
             <label
-              htmlFor="countryCode"
-              className="my-2 font-black font-Poppins w-full"
+              htmlFor="phoneNumber"
+              className="w-full my-2 font-black font-Poppins"
             >
-              Country Code:
+              {pageData.contactForm.phoneNumberField}:
             </label>
-            <input
-              type="tel"
-              id="countryCode"
-              name="countryCode"
-              pattern="[0-3]{3}"
-              placeholder="+01"
-              className="h-10 w-full"
-            />
-          </div>
-
-          <div className="flex flex-col justify-between w-1/2 pl-3">
-            <label
-              htmlFor="telefono"
-              className="my-2 font-black font-Poppins w-full"
-            >
-              Phone number:
-            </label>
-            <input
-              type="tel"
-              id="telefono"
-              name="telefono"
-              pattern="[0-9]{10}"
-              placeholder="Ej. 1234567890"
-              className="h-10 w-full"
+            <PhoneInput
+              defaultCountry="us"
+              value={phone}
+              onChange={phone => setPhone(phone)}
+              inputStyle={{ width: "100%", borderRadius: "0" }}
+              inputProps={{
+                name: "phoneNumber",
+                type: "tel",
+                id: "phoneNumber",
+              }}
+              className="w-full h-10"
             />
           </div>
         </fieldset>
@@ -158,15 +414,21 @@ export default function useContactAndLocation({ pageContext }) {
           aria-label="Mensaje"
         >
           <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
-            Message*:
+            {pageData.contactForm.messageField}
+            <span className="text-red-500">*</span>:
           </label>
           <textarea
             id="mensaje"
             name="mensaje"
-            rows="5"
+            rows="15"
             required
-            placeholder="Message"
-            className="lg:h-16"
+            onInvalid={e =>
+              handleInputChange(
+                e,
+                pageData.contactForm.messageFieldErrorMessage
+              )
+            }
+            className="p-2"
           ></textarea>
         </fieldset>
 
@@ -174,6 +436,7 @@ export default function useContactAndLocation({ pageContext }) {
           <ReCAPTCHA
             ref={captcha}
             sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
+            hl={headerAndFooterData}
             onChange={onChange}
             className="flex my-2 justify-evenly lg:justify-start"
           />
@@ -182,76 +445,125 @@ export default function useContactAndLocation({ pageContext }) {
               type="checkbox"
               className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
               tabIndex="-1"
+              onInvalid={e =>
+                handleInputChange(e, pageData.contactForm.reCaptchaErrorMessage)
+              }
               required
             />
           )}
         </div>
         <button
           type="submit"
-          className="bg-[#F6CC4D] text-white h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
+          className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
         >
-          SEND
+          {pageData.contactForm.sendButton}
         </button>
+        {formSubmitted && (
+          <Transition.Root show={open} as={Fragment}>
+            <Dialog
+              as="div"
+              className="relative z-10"
+              initialFocus={cancelButtonRef}
+              onClose={setOpen}
+            >
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+              </Transition.Child>
+
+              <div className="fixed inset-0 z-10 overflow-y-auto">
+                <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  >
+                    <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
+                      <div className="px-1 pt-5 pb-4 bg-white">
+                        <div className="sm:flex sm:items-start">
+                          <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div className="mt-2">
+                              <ReactMarkdown>
+                                {pageData?.formOnSubmitMessage?.markdown}
+                              </ReactMarkdown>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                          onClick={() => setOpen(false)}
+                        >
+                          ok
+                        </button>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition.Root>
+        )}
+        {formError && <p style={{ color: "red" }}>{formError}</p>}
+        {redirecting && (
+          <div>
+            <p>Redirecting to the home page...</p>
+          </div>
+        )}
       </form>
-
-      <div className="grid mb-5 mx-3 min-[412px]:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
-        <div className="flex items-center col-span-1">
-          <svg className="h-8 mr-2 lg:h-12" viewBox="0 0 448 510">
-            <path
-              fill="#000"
-              d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"
+      <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
+        {pageData.contactElements?.map((element, index) => (
+          <div className="flex items-center col-span-1" key={index}>
+            <img
+              className="h-8 mr-2 lg:h-12"
+              src={element?.elementIcon?.url}
+              alt={`${element.elementTitle} Icon`}
             />
-          </svg>
-          <div className="text-base">
-            <p className="font-bold">Whatsapp</p>
-            <p>+506-8973-2759</p>
+            <div className="text-base">
+              <p className="font-bold">{element.elementTitle}</p>
+              <ReactMarkdown>{element.elementText?.markdown}</ReactMarkdown>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center col-span-1">
-          <svg className="mr-2 h-7 lg:h-10" viewBox="0 0 585 610">
-            <path
-              fill="#000"
-              d="M160 48c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H160zM104.6 32C115.6 12.9 136.3 0 160 0h48c23.7 0 44.4 12.9 55.4 32H320h24 24H512c35.3 0 64 28.7 64 64v48 24 24V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32h40.6zM96 80H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H512c8.8 0 16-7.2 16-16V192H360c-22.1 0-40-17.9-40-40V80H272V352c0 35.3-28.7 64-64 64H160c-35.3 0-64-28.7-64-64V80zm272 0v64H528V96c0-8.8-7.2-16-16-16H368zm16 192a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM352 400a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM480 272a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM448 400a32 32 0 1 1 0-64 32 32 0 1 1 0 64z"
-            />
-          </svg>
-          <div className="text-base">
-            <p className="font-bold">Central Time</p>
-            <p>8:00 - 18:00</p>
-          </div>
-        </div>
-        <div className="flex items-center col-span-1">
-          <svg className="mr-2 h-7" viewBox="0 0 500 525">
-            <path
-              fill="#000"
-              d="M112 48V215.6L64 183V48 0h48H400h48V48 183l-48 32.6V48H112zM256 410l-27-18.3L48 268.9V464H464V268.9L283 391.7 256 410zM464 210.9l48-32.6v58V464v48H464 48 0V464 236.3v-58l48 32.6L256 352 464 210.9zM184 96H328h24v48H328 184 160V96h24zm0 80H328h24v48H328 184 160V176h24z"
-            />
-          </svg>
-          <div className="text-base">
-            <p className="font-bold">Email</p>
-            <p>info@wildrider.com</p>
-          </div>
-        </div>
+        ))}
       </div>
-
-      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
+      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
         <img
-          src={parkingWR1}
+          src={pageData.topImage.url}
           alt="Profile"
           className="mb-10 min-[2000px]:mx-auto"
         />
-        <img src={parkingWR2} alt="Profile" className="min-[2000px]:m-auto" />
+        <img
+          src={pageData.bottomImage.url}
+          alt="Profile"
+          className="min-[2000px]:m-auto"
+        />
       </div>
-
       <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
-        Calle Alajuela, behind City Mall, from “Molinos de Costa Rica” 300
-        meters South. Alajuela, Costa Rica
+        <h1>{pageData.titleOfAddress}</h1>
+        {pageData.address}
+        <br />
+        <br />
+        {pageData.localizations[0]?.address}
       </p>
-
+      <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center"></p>
       <iframe
         width="360"
         height="300"
         id="gmap_canvas"
-        src="https://maps.google.com/maps?q=wild%20rider&t=&z=18&ie=UTF8&iwloc=&output=embed"
+        src={pageData.urlSourceFrame}
         frameBorder="0"
         scrolling="no"
         marginHeight="0"
@@ -259,12 +571,11 @@ export default function useContactAndLocation({ pageContext }) {
         className="w-11/12 m-auto my-5 lg:col-[1/3] lg:w-[95%] rounded-xl shadow-md min-[2000px]:row-[2/3] min-[2000px]:col-[3/4] min-[2000px]:w-full min-[2000px]:h-full min-[2000px]:-mt-2"
       ></iframe>
       <a
-        target="_blank"
-        href="https://goo.gl/maps/KVoab3br7v4zSjoCA"
         className="lg:col-[1/3] min-[2000px]:col-[3/4] min-[2000px]:row-[3/4]"
+        onClick={() => handleLinkClick(pageData.googleMapsUrlButton)}
       >
         <button className="bg-[#0833a2] flex text-white m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg min-[2000px]:mt-2">
-          Google Maps
+          {pageData.googleMapsButtonText}
           <svg className="h-6 ml-2" viewBox="0 0 448 510">
             <path
               fill="#fff"

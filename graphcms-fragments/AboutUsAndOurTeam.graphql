@@ -1,13 +1,55 @@
 fragment AboutUsAndOurTeam on AboutUsAndOurTeam {
   stage
   locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
   remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   slug
   title
-  publishedBy {
+  showText
+  hideText
+  theTeam {
+    ... on OurTeam {
+      stage
+      locale
+      id
+      name
+      description
+      photo {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
+  toggleContent {
+    ... on ToggleContent {
+      stage
+      locale
+      id
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+    }
+  }
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -21,7 +63,7 @@ fragment AboutUsAndOurTeam on AboutUsAndOurTeam {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id

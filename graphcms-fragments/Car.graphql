@@ -1,10 +1,92 @@
 fragment Car on Car {
   stage
-  publishedAt
-  updatedAt
-  createdAt
+  locale
   remoteId: id
-  publishedBy {
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
+  numberOfOrder
+  carName
+  carDetailsTitle
+  carDetails {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  yearOfCarTitle
+  yearOfCarValue
+  passengersTitle
+  passengersOfCarValue
+  longTermRentalTitle
+  insuranceAndTaxInfo
+  manualTransmission {
+    ... on TransmissionVariant {
+      stage
+      locale
+      id
+      carTransmissionSelectorValue
+      priceOfCar {
+        ... on PriceCar {
+          stage
+          locale
+          id
+          priceOfCar
+          unsetPriceMessage {
+            ... on RichText {
+              raw
+              html
+              markdown
+              text
+            }
+          }
+          season {
+            ... on Season {
+              remoteTypeName: __typename
+              remoteId: id
+              locale
+              stage
+            }
+          }
+        }
+      }
+    }
+  }
+  automaticTransmission {
+    ... on TransmissionVariant {
+      stage
+      locale
+      id
+      carTransmissionSelectorValue
+      priceOfCar {
+        ... on PriceCar {
+          stage
+          locale
+          id
+          priceOfCar
+          unsetPriceMessage {
+            ... on RichText {
+              raw
+              html
+              markdown
+              text
+            }
+          }
+          season {
+            ... on Season {
+              remoteTypeName: __typename
+              remoteId: id
+              locale
+              stage
+            }
+          }
+        }
+      }
+    }
+  }
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -18,14 +100,45 @@ fragment Car on Car {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
       stage
     }
   }
-  highSeason
+  carMainPhoto {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  carPhotos {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  carsAndQuote {
+    ... on CarsAndQuote {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  carQuoteForm {
+    ... on CarQuoteForm {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename

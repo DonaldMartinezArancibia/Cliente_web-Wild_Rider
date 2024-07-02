@@ -28,6 +28,7 @@ module.exports = {
         Inter: "Inter",
         Poppins: "Poppins",
         Montserrat: "Montserrat",
+        InterTight: "Inter Tight",
       },
       backgroundImage: {
         "hero-pattern":

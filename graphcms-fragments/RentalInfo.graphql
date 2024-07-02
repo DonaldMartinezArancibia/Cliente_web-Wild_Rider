@@ -1,13 +1,13 @@
 fragment RentalInfo on RentalInfo {
   stage
   locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
   remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   slug
   title
-  publishedBy {
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -21,7 +21,7 @@ fragment RentalInfo on RentalInfo {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -30,13 +30,6 @@ fragment RentalInfo on RentalInfo {
   }
   scheduledIn {
     ... on ScheduledOperation {
-      remoteTypeName: __typename
-      remoteId: id
-      stage
-    }
-  }
-  menu {
-    ... on Menu {
       remoteTypeName: __typename
       remoteId: id
       stage

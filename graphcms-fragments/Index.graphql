@@ -1,14 +1,12 @@
 fragment Index on Index {
   stage
   locale
-  publishedAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
-  createdAt(variation: COMBINED)
   remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
   slug
   title
-  mainTitle
-  mainTextBelowTitle
   mainTextBelow {
     ... on RichText {
       raw
@@ -17,7 +15,61 @@ fragment Index on Index {
       text
     }
   }
-  publishedBy {
+  viewCarsButtonText
+  contentBelowVideo {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  videosSectionTitle
+  offersSectionText {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  offersSectionTitle
+  testimonialsSectionTitle
+  testimonialSectionText {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  textOfCookies {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  acceptCookieButton
+  declineCookieButton
+  freeBenefitsElements {
+    ... on FreeBenefitsElement {
+      stage
+      locale
+      id
+      benefitTitle
+      benefitImage {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -31,10 +83,34 @@ fragment Index on Index {
       stage
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+  }
+  viewCarsbuttonurl {
+    ... on CarsAndQuote {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  coverOfVideo {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  presentationVideos {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }

@@ -17,23 +17,20 @@ export default function Showdata({ pageContext }) {
   // if (postsQueryError) return <p>Error : {postBySlugQueryError.message}</p>
 
   return (
-    <section className="container flex flex-wrap justify-between mx-auto xl:px-24">
+    <section className="container flex flex-wrap justify-between w-4/6">
       {posts.posts.map(item => (
-        <article
-          key={item.id}
-          className="flex-1 max-w-sm m-4 overflow-hidden border border-gray-200 rounded shadow-lg ring-opacity-5 ring-black ring-1"
-        >
-          <img className="w-full h-44" src={item.cover.url} />
-          <div className="px-6 py-4">
-            <div className="mb-2 text-xl font-medium">{item.title}</div>
-            <p className="text-base text-gray-700">{item.seo.description}</p>
+        <article key={item.id} className="mb-10">
+          {/* <img className="w-full h-44" src={item.cover.url} /> */}
+          <div className="py-4">
+            <div className="mb-2 text-xl font-bold">{item.title}</div>
+            <p className="text-base font-medium">{item.content}</p>
           </div>
-          <div className="px-6 py-4">
+          <div className="py-4 mr-20 text-end">
             <Link
-              to={`blog/${item.slug}`}
-              className="px-4 py-2 font-medium text-white bg-indigo-500 rounded-full hover:bg-indigo-600"
+              to={`/blog/${item.slug}`} // Usar una ruta absoluta aquí
+              className="px-14 py-4 font-medium text-white bg-[#0833a2] rounded hover:bg-indigo-600"
             >
-              Read More
+              View more
             </Link>
           </div>
         </article>

@@ -1,0 +1,112 @@
+fragment CarQuoteForm on CarQuoteForm {
+  stage
+  locale
+  publishedAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  createdAt(variation: COMBINED)
+  remoteId: id
+  slug
+  title
+  welcomeText {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  basicInformationTitle
+  completeNameField
+  completeNameFieldErrorMessage
+  emailField
+  emailFieldErrorMessage
+  confirmEmailField
+  confirmEmailFieldErrorMessage
+  emailAndEmailConfirmNotEqualErrorMessage
+  phoneNumberField
+  countryResidenceField
+  countriesOptions
+  numberOfTravelersField
+  numberOfTravelersOptions
+  vehicleSelectionField
+  otherHour
+  pickUpInformationTitle
+  takeoverDateField
+  subtextOfTakeoverDate
+  takeoverHourField
+  subtextOfTakeoverHour
+  takeoverPlaceField
+  takeoverPlaceOptions
+  dropOffInformationTitle
+  returnDateField
+  subtextOfReturnDate
+  returnHourField
+  subtextOfReturnHour
+  returnPlaceField
+  returnPlaceOptions
+  freeAdditionalServicesTitle
+  freeServicesSubtitle
+  freeServicesCheckboxOptions
+  paidAdditionalServicesTitle
+  paidServicesSubtitle
+  paidServicesCheckboxOptions
+  communicationFieldTitle
+  communicationFieldSubtitle
+  buttonText
+  reCaptchaErrorMessage
+  formOnSubmitMessage
+  freeServicesSelectors {
+    ... on ServicesSelector {
+      stage
+      locale
+      id
+      serviceSelectorTitle
+      serviceValues
+    }
+  }
+  paidServicesSelectors {
+    ... on ServicesSelector {
+      stage
+      locale
+      id
+      serviceSelectorTitle
+      serviceValues
+    }
+  }
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  cars {
+    ... on Car {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+}

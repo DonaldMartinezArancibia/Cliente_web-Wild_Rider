@@ -2,7 +2,7 @@ import { gql } from "@apollo/client"
 
 const CarsAndQuote = gql`
   query CarsAndQuote($internalId: ID!, $locale: [Locale!]!) {
-    carsAndQuotes(where: { id: $internalId }, locales: $locale) {
+    carsAndQuote(where: { id: $internalId }, locales: $locale) {
       localizations {
         slug
         locale
@@ -11,4 +11,13 @@ const CarsAndQuote = gql`
   }
 `
 
-export { CarsAndQuote }
+const CarContent = gql`
+  query CarsAndQuotes($locale: [Locale!]!) {
+    carsAndQuotes(locales: $locale) {
+      title
+      iconOfLongTermRental
+    }
+  }
+`
+
+export { CarsAndQuote, CarContent }
