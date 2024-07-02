@@ -15,8 +15,10 @@ export default function useContactAndLocation({ pageContext }) {
   }
 
   return (
-    <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16">
-      <h1 className="font-CarterOne lg:text-5xl">Contact & Location</h1>
+    <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
+      <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] min-[2000px]:col-[1/4] min-[2000px]:row-[1/2]">
+        Contact & Location
+      </h1>
       <form
         name="contact"
         method="post"
@@ -42,7 +44,7 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="nombre"
               className="my-2 font-black font-Poppins w-full"
             >
-              Name:
+              Name*:
             </label>
             <input
               type="text"
@@ -58,7 +60,7 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="surname"
               className="my-2 font-black font-Poppins w-full"
             >
-              Surname:
+              Surname*:
             </label>
             <input
               type="text"
@@ -81,7 +83,7 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="correo"
               className="my-2 font-black font-Poppins w-full"
             >
-              Email:
+              Email*:
             </label>
             <input
               type="email"
@@ -97,7 +99,7 @@ export default function useContactAndLocation({ pageContext }) {
               htmlFor="correoconfirm"
               className="my-2 font-black font-Poppins w-full"
             >
-              Confirm Email:
+              Confirm Email*:
             </label>
             <input
               type="email"
@@ -129,7 +131,6 @@ export default function useContactAndLocation({ pageContext }) {
               pattern="[0-3]{3}"
               placeholder="+01"
               className="h-10 w-full"
-              required
             />
           </div>
 
@@ -147,7 +148,6 @@ export default function useContactAndLocation({ pageContext }) {
               pattern="[0-9]{10}"
               placeholder="Ej. 1234567890"
               className="h-10 w-full"
-              required
             />
           </div>
         </fieldset>
@@ -233,9 +233,13 @@ export default function useContactAndLocation({ pageContext }) {
         </div>
       </div>
 
-      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[1/3] lg:col-[2/3] lg:w-10/12">
-        <img src={parkingWR1} alt="Profile" className="mb-10" />
-        <img src={parkingWR2} alt="Profile" />
+      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 min-[2000px]:row-[2/3]">
+        <img
+          src={parkingWR1}
+          alt="Profile"
+          className="mb-10 min-[2000px]:mx-auto"
+        />
+        <img src={parkingWR2} alt="Profile" className="min-[2000px]:m-auto" />
       </div>
 
       <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
@@ -252,14 +256,14 @@ export default function useContactAndLocation({ pageContext }) {
         scrolling="no"
         marginHeight="0"
         marginWidth="0"
-        className="w-11/12 m-auto my-5 lg:col-[1/3] lg:w-[95%] rounded-xl shadow-md"
+        className="w-11/12 m-auto my-5 lg:col-[1/3] lg:w-[95%] rounded-xl shadow-md min-[2000px]:row-[2/3] min-[2000px]:col-[3/4] min-[2000px]:w-full min-[2000px]:h-full min-[2000px]:-mt-2"
       ></iframe>
       <a
         target="_blank"
         href="https://goo.gl/maps/KVoab3br7v4zSjoCA"
-        className="lg:col-[1/3]"
+        className="lg:col-[1/3] min-[2000px]:col-[3/4] min-[2000px]:row-[3/4]"
       >
-        <button className="bg-[#0833a2] flex text-white m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg">
+        <button className="bg-[#0833a2] flex text-white m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg min-[2000px]:mt-2">
           Google Maps
           <svg className="h-6 ml-2" viewBox="0 0 448 510">
             <path
