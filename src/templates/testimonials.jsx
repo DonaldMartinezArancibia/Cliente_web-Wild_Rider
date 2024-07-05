@@ -3,6 +3,7 @@ import { MapContainer } from "../components/reviewsHygraph"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { TestimonialPageContent } from "../gql/testimonialPageQuery"
+import StickyBar from "../components/StickyBar"
 
 export default function useTestimonialsPage({ pageContext }) {
   const client = useApolloClient()
@@ -25,6 +26,7 @@ export default function useTestimonialsPage({ pageContext }) {
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <StickyBar pageContext={pageContext} />
       <h1 className="mb-10 font-CarterOne lg:text-5xl lg:mb-0 lg:px-20 lg:py-14">
         {pageData.title}
       </h1>

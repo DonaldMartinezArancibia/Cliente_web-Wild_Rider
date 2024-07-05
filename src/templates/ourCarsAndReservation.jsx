@@ -3,6 +3,7 @@ import { useApolloClient, useQuery } from "@apollo/client"
 import { Car } from "../gql/carsQuery"
 import { CarContent } from "../gql/carsPageQuery"
 import OpenModal from "../components/carInfoModal"
+import StickyBar from "../components/StickyBar"
 
 export default function useOurCarsAndReservation({ pageContext }) {
   const client = useApolloClient()
@@ -29,11 +30,12 @@ export default function useOurCarsAndReservation({ pageContext }) {
   // console.log(carsPageData)
 
   return (
-    <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-40rem_bottom_-40rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] xl:p-14">
-      <h1 className="mb-10 font-CarterOne lg:text-5xl">
+    <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-40rem_bottom_-40rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <StickyBar pageContext={pageContext} />
+      <h1 className="p-4 mb-10 font-CarterOne lg:text-5xl xl:p-14">
         {carsPageData.carsAndQuotes[0].title}
       </h1>
-      <section className="p-[10px_10px_10px] md:gap-10 xl:gap-28 sm:grid sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr]">
+      <section className="p-[10px_10px_10px] sm:grid sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr] md:gap-10 xl:gap-28 xl:p-14">
         {cars.cars.map(item => (
           <article key={item.id} className="mb-10 md:mb-0">
             {item.longTermRentalTitle !== null &&
@@ -58,7 +60,8 @@ export default function useOurCarsAndReservation({ pageContext }) {
 
             <img
               className="m-auto w-11/12 md:w-auto lg:h-[355px]"
-              src={item.carMainPhoto.url}
+              src={item.carMainPhoto?.url}
+              alt={item.carMainPhoto?.altText}
             />
             <div className="flex flex-col items-center justify-between py-4 2xl:grid 2xl:grid-cols-2">
               <h2 className="max-w-3xl mb-4 text-4xl 2xl:mb-0 font-CarterOne 2xl:col-[1/2] 2xl:row-[2/3]">
