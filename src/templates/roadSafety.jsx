@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useQuery } from "@apollo/client"
 import { RoadSafetyContent } from "../gql/roadSafetyPageQuery"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import StickyBar from "../components/StickyBar"
 
 const RoadSafety = ({ pageContext }) => {
   const {
@@ -19,6 +20,7 @@ const RoadSafety = ({ pageContext }) => {
 
   return (
     <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
+      <StickyBar pageContext={pageContext} />
       <h1 className="mb-10 font-CarterOne lg:text-5xl">
         {roadSafetyPage.title}
       </h1>
