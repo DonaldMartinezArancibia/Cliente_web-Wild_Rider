@@ -104,7 +104,7 @@ const GoogleReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-5">
+    <Slider {...settings} className="!flex mb-5 lg:p-4">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -159,7 +159,7 @@ const TripAdvisorReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-10">
+    <Slider {...settings} className="!flex mb-10 lg:p-4">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -214,7 +214,7 @@ const FacebookReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-10">
+    <Slider {...settings} className="!flex mb-10 lg:p-4">
       {reviews.map((review, index) => (
         <Review
           key={index}

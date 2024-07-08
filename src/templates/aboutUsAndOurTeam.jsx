@@ -4,6 +4,7 @@ import { AboutUsAndOurTeams } from "../gql/ourTeam"
 import ReactHtmlParser from "react-html-parser"
 import { AboutUsContent } from "../gql/aboutusPageQuery"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import StickyBar from "../components/StickyBar"
 
 const AboutUs = ({ pageContext }) => {
   const client = useApolloClient()
@@ -35,12 +36,15 @@ const AboutUs = ({ pageContext }) => {
   const ourTeamPage = ourTeamsPageData.aboutUsAndOurTeams[0] || []
 
   return (
-    <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="mb-10 font-CarterOne lg:text-5xl">{ourTeamPage.title}</h1>
+    <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <StickyBar pageContext={pageContext} />
+      <h1 className="p-4 lg:mb-10 font-CarterOne lg:text-5xl lg:p-14">
+        {ourTeamPage.title}
+      </h1>
 
       {aboutUsMainContent && ReactHtmlParser(aboutUsMainContent)}
 
-      <div className="sm:grid lg:grid-cols-3">
+      <div className="sm:grid lg:px-14 lg:grid-cols-3">
         {theTeams.map((team, index) => (
           <div key={index} className="flex flex-col items-center mb-8">
             <img
@@ -77,7 +81,7 @@ const ContentToggle = ({ content, index, ourTeamPage }) => {
   }
 
   return (
-    <section id="toggleContent" className="mb-14 col-[1/4]">
+    <section id="toggleContent" className="p-4 mb-14 col-[1/4]">
       <div className="mb-2">
         <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
       </div>

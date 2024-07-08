@@ -13,13 +13,13 @@ const VideoPlayer = ({ videos }) => {
   const [isFocused, setIsFocused] = useState(false)
   const [isAudioMuted, setIsAudioMuted] = useState(true)
   const playerRef = useRef(null)
-  console.log(videos)
-  useEffect(() => {
-    // Comienza la reproducción cuando el componente se monta
-    if (isFocused) {
-      playerRef.current.play()
-    }
-  }, [isFocused])
+  // console.log(videos)
+  // useEffect(() => {
+  //   // Comienza la reproducción cuando el componente se monta
+  //   if (isFocused) {
+  //     playerRef.current.play()
+  //   }
+  // }, [isFocused])
 
   const handleEnded = () => {
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
@@ -53,16 +53,16 @@ const VideoPlayer = ({ videos }) => {
   const handlePlayerBlur = () => {
     setIsFocused(false)
     // Pausa la reproducción cuando pierde el foco
-    playerRef.current.pause()
+    // playerRef.current.pause()
   }
 
   return (
     <div
       className="relative"
-      // onMouseEnter={handlePlayerFocus}
-      // onMouseLeave={handlePlayerBlur}
-      // onFocus={handlePlayerFocus}
-      // onBlur={handlePlayerBlur}
+      onMouseEnter={handlePlayerFocus}
+      onMouseLeave={handlePlayerBlur}
+      onFocus={handlePlayerFocus}
+      onBlur={handlePlayerBlur}
     >
       {videos[currentVideoIndex].sources[0].src ? (
         <Player
@@ -99,7 +99,7 @@ const VideoPlayer = ({ videos }) => {
       )}
       {/* Botones de reproducción */}
       {isFocused && (
-        <div className="absolute z-10 flex items-center space-x-4 transform -translate-y-1/2 left-3 top-1/2">
+        <div className="absolute flex items-center space-x-4 transform -translate-y-1/2 left-3 top-1/2">
           <button
             className="px-4 py-2 text-white bg-gray-700 bg-opacity-70"
             onClick={playPreviousVideo}
@@ -123,7 +123,7 @@ const VideoPlayer = ({ videos }) => {
         </div>
       )}
       {isFocused && (
-        <div className="absolute z-10 flex items-center space-x-4 transform -translate-y-1/2 right-3 top-1/2">
+        <div className="absolute flex items-center space-x-4 transform -translate-y-1/2 right-3 top-1/2">
           <button
             className="px-4 py-2 text-white bg-gray-700 bg-opacity-70"
             onClick={playNextVideo}
