@@ -18,7 +18,7 @@ import { addMinutes, format, parse } from "date-fns"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   let [open, setOpen] = useState(true)
-  console.log(pageContext.langKey)
+  // console.log(pageContext.langKey)
   const locale = pageContext.langKey || pageContext.pageContext.langKey
   const cancelButtonRef = useRef(null)
   const client = useApolloClient()
@@ -542,10 +542,10 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   ? carsById.manualTransmission.priceOfCar.map(
                       (price, priceIndex) => (
                         <tr key={priceIndex}>
-                          <td className="p-2">{price.season.seasonTitle}</td>
+                          <td className="p-2">{price.season?.seasonTitle}</td>
                           <td className="p-2">
-                            {formatDate(price.season.startDate)} |{" "}
-                            {formatDate(price.season.endDate)}
+                            {formatDate(price.season?.startDate)} |{" "}
+                            {formatDate(price.season?.endDate)}
                           </td>
                           <td className="p-2">${price.priceOfCar}</td>
                         </tr>
@@ -783,6 +783,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10"
               required={pageData.vehicleSelectionField?.includes("*")}
               value={defaultValue.value}
+              onInvalid={e =>
+                handleInputChange(e, pageData.vehicleSelectionFieldErrorMessage)
+              }
               onChange={e =>
                 setDefaultValue({
                   value: e.target.value,
@@ -790,6 +793,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 })
               }
             >
+              <option value="">
+                {pageData.vehicleSelectionFieldDefaultOption}
+              </option>
               {pageData.cars
                 .flatMap(getTransmissionOptions)
                 .map((option, index) => (

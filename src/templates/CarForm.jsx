@@ -17,7 +17,7 @@ const CarForm = ({ pageContext, location, headerAndFooterData }) => {
     headerAndFooterData: headerAndFooterData,
   }
 
-  console.log(pageContext)
+  // console.log(pageContext)
 
   return (
     <div>
