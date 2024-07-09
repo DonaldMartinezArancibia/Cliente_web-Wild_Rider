@@ -15,6 +15,7 @@ import { CookieNotice } from "gatsby-cookie-notice"
 import { useRef, useState, useEffect } from "react"
 // import { IubendaCookiePolicy } from "../components/iubendaComponent"
 // import { IubendaCookieConsent } from "../components/iubendaComponent"
+import StickyBar from "../components/StickyBar"
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -94,7 +95,8 @@ export default function IndexPage({ pageContext }) {
   // console.log(videosWithCovers)
 
   return (
-    <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+    <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] pt-8 md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <StickyBar pageContext={pageContext} />
       {/* <CookieNotice
         // backgroundWrapperClasses="fixed bg-[#e0e0e0] bg-[#F6CC4D] min-[480px]:w-2/3 min-[640px]:w-1/2 lg:w-1/3 p-4 right-4 left-4 bottom-5 flex items-center justify-center z-50 border-opacity-100 border-gray-300 rounded-xl shadow-md"
         // buttonWrapperClasses="max-w-md mx-auto bg-white rounded p-4 shadow-md"

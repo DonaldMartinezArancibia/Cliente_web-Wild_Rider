@@ -10,6 +10,7 @@ import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import StickyBar from "../components/StickyBar"
 
 export default function useContactAndLocation({
   pageContext,
@@ -228,337 +229,346 @@ export default function useContactAndLocation({
   }
 
   return (
-    <main className="py-10 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:grid lg:grid-cols-[1fr_1fr] lg:p-16 min-[2000px]:grid-cols-[35%_35%_30%]">
-      <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3] ...">
-        {pageData.title}
-      </h1>
-      <form
-        name="contact"
-        onSubmit={handleSubmit}
-        method="post"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
-        className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
-      >
-        {/* You still need to add the hidden input with the form name to your JSX form */}
-        <p className="hidden">
-          <label>
-            Don’t fill this out if you’re human: <input name="bot-field" />
-          </label>
-        </p>
-        <input type="hidden" name="form-name" value="contact" />
-
-        <fieldset
-          className="flex flex-row"
-          role="group"
-          aria-label="Datos personales"
+    <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <StickyBar pageContext={pageContext} />
+      <section className="p-4 pt-3 lg:p-16 lg:grid lg:grid-cols-[1fr_1fr] min-[2000px]:grid-cols-[35%_35%_30%]">
+        <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3]">
+          {pageData.title}
+        </h1>
+        <form
+          name="contact"
+          onSubmit={handleSubmit}
+          method="post"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          className="m-2 self-center md:grid md:grid-cols-[1fr_1fr] md:grid-rows-[1fr] md:gap-x-4 md:gap-y-2 lg:grid-cols-1 lg:my-5"
         >
-          <div className="flex flex-col justify-between w-1/2 pr-3">
-            <label
-              htmlFor="nombre"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {pageData.contactForm.nameField}
-              <span className="text-red-500">*</span>:
+          {/* You still need to add the hidden input with the form name to your JSX form */}
+          <p className="hidden">
+            <label>
+              Don’t fill this out if you’re human: <input name="bot-field" />
             </label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              className="w-full h-10 p-2"
-              onInvalid={e =>
-                handleInputChange(e, pageData.contactForm.nameFieldErrorMessage)
-              }
-              required
-            />
-          </div>
-          <div className="flex flex-col justify-between w-1/2 pl-3">
-            <label
-              htmlFor="surname"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {pageData.contactForm.surnameField}
-              <span className="text-red-500">*</span>:
-            </label>
-            <input
-              type="text"
-              id="surname"
-              name="surname"
-              className="w-full h-10 p-2"
-              onInvalid={e =>
-                handleInputChange(
-                  e,
-                  pageData.contactForm.surnameFieldErrorMessage
-                )
-              }
-              required
-            />
-          </div>
-        </fieldset>
+          </p>
+          <input type="hidden" name="form-name" value="contact" />
 
-        <fieldset
-          className="md:flex md:flex-row"
-          role="group"
-          aria-label="Correo Electrónico"
-        >
-          <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
-            <label
-              htmlFor="email"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {pageData.contactForm.emailField}
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              className="w-full h-10 p-2"
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={e => handleChange(e, setEmail, setSuggestion)}
-              onInvalid={e =>
-                handleInputChange(
-                  e,
-                  pageData.contactForm.emailFieldErrorMessage
-                )
-              }
-              required
-            />
-            {suggestion && (
-              <div>
-                Did you mean
-                <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault()
-                    acceptSuggestion(suggestion, setEmail)
-                  }}
-                >
-                  {suggestion}
-                </a>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
-            <label
-              htmlFor="emailConfirm"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {pageData.contactForm.confirmEmailField}{" "}
-              <span className="text-red-500">*</span>
-            </label>
-            <input
-              className="w-full h-10 p-2"
-              type="email"
-              id="emailConfirm"
-              name="emailConfirm"
-              value={emailConfirm}
-              onChange={e =>
-                handleChange(e, setEmailConfirm, setSuggestionConfirm)
-              }
-              onInvalid={e =>
-                handleInputChange(
-                  e,
-                  pageData.contactForm.confirmEmailFieldErrorMessage
-                )
-              }
-              required
-            />
-            {suggestionConfirm && (
-              <div>
-                Did you mean
-                <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault()
-                    acceptSuggestion(suggestionConfirm, setEmailConfirm)
-                  }}
-                >
-                  {suggestionConfirm}
-                </a>
-              </div>
-            )}
-          </div>
-        </fieldset>
-
-        <fieldset
-          className="flex flex-row"
-          role="group"
-          aria-label="Número de Teléfono"
-        >
-          <div className="flex flex-col justify-between w-full">
-            <label
-              htmlFor="phoneNumber"
-              className="w-full my-2 font-black font-Poppins"
-            >
-              {pageData.contactForm.phoneNumberField}:
-            </label>
-            <PhoneInput
-              defaultCountry="us"
-              value={phone}
-              onChange={phone => setPhone(phone)}
-              inputStyle={{ width: "100%", borderRadius: "0" }}
-              inputProps={{
-                name: "phoneNumber",
-                type: "tel",
-                id: "phoneNumber",
-              }}
-              className="w-full h-10"
-            />
-          </div>
-        </fieldset>
-
-        <fieldset
-          className="flex flex-col md:row-span-2"
-          role="group"
-          aria-label="Mensaje"
-        >
-          <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
-            {pageData.contactForm.messageField}
-            <span className="text-red-500">*</span>:
-          </label>
-          <textarea
-            id="mensaje"
-            name="mensaje"
-            rows="15"
-            required
-            onInvalid={e =>
-              handleInputChange(
-                e,
-                pageData.contactForm.messageFieldErrorMessage
-              )
-            }
-            className="p-2"
-          ></textarea>
-        </fieldset>
-
-        <div className="relative captcha">
-          <ReCAPTCHA
-            ref={captcha}
-            sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-            hl={headerAndFooterData}
-            onChange={onChange}
-            className="flex my-2 justify-evenly lg:justify-start"
-          />
-          {!isCaptchaVerified && (
-            <input
-              type="checkbox"
-              className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
-              tabIndex="-1"
-              onInvalid={e =>
-                handleInputChange(e, pageData.contactForm.reCaptchaErrorMessage)
-              }
-              required
-            />
-          )}
-        </div>
-        <button
-          type="submit"
-          className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
-        >
-          {pageData.contactForm.sendButton}
-        </button>
-        {formSubmitted && (
-          <Transition.Root show={open} as={Fragment}>
-            <Dialog
-              as="div"
-              className="relative z-10"
-              initialFocus={cancelButtonRef}
-              onClose={setOpen}
-            >
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
+          <fieldset
+            className="flex flex-row"
+            role="group"
+            aria-label="Datos personales"
+          >
+            <div className="flex flex-col justify-between w-1/2 pr-3">
+              <label
+                htmlFor="nombre"
+                className="w-full my-2 font-black font-Poppins"
               >
-                <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
-              </Transition.Child>
+                {pageData.contactForm.nameField}
+                <span className="text-red-500">*</span>:
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                className="w-full h-10 p-2"
+                onInvalid={e =>
+                  handleInputChange(
+                    e,
+                    pageData.contactForm.nameFieldErrorMessage
+                  )
+                }
+                required
+              />
+            </div>
+            <div className="flex flex-col justify-between w-1/2 pl-3">
+              <label
+                htmlFor="surname"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.surnameField}
+                <span className="text-red-500">*</span>:
+              </label>
+              <input
+                type="text"
+                id="surname"
+                name="surname"
+                className="w-full h-10 p-2"
+                onInvalid={e =>
+                  handleInputChange(
+                    e,
+                    pageData.contactForm.surnameFieldErrorMessage
+                  )
+                }
+                required
+              />
+            </div>
+          </fieldset>
 
-              <div className="fixed inset-0 z-10 overflow-y-auto">
-                <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enterTo="opacity-100 translate-y-0 sm:scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          <fieldset
+            className="md:flex md:flex-row"
+            role="group"
+            aria-label="Correo Electrónico"
+          >
+            <div className="flex flex-col justify-between md:pr-3 md:w-1/2">
+              <label
+                htmlFor="email"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.emailField}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full h-10 p-2"
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={e => handleChange(e, setEmail, setSuggestion)}
+                onInvalid={e =>
+                  handleInputChange(
+                    e,
+                    pageData.contactForm.emailFieldErrorMessage
+                  )
+                }
+                required
+              />
+              {suggestion && (
+                <div>
+                  Did you mean
+                  <a
+                    href=""
+                    onClick={e => {
+                      e.preventDefault()
+                      acceptSuggestion(suggestion, setEmail)
+                    }}
                   >
-                    <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
-                      <div className="px-1 pt-5 pb-4 bg-white">
-                        <div className="sm:flex sm:items-start">
-                          <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <div className="mt-2">
-                              <ReactMarkdown>
-                                {pageData?.formOnSubmitMessage?.markdown}
-                              </ReactMarkdown>
+                    {suggestion}
+                  </a>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col justify-between md:pl-3 md:w-1/2">
+              <label
+                htmlFor="emailConfirm"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.confirmEmailField}{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                className="w-full h-10 p-2"
+                type="email"
+                id="emailConfirm"
+                name="emailConfirm"
+                value={emailConfirm}
+                onChange={e =>
+                  handleChange(e, setEmailConfirm, setSuggestionConfirm)
+                }
+                onInvalid={e =>
+                  handleInputChange(
+                    e,
+                    pageData.contactForm.confirmEmailFieldErrorMessage
+                  )
+                }
+                required
+              />
+              {suggestionConfirm && (
+                <div>
+                  Did you mean
+                  <a
+                    href=""
+                    onClick={e => {
+                      e.preventDefault()
+                      acceptSuggestion(suggestionConfirm, setEmailConfirm)
+                    }}
+                  >
+                    {suggestionConfirm}
+                  </a>
+                </div>
+              )}
+            </div>
+          </fieldset>
+
+          <fieldset
+            className="flex flex-row"
+            role="group"
+            aria-label="Número de Teléfono"
+          >
+            <div className="flex flex-col justify-between w-full">
+              <label
+                htmlFor="phoneNumber"
+                className="w-full my-2 font-black font-Poppins"
+              >
+                {pageData.contactForm.phoneNumberField}:
+              </label>
+              <PhoneInput
+                defaultCountry="us"
+                value={phone}
+                onChange={phone => setPhone(phone)}
+                inputStyle={{ width: "100%", borderRadius: "0" }}
+                inputProps={{
+                  name: "phoneNumber",
+                  type: "tel",
+                  id: "phoneNumber",
+                }}
+                className="w-full h-10"
+              />
+            </div>
+          </fieldset>
+
+          <fieldset
+            className="flex flex-col md:row-span-2"
+            role="group"
+            aria-label="Mensaje"
+          >
+            <label htmlFor="mensaje" className="my-2 font-black font-Poppins">
+              {pageData.contactForm.messageField}
+              <span className="text-red-500">*</span>:
+            </label>
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              rows="15"
+              required
+              onInvalid={e =>
+                handleInputChange(
+                  e,
+                  pageData.contactForm.messageFieldErrorMessage
+                )
+              }
+              className="p-2"
+            ></textarea>
+          </fieldset>
+
+          <div className="relative captcha">
+            <ReCAPTCHA
+              ref={captcha}
+              sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
+              hl={headerAndFooterData}
+              onChange={onChange}
+              className="flex my-2 justify-evenly lg:justify-start"
+            />
+            {!isCaptchaVerified && (
+              <input
+                type="checkbox"
+                className="absolute left-[40%] bottom-7 -z-10 captcha-fake-field lg:left-[10%]"
+                tabIndex="-1"
+                onInvalid={e =>
+                  handleInputChange(
+                    e,
+                    pageData.contactForm.reCaptchaErrorMessage
+                  )
+                }
+                required
+              />
+            )}
+          </div>
+          <button
+            type="submit"
+            className="bg-[#F6CC4D] text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
+          >
+            {pageData.contactForm.sendButton}
+          </button>
+          {formSubmitted && (
+            <Transition.Root show={open} as={Fragment}>
+              <Dialog
+                as="div"
+                className="relative z-10"
+                initialFocus={cancelButtonRef}
+                onClose={setOpen}
+              >
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 z-10 overflow-y-auto">
+                  <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                      enterTo="opacity-100 translate-y-0 sm:scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                      leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    >
+                      <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
+                        <div className="px-1 pt-5 pb-4 bg-white">
+                          <div className="sm:flex sm:items-start">
+                            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                              <div className="mt-2">
+                                <ReactMarkdown>
+                                  {pageData?.formOnSubmitMessage?.markdown}
+                                </ReactMarkdown>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
-                        <button
-                          type="button"
-                          className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                          onClick={() => setOpen(false)}
-                        >
-                          ok
-                        </button>
-                      </div>
-                    </Dialog.Panel>
-                  </Transition.Child>
+                        <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
+                          <button
+                            type="button"
+                            className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                            onClick={() => setOpen(false)}
+                          >
+                            ok
+                          </button>
+                        </div>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
                 </div>
-              </div>
-            </Dialog>
-          </Transition.Root>
-        )}
-        {formError && <p style={{ color: "red" }}>{formError}</p>}
-        {redirecting && (
-          <div>
-            <p>Redirecting to the home page...</p>
-          </div>
-        )}
-      </form>
-      <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
-        {pageData.contactElements?.map((element, index) => (
-          <div className="flex items-center col-span-1" key={index}>
-            <img
-              className="h-8 mr-2 lg:h-12"
-              src={element?.elementIcon?.url}
-              alt={`${element.elementTitle} Icon`}
-            />
-            <div className="text-base">
-              <p className="font-bold">{element.elementTitle}</p>
-              <ReactMarkdown>{element.elementText?.markdown}</ReactMarkdown>
+              </Dialog>
+            </Transition.Root>
+          )}
+          {formError && <p style={{ color: "red" }}>{formError}</p>}
+          {redirecting && (
+            <div>
+              <p>Redirecting to the home page...</p>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
-        <img
-          src={pageData.topImage.url}
-          alt="Profile"
-          className="mb-10 min-[2000px]:mx-auto"
-        />
-        <img
-          src={pageData.bottomImage.url}
-          alt="Profile"
-          className="min-[2000px]:m-auto"
-        />
-      </div>
-      <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
-        <h1>{pageData.titleOfAddress}</h1>
-        {pageData.address}
-        <br />
-        <br />
-        {pageData.localizations[0]?.address}
-      </p>
-      <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center"></p>
+          )}
+        </form>
+        <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
+          {pageData.contactElements?.map((element, index) => (
+            <div className="flex items-center col-span-1" key={index}>
+              <img
+                className="h-8 mr-2 lg:h-12"
+                src={element?.elementIcon?.url}
+                alt={`${element.elementTitle} Icon`}
+              />
+              <div className="text-base">
+                <p className="font-bold">{element.elementTitle}</p>
+                <ReactMarkdown>{element.elementText?.markdown}</ReactMarkdown>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
+          <img
+            src={pageData.topImage.url}
+            alt="Profile"
+            className="mb-10 min-[2000px]:mx-auto"
+          />
+          <img
+            src={pageData.bottomImage.url}
+            alt="Profile"
+            className="min-[2000px]:m-auto"
+          />
+        </div>
+        <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center">
+          <h1>{pageData.titleOfAddress}</h1>
+          {pageData.address}
+          <br />
+          <br />
+          {pageData.localizations[0]?.address}
+        </p>
+        <p className="mx-3 font-semibold lg:w-10/12 lg:justify-self-center"></p>
+      </section>
       <iframe
         width="360"
         height="300"

@@ -18,6 +18,8 @@ import { addMinutes, format, parse } from "date-fns"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   let [open, setOpen] = useState(true)
+  // console.log(pageContext.langKey)
+  const locale = pageContext.langKey || pageContext.pageContext.langKey
   const cancelButtonRef = useRef(null)
   const client = useApolloClient()
   const {
@@ -26,7 +28,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     error: CarQuoteFormQueryError,
   } = useQuery(CarQuoteFormContent, {
     variables: {
-      locale: [pageContext.pageContext.langKey],
+      locale: [locale],
     },
   })
   client.refetchQueries({
@@ -40,7 +42,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   // console.log(datos)
   // console.log(datosVar())
   // const { carName, remoteId } = pageContext
-  const carsById = apolloData.cars[0]
+  const carsById = apolloData?.cars[0]
   // console.log(carsById)
   // const { carsById } = apolloData.apolloData.carsById
 
@@ -426,7 +428,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     }
   }
 
-  const selectedTransmission = pageContext.pageContext.selectedTransmission
+  const selectedTransmission = pageContext?.pageContext?.selectedTransmission
   // console.log(pageContext.pageContext)
   // console.log(selectedTransmission)
 
@@ -504,10 +506,10 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           <ReactMarkdown>{pageData.welcomeText?.markdown}</ReactMarkdown>
         </p>
         <h2 className="row-start-2 font-CarterOne lg:col-span-2">
-          {carsById.carName}
+          {carsById?.carName}
         </h2>
-        {carsById.insuranceAndTaxInfo !== null &&
-          carsById.insuranceAndTaxInfo !== undefined && (
+        {carsById?.insuranceAndTaxInfo !== null &&
+          carsById?.insuranceAndTaxInfo !== undefined && (
             <span className="inline-flex items-center row-[3/4] px-2 py-1 text-xs font-medium text-blue-700 rounded-md lg:col-[1/3] gap-x-2 bg-blue-50 mt-2 ring-1 ring-inset ring-blue-700/10">
               <svg
                 className="w-2 fill-[#3b82f6]"
@@ -520,7 +522,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             </span>
           )}
         <img
-          src={carsById.carMainPhoto.url}
+          src={carsById?.carMainPhoto.url}
           className="w-full m-auto sm:w-4/5 lg:m-0 lg:col-[2/3]"
         />
         <div className="flex flex-col xl:flex-row lg:col-[1/2] lg:row-[4/5]">
@@ -528,28 +530,28 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
               <thead>
                 <tr className="text-xl">
-                  <th className="p-2">{carsById.carsAndQuote.seasonTitle}</th>
-                  <th className="p-2">{carsById.carsAndQuote.datesTitle}</th>
+                  <th className="p-2">{carsById?.carsAndQuote.seasonTitle}</th>
+                  <th className="p-2">{carsById?.carsAndQuote.datesTitle}</th>
                   <th className="p-2">
-                    {carsById.carsAndQuote.priceTitleManual}
+                    {carsById?.carsAndQuote.priceTitleManual}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {carsById.manualTransmission?.priceOfCar?.length > 0
+                {carsById?.manualTransmission?.priceOfCar?.length > 0
                   ? carsById.manualTransmission.priceOfCar.map(
                       (price, priceIndex) => (
                         <tr key={priceIndex}>
-                          <td className="p-2">{price.season.seasonTitle}</td>
+                          <td className="p-2">{price.season?.seasonTitle}</td>
                           <td className="p-2">
-                            {formatDate(price.season.startDate)} |{" "}
-                            {formatDate(price.season.endDate)}
+                            {formatDate(price.season?.startDate)} |{" "}
+                            {formatDate(price.season?.endDate)}
                           </td>
                           <td className="p-2">${price.priceOfCar}</td>
                         </tr>
                       )
                     )
-                  : carsById.automaticTransmission?.priceOfCar?.map(
+                  : carsById?.automaticTransmission?.priceOfCar?.map(
                       (price, priceIndex) => (
                         <tr key={priceIndex}>
                           <td className="p-2">{price.season?.seasonTitle}</td>
@@ -617,7 +619,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <input
                 name="carName"
                 style={{ height: "0px", width: "0px" }}
-                value={carsById.carName}
+                value={carsById?.carName}
               />
               <label
                 htmlFor="carName"
@@ -781,6 +783,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10"
               required={pageData.vehicleSelectionField?.includes("*")}
               value={defaultValue.value}
+              onInvalid={e =>
+                handleInputChange(e, pageData.vehicleSelectionFieldErrorMessage)
+              }
               onChange={e =>
                 setDefaultValue({
                   value: e.target.value,
@@ -788,6 +793,9 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 })
               }
             >
+              <option value="">
+                {pageData.vehicleSelectionFieldDefaultOption}
+              </option>
               {pageData.cars
                 .flatMap(getTransmissionOptions)
                 .map((option, index) => (
@@ -1072,7 +1080,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           <ReCAPTCHA
             ref={captcha}
             sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-            hl={pageContext.pageContext.headerAndFooterData}
+            hl={pageContext.pageContext?.headerAndFooterData}
             onChange={onChange}
             className="flex my-2 justify-evenly lg:justify-start"
           />

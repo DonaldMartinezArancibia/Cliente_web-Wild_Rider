@@ -10,6 +10,18 @@ const CarQuoteForm = gql`
     }
   }
 `
+const CarQuoteFormSlugs = gql`
+  query CarQuoteForms($locale: [Locale!]!) {
+    carQuoteForms(locales: $locale) {
+      slug
+      buttonTextOfQuickQuote
+      localizations {
+        slug
+        locale
+      }
+    }
+  }
+`
 const CarQuoteFormContent = gql`
   query CarQuoteForm($locale: [Locale!]!) {
     carQuoteForms(locales: $locale) {
@@ -42,6 +54,8 @@ const CarQuoteFormContent = gql`
         }
       }
       vehicleSelectionField
+      vehicleSelectionFieldDefaultOption
+      vehicleSelectionFieldErrorMessage
       otherHour
       pickUpInformationTitle
       takeoverDateField
@@ -83,4 +97,4 @@ const CarQuoteFormContent = gql`
   }
 `
 
-export { CarQuoteForm, CarQuoteFormContent }
+export { CarQuoteForm, CarQuoteFormSlugs, CarQuoteFormContent }

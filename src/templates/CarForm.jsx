@@ -1,6 +1,7 @@
 import React from "react"
 import CarQuoteQuery from "../components/carQuoteQuery"
 import { datosVar } from "../components/variableReactiva"
+import CarFormHtml from "../components/carQuoteForm"
 
 const CarForm = ({ pageContext, location, headerAndFooterData }) => {
   // Obtén el objeto datos desde la variable reactiva
@@ -16,9 +17,15 @@ const CarForm = ({ pageContext, location, headerAndFooterData }) => {
     headerAndFooterData: headerAndFooterData,
   }
 
+  // console.log(pageContext)
+
   return (
     <div>
-      <CarQuoteQuery pageContext={newPageContext} carId={datos} />
+      {newPageContext.selectedTransmission !== undefined ? (
+        <CarQuoteQuery pageContext={newPageContext} carId={datos} />
+      ) : (
+        <CarFormHtml pageContext={pageContext} />
+      )}
     </div>
   )
 }

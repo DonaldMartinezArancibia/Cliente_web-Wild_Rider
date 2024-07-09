@@ -60,8 +60,6 @@ const IndexContent = gql`
         markdown
         text
       }
-      acceptCookieButton
-      declineCookieButton
     }
   }
 `

@@ -29,6 +29,8 @@ fragment CarQuoteForm on CarQuoteForm {
   numberOfTravelersField
   numberOfTravelersOptions
   vehicleSelectionField
+  vehicleSelectionFieldDefaultOption
+  vehicleSelectionFieldErrorMessage
   otherHour
   pickUpInformationTitle
   takeoverDateField
@@ -55,6 +57,7 @@ fragment CarQuoteForm on CarQuoteForm {
   buttonText
   reCaptchaErrorMessage
   formOnSubmitMessage
+  buttonTextOfQuickQuote
   freeServicesSelectors {
     ... on ServicesSelector {
       stage

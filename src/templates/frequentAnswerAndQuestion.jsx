@@ -4,6 +4,7 @@ import { FrequentAnswersAndQuestions } from "../gql/allAnswersAndQuestions"
 import * as JsSearch from "js-search"
 import { FaqContent } from "../gql/faqPageQuery"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import StickyBar from "../components/StickyBar"
 
 export default function useFrequentAnswersAndQuestions({ pageContext }) {
   const client = useApolloClient()
@@ -68,17 +69,18 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
   if (faqError) return <p>Error: {faqError.message}</p>
 
   return (
-    <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
-      <h1 className="font-CarterOne lg:text-5xl">FAQ</h1>
+    <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+      <StickyBar pageContext={pageContext} />
+      <h1 className="p-4 font-CarterOne lg:pt-14 lg:text-5xl lg:px-14">FAQ</h1>
 
-      <section className="my-10">
+      <section className="p-4 my-4 lg:px-14">
         <ReactMarkdown>
           {faqPageData?.faqs[0]?.faqSubtitleText.markdown}
         </ReactMarkdown>
       </section>
 
-      <div className="relative mb-10 lg:w-1/2">
-        <label htmlFor="FAQsearch" className="absolute right-5 top-5">
+      <div className="relative p-4 mb-10 lg:w-1/2 lg:pl-14">
+        <label htmlFor="FAQsearch" className="absolute right-7 top-9">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5 text-black"
@@ -98,12 +100,12 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
         />
       </div>
 
-      <ul>
+      <ul className="lg:px-14">
         {searchResults.map((result, index) => (
           <li key={index} className="mb-10 lg:w-1/2">
             <h3
               onClick={() => toggleAnswerVisibility(index)}
-              className="p-4 relative bg-white border-[2.9px] border-[#979797] rounded-2xl cursor-pointer z-10"
+              className="p-4 relative bg-white border-[2.9px] border-[#979797] rounded-2xl cursor-pointer"
             >
               {result.question}
               <span className="absolute top-6 right-7">
@@ -126,7 +128,7 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
                 </p>
                 <button
                   onClick={() => toggleAnswerVisibility(index)}
-                  className="right-[44%] text-primary hover:underline cursor-pointer absolute bottom-10 md:right[55%] lg:right-1/2 z-10 flex items-center"
+                  className="right-[44%] text-primary hover:underline cursor-pointer absolute bottom-10 md:right[55%] lg:right-1/2 flex items-center"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
