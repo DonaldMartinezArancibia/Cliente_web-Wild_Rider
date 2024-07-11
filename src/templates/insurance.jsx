@@ -52,7 +52,9 @@ const ContentToggle = ({ content, index, insurancePage }) => {
   return (
     <section id="toggleContent" className="p-4 mb-14 col-[1/4] lg:p-0">
       <div className="mb-2">
-        <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
+        <ReactMarkdown linkTarget="_blank">
+          {content.displayContent?.markdown}
+        </ReactMarkdown>
       </div>
 
       {content.extendedContent && (
@@ -61,7 +63,9 @@ const ContentToggle = ({ content, index, insurancePage }) => {
             isExtendedContentVisible ? "" : "hidden"
           }`}
         >
-          <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
+          <ReactMarkdown linkTarget="_blank">
+            {content.extendedContent?.markdown}
+          </ReactMarkdown>
         </div>
       )}
       {content.extendedContent && (
