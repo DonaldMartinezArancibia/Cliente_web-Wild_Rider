@@ -15,6 +15,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { data } from "autoprefixer"
 import { addMinutes, format, parse } from "date-fns"
+import he from "he" // Importar la biblioteca para desescapar HTML
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   let [open, setOpen] = useState(true)
@@ -535,57 +536,78 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   <th className="p-2">
                     {carsById?.carsAndQuote.priceTitleManual}
                   </th>
+                  <th className="p-2">
+                    {carsById?.carsAndQuote.priceTitleAutomatic}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {carsById?.manualTransmission?.priceOfCar?.length > 0
-                  ? carsById.manualTransmission.priceOfCar.map(
-                      (price, priceIndex) => (
-                        <tr key={priceIndex}>
-                          <td className="p-2">{price.season?.seasonTitle}</td>
-                          <td className="p-2">
-                            {formatDate(price.season?.startDate)} |{" "}
-                            {formatDate(price.season?.endDate)}
-                          </td>
-                          <td className="p-2">${price.priceOfCar}</td>
-                        </tr>
-                      )
+                <>
+                  {carsById?.manualTransmission.priceOfCar.map(
+                    (manualPrice, priceIndex) => (
+                      <tr key={priceIndex}>
+                        <td className="p-2">
+                          {manualPrice.season?.seasonTitle}
+                        </td>
+                        <td className="p-2">
+                          {formatDate(manualPrice.season?.startDate)} |{" "}
+                          {formatDate(manualPrice.season?.endDate)}
+                        </td>
+                        <td className="text-center">
+                          {manualPrice.priceOfCar !== 0 ? (
+                            <>${manualPrice.priceOfCar}</>
+                          ) : (
+                            manualPrice.unsetPriceMessage?.html && (
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: he.decode(
+                                    manualPrice.unsetPriceMessage.html
+                                  ),
+                                }}
+                              />
+                            )
+                          )}
+                        </td>
+                        {carsById?.automaticTransmission?.priceOfCar?.[
+                          priceIndex
+                        ] && (
+                          <>
+                            {carsById?.automaticTransmission.priceOfCar[
+                              priceIndex
+                            ].priceOfCar !== 0 ? (
+                              <td className="text-center">
+                                $
+                                {
+                                  carsById?.automaticTransmission.priceOfCar[
+                                    priceIndex
+                                  ].priceOfCar
+                                }
+                              </td>
+                            ) : (
+                              <td className="text-center">
+                                {carsById?.automaticTransmission.priceOfCar[
+                                  priceIndex
+                                ].unsetPriceMessage?.html && (
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: he.decode(
+                                        carsById?.automaticTransmission
+                                          .priceOfCar[priceIndex]
+                                          .unsetPriceMessage.html
+                                      ),
+                                    }}
+                                  />
+                                )}
+                              </td>
+                            )}
+                          </>
+                        )}
+                      </tr>
                     )
-                  : carsById?.automaticTransmission?.priceOfCar?.map(
-                      (price, priceIndex) => (
-                        <tr key={priceIndex}>
-                          <td className="p-2">{price.season?.seasonTitle}</td>
-                          <td className="p-2">
-                            {formatDate(price.season?.startDate)} |{" "}
-                            {formatDate(price.season?.endDate)}
-                          </td>
-                          <td className="p-2">${price.priceOfCar}</td>
-                        </tr>
-                      )
-                    )}
+                  )}
+                </>
               </tbody>
             </table>
-            {carsById?.manualTransmission?.priceOfCar?.length > 0 &&
-              carsById.automaticTransmission?.priceOfCar?.length > 0 && (
-                <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
-                  <thead>
-                    <tr className="text-xl">
-                      <th className="p-2">
-                        {carsById.carsAndQuote.priceTitleAutomatic}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {carsById.automaticTransmission?.priceOfCar?.map(
-                      (price, priceIndex) => (
-                        <tr key={priceIndex}>
-                          <td className="text-center">${price.priceOfCar}</td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              )}
           </div>
         </div>
       </div>
@@ -1080,7 +1102,10 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           <ReCAPTCHA
             ref={captcha}
             sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-            hl={pageContext.pageContext?.headerAndFooterData}
+            hl={
+              pageContext.pageContext?.headerAndFooterData ||
+              pageContext.langKey
+            }
             onChange={onChange}
             className="flex my-2 justify-evenly lg:justify-start"
           />
