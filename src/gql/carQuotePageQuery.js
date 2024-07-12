@@ -22,6 +22,29 @@ const CarQuoteFormSlugs = gql`
     }
   }
 `
+const CombinedQuery = gql`
+  query CombinedQuery($locale: [Locale!]!) {
+    carQuoteForms(locales: $locale) {
+      slug
+      buttonTextOfQuickQuote
+      localizations {
+        slug
+        locale
+      }
+    }
+    menu(
+      where: { id: "clh9c9u0e9psb0ciqxndxi86r" }
+      locales: $locale
+      stage: PUBLISHED
+    ) {
+      menuElements {
+        ... on Index {
+          slug
+        }
+      }
+    }
+  }
+`
 const CarQuoteFormContent = gql`
   query CarQuoteForm($locale: [Locale!]!) {
     carQuoteForms(locales: $locale) {
@@ -97,4 +120,4 @@ const CarQuoteFormContent = gql`
   }
 `
 
-export { CarQuoteForm, CarQuoteFormSlugs, CarQuoteFormContent }
+export { CarQuoteForm, CarQuoteFormSlugs, CarQuoteFormContent, CombinedQuery }
