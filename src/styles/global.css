@@ -33,6 +33,7 @@
     background-color: #e0e0e0;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    @apply transition-all ease-in-out;
   }
   #sectionBellowHeader {
     @apply grid grid-cols-1 p-2 md:grid-cols-[55%_45%] md:p-6 md:pt-0;

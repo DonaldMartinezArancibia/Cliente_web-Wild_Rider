@@ -40,7 +40,7 @@ const StickyBar = ({ pageContext }) => {
   return (
     <div
       ref={stickyRef}
-      className={`sticky top-0 z-10 p-1 ${
+      className={`sticky transition-all ease-in-out top-0 z-10 p-1 ${
         isScrollVisible ? "w-full" : "md:w-1/2"
       }`}
     >
@@ -53,7 +53,7 @@ const StickyBar = ({ pageContext }) => {
                 }${carQuoteForms[0].slug}`
               : ""
           }
-          className="bg-[#F6CC4D] text-[#0833a2] text-2xl sm:text-4xl font-Poppins block m-auto py-5 px-16 hover:bg-[#ffda6b] rounded-lg font-extrabold"
+          className="bg-[#F6CC4D] text-[#0833a2] text-2xl sm:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-[#ffda6b] rounded-lg font-extrabold md:px-16"
         >
           {data?.carQuoteForms[0]?.buttonTextOfQuickQuote}
         </Link>
@@ -65,7 +65,7 @@ const StickyBar = ({ pageContext }) => {
                 }`
               : ""
           }
-          className={`transition ease-in-out hover:text-[#f6cc4d] hover:drop-shadow-[1px_1px_rgba(0,0,0)] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out text-[#0833a2] text-xl sm:text-xl font-Poppins block m-auto p-1 rounded-lg font-extrabold ${
+          className={`bg-[#0833a2] relative p-5 hover:bg-blue-800 text-white text-xl sm:text-xl md:ml-16 font-Poppins block m-auto rounded-lg font-extrabold ${
             isScrollVisible ? "block" : "hidden"
           }`}
         >
