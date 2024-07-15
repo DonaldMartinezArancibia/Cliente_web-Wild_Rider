@@ -40,6 +40,7 @@ const CombinedQuery = gql`
       menuElements {
         ... on Index {
           slug
+          title
         }
       }
     }

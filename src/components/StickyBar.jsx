@@ -69,7 +69,7 @@ const StickyBar = ({ pageContext }) => {
             isScrollVisible ? "block" : "hidden"
           }`}
         >
-          Regresar al Inicio
+          {indexLink.title}
         </Link>
       </div>
     </div>
