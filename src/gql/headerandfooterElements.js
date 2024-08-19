@@ -48,6 +48,12 @@ const headerAndFooterElements = gql`
       termsOfService
       privacyPolicy
       langKey
+      imprintTitle
+      imprintDetailText {
+        html
+        markdown
+        text
+      }
     }
   }
 `

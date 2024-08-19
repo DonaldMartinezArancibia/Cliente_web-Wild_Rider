@@ -39,7 +39,9 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     Insurance,
     RoadSafety,
   ].find(
-    query => query.definitions[0].name.value === pageContext.remoteTypeName
+    query =>
+      query.definitions[0].name.value === pageContext.remoteTypeName ||
+      pageContext.slug
   )
   // console.log(query)
 
