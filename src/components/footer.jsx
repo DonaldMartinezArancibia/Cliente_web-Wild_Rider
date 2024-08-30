@@ -5,6 +5,7 @@ import { useLocation } from "@reach/router"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { IubendaCookieConsent } from "./iubendaComponent"
+import Example from "./popup"
 
 const Footer = ({ footerData, footerMenus, pageContext }) => {
   const currentYear = new Date().getFullYear()
@@ -71,20 +72,32 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
   const getLinkClass = to => {
     return location.pathname === to
       ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d]"
-      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white hover:cursor-pointer hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
+      : "mt-4 drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white hover:cursor-pointer hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out sm:mr-10 lg:mt-0"
   }
   return (
     <footer className="w-full py-1 bg-[#0833A2] text-white lg:py-3">
-      <div className="flex flex-col items-center w-9/12 m-auto mx-auto contanier sm:flex-row sm:justify-evenly sm:w-11/12 lg:w-9/12 lg:justify-between lg:space-y-0">
-        <ul className="flex items-center mb-1 space-x-8 sm:mb-0">
+      <div className="flex flex-col w-9/12 m-auto mx-auto contanier sm:flex-row sm:justify-evenly sm:w-11/12 lg:w-9/12 lg:justify-between lg:space-y-0">
+        <ul className="items-center my-5 sm:flex sm:flex-wrap sm:m-0">
           {links?.map((link, index) => (
             <li key={index} className={getLinkClass(link.to)}>
               <Link to={link.to}>{link.text}</Link>
             </li>
           ))}
-          <li onClick={open} className={getLinkClass()}>
+          <li onClick={open} className={`${getLinkClass()} !mr-0`}>
             {footerData.imprintTitle}
           </li>
+          <Example
+            iframeUrl={footerData.iFrameLinkOfTermsAndConditions}
+            linkTitle={footerData.termsAndConditionsTitle}
+          />
+          <Example
+            iframeUrl={footerData.iFrameLinkOfCookiePolicy}
+            linkTitle={footerData.cookiePolicyTitle}
+          />
+          <Example
+            iframeUrl={footerData.iFrameLinkOfPrivacyPolicy}
+            linkTitle={footerData.privacyPolicyTitle}
+          />
         </ul>
         <ul className="flex items-center space-x-8">
           {footerData.socialNetworks.map((network, index) => (
