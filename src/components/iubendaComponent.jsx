@@ -6,6 +6,7 @@ const IubendaCookieConsent = ({ cookiePolicyId, lang }) => {
     var _iub = _iub || [];
     _iub.csConfiguration = {
       "askConsentAtCookiePolicyUpdate": true,
+      "countryDetection": true,
       "enableFadp": true,
       "enableLgpd": true,
       "enableUspr": true,
