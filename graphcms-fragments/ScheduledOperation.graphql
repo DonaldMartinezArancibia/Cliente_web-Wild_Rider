@@ -91,6 +91,12 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on Imprint {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on Index {
       remoteTypeName: __typename
       remoteId: id

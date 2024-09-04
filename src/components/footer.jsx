@@ -83,9 +83,9 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
               <Link to={link.to}>{link.text}</Link>
             </li>
           ))}
-          <li onClick={open} className={`${getLinkClass()} !mr-0`}>
+          {/* <li onClick={open} className={`${getLinkClass()} !mr-0`}>
             {footerData.imprintTitle}
-          </li>
+          </li> */}
           <Example
             iframeUrl={footerData.iFrameLinkOfTermsAndConditions}
             linkTitle={footerData.termsAndConditionsTitle}
@@ -126,7 +126,7 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
           &copy; {"1998 - " + currentYear + " " + footerData.footerCopyright}
         </p>
       </div>
-      <Transition.Root show={isOpen} as={Fragment}>
+      {/* <Transition.Root show={isOpen} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10"
@@ -185,7 +185,7 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
             </div>
           </div>
         </Dialog>
-      </Transition.Root>
+      </Transition.Root> */}
     </footer>
   )
 }

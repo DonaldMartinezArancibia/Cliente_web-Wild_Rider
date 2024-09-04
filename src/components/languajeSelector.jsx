@@ -16,6 +16,7 @@ import { PrivacyPolicyPage } from "../gql/privacyPage"
 import { TermsOfServicePage } from "../gql/termsPage"
 import { Insurance } from "../gql/insurancePageQuery"
 import { RoadSafety } from "../gql/roadSafetyPageQuery"
+import { Imprint } from "../gql/imprintPageQuery"
 // import { headerAndFooterElements } from "../gql/headerandfooterElements"
 
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
@@ -38,11 +39,11 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     TermsOfServicePage,
     Insurance,
     RoadSafety,
+    Imprint,
   ].find(
-    query =>
-      query.definitions[0].name.value === pageContext.remoteTypeName ||
-      pageContext.slug
+    query => query.definitions[0].name.value === pageContext.remoteTypeName
   )
+  // console.log(query.definitions[0].name.value)
   // console.log(query)
 
   // const {
@@ -139,6 +140,13 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       )
     }
 
+    let imprintData
+    if (data.imprint) {
+      imprintData = data.imprint.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
     if (indexData?.locale === "en") return ""
     if (indexData?.locale) return indexData.locale
     if (postData?.locale === "en") return `blog/${postData.slug}`
@@ -170,6 +178,8 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     if (travelPlannerData?.locale === "en") return travelPlannerData.slug
     if (travelPlannerData?.locale)
       return `${travelPlannerData.locale}/${travelPlannerData.slug}`
+    if (imprintData?.locale === "en") return imprintData.slug
+    if (imprintData?.locale) return `${imprintData.locale}/${imprintData.slug}`
     return `${postData?.locale}/blog/${postData?.slug}`
   }
 

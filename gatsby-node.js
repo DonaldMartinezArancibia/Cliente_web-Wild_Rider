@@ -115,6 +115,7 @@ exports.createPages = async ({ graphql, actions }) => {
         privacyPage,
         roadPage,
         insurancePage,
+        imprintPage,
       ] = await Promise.all([
         // fetchContentByType("allGraphCmsPost", locale),
         fetchContentByType("allGraphCmsIndex", locale),
@@ -130,6 +131,7 @@ exports.createPages = async ({ graphql, actions }) => {
         fetchContentByType("allGraphCmsPrivacyPolicyPage", locale),
         fetchContentByType("allGraphCmsRoadSafety", locale),
         fetchContentByType("allGraphCmsInsurance", locale),
+        fetchContentByType("allGraphCmsImprint", locale),
       ])
 
       function createPagesForContent(
@@ -249,6 +251,12 @@ exports.createPages = async ({ graphql, actions }) => {
         roadPage.data.allGraphCmsRoadSafety.nodes,
         `${urlPrefix}`,
         "./src/templates/roadSafety.jsx"
+      )
+
+      createPagesForContent(
+        imprintPage.data.allGraphCmsImprint.nodes,
+        `${urlPrefix}`,
+        "./src/templates/imprint.jsx"
       )
     })
   )
