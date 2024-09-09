@@ -31,6 +31,21 @@ fragment HeaderAndFooterElement on HeaderAndFooterElement {
   contact
   explore
   footerCopyright
+  termsAndConditionsTitle
+  iFrameLinkOfTermsAndConditions
+  privacyPolicyTitle
+  iFrameLinkOfPrivacyPolicy
+  cookiePolicyTitle
+  iFrameLinkOfCookiePolicy
+  imprintTitle
+  imprintDetailText {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
   termsOfService
   privacyPolicy
   contactElements {

@@ -5,8 +5,9 @@ const Car = gql`
     cars(locales: $locale, orderBy: numberOfOrder_ASC, last: 2000) {
       carName
       id
-      carMainPhoto(locales: en) {
+      carMainPhoto(locales: $locale) {
         url
+        altText
       }
       yearOfCarTitle
       yearOfCarValue

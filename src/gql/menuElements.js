@@ -64,6 +64,11 @@ const menuElements = gql`
           slug
           title
         }
+        ... on Imprint {
+          id
+          slug
+          title
+        }
       }
     }
   }

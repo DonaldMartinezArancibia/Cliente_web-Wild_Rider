@@ -1,102 +1,91 @@
-import React from "react"
-import { Fragment, useRef, useState, useEffect } from "react"
+import React, { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { useQuery } from "@apollo/client"
-import { Post } from "../gql/allPost"
+import { useLocation } from "@reach/router"
 
-export default function Example() {
+const Example = React.memo(({ iframeUrl, linkTitle }) => {
+  // Memo para evitar renders innecesarios
   let [open, setOpen] = useState(false)
-  useEffect(() => {
-    setTimeout(() => {
-      setOpen(true)
-    }, 3000)
-  }, [])
-
   const cancelButtonRef = useRef(null)
+  const location = useLocation()
 
-  const {
-    data: postBySlug,
-    loading: postBySlugQueryLoading,
-    error: postBySlugQueryError,
-  } = useQuery(Post, {
-    variables: { internalId: "clcqdqrwqm5uo0ak25chb6wzy", locale: ["en"] },
-  })
-  if (postBySlugQueryLoading) return <p>Loading...</p>
-  if (postBySlugQueryError) return <p>Error : {postBySlugQueryError.message}</p>
+  const getLinkClass = to => {
+    return location.pathname !== to
+      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d]"
+      : "mt-4 drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white hover:cursor-pointer hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out sm:mr-10 lg:mt-0"
+  }
+
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10"
-        initialFocus={cancelButtonRef}
-        onClose={setOpen}
+    <>
+      {/* Enlace que abre el modal */}
+      <a
+        onClick={e => {
+          e.preventDefault() // Evitar el comportamiento predeterminado del enlace
+          setOpen(true) // Abrir el modal
+        }}
+        className={`${getLinkClass(location.pathname)} block`}
       >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
-        </Transition.Child>
+        {linkTitle} {/* Usa el título pasado como prop */}
+      </a>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="px-1 pt-5 pb-4 bg-white">
-                  <div className="sm:flex sm:items-start">
-                    <button
-                      type="button"
-                      ref={cancelButtonRef}
-                      className="inline-flex justify-center w-full p-1 text-base font-medium text-red-600 border border-transparent rounded-md shadow-sm bg-white-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm hover:text-white"
-                      onClick={() => setOpen(false)}
-                    >
-                      <XMarkIcon className="w-6 h-6" aria-hidden="true" />
-                    </button>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
-                        {postBySlug.posts[0].address.adressLineOne}
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Are you sure you want to deactivate your account? All
-                          of your data will be permanently removed. This action
-                          cannot be undone.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
+      {/* Modal */}
+      <Transition.Root show={open} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          initialFocus={cancelButtonRef}
+          onClose={() => setOpen(false)}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-full p-4 sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative p-2 overflow-hidden text-right transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-[600px] w-full max-w-full">
                   <button
                     type="button"
-                    className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    ref={cancelButtonRef}
+                    className="p-1 m-[5px_5px_4px] text-base font-medium text-red-600 border border-transparent rounded-md shadow-sm 2xl:inline-flex bg-white-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 hover:text-white"
                     onClick={() => setOpen(false)}
                   >
-                    Cancel
+                    <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                   </button>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
+                  <div className="sm:text-left">
+                    {open && ( // Solo carga el iframe si el modal está abierto
+                      <iframe
+                        src={iframeUrl} // Usa la URL pasada como prop
+                        title="Cookie Policy"
+                        className="w-full h-full border-none"
+                        style={{ width: "100%", height: "750px" }}
+                      />
+                    )}
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
           </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+        </Dialog>
+      </Transition.Root>
+    </>
   )
-}
+})
+
+export default Example

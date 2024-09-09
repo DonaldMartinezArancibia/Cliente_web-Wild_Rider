@@ -45,9 +45,19 @@ const headerAndFooterElements = gql`
         urlToSocialNetwork
       }
       footerCopyright
-      termsOfService
-      privacyPolicy
       langKey
+      imprintTitle
+      imprintDetailText {
+        html
+        markdown
+        text
+      }
+      termsAndConditionsTitle
+      iFrameLinkOfTermsAndConditions
+      privacyPolicyTitle
+      iFrameLinkOfPrivacyPolicy
+      cookiePolicyTitle
+      iFrameLinkOfCookiePolicy
     }
   }
 `
