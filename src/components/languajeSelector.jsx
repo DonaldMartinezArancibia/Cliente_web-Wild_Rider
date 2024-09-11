@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { navigate } from "gatsby"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { Post } from "../gql/allPost"
@@ -66,12 +66,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // if (headerAndFooterElementsQueryLoading) return <p>Loading...</p>
   // if (headerAndFooterElementsQueryError)
   //   return console.log(headerAndFooterElementsQueryError)
-  if (loading) return <p>Loading...</p>
-  if (error) return console.log(error)
 
   // const langSelectorTitle =
   //   headerAndFooterElementsData.headerAndFooterElements[0]
   function getSlugByLocale(data, lang) {
+    localStorage.setItem("user-lang", lang) // Guardar la preferencia de idioma del usuario
+
     let indexData
 
     if (data.index) {
@@ -182,6 +182,29 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     if (imprintData?.locale) return `${imprintData.locale}/${imprintData.slug}`
     return `${postData?.locale}/blog/${postData?.slug}`
   }
+
+  useEffect(() => {
+    const browserLanguage = navigator.language.split("-")[0]
+    const userLang = localStorage.getItem("user-lang") // Verificar si el usuario ha seleccionado manualmente un idioma
+    const langSlugs = { en: "en", es: "es", de: "de" }
+
+    if (
+      !userLang &&
+      langSlugs[browserLanguage] &&
+      browserLanguage !== pageContext.langKey
+    ) {
+      // Solo redirigir si el usuario no ha seleccionado un idioma previamente
+      navigate(`/${langSlugs[browserLanguage]}/`)
+    }
+  }, [pageContext.langKey])
+
+  const handleLanguageChange = lang => {
+    localStorage.setItem("user-lang", lang) // Guardar la preferencia de idioma del usuario
+    navigate(`/${lang}/`)
+  }
+
+  if (loading) return <p>Loading...</p>
+  if (error) return console.log(error)
 
   return (
     <>
