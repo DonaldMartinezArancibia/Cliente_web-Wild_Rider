@@ -44,16 +44,16 @@ const menuElements = gql`
         #   slug
         #   title
         # }
-        ... on TermsOfServicePage {
-          id
-          slug
-          title
-        }
-        ... on PrivacyPolicyPage {
-          id
-          slug
-          title
-        }
+        # ... on TermsOfServicePage {
+        #   id
+        #   slug
+        #   title
+        # }
+        # ... on PrivacyPolicyPage {
+        #   id
+        #   slug
+        #   title
+        # }
         ... on Insurance {
           id
           slug
