@@ -111,8 +111,8 @@ exports.createPages = async ({ graphql, actions }) => {
         faqPageResult,
         travelPageResult,
         carquotePageResult,
-        termsPage,
-        privacyPage,
+        // termsPage,
+        // privacyPage,
         roadPage,
         insurancePage,
         imprintPage,
@@ -127,8 +127,8 @@ exports.createPages = async ({ graphql, actions }) => {
         fetchContentByType("allGraphCmsFaq", locale),
         fetchContentByType("allGraphCmsTravelPlanner", locale),
         fetchContentByType("allGraphCmsCarQuoteForm", locale),
-        fetchContentByType("allGraphCmsTermsOfServicePage", locale),
-        fetchContentByType("allGraphCmsPrivacyPolicyPage", locale),
+        // fetchContentByType("allGraphCmsTermsOfServicePage", locale),
+        // fetchContentByType("allGraphCmsPrivacyPolicyPage", locale),
         fetchContentByType("allGraphCmsRoadSafety", locale),
         fetchContentByType("allGraphCmsInsurance", locale),
         fetchContentByType("allGraphCmsImprint", locale),
@@ -229,17 +229,17 @@ exports.createPages = async ({ graphql, actions }) => {
         "./src/templates/CarForm.jsx"
       )
 
-      createPagesForContent(
-        termsPage.data.allGraphCmsTermsOfServicePage.nodes,
-        `${urlPrefix}`,
-        "./src/templates/onConstructionPage.jsx"
-      )
+      // createPagesForContent(
+      //   termsPage.data.allGraphCmsTermsOfServicePage.nodes,
+      //   `${urlPrefix}`,
+      //   "./src/templates/onConstructionPage.jsx"
+      // )
 
-      createPagesForContent(
-        privacyPage.data.allGraphCmsPrivacyPolicyPage.nodes,
-        `${urlPrefix}`,
-        "./src/templates/onConstructionPage.jsx"
-      )
+      // createPagesForContent(
+      //   privacyPage.data.allGraphCmsPrivacyPolicyPage.nodes,
+      //   `${urlPrefix}`,
+      //   "./src/templates/onConstructionPage.jsx"
+      // )
 
       createPagesForContent(
         insurancePage.data.allGraphCmsInsurance.nodes,
