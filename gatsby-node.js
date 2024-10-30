@@ -232,13 +232,13 @@ exports.createPages = async ({ graphql, actions }) => {
       createPagesForContent(
         campingPage.data.allGraphCmsCampingPage.nodes,
         `${urlPrefix}`,
-        "./src/templates/onConstructionPage.jsx"
+        "./src/templates/campingPage.jsx"
       )
 
       createPagesForContent(
         airportAndOfficePage.data.allGraphCmsAirportAndOfficePage.nodes,
         `${urlPrefix}`,
-        "./src/templates/onConstructionPage.jsx"
+        "./src/templates/airportAndOffice.jsx"
       )
 
       createPagesForContent(

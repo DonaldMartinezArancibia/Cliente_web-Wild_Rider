@@ -7,6 +7,29 @@ fragment CampingPage on CampingPage {
   remoteId: id
   slug
   title
+  toggleContent {
+    ... on ToggleContent {
+      stage
+      locale
+      id
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+    }
+  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -25,6 +48,22 @@ fragment CampingPage on CampingPage {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+  }
+  coverOfVideo {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  videos {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }

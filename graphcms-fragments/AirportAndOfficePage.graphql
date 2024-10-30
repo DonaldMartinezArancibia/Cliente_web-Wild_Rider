@@ -7,6 +7,59 @@ fragment AirportAndOfficePage on AirportAndOfficePage {
   remoteId: id
   slug
   title
+  titleOfAddress
+  address
+  urlSourceFrame
+  googleMapsUrlButton
+  googleMapsButtonText
+  toggleContent {
+    ... on ToggleContent {
+      stage
+      locale
+      id
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+    }
+  }
+  contactElements {
+    ... on ContactElement {
+      stage
+      locale
+      id
+      elementTitle
+      elementValue
+      elementText {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      elementIcon {
+        ... on Asset {
+          remoteTypeName: __typename
+          remoteId: id
+          locale
+          stage
+        }
+      }
+    }
+  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename
