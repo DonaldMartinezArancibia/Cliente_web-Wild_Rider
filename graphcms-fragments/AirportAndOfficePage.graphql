@@ -1,4 +1,4 @@
-fragment PrivacyPolicyPage on PrivacyPolicyPage {
+fragment AirportAndOfficePage on AirportAndOfficePage {
   stage
   locale
   publishedAt(variation: COMBINED)

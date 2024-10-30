@@ -39,6 +39,18 @@ fragment Menu on Menu {
       locale
       stage
     }
+    ... on AirportAndOfficePage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on CampingPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on CarsAndQuote {
       remoteTypeName: __typename
       remoteId: id
@@ -75,19 +87,7 @@ fragment Menu on Menu {
       locale
       stage
     }
-    ... on PrivacyPolicyPage {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
     ... on RoadSafety {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-    ... on TermsOfServicePage {
       remoteTypeName: __typename
       remoteId: id
       locale

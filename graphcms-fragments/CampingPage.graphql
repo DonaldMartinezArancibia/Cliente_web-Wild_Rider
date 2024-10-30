@@ -1,4 +1,4 @@
-fragment TermsOfServicePage on TermsOfServicePage {
+fragment CampingPage on CampingPage {
   stage
   locale
   publishedAt(variation: COMBINED)

@@ -43,7 +43,19 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
+    ... on AirportAndOfficePage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
     ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+    ... on CampingPage {
       remoteTypeName: __typename
       remoteId: id
       locale
@@ -120,12 +132,6 @@ fragment ScheduledOperation on ScheduledOperation {
       locale
       stage
     }
-    ... on PrivacyPolicyPage {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
     ... on RentalInfo {
       remoteTypeName: __typename
       remoteId: id
@@ -153,12 +159,6 @@ fragment ScheduledOperation on ScheduledOperation {
     ... on Seos {
       remoteTypeName: __typename
       remoteId: id
-      stage
-    }
-    ... on TermsOfServicePage {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
       stage
     }
     ... on Testimonial {
