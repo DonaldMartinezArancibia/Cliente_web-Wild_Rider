@@ -22,6 +22,15 @@ module.exports = {
   plugins: [
     `gatsby-plugin-image`,
     {
+      resolve: "gatsby-plugin-robots-txt",
+      options: {
+        host: "https://wild-rider.com",
+        sitemap: "https://wild-rider.com/sitemap.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
+        output: "/robots.txt",
+      },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
