@@ -20,6 +20,7 @@ fragment ContactAndLocation on ContactAndLocation {
       text
     }
   }
+  showContentBellowFormAndTwoImages
   contactForm {
     ... on ContactForm {
       stage

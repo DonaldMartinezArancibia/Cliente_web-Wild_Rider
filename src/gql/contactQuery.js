@@ -47,6 +47,7 @@ const ContactContent = gql`
         markdown
         text
       }
+      showContentBellowFormAndTwoImages
       contactElements {
         elementTitle
         elementIcon(locales: en) {
