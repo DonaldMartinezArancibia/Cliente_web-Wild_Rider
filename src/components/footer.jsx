@@ -28,6 +28,7 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
     en: 44395300,
     es: 76904439,
     de: 91112901,
+    fr: 21879201,
   }
 
   // Obtener cookiePolicyId correspondiente

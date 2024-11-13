@@ -112,6 +112,22 @@ fragment Asset on Asset {
       stage
     }
   }
+  coverOfVideoCampingPage {
+    ... on CampingPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  videosCampingPage {
+    ... on CampingPage {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
   scheduledIn {
     ... on ScheduledOperation {
       remoteTypeName: __typename

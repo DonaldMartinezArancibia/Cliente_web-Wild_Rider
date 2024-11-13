@@ -1,10 +1,10 @@
-fragment ContactAndLocation on ContactAndLocation {
+fragment AirportAndOfficePage on AirportAndOfficePage {
   stage
   locale
-  remoteId: id
-  createdAt(variation: COMBINED)
-  updatedAt(variation: COMBINED)
   publishedAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  createdAt(variation: COMBINED)
+  remoteId: id
   slug
   title
   titleOfAddress
@@ -12,34 +12,27 @@ fragment ContactAndLocation on ContactAndLocation {
   urlSourceFrame
   googleMapsUrlButton
   googleMapsButtonText
-  formOnSubmitMessage {
-    ... on RichText {
-      raw
-      html
-      markdown
-      text
-    }
-  }
-  showContentBellowFormAndTwoImages
-  contactForm {
-    ... on ContactForm {
+  toggleContent {
+    ... on ToggleContent {
       stage
       locale
       id
-      nameField
-      nameFieldErrorMessage
-      surnameField
-      surnameFieldErrorMessage
-      emailField
-      emailFieldErrorMessage
-      confirmEmailField
-      confirmEmailFieldErrorMessage
-      emailAndEmailConfirmNotEqualErrorMessage
-      phoneNumberField
-      messageField
-      messageFieldErrorMessage
-      reCaptchaErrorMessage
-      sendButton
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
     }
   }
   contactElements {
@@ -67,7 +60,7 @@ fragment ContactAndLocation on ContactAndLocation {
       }
     }
   }
-  createdBy {
+  publishedBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
@@ -81,26 +74,10 @@ fragment ContactAndLocation on ContactAndLocation {
       stage
     }
   }
-  publishedBy {
+  createdBy {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
-      stage
-    }
-  }
-  topImage {
-    ... on Asset {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
-      stage
-    }
-  }
-  bottomImage {
-    ... on Asset {
-      remoteTypeName: __typename
-      remoteId: id
-      locale
       stage
     }
   }

@@ -2,6 +2,7 @@ import React from "react"
 import { Helmet } from "react-helmet"
 
 const IubendaCookieConsent = ({ cookiePolicyId, lang }) => {
+  console.log(lang)
   const iubendaConfig = `
     var _iub = _iub || [];
     _iub.csConfiguration = {

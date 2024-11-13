@@ -1,4 +1,4 @@
-fragment PrivacyPolicyPage on PrivacyPolicyPage {
+fragment CampingPage on CampingPage {
   stage
   locale
   publishedAt(variation: COMBINED)
@@ -7,6 +7,29 @@ fragment PrivacyPolicyPage on PrivacyPolicyPage {
   remoteId: id
   slug
   title
+  toggleContent {
+    ... on ToggleContent {
+      stage
+      locale
+      id
+      displayContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+      extendedContent {
+        ... on RichText {
+          raw
+          html
+          markdown
+          text
+        }
+      }
+    }
+  }
   publishedBy {
     ... on User {
       remoteTypeName: __typename
@@ -25,6 +48,22 @@ fragment PrivacyPolicyPage on PrivacyPolicyPage {
     ... on User {
       remoteTypeName: __typename
       remoteId: id
+      stage
+    }
+  }
+  coverOfVideo {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  videos {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
       stage
     }
   }
