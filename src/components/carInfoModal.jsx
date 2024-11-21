@@ -474,8 +474,8 @@ export default function OpenModal({ carId, pageContext }) {
                       (photo, index) => (
                         <img
                           key={index}
-                          src={photo.url}
-                          alt={`Car Photo ${index + 1}`}
+                          src={photo?.url}
+                          alt={photo?.altText}
                         />
                       )
                     )}

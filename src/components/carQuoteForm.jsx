@@ -524,6 +524,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           )}
         <img
           src={carsById?.carMainPhoto.url}
+          alt={carsById?.carMainPhoto.altText}
           className="w-full m-auto sm:w-4/5 lg:m-0 lg:col-[2/3]"
         />
         <div className="flex flex-col xl:flex-row lg:col-[1/2] lg:row-[4/5]">
