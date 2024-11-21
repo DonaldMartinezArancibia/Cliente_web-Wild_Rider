@@ -189,8 +189,8 @@ export default function IndexPage({ pageContext }) {
               className="flex items-center"
             >
               <img
-                src={benefit.benefitImage.url}
-                alt={`Benefit ${index}`}
+                src={benefit.benefitImage?.url}
+                alt={benefit.benefitImage?.altText}
                 className="h-12"
               />
               <p className="col-span-1 ml-5">{benefit.benefitTitle}</p>

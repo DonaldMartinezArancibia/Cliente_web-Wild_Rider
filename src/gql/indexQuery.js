@@ -44,8 +44,9 @@ const IndexContent = gql`
         text
       }
       freeBenefitsElements(last: 100) {
-        benefitImage(locales: en) {
+        benefitImage {
           url
+          altText
         }
         benefitTitle
       }
