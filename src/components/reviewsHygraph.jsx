@@ -271,6 +271,10 @@ const MapContainer = pageContext => {
     DefaultImage: null,
   }
 
+  console.log(googleR.tripAdvisorReviews)
+  console.log(googleR.facebookReviews)
+  console.log(googleR.googleReviews)
+
   return (
     <>
       {/* Utiliza el componente GoogleReviewsCarousel para mostrar las reseñas de Google */}

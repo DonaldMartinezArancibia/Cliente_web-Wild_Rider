@@ -5,11 +5,13 @@ const Cars = gql`
     cars(where: { id: $internalId }, locales: $locale) {
       carName
       id
-      carMainPhoto(locales: en) {
+      carMainPhoto(locales: $locale) {
         url
+        altText
       }
-      carPhotos(locales: en) {
+      carPhotos(locales: $locale) {
         url
+        altText
       }
       carDetails {
         html
