@@ -230,13 +230,58 @@ export default function useContactAndLocation({
 
   console.log(pageData.showContentBellowFormAndTwoImages)
 
+  const ContentToggle = ({ content, index, pageData }) => {
+    const [isExtendedContentVisible, setIsExtendedContentVisible] =
+      useState(false)
+
+    const handleToggleContent = () => {
+      setIsExtendedContentVisible(prev => !prev)
+    }
+
+    return (
+      <section id="toggleContent" className="p-4 mb-14 col-[1/4] lg:p-0">
+        <div className="mb-2">
+          <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
+        </div>
+
+        {content.extendedContent && (
+          <div
+            className={`extended-content-${index} ${
+              isExtendedContentVisible ? "" : "hidden"
+            }`}
+          >
+            <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
+          </div>
+        )}
+        {content.extendedContent && (
+          <button
+            className="text-[#0833a2] hover:underline"
+            onClick={handleToggleContent}
+          >
+            {isExtendedContentVisible ? pageData?.hideText : pageData?.showText}
+          </button>
+        )}
+      </section>
+    )
+  }
+
   return (
     <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <StickyBar pageContext={pageContext} />
       <section className="p-4 pt-3 lg:p-16 lg:grid lg:grid-cols-[1fr_1fr] min-[2000px]:grid-cols-[35%_35%_30%]">
-        <h1 className="font-CarterOne lg:text-5xl lg:col-[1/3]">
+        <h1 className="font-CarterOne lg:pb-4 lg:text-5xl lg:col-[1/3]">
           {pageData.title}
         </h1>
+        <div className="sm:grid lg:col-[1/3] lg:row-[2/3] xl:px-14">
+          {pageData.toggleContent.map((content, contentIndex) => (
+            <ContentToggle
+              key={contentIndex}
+              content={content}
+              index={contentIndex}
+              pageData={pageData}
+            />
+          ))}
+        </div>
         <form
           name="contact"
           onSubmit={handleSubmit}
@@ -556,7 +601,7 @@ export default function useContactAndLocation({
             </div>
           </>
         ) : null}
-        <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[2/3] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
+        <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[3/4] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
           <img
             src={pageData.topImage.url}
             alt="Profile"

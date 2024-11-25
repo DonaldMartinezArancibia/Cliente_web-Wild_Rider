@@ -60,6 +60,15 @@ const ContactContent = gql`
           text
         }
       }
+      toggleContent(last: 2000) {
+        displayContent {
+          markdown
+        }
+        extendedContent {
+          markdown
+          raw
+        }
+      }
       urlSourceFrame
       googleMapsUrlButton
       googleMapsButtonText
