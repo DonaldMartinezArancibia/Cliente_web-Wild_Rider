@@ -52,7 +52,15 @@ const ContentToggle = ({ content, index, roadSafetyPage }) => {
   return (
     <section id="toggleContent" className="p-4 mb-14 col-[1/4] lg:p-0">
       <div className="mb-2">
-        <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            img: ({ src, alt }) => (
+              <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+            ),
+          }}
+        >
+          {content.displayContent?.markdown}
+        </ReactMarkdown>
       </div>
 
       {content.extendedContent && (
@@ -61,7 +69,15 @@ const ContentToggle = ({ content, index, roadSafetyPage }) => {
             isExtendedContentVisible ? "" : "hidden"
           }`}
         >
-          <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              img: ({ src, alt }) => (
+                <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+              ),
+            }}
+          >
+            {content.extendedContent?.markdown}
+          </ReactMarkdown>
         </div>
       )}
       {content.extendedContent && (
