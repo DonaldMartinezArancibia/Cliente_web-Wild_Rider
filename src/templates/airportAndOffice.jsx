@@ -45,52 +45,6 @@ const AirportAndOffice = ({ pageContext }) => {
           />
         ))}
       </div>
-    </main>
-  )
-}
-
-const ContentToggle = ({
-  content,
-  index,
-  airportAndOfficePage,
-  handleLinkClick,
-}) => {
-  const [isExtendedContentVisible, setIsExtendedContentVisible] =
-    useState(false)
-
-  const handleToggleContent = () => {
-    setIsExtendedContentVisible(prev => !prev)
-  }
-
-  return (
-    <section id="toggleContent" className="p-4 mb-14 col-[1/4] lg:p-0">
-      <div className="mb-2">
-        <ReactMarkdown linkTarget="_blank">
-          {content.displayContent?.markdown}
-        </ReactMarkdown>
-      </div>
-
-      {/* {content.extendedContent && (
-        <div
-          className={`extended-content-${index} ${
-            isExtendedContentVisible ? "" : "hidden"
-          }`}
-        >
-          <ReactMarkdown linkTarget="_blank">
-            {content.extendedContent?.markdown}
-          </ReactMarkdown>
-        </div>
-      )}
-      {content.extendedContent && (
-        <button
-          className="text-[#0833a2] hover:underline"
-          onClick={handleToggleContent}
-        >
-          {isExtendedContentVisible
-            ? insurancePage.hideText
-            : insurancePage.showText}
-        </button>
-      )} */}
       <div className="grid mb-5 mx-3 min-[500px]:grid-cols-2 md:grid-cols-3 md:justify-items-center md:my-8 lg:col-[1/2] lg:row-[3/4]">
         {airportAndOfficePage.contactElements?.map((element, index) => (
           <div className="flex items-center col-span-1" key={index}>
@@ -140,6 +94,52 @@ const ContentToggle = ({
           </svg>
         </button>
       </a>
+    </main>
+  )
+}
+
+const ContentToggle = ({
+  content,
+  index,
+  airportAndOfficePage,
+  handleLinkClick,
+}) => {
+  const [isExtendedContentVisible, setIsExtendedContentVisible] =
+    useState(false)
+
+  const handleToggleContent = () => {
+    setIsExtendedContentVisible(prev => !prev)
+  }
+
+  return (
+    <section id="toggleContent" className="p-4 mb-14 col-[1/4] lg:p-0">
+      <div className="mb-2">
+        <ReactMarkdown linkTarget="_blank">
+          {content.displayContent?.markdown}
+        </ReactMarkdown>
+      </div>
+
+      {/* {content.extendedContent && (
+        <div
+          className={`extended-content-${index} ${
+            isExtendedContentVisible ? "" : "hidden"
+          }`}
+        >
+          <ReactMarkdown linkTarget="_blank">
+            {content.extendedContent?.markdown}
+          </ReactMarkdown>
+        </div>
+      )}
+      {content.extendedContent && (
+        <button
+          className="text-[#0833a2] hover:underline"
+          onClick={handleToggleContent}
+        >
+          {isExtendedContentVisible
+            ? insurancePage.hideText
+            : insurancePage.showText}
+        </button>
+      )} */}
     </section>
   )
 }
