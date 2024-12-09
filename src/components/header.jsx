@@ -245,13 +245,13 @@ export default function Header({ pageContext }) {
             </p>
           </Link>
         </h1> */}
-        <ul className="hidden lg:grid grid-cols-[auto] gap-x-12 m-auto text-xl font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
+        <ul className="hidden lg:grid grid-cols-[auto] gap-x-12 m-auto text-lg font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
           {links.map((link, index) => (
             <li
               key={index}
               className={`${getLinkClass(link.to)} ${
                 index === 0
-                  ? "col-span-1 row-span-3 content-center text-4xl before:bottom-8 before:top-16"
+                  ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16"
                   : ""
               }`} // Cambia '5' al número de filas que desees que ocupe
             >
