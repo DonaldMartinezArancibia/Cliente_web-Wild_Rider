@@ -245,15 +245,25 @@ export default function Header({ pageContext }) {
             </p>
           </Link>
         </h1> */}
-        <ul className="hidden lg:grid grid-cols-[auto] gap-x-12 m-auto text-lg font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
+        <ul className="hidden lg:px-5 lg:grid grid-cols-[auto] gap-x-12 m-auto text-lg font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
           {links.map((link, index) => (
             <li
               key={index}
-              className={`${getLinkClass(link.to)} ${
-                index === 0
-                  ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16"
-                  : ""
-              }`} // Cambia '5' al número de filas que desees que ocupe
+              className={`${getLinkClass(link.to)} 
+    ${
+      index === 0
+        ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
+        : ""
+    } 
+    ${
+      index === 3 && (
+        <li
+          key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
+        >
+          hi
+        </li>
+      )
+    }`}
             >
               <Link to={link.to}>{link.text}</Link>
             </li>
@@ -284,7 +294,7 @@ export default function Header({ pageContext }) {
         className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-opacity-50 bg-stone-700 w-80"
       >
         <div className="p-8">
-          <ul className="space-y-8 text-center font-Poppins">
+          <ul className="space-y-5 text-center font-Poppins">
             {links.map((link, index) => (
               <li
                 key={index}
