@@ -41,13 +41,13 @@ const Camping = ({ pageContext }) => {
   return (
     <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <StickyBar pageContext={pageContext} />
-      <h1 className="p-4 font-CarterOne lg:text-5xl xl:p-14 xl:pb-10">
+      <h1 className="p-4 lg:mb-10 font-CarterOne lg:text-5xl lg:px-14">
         {campingPage.title}
       </h1>
 
       {/* {roadSafetyPage && ReactHtmlParser(roadSafetyPage)} */}
 
-      <div className="sm:grid lg:grid-cols-3 xl:px-14">
+      <div className="sm:grid lg:grid-cols-3 lg:px-14">
         {campingPage.toggleContent.map((content, contentIndex) => (
           <ContentToggle
             key={contentIndex}
