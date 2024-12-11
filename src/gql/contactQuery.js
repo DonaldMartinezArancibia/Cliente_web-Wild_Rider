@@ -47,6 +47,7 @@ const ContactContent = gql`
         markdown
         text
       }
+      showContentBellowFormAndTwoImages
       contactElements {
         elementTitle
         elementIcon(locales: en) {
@@ -57,6 +58,15 @@ const ContactContent = gql`
           html
           markdown
           text
+        }
+      }
+      toggleContent(last: 2000) {
+        displayContent {
+          markdown
+        }
+        extendedContent {
+          markdown
+          raw
         }
       }
       urlSourceFrame

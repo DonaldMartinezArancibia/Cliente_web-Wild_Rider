@@ -12,8 +12,8 @@ import { ContactAndLocation } from "../gql/contactQuery"
 import { TravelPlanner } from "../gql/travelPlannerPageQuery"
 import { Car } from "../gql/carsQuery"
 import { CarQuoteForm } from "../gql/carQuotePageQuery"
-import { PrivacyPolicyPage } from "../gql/privacyPage"
-import { TermsOfServicePage } from "../gql/termsPage"
+import { AirportAndOfficePage } from "../gql/airportAndOfficePage"
+import { CampingPage } from "../gql/campingPage"
 import { Insurance } from "../gql/insurancePageQuery"
 import { RoadSafety } from "../gql/roadSafetyPageQuery"
 import { Imprint } from "../gql/imprintPageQuery"
@@ -35,8 +35,8 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     TravelPlanner,
     Car,
     CarQuoteForm,
-    PrivacyPolicyPage,
-    TermsOfServicePage,
+    AirportAndOfficePage,
+    CampingPage,
     Insurance,
     RoadSafety,
     Imprint,
@@ -147,6 +147,20 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       )
     }
 
+    let campingData
+    if (data.campingPage) {
+      campingData = data.campingPage.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
+    let airportAndOfficePageData
+    if (data.airportAndOfficePage) {
+      airportAndOfficePageData = data.airportAndOfficePage.localizations.find(
+        item => item.locale === lang
+      )
+    }
+
     if (indexData?.locale === "en") return ""
     if (indexData?.locale) return indexData.locale
     if (postData?.locale === "en") return `blog/${postData.slug}`
@@ -180,6 +194,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       return `${travelPlannerData.locale}/${travelPlannerData.slug}`
     if (imprintData?.locale === "en") return imprintData.slug
     if (imprintData?.locale) return `${imprintData.locale}/${imprintData.slug}`
+    if (campingData?.locale === "en") return campingData.slug
+    if (campingData?.locale) return `${campingData.locale}/${campingData.slug}`
+    if (airportAndOfficePageData?.locale === "en")
+      return airportAndOfficePageData.slug
+    if (airportAndOfficePageData?.locale)
+      return `${airportAndOfficePageData.locale}/${airportAndOfficePageData.slug}`
     return `${postData?.locale}/blog/${postData?.slug}`
   }
 

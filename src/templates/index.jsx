@@ -184,7 +184,13 @@ export default function IndexPage({ pageContext }) {
       </Helmet>
 
       <section id="sectionBellowHeader">
-        <ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            img: ({ src, alt }) => (
+              <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+            ),
+          }}
+        >
           {IndexContentData.indices[0].mainTextBelow.markdown}
         </ReactMarkdown>
       </section>

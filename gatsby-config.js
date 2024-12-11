@@ -17,10 +17,20 @@ module.exports = {
     title: `Gatsby Default Starter`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
     author: `@gatsbyjs`,
-    siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
+    siteUrl: `https://wild-rider.com/`,
   },
   plugins: [
     `gatsby-plugin-image`,
+    `gatsby-plugin-sitemap`,
+    {
+      resolve: "gatsby-plugin-robots-txt",
+      options: {
+        host: "https://wild-rider.com",
+        sitemap: "https://wild-rider.com/sitemap-xml.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
+        output: "/robots.txt",
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

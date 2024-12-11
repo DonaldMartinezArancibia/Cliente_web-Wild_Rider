@@ -1,47 +1,70 @@
 import React, { useState } from "react"
 import { useQuery } from "@apollo/client"
-import { RoadSafetyContent } from "../gql/roadSafetyPageQuery"
+import { CampingPageContent } from "../gql/campingPage"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import VideoPlayer from "../components/videoPlayer"
 import StickyBar from "../components/StickyBar"
 
-const RoadSafety = ({ pageContext }) => {
+const Camping = ({ pageContext }) => {
   const {
-    data: roadSafetyPageData,
-    loading: roadSafetyPageLoading,
-    error: roadSafetyPageError,
-  } = useQuery(RoadSafetyContent, {
+    data: campingPageData,
+    loading: campingPageLoading,
+    error: campingPageError,
+  } = useQuery(CampingPageContent, {
     variables: { locale: [pageContext.langKey] },
   })
 
-  if (roadSafetyPageLoading) return <p>Loading...</p>
-  if (roadSafetyPageError) return <p>Error: {roadSafetyPageError?.message}</p>
+  if (campingPageLoading) return <p>Loading...</p>
+  if (campingPageError) return <p>Error: {campingPageError?.message}</p>
 
-  const roadSafetyPage = roadSafetyPageData.roadSafeties[0] || []
+  const campingPage = campingPageData.campingPages[0] || []
+
+  const videos =
+    campingPage?.videos?.map(video => ({
+      sources: [
+        {
+          src: video.url,
+          type: video.mimeType,
+        },
+      ],
+    })) || []
+
+  const coverOfVideo = campingPage?.coverOfVideo || []
+
+  const videosWithCovers = videos.map((video, index) => ({
+    ...video,
+    cover: coverOfVideo[index], // Añadir el elemento correspondiente de coverOfVideo al objeto video
+  }))
+
+  console.log(videosWithCovers)
 
   return (
     <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <StickyBar pageContext={pageContext} />
-      <h1 className="p-4 font-CarterOne lg:mb-10 lg:text-5xl lg:px-14 xl:pb-10">
-        {roadSafetyPage.title}
+      <h1 className="p-4 lg:mb-10 font-CarterOne lg:text-5xl lg:px-14">
+        {campingPage.title}
       </h1>
 
       {/* {roadSafetyPage && ReactHtmlParser(roadSafetyPage)} */}
 
       <div className="sm:grid lg:grid-cols-3 lg:px-14">
-        {roadSafetyPage.toggleContent.map((content, contentIndex) => (
+        {campingPage.toggleContent.map((content, contentIndex) => (
           <ContentToggle
             key={contentIndex}
             content={content}
             index={contentIndex}
-            roadSafetyPage={roadSafetyPage}
+            campingPage={campingPage}
           />
         ))}
+      </div>
+      <div className="items-center justify-center px-4 m-auto mb-8 md:w-5/6 video-container">
+        <VideoPlayer videos={videosWithCovers} />
       </div>
     </main>
   )
 }
 
-const ContentToggle = ({ content, index, roadSafetyPage }) => {
+const ContentToggle = ({ content, index, campingPage }) => {
   const [isExtendedContentVisible, setIsExtendedContentVisible] =
     useState(false)
 
@@ -52,32 +75,16 @@ const ContentToggle = ({ content, index, roadSafetyPage }) => {
   return (
     <section id="toggleContent" className="p-4 mb-14 col-[1/4] lg:p-0">
       <div className="mb-2">
-        <ReactMarkdown
-          components={{
-            img: ({ src, alt }) => (
-              <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
-            ),
-          }}
-        >
-          {content.displayContent?.markdown}
-        </ReactMarkdown>
+        <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
       </div>
 
-      {content.extendedContent && (
+      {/* {content.extendedContent && (
         <div
           className={`extended-content-${index} ${
             isExtendedContentVisible ? "" : "hidden"
           }`}
         >
-          <ReactMarkdown
-            components={{
-              img: ({ src, alt }) => (
-                <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
-              ),
-            }}
-          >
-            {content.extendedContent?.markdown}
-          </ReactMarkdown>
+          <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
         </div>
       )}
       {content.extendedContent && (
@@ -89,9 +96,9 @@ const ContentToggle = ({ content, index, roadSafetyPage }) => {
             ? roadSafetyPage.hideText
             : roadSafetyPage.showText}
         </button>
-      )}
+      )} */}
     </section>
   )
 }
 
-export default RoadSafety
+export default Camping

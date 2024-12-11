@@ -104,7 +104,7 @@ export default function Header({ pageContext }) {
   //Retira los slug de los diferentes idiomas solamente para la pagina index
   function transformMenuElements(data) {
     if (data && data.menus && data.menus.length > 0) {
-      const modifiedData = data.menus[0].menuElements.map(element => {
+      const modifiedData = data.menus[3].menuElements.map(element => {
         if (element.__typename === "Index") {
           return {
             ...element,
@@ -141,7 +141,7 @@ export default function Header({ pageContext }) {
     // console.log(location.pathname, to, location.pathname === to)
     return location.pathname === to
       ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d]"
-      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
+      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white my-2 hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
   }
 
   return (
@@ -235,7 +235,7 @@ export default function Header({ pageContext }) {
           />
         )}
       </div>
-      <div className="flex items-center bg-[#0833A2] xl:py-10 w-full justify-between">
+      <div className="flex items-center bg-[#0833A2] xl:py-4 w-full justify-between">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
           <Link to="/" className="font-bold text-[#f6cc4d] font-CarterOne">
             Wild Rider
@@ -245,9 +245,26 @@ export default function Header({ pageContext }) {
             </p>
           </Link>
         </h1> */}
-        <ul className="items-center hidden m-auto space-x-8 text-xl font-bold font-Poppins lg:flex-wrap lg:justify-evenly xl:flex">
+        <ul className="hidden xl:px-5 xl:grid grid-cols-[auto] gap-x-12 m-auto text-lg font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
           {links.map((link, index) => (
-            <li key={index} className={getLinkClass(link.to)}>
+            <li
+              key={index}
+              className={`${getLinkClass(link.to)} 
+    ${
+      index === 0
+        ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
+        : ""
+    } 
+    ${
+      index === 3 && (
+        <li
+          key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
+        >
+          hi
+        </li>
+      )
+    }`}
+            >
               <Link to={link.to}>{link.text}</Link>
             </li>
           ))}
@@ -277,7 +294,7 @@ export default function Header({ pageContext }) {
         className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-opacity-50 bg-stone-700 w-80"
       >
         <div className="p-8">
-          <ul className="space-y-8 text-center font-Poppins">
+          <ul className="space-y-5 text-center font-Poppins">
             {links.map((link, index) => (
               <li
                 key={index}

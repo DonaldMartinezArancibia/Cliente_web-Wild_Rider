@@ -38,7 +38,7 @@ const AboutUs = ({ pageContext }) => {
   return (
     <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <StickyBar pageContext={pageContext} />
-      <h1 className="p-4 lg:mb-10 font-CarterOne lg:text-5xl lg:p-14">
+      <h1 className="p-4 font-CarterOne lg:text-5xl lg:px-14">
         {ourTeamPage.title}
       </h1>
 
@@ -49,7 +49,7 @@ const AboutUs = ({ pageContext }) => {
           <div key={index} className="flex flex-col items-center mb-8">
             <img
               src={team.photo.url}
-              alt={team.name}
+              alt={team.photo.altText}
               className="w-40 mt-5 border-[3px] border-black rounded-full"
             />
             <h2 className="my-8 font-bold">{team.name}</h2>
@@ -83,7 +83,15 @@ const ContentToggle = ({ content, index, ourTeamPage }) => {
   return (
     <section id="toggleContent" className="p-4 mb-14 col-[1/4]">
       <div className="mb-2">
-        <ReactMarkdown>{content.displayContent?.markdown}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            img: ({ src, alt }) => (
+              <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+            ),
+          }}
+        >
+          {content.displayContent?.markdown}
+        </ReactMarkdown>
       </div>
 
       {content.extendedContent && (
@@ -92,7 +100,15 @@ const ContentToggle = ({ content, index, ourTeamPage }) => {
             isExtendedContentVisible ? "" : "hidden"
           }`}
         >
-          <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              img: ({ src, alt }) => (
+                <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+              ),
+            }}
+          >
+            {content.extendedContent?.markdown}
+          </ReactMarkdown>
         </div>
       )}
       {content.extendedContent && (
