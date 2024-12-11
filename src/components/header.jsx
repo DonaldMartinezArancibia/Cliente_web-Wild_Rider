@@ -245,7 +245,7 @@ export default function Header({ pageContext }) {
             </p>
           </Link>
         </h1> */}
-        <ul className="hidden lg:px-5 lg:grid grid-cols-[auto] gap-x-12 m-auto text-lg font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
+        <ul className="hidden xl:px-5 xl:grid grid-cols-[auto] gap-x-12 m-auto text-lg font-bold font-Poppins sm:grid-cols-[auto_auto] md:grid-cols-[auto_auto_auto] lg:grid-cols-[auto_auto_auto_auto_auto_auto] xl:grid-cols-[auto_auto_auto_auto_auto_auto]">
           {links.map((link, index) => (
             <li
               key={index}
