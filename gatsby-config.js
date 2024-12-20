@@ -21,12 +21,31 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-image`,
-    `gatsby-plugin-sitemap`,
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        resolveSiteUrl: () => `https://wild-rider.com/`, // Proporciona el siteUrl directamente
+        query: `
+          {
+            allSitePage {
+              nodes {
+                path
+              }
+            }
+          }
+        `,
+        serialize: ({ path }) => ({
+          url: `https://wild-rider.com${path}`,
+          changefreq: `daily`,
+          priority: 0.8,
+        }),
+      },
+    },
     {
       resolve: "gatsby-plugin-robots-txt",
       options: {
         host: "https://wild-rider.com",
-        sitemap: "https://wild-rider.com/sitemap-xml.xml",
+        sitemap: "https://wild-rider.com/sitemap-0.xml",
         policy: [{ userAgent: "*", allow: "/" }],
         output: "/robots.txt",
       },
