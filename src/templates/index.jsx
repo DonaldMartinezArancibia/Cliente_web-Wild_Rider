@@ -278,23 +278,14 @@ export default function IndexPage({ pageContext }) {
       {/* <Example /> */}
       {/* <Showdata pageContext={pageContext} /> */}
       {/* <Storedata /> */}
-      <script
-        src="https://wild-rica-costa-rica-2.hqrentals.eu/public/car-rental/integrations/assets/integrator"
-        async
-      ></script>
-      <div
-        className="hq-rental-software-integration"
-        data-integrator_link="https://wild-rica-costa-rica-2.hqrentals.eu/public/car-rental/integrations"
-        data-brand="lyt17ynm-fufr-9im6-9jfn-zmokkc1lmugu"
-        data-snippet="reservation-form"
-        data-skip_language=""
-        data-skip_redirect="1"
-        data-reservation_page=""
-        data-layout="vertical"
-        data-currency=""
-        data-rate_type_uuid=""
-        data-referral=""
-      ></div>
+    <iframe
+      src="https://wild-rica-costa-rica-2.hqrentals.eu/public/car-rental/reservations/recover-last-booking?brand_uuid=lyt17ynm-fufr-9im6-9jfn-zmokkc1lmugu"
+      width="100%"
+      height="800"
+      style={{ border: "none" }}
+      title="HQ Rental Form"
+      loading="lazy"
+    />
     </main>
   )
 }
