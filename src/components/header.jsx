@@ -8,6 +8,7 @@ import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import logo from "../images/LogoWEB Horizontal Amarillo Transparente.svg"
 import headerImg from "../images/site-header-3000x516-1.jpg"
+import HqRentalIframe from "./hqRentalForm"
 
 export default function Header({ pageContext }) {
   const client = useApolloClient()
@@ -31,8 +32,8 @@ export default function Header({ pageContext }) {
   const [isHidden, setIsHidden] = React.useState(false)
 
   const validateWindowSize = () => {
-    setIsHidden(window.innerWidth > 1280)
-    setUnHidden(window.innerWidth < 1280)
+    setIsHidden(window.innerWidth > 767)
+    setUnHidden(window.innerWidth < 768)
   }
 
   React.useEffect(() => {
@@ -146,8 +147,8 @@ export default function Header({ pageContext }) {
 
   return (
     <header className="w-full text-white font-Montserrat">
-      <div className="bg-[#4f5153] w-full xl:grid xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
-        <div className="relative xl:col-[1/5]">
+      <div className="bg-[#4f5153] pb-14 w-full min-[768px]:grid min-[768px]:grid-cols-[1fr_1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
+        <div className="relative min-[768px]:col-[1/4] xl:col-[1/5]">
           <img
             src={langSelectorTitle?.imageOverLogo?.url}
             alt={langSelectorTitle?.imageOverLogoAlt}
@@ -173,7 +174,7 @@ export default function Header({ pageContext }) {
           </div>
         </div>
 
-        <div className="flex justify-center m-auto lg:m-0">
+        <div className="flex justify-center items-center max-[500px]:m-auto pt-10 lg:my-0">
           {/* <Link
             to={
               pageContext.langKey === "en"
@@ -184,7 +185,7 @@ export default function Header({ pageContext }) {
           >
             <img src={logo} className="w-2/3 lg:w-full" alt="" />
           </Link> */}
-          <h1 className="text-center text-[10vw] leading-none tracking-wide sm:w-2/5 sm:text-[5vw] xl:w-full xl:self-center">
+          <h1 className="text-center text-[10vw] leading-none tracking-wide sm:text-[5vw] xl:w-full xl:self-center">
             <Link
               to={
                 pageContext.langKey === "en"
@@ -201,21 +202,32 @@ export default function Header({ pageContext }) {
             </Link>
           </h1>
         </div>
-        <div className="self-center mt-2 overflow-hidden text-center">
-          {langSelectorTitle?.displaySkypeTextAndNumber ? (
+
+        <div className="flex justify-center min-[1000px]:grid min-[1000px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
+        <iframe
+      src={langSelectorTitle?.iframeHqRentalsUrl}
+      // width="770"
+      // height="360"
+      style={{ border: "none" }}
+      title="HQ Rental Form"
+      loading="lazy"
+      className="h-[500px] w-[360px] min-[700px]:h-[470px] min-[800px]:h-[470px]"
+    />
+        </div>
+
+        <div className="self-center mt-2 overflow-hidden text-center max-[1280px]:hidden">
+        {langSelectorTitle?.displaySkypeTextAndNumber ? (
             <>
               <p className="my-2 px-6 font-medium animate-[textScroll_25s_linear_infinite] pl-[100%] lg:pl-0 lg:animate-[textScroll_0s_none] lg:whitespace-normal whitespace-nowrap">
                 {langSelectorTitle.textOverSkypeNumber}
               </p>
-              <a href="tel:18007219821" className="text-4xl font-black">
+              <a href="tel:18007219821" className="text-4xl font-black mb-4">
                 {langSelectorTitle.skypeNumber}
               </a>
             </>
           ) : null}
-        </div>
-        <div className="grid min-[412px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
           {langSelectorTitle?.contactElements?.map((element, index) => (
-            <div className="flex items-center col-span-1" key={index}>
+            <div className="flex items-center col-span-1 mt-4 ml-20" key={index}>
               <img
                 className="mr-2 h-7 lg:h-9"
                 src={element?.elementIcon?.url}
@@ -228,6 +240,7 @@ export default function Header({ pageContext }) {
             </div>
           ))}
         </div>
+
         {!unHidden && (
           <LanguageSelector
             pageContext={pageContext}

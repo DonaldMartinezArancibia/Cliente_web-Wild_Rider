@@ -50,10 +50,10 @@
   #sectionBellowHeader p:nth-of-type(1) br {
     @apply block content-[''] mt-5;
   }
-  #sectionBellowHeader p:nth-of-type(2) {
+  #sectionBellowHeader p:nth-of-type(2), #sectionBellowHeader > iframe {
     @apply lg:col-[2/3] lg:row-[1/3] m-auto w-full justify-center;
   }
-  #sectionBellowHeader p:nth-of-type(2) > img {
+  #sectionBellowHeader p:nth-of-type(2) > img, #sectionBellowHeader > iframe {
     @apply m-auto xl:w-11/12;
   }
   #contentBelowVideo > h2 {
@@ -132,7 +132,7 @@
   }
 }
 
-/* custom-styles.css */
+/*custom-styles.css*/
 :root {
   --react-international-phone-border-radius: 0px;
   --react-international-phone-height: 40px;

@@ -17,6 +17,9 @@ import { useRef, useState, useEffect } from "react"
 // import { IubendaCookieConsent } from "../components/iubendaComponent"
 import StickyBar from "../components/StickyBar"
 import { Helmet } from "react-helmet"
+import HqRentalIframe from "../components/hqRentalForm"
+import rehypeRaw from "rehype-raw";
+
 
 export default function IndexPage({ pageContext }) {
   let [open, setOpen] = useState(false)
@@ -98,29 +101,6 @@ export default function IndexPage({ pageContext }) {
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] pt-8 md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <StickyBar pageContext={pageContext} />
-      <div className="fixed bottom-4 right-4 z-50 bg-white shadow-lg rounded-lg p-3">
-        <ul className="flex items-center justify-center">
-          <li>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.tripadvisor.es/Attraction_Review-g309224-d6539830-Reviews-Wild_Rider-Alajuela_Province_of_Alajuela.html"
-            >
-              <img
-                src="https://static.tacdn.com/img2/travelers_choice/widgets/tchotel_2024_LL.png"
-                alt="TripAdvisor"
-                className="w-20 h-auto transition-transform duration-300 hover:scale-110"
-              />
-            </a>
-          </li>
-        </ul>
-      </div>
-      <script
-        async
-        src="https://www.jscache.com/wejs?wtype=certificateOfExcellence&amp;uniq=142&amp;locationId=6539830&amp;lang=es&amp;year=2024&amp;display_version=2"
-        data-loadtrk
-        onload="this.loadtrk=true"
-      ></script>
       {/* <CookieNotice
         // backgroundWrapperClasses="fixed bg-[#e0e0e0] bg-[#F6CC4D] min-[480px]:w-2/3 min-[640px]:w-1/2 lg:w-1/3 p-4 right-4 left-4 bottom-5 flex items-center justify-center z-50 border-opacity-100 border-gray-300 rounded-xl shadow-md"
         // buttonWrapperClasses="max-w-md mx-auto bg-white rounded p-4 shadow-md"
@@ -207,15 +187,23 @@ export default function IndexPage({ pageContext }) {
       </Helmet>
 
       <section id="sectionBellowHeader">
-        <ReactMarkdown
-          components={{
-            img: ({ src, alt }) => (
-              <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
-            ),
-          }}
-        >
-          {IndexContentData.indices[0].mainTextBelow.markdown}
-        </ReactMarkdown>
+      <ReactMarkdown
+  rehypePlugins={[rehypeRaw]}
+  components={{
+    img: ({ src, alt }) => (
+      <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+    ),
+    iframe: ({ node, ...props }) => (
+      <iframe
+        {...props}
+        style={{ width: "100%", height: "775px", border: "none" }}
+        allowFullScreen
+      />
+    ),
+  }}
+>
+  {IndexContentData.indices[0].mainTextBelow.markdown}
+</ReactMarkdown>
       </section>
       <Link to={IndexContentData.indices[0].viewCarsbuttonurl?.slug}>
         <button className="bg-[#0833a2] text-white block m-auto py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg md:ml-16">
@@ -278,14 +266,6 @@ export default function IndexPage({ pageContext }) {
       {/* <Example /> */}
       {/* <Showdata pageContext={pageContext} /> */}
       {/* <Storedata /> */}
-    <iframe
-      src="https://wild-rica-costa-rica-2.hqrentals.eu/public/car-rental/reservations/recover-last-booking?brand_uuid=lyt17ynm-fufr-9im6-9jfn-zmokkc1lmugu"
-      width="100%"
-      height="800"
-      style={{ border: "none" }}
-      title="HQ Rental Form"
-      loading="lazy"
-    />
     </main>
   )
 }
