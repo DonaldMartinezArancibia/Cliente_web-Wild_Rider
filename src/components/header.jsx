@@ -6,6 +6,7 @@ import LanguageSelector from "./languajeSelector"
 import { useApolloClient, useQuery } from "@apollo/client"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
+import { CombinedQuery } from "../gql/carQuotePageQuery"
 import logo from "../images/LogoWEB Horizontal Amarillo Transparente.svg"
 import headerImg from "../images/site-header-3000x516-1.jpg"
 import HqRentalIframe from "./hqRentalForm"
@@ -95,6 +96,13 @@ export default function Header({ pageContext }) {
   client.refetchQueries({
     include: [menuElements],
   })
+
+    const { data, loading, error } = useQuery(CombinedQuery, {
+      variables: {
+        locale: [pageContext.langKey],
+      },
+    });
+    
   if (menuElementsDataQueryLoading) return <p>Loading...</p>
   if (menuElementsDataQueryError)
     return <p>Error : {menuElementsDataQueryError.message}</p>
@@ -147,7 +155,7 @@ export default function Header({ pageContext }) {
 
   return (
     <header className="w-full text-white font-Montserrat">
-      <div className="bg-[#4f5153] pb-14 w-full min-[768px]:grid min-[768px]:grid-cols-[1fr_1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
+      <div className="bg-[#4f5153] pb-8 w-full min-[768px]:grid min-[768px]:grid-cols-[1fr_1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
         <div className="relative min-[768px]:col-[1/4] xl:col-[1/5]">
           <img
             src={langSelectorTitle?.imageOverLogo?.url}
@@ -203,8 +211,8 @@ export default function Header({ pageContext }) {
           </h1>
         </div>
 
-        <div className="flex justify-center min-[1000px]:grid min-[1000px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
-        <iframe
+        <div className="flex justify-center flex-col max-[1020px]:my-4">
+        {/* <iframe
       src={langSelectorTitle?.iframeHqRentalsUrl}
       // width="770"
       // height="360"
@@ -212,7 +220,27 @@ export default function Header({ pageContext }) {
       title="HQ Rental Form"
       loading="lazy"
       className="h-[500px] w-[360px] min-[700px]:h-[470px] min-[800px]:h-[470px]"
-    />
+    /> */}
+         <Link
+              to={
+                langSelectorTitle?.iframeHqRentalsUrl
+              }
+              className={`bg-[#0833a2] mb-8 text-2xl lg:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-blue-800 rounded-lg font-extrabold md:px-16`}
+            >
+              {langSelectorTitle?.textOfButtonOfHQrentalEngine}
+            </Link>
+            <Link
+              to={
+                data?.carQuoteForms[0]?.localizations[0]
+                  ? `/${
+                      pageContext.langKey === "en" ? "" : pageContext.langKey + "/"
+                    }${data.carQuoteForms[0].slug}`
+                  : ""
+              }
+              className="bg-[#F6CC4D] text-[#0833a2] text-2xl lg:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-[#ffda6b] rounded-lg font-extrabold md:px-16"
+            >
+              {data?.carQuoteForms[0]?.buttonTextOfQuickQuote}
+            </Link>
         </div>
 
         <div className="self-center mt-2 overflow-hidden text-center max-[1280px]:hidden">

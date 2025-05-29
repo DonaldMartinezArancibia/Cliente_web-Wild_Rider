@@ -9,6 +9,7 @@ const headerAndFooterElements = gql`
         url
       }
       imageOverLogoAlt
+      textOfButtonOfHQrentalEngine
       iframeHqRentalsUrl
       displaySkypeTextAndNumber
       textOverSkypeNumber

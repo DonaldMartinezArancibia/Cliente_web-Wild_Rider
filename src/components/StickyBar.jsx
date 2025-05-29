@@ -35,6 +35,8 @@ const StickyBar = ({ pageContext }) => {
 
   if (loading) return <p>Loading...</p>
   const { carQuoteForms, menu } = data
+console.log(data);
+
   const indexLink = menu.menuElements.find(item => item.__typename === "Index")
 
   return (
@@ -45,7 +47,7 @@ const StickyBar = ({ pageContext }) => {
       }`}
     >
       <div className="flex flex-col md:flex-row">
-        <Link
+        {/* <Link
           to={
             carQuoteForms[0]?.localizations[0]
               ? `/${
@@ -56,7 +58,7 @@ const StickyBar = ({ pageContext }) => {
           className="bg-[#F6CC4D] text-[#0833a2] text-2xl sm:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-[#ffda6b] rounded-lg font-extrabold md:px-16"
         >
           {data?.carQuoteForms[0]?.buttonTextOfQuickQuote}
-        </Link>
+        </Link> */}
         <Link
           to={
             indexLink.slug
