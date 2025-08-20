@@ -56,13 +56,12 @@ module.exports = {
       },
     },
     `gatsby-transformer-sharp`,
-    {resolve: `gatsby-plugin-google-gtag`,
+    {
+      resolve: `gatsby-plugin-google-gtag`,
       options: {
         // You can add multiple tracking ids and a pageview event will be fired for all of them.
         trackingIds: [
-          "GA-TRACKING_ID", // Google Analytics / GA
-          "AW-11029991885", // Google Ads / Adwords / AW
-          "DC-FLOODIGHT_ID", // Marketing Platform advertising products (Display & Video 360, Search Ads 360, and Campaign Manager)
+          "G-12V5JT58T8", // Google Tag Manager / GTM
         ],
         // This object gets passed directly to the gtag config command
         // This config will be shared across all trackingIds
@@ -80,7 +79,7 @@ module.exports = {
           // Avoids sending pageview hits from custom paths
           exclude: ["/preview/**", "/do-not-track/me/too/"],
           // Defaults to https://www.googletagmanager.com
-          origin: "YOUR_SELF_HOSTED_ORIGIN",
+          origin: "https://www.googletagmanager.com",
           // Delays processing pageview events on route update (in milliseconds)
           delayOnRouteUpdate: 0,
         },
@@ -139,7 +138,7 @@ module.exports = {
           allowAdFeatures: false, // default
         },
         googleTagManager: {
-          trackingId: "YOUR_GOOGLE_TAG_MANAGER_TRACKING_ID", // leave empty if you want to disable the tracker
+          trackingId: "", // leave empty if you want to disable the tracker
           cookieName: "gatsby-gdpr-google-tagmanager", // default
           dataLayerName: "dataLayer", // default
         },
