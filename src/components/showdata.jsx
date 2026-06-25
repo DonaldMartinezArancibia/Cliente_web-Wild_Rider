@@ -1,5 +1,5 @@
 import React from "react"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client/react"
 import { GetAllPosts, PostBySlug } from "../gql/allPost"
 import { Link } from "gatsby"
 
@@ -10,9 +10,6 @@ export default function Showdata({ pageContext }) {
     loading: postsQueryLoading,
     error: postsQueryError,
   } = useQuery(GetAllPosts, { variables: { locale: [pageContext.langKey] } })
-  client.refetchQueries({
-    include: [GetAllPosts],
-  })
   if (postsQueryLoading) return <p>Loading...</p>
   // if (postsQueryError) return <p>Error : {postBySlugQueryError.message}</p>
 

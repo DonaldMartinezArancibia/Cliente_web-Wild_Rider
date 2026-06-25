@@ -1,5 +1,5 @@
 import React from "react"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client/react"
 import { Car } from "../gql/carsQuery"
 import { CarContent } from "../gql/carsPageQuery"
 import OpenModal from "../components/carInfoModal"
@@ -12,17 +12,11 @@ export default function useOurCarsAndReservation({ pageContext }) {
     loading: carsQueryLoading,
     error: carsQueryError,
   } = useQuery(Car, { variables: { locale: [pageContext.langKey] } })
-  client.refetchQueries({
-    include: [Car],
-  })
   const {
     data: carsPageData,
     loading: carsPageDataLoading,
     error: carsPageDataError,
   } = useQuery(CarContent, { variables: { locale: [pageContext.langKey] } })
-  client.refetchQueries({
-    include: [CarContent],
-  })
   if (carsQueryLoading) return <p>Loading...</p>
   if (carsPageDataLoading) return <p>Loading...</p>
 

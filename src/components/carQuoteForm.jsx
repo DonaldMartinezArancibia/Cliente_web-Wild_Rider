@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, Fragment } from "react"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import mailcheck from "mailcheck"
 import { PhoneInput } from "react-international-phone"
 import "react-international-phone/style.css"
@@ -9,7 +9,7 @@ import Flatpickr from "react-flatpickr"
 import ReCAPTCHA from "react-google-recaptcha"
 import { navigate } from "gatsby"
 import { datosVar } from "./variableReactiva"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { CarQuoteFormContent } from "../gql/carQuotePageQuery"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
@@ -31,9 +31,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     variables: {
       locale: [locale],
     },
-  })
-  client.refetchQueries({
-    include: [CarQuoteFormContent],
   })
   const captcha = useRef(null)
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
@@ -572,37 +569,37 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                         {carsById?.automaticTransmission?.priceOfCar?.[
                           priceIndex
                         ] && (
-                          <>
-                            {carsById?.automaticTransmission.priceOfCar[
-                              priceIndex
-                            ].priceOfCar !== 0 ? (
-                              <td className="text-center">
-                                $
-                                {
-                                  carsById?.automaticTransmission.priceOfCar[
+                            <>
+                              {carsById?.automaticTransmission.priceOfCar[
+                                priceIndex
+                              ].priceOfCar !== 0 ? (
+                                <td className="text-center">
+                                  $
+                                  {
+                                    carsById?.automaticTransmission.priceOfCar[
+                                      priceIndex
+                                    ].priceOfCar
+                                  }
+                                </td>
+                              ) : (
+                                <td className="text-center">
+                                  {carsById?.automaticTransmission.priceOfCar[
                                     priceIndex
-                                  ].priceOfCar
-                                }
-                              </td>
-                            ) : (
-                              <td className="text-center">
-                                {carsById?.automaticTransmission.priceOfCar[
-                                  priceIndex
-                                ].unsetPriceMessage?.html && (
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html: he.decode(
-                                        carsById?.automaticTransmission
-                                          .priceOfCar[priceIndex]
-                                          .unsetPriceMessage.html
-                                      ),
-                                    }}
-                                  />
-                                )}
-                              </td>
-                            )}
-                          </>
-                        )}
+                                  ].unsetPriceMessage?.html && (
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: he.decode(
+                                            carsById?.automaticTransmission
+                                              .priceOfCar[priceIndex]
+                                              .unsetPriceMessage.html
+                                          ),
+                                        }}
+                                      />
+                                    )}
+                                </td>
+                              )}
+                            </>
+                          )}
                       </tr>
                     )
                   )}

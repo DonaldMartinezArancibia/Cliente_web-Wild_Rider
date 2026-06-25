@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { navigate } from "gatsby"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client/react"
 import { Post } from "../gql/allPost"
 import { Index } from "../gql/indexQuery"
 import { CarsAndQuote } from "../gql/carsPageQuery"

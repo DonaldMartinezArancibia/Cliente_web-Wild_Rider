@@ -3,16 +3,11 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client/react"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
-import { CombinedQuery } from "../gql/carQuotePageQuery"
-import logo from "../images/LogoWEB Horizontal Amarillo Transparente.svg"
-import headerImg from "../images/site-header-3000x516-1.jpg"
-import HqRentalIframe from "./hqRentalForm"
 
 export default function Header({ pageContext }) {
-  const client = useApolloClient()
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
 
@@ -33,8 +28,8 @@ export default function Header({ pageContext }) {
   const [isHidden, setIsHidden] = React.useState(false)
 
   const validateWindowSize = () => {
-    setIsHidden(window.innerWidth > 767)
-    setUnHidden(window.innerWidth < 768)
+    setIsHidden(window.innerWidth > 1280)
+    setUnHidden(window.innerWidth < 1280)
   }
 
   React.useEffect(() => {
@@ -77,13 +72,8 @@ export default function Header({ pageContext }) {
 
   const {
     data: headerAndFooterElementsData,
-    loading: headerAndFooterElementsQueryLoading,
-    error: headerAndFooterElementsQueryError,
   } = useQuery(headerAndFooterElements, {
     variables: { locale: [pageContext.langKey] },
-  })
-  client.refetchQueries({
-    include: [headerAndFooterElements],
   })
 
   const {
@@ -93,16 +83,7 @@ export default function Header({ pageContext }) {
   } = useQuery(menuElements, {
     variables: { locale: [langKey] },
   })
-  client.refetchQueries({
-    include: [menuElements],
-  })
 
-    const { data, loading, error } = useQuery(CombinedQuery, {
-      variables: {
-        locale: [pageContext.langKey],
-      },
-    });
-    
   if (menuElementsDataQueryLoading) return <p>Loading...</p>
   if (menuElementsDataQueryError)
     return <p>Error : {menuElementsDataQueryError.message}</p>
@@ -155,8 +136,8 @@ export default function Header({ pageContext }) {
 
   return (
     <header className="w-full text-white font-Montserrat">
-      <div className="bg-[#4f5153] pb-8 w-full min-[768px]:grid min-[768px]:grid-cols-[1fr_1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
-        <div className="relative min-[768px]:col-[1/4] xl:col-[1/5]">
+      <div className="bg-[#4f5153] w-full xl:grid xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
+        <div className="relative xl:col-[1/5]">
           <img
             src={langSelectorTitle?.imageOverLogo?.url}
             alt={langSelectorTitle?.imageOverLogoAlt}
@@ -164,7 +145,7 @@ export default function Header({ pageContext }) {
           />
 
           <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">
-            <button type="button" onClick={() => setIsOpen(!isOpen)}>
+            <button type="button" aria-label="Abrir menú de navegación" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 className="h-8 text-[#f6cc4d]"
                 fill="none"
@@ -182,7 +163,7 @@ export default function Header({ pageContext }) {
           </div>
         </div>
 
-        <div className="flex justify-center items-center max-[500px]:m-auto pt-10 lg:my-0">
+        <div className="flex justify-center m-auto lg:m-0">
           {/* <Link
             to={
               pageContext.langKey === "en"
@@ -193,7 +174,7 @@ export default function Header({ pageContext }) {
           >
             <img src={logo} className="w-2/3 lg:w-full" alt="" />
           </Link> */}
-          <h1 className="text-center text-[10vw] leading-none tracking-wide sm:text-[5vw] xl:w-full xl:self-center">
+          <h1 className="text-center text-[10vw] leading-none tracking-wide sm:w-2/5 sm:text-[5vw] xl:w-full xl:self-center">
             <Link
               to={
                 pageContext.langKey === "en"
@@ -210,52 +191,21 @@ export default function Header({ pageContext }) {
             </Link>
           </h1>
         </div>
-
-        <div className="flex justify-center flex-col max-[1020px]:my-4">
-        {/* <iframe
-      src={langSelectorTitle?.iframeHqRentalsUrl}
-      // width="770"
-      // height="360"
-      style={{ border: "none" }}
-      title="HQ Rental Form"
-      loading="lazy"
-      className="h-[500px] w-[360px] min-[700px]:h-[470px] min-[800px]:h-[470px]"
-    /> */}
-         <Link
-              to={
-                langSelectorTitle?.iframeHqRentalsUrl
-              }
-              className={`bg-[#0833a2] mb-8 text-2xl lg:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-blue-800 rounded-lg font-extrabold md:px-16`}
-            >
-              {langSelectorTitle?.textOfButtonOfHQrentalEngine}
-            </Link>
-            <Link
-              to={
-                data?.carQuoteForms[0]?.localizations[0]
-                  ? `/${
-                      pageContext.langKey === "en" ? "" : pageContext.langKey + "/"
-                    }${data.carQuoteForms[0].slug}`
-                  : ""
-              }
-              className="bg-[#F6CC4D] text-[#0833a2] text-2xl lg:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-[#ffda6b] rounded-lg font-extrabold md:px-16"
-            >
-              {data?.carQuoteForms[0]?.buttonTextOfQuickQuote}
-            </Link>
-        </div>
-
-        <div className="self-center mt-2 overflow-hidden text-center max-[1280px]:hidden">
-        {langSelectorTitle?.displaySkypeTextAndNumber ? (
+        <div className="self-center mt-2 overflow-hidden text-center">
+          {langSelectorTitle?.displaySkypeTextAndNumber ? (
             <>
               <p className="my-2 px-6 font-medium animate-[textScroll_25s_linear_infinite] pl-[100%] lg:pl-0 lg:animate-[textScroll_0s_none] lg:whitespace-normal whitespace-nowrap">
                 {langSelectorTitle.textOverSkypeNumber}
               </p>
-              <a href="tel:18007219821" className="text-4xl font-black mb-4">
+              <a href="tel:18007219821" className="text-4xl font-black">
                 {langSelectorTitle.skypeNumber}
               </a>
             </>
           ) : null}
+        </div>
+        <div className="grid min-[412px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
           {langSelectorTitle?.contactElements?.map((element, index) => (
-            <div className="flex items-center col-span-1 mt-4 ml-20" key={index}>
+            <div className="flex items-center col-span-1" key={index}>
               <img
                 className="mr-2 h-7 lg:h-9"
                 src={element?.elementIcon?.url}
@@ -268,7 +218,6 @@ export default function Header({ pageContext }) {
             </div>
           ))}
         </div>
-
         {!unHidden && (
           <LanguageSelector
             pageContext={pageContext}
@@ -291,20 +240,18 @@ export default function Header({ pageContext }) {
             <li
               key={index}
               className={`${getLinkClass(link.to)} 
-    ${
-      index === 0
-        ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
-        : ""
-    } 
-    ${
-      index === 3 && (
-        <li
-          key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
-        >
-          hi
-        </li>
-      )
-    }`}
+    ${index === 0
+                  ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
+                  : ""
+                } 
+    ${index === 3 && (
+                  <li
+                    key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
+                  >
+                    hi
+                  </li>
+                )
+                }`}
             >
               <Link to={link.to}>{link.text}</Link>
             </li>
@@ -313,6 +260,7 @@ export default function Header({ pageContext }) {
       </div>
 
       <Transition
+        as="div"
         show={isOpen}
         enter="transition-opacity duration-75"
         enterFrom="opacity-0 invisible"
@@ -320,11 +268,12 @@ export default function Header({ pageContext }) {
         leave="transition-opacity duration-150"
         leaveFrom="opacity-100 visible"
         leaveTo="opacity-0 invisible"
-        className="fixed inset-0 z-10 w-screen h-screen p-0 m-0 overflow-hidden bg-black bg-opacity-10 backdrop-filter backdrop-blur-sm"
+        className="fixed inset-0 z-10 w-screen h-screen p-0 m-0 overflow-hidden bg-black/10 backdrop-blur-sm"
         onClick={() => setIsOpen(false)}
-      ></Transition>
+      />
 
       <Transition
+        as="div"
         show={isOpen}
         enter="transition-transform transform duration-150"
         enterFrom="-translate-x-full"
@@ -332,26 +281,23 @@ export default function Header({ pageContext }) {
         leave="transition-transform transform duration-150"
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
-        className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-opacity-50 bg-stone-700 w-80"
+        className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-stone-700/50 w-80"
       >
         <div className="p-8">
           <ul className="space-y-5 text-center font-Poppins">
             {links.map((link, index) => (
-              <li
-                key={index}
-                className={getLinkClass(link.to)}
-                onClick={() => setIsOpen(false)}
-              >
-                <Link to={link.to}>{link.text}</Link>
+              <li key={index} className={getLinkClass(link.to)}>
+                <Link to={link.to} onClick={() => setIsOpen(false)}>{link.text}</Link>
               </li>
             ))}
             {!isHidden && (
-              <div onClick={() => setIsOpen(false)}>
+              <li>
                 <LanguageSelector
                   pageContext={pageContext}
                   langSelectorTitle={langSelectorTitle}
+                  onSelect={() => setIsOpen(false)}
                 />
-              </div>
+              </li>
             )}
           </ul>
         </div>
