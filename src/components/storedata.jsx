@@ -1,9 +1,8 @@
 import React, { useState } from "react"
-import { useMutation } from "@apollo/client"
+import { useMutation, useApolloClient } from "@apollo/client/react"
 import CREATE_SEO from "./create"
 import PUBLISH_SEO from "./publishSeo"
 import Show from "./show"
-import { useApolloClient } from "@apollo/client"
 
 export default function Storedata() {
   const client = useApolloClient()

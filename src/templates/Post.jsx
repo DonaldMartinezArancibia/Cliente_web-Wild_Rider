@@ -1,7 +1,7 @@
 // import React from "react"
 // import { graphql } from "gatsby"
 // import { formatDate } from "../utils"
-// import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+// import ReactMarkdown from "react-markdown"
 // import { Seo } from "../components"
 // import { GatsbyImage, getImage } from "gatsby-plugin-image"
 

@@ -8,9 +8,7 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 
-require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
-})
+require("dotenv").config()
 
 module.exports = {
   siteMetadata: {
@@ -58,6 +56,35 @@ module.exports = {
       },
     },
     `gatsby-transformer-sharp`,
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {
+        // You can add multiple tracking ids and a pageview event will be fired for all of them.
+        trackingIds: [
+          "G-12V5JT58T8", // Google Tag Manager / GTM
+        ],
+        // This object gets passed directly to the gtag config command
+        // This config will be shared across all trackingIds
+        gtagConfig: {
+          optimize_id: "OPT_CONTAINER_ID",
+          anonymize_ip: true,
+          cookie_expires: 0,
+        },
+        // This object is used for configuration specific to this plugin
+        pluginConfig: {
+          // Puts tracking script in the head instead of the body
+          head: true,
+          // Setting this parameter is also optional
+          respectDNT: true,
+          // Avoids sending pageview hits from custom paths
+          exclude: ["/preview/**", "/do-not-track/me/too/"],
+          // Defaults to https://www.googletagmanager.com
+          origin: "https://www.googletagmanager.com",
+          // Delays processing pageview events on route update (in milliseconds)
+          delayOnRouteUpdate: 0,
+        },
+      },
+    },
     `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
@@ -93,14 +120,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-source-google-places`,
-      options: {
-        placeIds: ["ChIJkUvR8VbjoI8RjlaQqi1QI1U"],
-        apiKey: "AIzaSyCP5MaJT3eIa4DT1b_rhBmDxyjn1WIbdEk",
-        language: "en-US", // optional, defaults to en-US
-      },
-    },
-     {
       resolve: `gatsby-plugin-google-gtag`,
       options: {
         // You can add multiple tracking ids and a pageview event will be fired for all of them.
@@ -140,7 +159,7 @@ module.exports = {
           allowAdFeatures: false, // default
         },
         googleTagManager: {
-          trackingId: "YOUR_GOOGLE_TAG_MANAGER_TRACKING_ID", // leave empty if you want to disable the tracker
+          trackingId: "", // leave empty if you want to disable the tracker
           cookieName: "gatsby-gdpr-google-tagmanager", // default
           dataLayerName: "dataLayer", // default
         },

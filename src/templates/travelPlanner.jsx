@@ -1,5 +1,5 @@
 import React from "react"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client/react"
 import Showdata from "../components/showdata"
 import img1 from "../images/slider-img-1.webp"
 import img2 from "../images/slider-img-2.webp"

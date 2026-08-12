@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { CampingPageContent } from "../gql/campingPage"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import VideoPlayer from "../components/videoPlayer"
 import StickyBar from "../components/StickyBar"
 

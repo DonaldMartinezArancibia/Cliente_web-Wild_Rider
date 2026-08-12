@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { AboutUsAndOurTeams } from "../gql/ourTeam"
 import ReactHtmlParser from "react-html-parser"
 import { AboutUsContent } from "../gql/aboutusPageQuery"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import StickyBar from "../components/StickyBar"
 
 const AboutUs = ({ pageContext }) => {
@@ -96,9 +96,8 @@ const ContentToggle = ({ content, index, ourTeamPage }) => {
 
       {content.extendedContent && (
         <div
-          className={`extended-content-${index} ${
-            isExtendedContentVisible ? "" : "hidden"
-          }`}
+          className={`extended-content-${index} ${isExtendedContentVisible ? "" : "hidden"
+            }`}
         >
           <ReactMarkdown
             components={{

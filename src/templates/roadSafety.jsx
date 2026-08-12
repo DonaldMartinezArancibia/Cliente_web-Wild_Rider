@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { RoadSafetyContent } from "../gql/roadSafetyPageQuery"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import StickyBar from "../components/StickyBar"
 
 const RoadSafety = ({ pageContext }) => {
@@ -65,9 +65,8 @@ const ContentToggle = ({ content, index, roadSafetyPage }) => {
 
       {content.extendedContent && (
         <div
-          className={`extended-content-${index} ${
-            isExtendedContentVisible ? "" : "hidden"
-          }`}
+          className={`extended-content-${index} ${isExtendedContentVisible ? "" : "hidden"
+            }`}
         >
           <ReactMarkdown
             components={{

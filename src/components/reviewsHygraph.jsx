@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react"
-import Slider from "react-slick" // Importa la biblioteca de carruseles
-import "slick-carousel/slick/slick.css" // Importa los estilos CSS de slick-carousel
-import "slick-carousel/slick/slick-theme.css" // Importa los estilos del tema de slick-carousel
+import React from "react"
+import Slider from "react-slick"
 import {
   StarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/solid"
 import { GetAllReviews } from "../gql/allReviews"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client/react"
 import TripAdvisor from "../images/tripadvisor-logo.svg"
 import Google from "../images/google-logo.svg"
 import Facebook from "../images/facebook-logo.svg"
 
 // Componente Review
 const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
-  <div className="m-1 p-4 border-opacity-100 border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
+  <div className="m-1 p-4 border border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
     <a
       href="view-original-review"
       onClick={e => handleLinkClick(e, review.reviewLink)}
@@ -32,11 +30,10 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
           {Array.from(Array(5), (_, i) => (
             <StarIcon
               key={i}
-              className={`h-4 w-4 ${
-                review.numberOfStars >= i + 1
-                  ? "text-yellow-500"
-                  : "text-gray-400"
-              }`}
+              className={`h-4 w-4 ${review.numberOfStars >= i + 1
+                ? "text-yellow-500"
+                : "text-gray-400"
+                }`}
             />
           ))}
         </div>
@@ -104,7 +101,7 @@ const GoogleReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-5 lg:p-4">
+    <Slider {...settings} className="!flex mb-5 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -159,7 +156,7 @@ const TripAdvisorReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-10 lg:p-4">
+    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -214,7 +211,7 @@ const FacebookReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-10 lg:p-4">
+    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -229,22 +226,15 @@ const FacebookReviewsCarousel = ({
 }
 
 const MapContainer = pageContext => {
-  const [reviews, setReviews] = useState([])
-  const client = useApolloClient()
   const {
     data: googleR,
     loading: googleRLoading,
-    error: googleRError,
   } = useQuery(GetAllReviews, {
     variables: {
       // internalId: pageContext.remoteId,
       locale: [pageContext.pageContext.langKey],
     },
   })
-  client.refetchQueries({
-    include: [GetAllReviews],
-  })
-
   if (googleRLoading) return <p>Loading...</p>
 
   const openReviewLink = url => {
@@ -345,7 +335,7 @@ const ReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="!flex mb-5">
+    <Slider {...settings} className="!flex m-5 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -412,10 +402,10 @@ const MapContainerLayoutB = pageContext => {
     // Baraja el arreglo utilizando el algoritmo de Fisher-Yates
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[shuffledArray[i], shuffledArray[j]] = [
-        shuffledArray[j],
-        shuffledArray[i],
-      ]
+        ;[shuffledArray[i], shuffledArray[j]] = [
+          shuffledArray[j],
+          shuffledArray[i],
+        ]
     }
 
     return shuffledArray

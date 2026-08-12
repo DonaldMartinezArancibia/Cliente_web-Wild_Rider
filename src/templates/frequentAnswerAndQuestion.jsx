@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { FrequentAnswersAndQuestions } from "../gql/allAnswersAndQuestions"
 import * as JsSearch from "js-search"
 import { FaqContent } from "../gql/faqPageQuery"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import StickyBar from "../components/StickyBar"
 
 export default function useFrequentAnswersAndQuestions({ pageContext }) {
@@ -113,9 +113,8 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
               <span className="absolute top-6 right-7">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-4 w-4 text-black transition-transform ${
-                    answerState[index] ? "rotate-180" : ""
-                  }`}
+                  className={`h-4 w-4 text-black transition-transform ${answerState[index] ? "rotate-180" : ""
+                    }`}
                   viewBox="0 0 512 512"
                   fill="currentColor"
                 >
@@ -134,9 +133,8 @@ export default function useFrequentAnswersAndQuestions({ pageContext }) {
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className={`h-3 w-3 mr-2 text-black transition-transform ${
-                      answerState[index] ? "rotate-180" : ""
-                    }`}
+                    className={`h-3 w-3 mr-2 text-black transition-transform ${answerState[index] ? "rotate-180" : ""
+                      }`}
                     viewBox="0 0 512 512"
                     fill="currentColor"
                   >

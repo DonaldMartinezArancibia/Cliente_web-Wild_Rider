@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, Fragment } from "react"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { PhoneInput } from "react-international-phone"
 import mailcheck from "mailcheck"
 import ReCAPTCHA from "react-google-recaptcha"
@@ -9,7 +9,7 @@ import parkingWR2 from "../images/Captura de pantalla 2023-09-06 124559 (1).png"
 import { ContactAndLocation, ContactContent } from "../gql/contactQuery"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import StickyBar from "../components/StickyBar"
 
 export default function useContactAndLocation({
@@ -217,9 +217,6 @@ export default function useContactAndLocation({
       locale: [pageContext.langKey],
     },
   })
-  client.refetchQueries({
-    include: [ContactContent],
-  })
   if (ContactAndLocationDataQueryLoading) return <p>Loading...</p>
 
   const pageData = ContactAndLocationData.contactAndLocations[0]
@@ -246,9 +243,8 @@ export default function useContactAndLocation({
 
         {content.extendedContent && (
           <div
-            className={`extended-content-${index} ${
-              isExtendedContentVisible ? "" : "hidden"
-            }`}
+            className={`extended-content-${index} ${isExtendedContentVisible ? "" : "hidden"
+              }`}
           >
             <ReactMarkdown>{content.extendedContent?.markdown}</ReactMarkdown>
           </div>
@@ -315,7 +311,7 @@ export default function useContactAndLocation({
                 type="text"
                 id="nombre"
                 name="nombre"
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 onInvalid={e =>
                   handleInputChange(
                     e,
@@ -337,7 +333,7 @@ export default function useContactAndLocation({
                 type="text"
                 id="surname"
                 name="surname"
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 onInvalid={e =>
                   handleInputChange(
                     e,
@@ -363,7 +359,7 @@ export default function useContactAndLocation({
                 <span className="text-red-500">*</span>
               </label>
               <input
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 type="email"
                 id="email"
                 name="email"
@@ -401,7 +397,7 @@ export default function useContactAndLocation({
                 <span className="text-red-500">*</span>
               </label>
               <input
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 type="email"
                 id="emailConfirm"
                 name="emailConfirm"
@@ -481,7 +477,7 @@ export default function useContactAndLocation({
                   pageData.contactForm.messageFieldErrorMessage
                 )
               }
-              className="p-2"
+              className="p-2 bg-white"
             ></textarea>
           </fieldset>
 

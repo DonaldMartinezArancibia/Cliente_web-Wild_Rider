@@ -1,63 +1,59 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Link } from "gatsby"
-import Showdata from "../components/showdata"
-import Storedata from "../components/storedata"
-import ImageSlider from "../components/imageSlider"
-import Example from "../components/popup"
-// import MapContainer from "../components/reviewsData"
 import { MapContainerLayoutB } from "../components/reviewsHygraph"
-import { StaticImage } from "gatsby-plugin-image"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client/react"
 import { IndexContent } from "../gql/indexQuery"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import VideoPlayer from "../components/videoPlayer"
-import { CookieNotice } from "gatsby-cookie-notice"
-import { useRef, useState, useEffect } from "react"
-// import { IubendaCookiePolicy } from "../components/iubendaComponent"
-// import { IubendaCookieConsent } from "../components/iubendaComponent"
 import StickyBar from "../components/StickyBar"
-import { Helmet } from "react-helmet"
+import rehypeRaw from "rehype-raw"
+
 
 export default function IndexPage({ pageContext }) {
-  let [open, setOpen] = useState(false)
-  useEffect(() => {
-    setTimeout(() => {
-      setOpen(true)
-    }, 3000)
-  }, [])
-
-  const cancelButtonRef = useRef(null)
-  const client = useApolloClient()
   const {
     data: IndexContentData,
     loading: IndexContentDataQueryLoading,
-    error: IndexContentDataQueryError,
   } = useQuery(IndexContent, {
     variables: {
       // internalId: pageContext.remoteId,
       locale: [pageContext.langKey],
     },
   })
-  client.refetchQueries({
-    include: [IndexContent],
-  })
+
+  const seo = IndexContentData?.indices[0]?.searchEngineOptimization
+  useEffect(() => {
+    if (!seo) return
+    document.title = seo.title
+    const setMeta = (sel, attr, val) => {
+      let el = document.querySelector(sel)
+      if (!el) { el = document.createElement("meta"); document.head.appendChild(el) }
+      el.setAttribute(attr, val)
+    }
+    setMeta('meta[name="description"]', "content", seo.description)
+    setMeta('meta[name="keywords"]', "content", seo.keywords)
+    setMeta('meta[property="og:title"]', "content", seo.title)
+    setMeta('meta[property="og:description"]', "content", "Explora Costa Rica con nuestros vehículos 4x4. ¡Reserva hoy y empieza tu aventura!")
+    setMeta('meta[property="og:image"]', "content", "https://media.graphassets.com/OwrVgNoEQRK7vun9ALNj")
+    setMeta('meta[property="og:image:alt"]', "content", "Alquiler de autos 4x4 todo terreno en Costa Rica, ideales para explorar montañas y selvas")
+    setMeta('meta[property="og:url"]', "content", "https://wild-rider.com/")
+    setMeta('meta[property="og:type"]', "content", "website")
+    if (!document.getElementById("tripadvisor-widget")) {
+      const s = document.createElement("script")
+      s.id = "tripadvisor-widget"
+      s.async = true
+      s.src = "https://www.jscache.com/wejs?wtype=certificateOfExcellence&uniq=142&locationId=6539830&lang=es&year=2024&display_version=2"
+      s.setAttribute("data-loadtrk", "")
+      document.head.appendChild(s)
+    }
+  }, [seo])
+
   if (IndexContentDataQueryLoading) return <p>Loading...</p>
   // console.log(IndexContentData.indices[0])
   // const client = new ApolloClient({
   //   uri: 'https://rickandmortyapi.com/graphql',
   //   cache: new InMemoryCache(),
   // });
-  const images = [
-    "https://picsum.photos/id/1/800/800",
-    "https://picsum.photos/id/2/800/800",
-    "https://picsum.photos/id/3/800/800",
-  ]
-  // const { slug, locale } = pageContext
-  // const generateDynamicPagePath = (slug, language) => {
-  //   return `/${language}/`
-  //
-
-  function obtenerIdYouTube(url) {
+  /*function obtenerIdYouTube(url) {
     const expresionesRegulares = [
       /youtube\.com\/watch\?v=(\w{11})(&t=\w+)?/,
       /[?&]v=([^&]+)/,
@@ -74,7 +70,7 @@ export default function IndexPage({ pageContext }) {
     }
 
     return null // Si no se encontró ninguna coincidencia
-  }
+  }*/
 
   const videos =
     IndexContentData.indices[0]?.presentationVideos?.map(video => ({
@@ -98,6 +94,23 @@ export default function IndexPage({ pageContext }) {
   return (
     <main className="bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] pt-8 md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
       <StickyBar pageContext={pageContext} />
+      <div className="fixed bottom-4 right-4 z-50 bg-white shadow-lg rounded-lg p-3">
+        <ul className="flex items-center justify-center">
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.tripadvisor.es/Attraction_Review-g309224-d6539830-Reviews-Wild_Rider-Alajuela_Province_of_Alajuela.html"
+            >
+              <img
+                src="https://static.tacdn.com/img2/travelers_choice/widgets/tchotel_2024_LL.png"
+                alt="TripAdvisor"
+                className="w-20 h-auto transition-transform duration-300 hover:scale-110"
+              />
+            </a>
+          </li>
+        </ul>
+      </div>
       {/* <CookieNotice
         // backgroundWrapperClasses="fixed bg-[#e0e0e0] bg-[#F6CC4D] min-[480px]:w-2/3 min-[640px]:w-1/2 lg:w-1/3 p-4 right-4 left-4 bottom-5 flex items-center justify-center z-50 border-opacity-100 border-gray-300 rounded-xl shadow-md"
         // buttonWrapperClasses="max-w-md mx-auto bg-white rounded p-4 shadow-md"
@@ -147,47 +160,20 @@ export default function IndexPage({ pageContext }) {
       {/* <IubendaCookiePolicy /> */}
       {/* <IubendaCookieConsent /> */}
 
-      <Helmet>
-        <title>
-          {IndexContentData.indices[0].searchEngineOptimization.title}
-        </title>
-        <meta
-          name="description"
-          content={
-            IndexContentData.indices[0].searchEngineOptimization.description
-          }
-        />
-        <meta
-          name="keywords"
-          content={
-            IndexContentData.indices[0].searchEngineOptimization.keywords
-          }
-        />
-        <meta
-          property="og:title"
-          content={IndexContentData.indices[0].searchEngineOptimization.title}
-        />
-        <meta
-          property="og:description"
-          content="Explora Costa Rica con nuestros vehículos 4x4. ¡Reserva hoy y empieza tu aventura!"
-        />
-        <meta
-          property="og:image"
-          content="https://media.graphassets.com/OwrVgNoEQRK7vun9ALNj"
-        />
-        <meta
-          property="og:image:alt"
-          content="Alquiler de autos 4x4 todo terreno en Costa Rica, ideales para explorar montañas y selvas"
-        />
-        <meta property="og:url" content="https://wild-rider.com/" />
-        <meta property="og:type" content="website" />
-      </Helmet>
-
       <section id="sectionBellowHeader">
         <ReactMarkdown
+          rehypePlugins={[rehypeRaw]}
           components={{
             img: ({ src, alt }) => (
               <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
+            ),
+            iframe: ({ node, title, ...props }) => (
+              <iframe
+                {...props}
+                title={title || "Embedded content"}
+                style={{ width: "100%", height: "775px", border: "none" }}
+                allowFullScreen
+              />
             ),
           }}
         >

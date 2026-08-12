@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Link } from "gatsby"
-import { useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client/react"
 import { CombinedQuery } from "../gql/carQuotePageQuery"
 
 const StickyBar = ({ pageContext }) => {
@@ -35,6 +35,7 @@ const StickyBar = ({ pageContext }) => {
 
   if (loading) return <p>Loading...</p>
   const { carQuoteForms, menu } = data
+
   const indexLink = menu.menuElements.find(item => item.__typename === "Index")
 
   return (
