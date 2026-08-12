@@ -31,8 +31,8 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
             <StarIcon
               key={i}
               className={`h-4 w-4 ${review.numberOfStars >= i + 1
-                  ? "text-yellow-500"
-                  : "text-gray-400"
+                ? "text-yellow-500"
+                : "text-gray-400"
                 }`}
             />
           ))}
@@ -101,7 +101,7 @@ const GoogleReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="mb-5 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
+    <Slider {...settings} className="!flex mb-5 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -156,7 +156,7 @@ const TripAdvisorReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
+    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -211,7 +211,7 @@ const FacebookReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
+    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
@@ -335,7 +335,7 @@ const ReviewsCarousel = ({
   }
 
   return (
-    <Slider {...settings} className="mb-5 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
+    <Slider {...settings} className="!flex m-5 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
       {reviews.map((review, index) => (
         <Review
           key={index}
