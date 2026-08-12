@@ -6,6 +6,10 @@
 @config "../../tailwind.config.js";
 
 @layer base {
+  body {
+    background-color: #e0e0e0;
+  }
+
   h1 {
     @apply text-[32px];
   }
