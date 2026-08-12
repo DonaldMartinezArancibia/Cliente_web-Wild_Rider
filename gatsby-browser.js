@@ -8,17 +8,17 @@
 import React from "react"
 import {
   ApolloClient,
-  ApolloProvider,
   HttpLink,
   InMemoryCache,
 } from "@apollo/client"
+import { ApolloProvider } from "@apollo/client/react"
 import { MDXProvider } from "@mdx-js/react"
 import fetch from "isomorphic-fetch"
-import { datosVar } from "./src/components/variableReactiva"
-
-import "./src/components/layout.css"
 import Layout from "./src/components/layout"
 import "./src/styles/global.css"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import "video-react/dist/video-react.css"
 
 const httpLink = new HttpLink({
   uri: process.env.GATSBY_GRAPHCMS_ENDPOINT,

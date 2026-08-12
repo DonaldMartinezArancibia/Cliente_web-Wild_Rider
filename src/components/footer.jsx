@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useRef } from "react"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Dialog, Transition } from "@headlessui/react"

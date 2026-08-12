@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { navigate } from "gatsby"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client/react"
 import { Post } from "../gql/allPost"
 import { Index } from "../gql/indexQuery"
 import { CarsAndQuote } from "../gql/carsPageQuery"
@@ -237,7 +237,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
       >
         {langSelectorTitle}
       </button> */}
-      <div className="relative inline-block">
+      <div className="relative inline-block m-[auto_20px_auto_auto] min-[800px]:m-[auto_60px_auto_auto] lg:m-auto">
         <svg
           width="30"
           height="30"
@@ -258,7 +258,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
             {pageContext.langKey !== "en" ? "Español" : "English"}
           </span>
         </button> */}
-        <ul className="font-black text-center text-white transition-shadow duration-300 border-opacity-100 shadow-md left-1/4 hover:shadow-lg">
+        <ul className="font-black text-center text-white transition-shadow left-1/4 hover:shadow-lg">
           {pageContext.langKey !== "en" &&
             langSelectorTitle?.displayEnglishLangSelectorTitle !== false && (
               <li className="">

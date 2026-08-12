@@ -2,7 +2,7 @@ import React from "react"
 import { Fragment, useRef, useState, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client/react"
 import { Post } from "../gql/allPost"
 
 export default function Example() {

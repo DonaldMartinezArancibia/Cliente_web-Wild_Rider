@@ -1,7 +1,7 @@
 import React from "react"
 import { MapContainer } from "../components/reviewsHygraph"
-import { useApolloClient, useQuery } from "@apollo/client"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import { useQuery, useApolloClient } from '@apollo/client/react';
+import ReactMarkdown from "react-markdown"
 import { TestimonialPageContent } from "../gql/testimonialPageQuery"
 import StickyBar from "../components/StickyBar"
 
@@ -16,9 +16,6 @@ export default function useTestimonialsPage({ pageContext }) {
       // internalId: pageContext.remoteId,
       locale: [pageContext.langKey],
     },
-  })
-  client.refetchQueries({
-    include: [TestimonialPageContent],
   })
   if (TestimonialPageDataQueryLoading) return <p>Loading...</p>
 

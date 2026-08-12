@@ -3,14 +3,11 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client/react"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
-import logo from "../images/LogoWEB Horizontal Amarillo Transparente.svg"
-import headerImg from "../images/site-header-3000x516-1.jpg"
 
 export default function Header({ pageContext }) {
-  const client = useApolloClient()
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
 
@@ -75,13 +72,8 @@ export default function Header({ pageContext }) {
 
   const {
     data: headerAndFooterElementsData,
-    loading: headerAndFooterElementsQueryLoading,
-    error: headerAndFooterElementsQueryError,
   } = useQuery(headerAndFooterElements, {
     variables: { locale: [pageContext.langKey] },
-  })
-  client.refetchQueries({
-    include: [headerAndFooterElements],
   })
 
   const {
@@ -91,9 +83,7 @@ export default function Header({ pageContext }) {
   } = useQuery(menuElements, {
     variables: { locale: [langKey] },
   })
-  client.refetchQueries({
-    include: [menuElements],
-  })
+
   if (menuElementsDataQueryLoading) return <p>Loading...</p>
   if (menuElementsDataQueryError)
     return <p>Error : {menuElementsDataQueryError.message}</p>
@@ -155,7 +145,7 @@ export default function Header({ pageContext }) {
           />
 
           <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">
-            <button type="button" onClick={() => setIsOpen(!isOpen)}>
+            <button type="button" aria-label="Abrir menú de navegación" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 className="h-8 text-[#f6cc4d]"
                 fill="none"
@@ -250,20 +240,18 @@ export default function Header({ pageContext }) {
             <li
               key={index}
               className={`${getLinkClass(link.to)} 
-    ${
-      index === 0
-        ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
-        : ""
-    } 
-    ${
-      index === 3 && (
-        <li
-          key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
-        >
-          hi
-        </li>
-      )
-    }`}
+    ${index === 0
+                  ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
+                  : ""
+                } 
+    ${index === 3 && (
+                  <li
+                    key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
+                  >
+                    hi
+                  </li>
+                )
+                }`}
             >
               <Link to={link.to}>{link.text}</Link>
             </li>
@@ -272,6 +260,7 @@ export default function Header({ pageContext }) {
       </div>
 
       <Transition
+        as="div"
         show={isOpen}
         enter="transition-opacity duration-75"
         enterFrom="opacity-0 invisible"
@@ -279,11 +268,12 @@ export default function Header({ pageContext }) {
         leave="transition-opacity duration-150"
         leaveFrom="opacity-100 visible"
         leaveTo="opacity-0 invisible"
-        className="fixed inset-0 z-10 w-screen h-screen p-0 m-0 overflow-hidden bg-black bg-opacity-10 backdrop-filter backdrop-blur-sm"
+        className="fixed inset-0 z-10 w-screen h-screen p-0 m-0 overflow-hidden bg-black/10 backdrop-blur-sm"
         onClick={() => setIsOpen(false)}
-      ></Transition>
+      />
 
       <Transition
+        as="div"
         show={isOpen}
         enter="transition-transform transform duration-150"
         enterFrom="-translate-x-full"
@@ -291,26 +281,23 @@ export default function Header({ pageContext }) {
         leave="transition-transform transform duration-150"
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
-        className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-opacity-50 bg-stone-700 w-80"
+        className="fixed top-0 left-0 z-20 h-screen min-h-screen p-0 m-0 overflow-hidden bg-stone-700/50 w-80"
       >
         <div className="p-8">
           <ul className="space-y-5 text-center font-Poppins">
             {links.map((link, index) => (
-              <li
-                key={index}
-                className={getLinkClass(link.to)}
-                onClick={() => setIsOpen(false)}
-              >
-                <Link to={link.to}>{link.text}</Link>
+              <li key={index} className={getLinkClass(link.to)}>
+                <Link to={link.to} onClick={() => setIsOpen(false)}>{link.text}</Link>
               </li>
             ))}
             {!isHidden && (
-              <div onClick={() => setIsOpen(false)}>
+              <li>
                 <LanguageSelector
                   pageContext={pageContext}
                   langSelectorTitle={langSelectorTitle}
+                  onSelect={() => setIsOpen(false)}
                 />
-              </div>
+              </li>
             )}
           </ul>
         </div>

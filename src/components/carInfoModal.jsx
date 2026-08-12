@@ -2,10 +2,10 @@ import React from "react"
 import { Fragment, useRef, useState, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { useApolloClient, useQuery } from "@apollo/client"
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import { Cars } from "../gql/carsByIdQuery"
 import { Link } from "gatsby"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
+import ReactMarkdown from "react-markdown"
 import { setDatos } from "./variableReactiva"
 import { navigate } from "gatsby"
 import he from "he" // Importar la biblioteca para desescapar HTML
@@ -32,9 +32,6 @@ export default function OpenModal({ carId, pageContext }) {
     error: carsByIdQueryError,
   } = useQuery(Cars, {
     variables: { internalId: carId, locale: [pageContext.langKey] },
-  })
-  client.refetchQueries({
-    include: [Cars],
   })
   const [answerState, setAnswerState] = useState(false)
 
@@ -80,11 +77,11 @@ export default function OpenModal({ carId, pageContext }) {
       ...datos, // Copiar los datos existentes
       selectedTransmission:
         manualTransmissionValue !== undefined &&
-        manualTransmissionValue !== null
+          manualTransmissionValue !== null
           ? manualTransmissionValue
           : automaticTransmissionValue !== undefined
-          ? automaticTransmissionValue
-          : "",
+            ? automaticTransmissionValue
+            : "",
     }
 
     // Realizar la navegación con el nuevo objeto datos
@@ -349,36 +346,36 @@ export default function OpenModal({ carId, pageContext }) {
                                   {car.automaticTransmission?.priceOfCar?.[
                                     priceIndex
                                   ] && (
-                                    <>
-                                      {car.automaticTransmission.priceOfCar[
-                                        priceIndex
-                                      ].priceOfCar !== 0 ? (
-                                        <td className="text-center">
-                                          $
-                                          {
-                                            car.automaticTransmission
-                                              .priceOfCar[priceIndex].priceOfCar
-                                          }
-                                        </td>
-                                      ) : (
-                                        <td className="text-center">
-                                          {car.automaticTransmission.priceOfCar[
-                                            priceIndex
-                                          ].unsetPriceMessage?.html && (
-                                            <div
-                                              dangerouslySetInnerHTML={{
-                                                __html: he.decode(
-                                                  car.automaticTransmission
-                                                    .priceOfCar[priceIndex]
-                                                    .unsetPriceMessage.html
-                                                ),
-                                              }}
-                                            />
-                                          )}
-                                        </td>
-                                      )}
-                                    </>
-                                  )}
+                                      <>
+                                        {car.automaticTransmission.priceOfCar[
+                                          priceIndex
+                                        ].priceOfCar !== 0 ? (
+                                          <td className="text-center">
+                                            $
+                                            {
+                                              car.automaticTransmission
+                                                .priceOfCar[priceIndex].priceOfCar
+                                            }
+                                          </td>
+                                        ) : (
+                                          <td className="text-center">
+                                            {car.automaticTransmission.priceOfCar[
+                                              priceIndex
+                                            ].unsetPriceMessage?.html && (
+                                                <div
+                                                  dangerouslySetInnerHTML={{
+                                                    __html: he.decode(
+                                                      car.automaticTransmission
+                                                        .priceOfCar[priceIndex]
+                                                        .unsetPriceMessage.html
+                                                    ),
+                                                  }}
+                                                />
+                                              )}
+                                          </td>
+                                        )}
+                                      </>
+                                    )}
                                 </tr>
                               )
                             )}
@@ -428,9 +425,8 @@ export default function OpenModal({ carId, pageContext }) {
                           <span className="absolute top-6 right-7">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className={`h-4 w-4 text-black transition-transform ${
-                                answerState ? "rotate-180" : ""
-                              }`}
+                              className={`h-4 w-4 text-black transition-transform ${answerState ? "rotate-180" : ""
+                                }`}
                               viewBox="0 0 512 512"
                               fill="currentColor"
                             >
@@ -452,9 +448,8 @@ export default function OpenModal({ carId, pageContext }) {
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={`h-3 w-3 mr-2 text-black transition-transform ${
-                                  answerState ? "rotate-180" : ""
-                                }`}
+                                className={`h-3 w-3 mr-2 text-black transition-transform ${answerState ? "rotate-180" : ""
+                                  }`}
                                 viewBox="0 0 512 512"
                                 fill="currentColor"
                               >
@@ -487,17 +482,17 @@ export default function OpenModal({ carId, pageContext }) {
                       <button
                         onClick={handleButtonClick}
                         className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
-                        // disabled={
-                        //   car.automaticTransmission
-                        //     ?.carTransmissionSelectorValue !== null &&
-                        //   car.automaticTransmission
-                        //     ?.carTransmissionSelectorValue !== undefined &&
-                        //   car.manualTransmission
-                        //     ?.carTransmissionSelectorValue !== null &&
-                        //   car.manualTransmission
-                        //     ?.carTransmissionSelectorValue !== undefined &&
-                        //   selectedTransmission === ""
-                        // }
+                      // disabled={
+                      //   car.automaticTransmission
+                      //     ?.carTransmissionSelectorValue !== null &&
+                      //   car.automaticTransmission
+                      //     ?.carTransmissionSelectorValue !== undefined &&
+                      //   car.manualTransmission
+                      //     ?.carTransmissionSelectorValue !== null &&
+                      //   car.manualTransmission
+                      //     ?.carTransmissionSelectorValue !== undefined &&
+                      //   selectedTransmission === ""
+                      // }
                       >
                         {car.carsAndQuote.quoteButtonText}
                       </button>
