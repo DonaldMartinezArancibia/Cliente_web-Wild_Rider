@@ -655,7 +655,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 type="text"
                 id="name"
                 name="name"
-                className="w-full h-10 p-2 my-2"
+                className="w-full h-10 p-2 my-2 bg-white"
                 required={pageData.completeNameField?.includes("*")}
                 onInvalid={e =>
                   handleInputChange(e, pageData.nameFieldErrorMessage)
@@ -667,7 +667,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <div className="flex flex-col justify-between pr-3">
                 <ConditionalLabel text={pageData.emailField} htmlFor="email" />
                 <input
-                  className="w-full h-10 p-2"
+                  className="w-full h-10 p-2 bg-white"
                   type="email"
                   id="email"
                   name="email"
@@ -701,7 +701,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   htmlFor="emailConfirm"
                 />
                 <input
-                  className="w-full h-10 p-2"
+                  className="w-full h-10 p-2 bg-white"
                   type="email"
                   id="emailConfirm"
                   name="emailConfirm"
@@ -760,7 +760,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 id="country"
                 value={selectedCountry}
                 onChange={handleCountryChange}
-                className="w-full h-10"
+                className="w-full h-10 bg-white"
                 name="countrySelection"
                 required={pageData.countryResidenceField?.includes("*")}
               >
@@ -783,7 +783,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               id="numberOfTravelers"
               name="numberOfTravelers"
               required={pageData.numberOfTravelersField?.includes("*")}
-              className="w-full h-10"
+              className="w-full h-10 bg-white"
             >
               {pageData.numberOfTravelersOptions.map((option, index) => (
                 <option key={index} value={option}>
@@ -800,7 +800,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             <select
               id="vehicleSelection"
               name="vehicleSelection"
-              className="w-full h-10"
+              className="w-full h-10 bg-white"
               required={pageData.vehicleSelectionField?.includes("*")}
               value={defaultValue.value}
               onInvalid={e =>
@@ -851,7 +851,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               }
               name="StartDate"
               id="startDate"
-              className="w-full h-10 px-4 py-2"
+              className="w-full h-10 px-4 py-2 bg-white"
               required={pageData.takeoverDateField?.includes("*")}
             />
             <sub className="mt-2 text-sm text-gray-500">
@@ -866,7 +866,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             <select
               name="StartTime"
               id="startTime"
-              className="w-full h-10 px-4 py-2"
+              className="w-full h-10 px-4 py-2 bg-white"
               required={pageData.takeoverHourField?.includes("*")}
             >
               {generateTimeOptions2("6:00", "20:00")}
@@ -885,7 +885,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <select
                 id="takeoverPlace"
                 name="takeoverPlace"
-                className="w-full h-10"
+                className="w-full h-10 bg-white"
                 required={pageData.takeoverPlaceField?.includes("*")}
               >
                 {pageData.takeoverPlaceOptions.map((option, index) => (
@@ -920,7 +920,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               onChange={selectedDate => setEndDate(selectedDate)}
               name="EndDate"
               id="endDate"
-              className="w-full h-10 px-4 py-2"
+              className="w-full h-10 px-4 py-2 bg-white"
               required={pageData.returnDateField?.includes("*")}
             />
             <sub className="mt-2 text-sm text-gray-500">
@@ -935,7 +935,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
             <select
               id="endTime"
               name="endTime"
-              className="w-full h-10 px-4 py-2"
+              className="w-full h-10 px-4 py-2 bg-white"
               required={pageData.returnHourField?.includes("*")}
             >
               {generateTimeOptions2("6:00", "20:00")}
@@ -954,7 +954,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <select
                 id="returnPlace"
                 name="returnPlace"
-                className="w-full h-10"
+                className="w-full h-10 bg-white"
                 required={pageData.returnPlaceField?.includes("*")}
               >
                 {pageData.returnPlaceOptions.map((option, index) => (
@@ -1005,7 +1005,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                 <select
                   id={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                   name={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
-                  className="w-full h-10"
+                  className="w-full h-10 bg-white"
                   onChange={e =>
                     handleServiceSelection(
                       selector.serviceSelectorTitle,
@@ -1059,7 +1059,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               <select
                 id={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
                 name={selector.serviceSelectorTitle?.replace(/\s+/g, "")}
-                className="w-full h-10"
+                className="w-full h-10 bg-white"
                 onChange={e =>
                   handleServiceSelection(
                     selector.serviceSelectorTitle,
@@ -1090,7 +1090,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               id="questions"
               name="questions"
               required={pageData.communicationFieldSubtitle?.includes("*")}
-              className="w-full h-32 p-2 md:h-40"
+              className="w-full h-32 p-2 md:h-40 bg-white"
             ></textarea>
           </div>
         </fieldset>

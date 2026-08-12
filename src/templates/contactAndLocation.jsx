@@ -311,7 +311,7 @@ export default function useContactAndLocation({
                 type="text"
                 id="nombre"
                 name="nombre"
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 onInvalid={e =>
                   handleInputChange(
                     e,
@@ -333,7 +333,7 @@ export default function useContactAndLocation({
                 type="text"
                 id="surname"
                 name="surname"
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 onInvalid={e =>
                   handleInputChange(
                     e,
@@ -359,7 +359,7 @@ export default function useContactAndLocation({
                 <span className="text-red-500">*</span>
               </label>
               <input
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 type="email"
                 id="email"
                 name="email"
@@ -397,7 +397,7 @@ export default function useContactAndLocation({
                 <span className="text-red-500">*</span>
               </label>
               <input
-                className="w-full h-10 p-2"
+                className="w-full h-10 p-2 bg-white"
                 type="email"
                 id="emailConfirm"
                 name="emailConfirm"
@@ -477,7 +477,7 @@ export default function useContactAndLocation({
                   pageData.contactForm.messageFieldErrorMessage
                 )
               }
-              className="p-2"
+              className="p-2 bg-white"
             ></textarea>
           </fieldset>
 
