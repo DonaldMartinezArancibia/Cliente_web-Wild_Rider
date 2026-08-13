@@ -6,14 +6,14 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/solid"
 import { GetAllReviews } from "../gql/allReviews"
-import { useQuery } from "@apollo/client/react"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import TripAdvisor from "../images/tripadvisor-logo.svg"
 import Google from "../images/google-logo.svg"
 import Facebook from "../images/facebook-logo.svg"
 
 // Componente Review
 const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
-  <div className="m-1 p-4 border border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
+  <div className="m-2 p-4 border border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
     <a
       href="view-original-review"
       onClick={e => handleLinkClick(e, review.reviewLink)}
@@ -44,310 +44,20 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
         className="ml-auto"
       />
     </a>
-    <p className="text-[#1a1a1a]">
+    <p className="mt-3 text-[#1a1a1a] text-sm md:text-base">
       {truncateReview(review.review, 250)}
       {review.review.length > 250 && (
         <a
           href={review.reviewLink}
           onClick={e => handleLinkClick(e, review.reviewLink)}
-          className="text-[#0833a2] ml-1 hover:underline"
+          className="text-brand-blue ml-1 hover:underline"
         >
-          {review.testimonial.reviewsLinkText}
+          {review.testimonial?.reviewsLinkText || "Read more"}
         </a>
       )}
     </p>
   </div>
 )
-
-const GoogleReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  return (
-    <Slider {...settings} className="!flex mb-5 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-const TripAdvisorReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  return (
-    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-const FacebookReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  return (
-    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-
-const MapContainer = pageContext => {
-  const {
-    data: googleR,
-    loading: googleRLoading,
-  } = useQuery(GetAllReviews, {
-    variables: {
-      // internalId: pageContext.remoteId,
-      locale: [pageContext.pageContext.langKey],
-    },
-  })
-  if (googleRLoading) return <p>Loading...</p>
-
-  const openReviewLink = url => {
-    window.open(url, "Data", "height=700px,width=600px")
-  }
-
-  const handleLinkClick = (e, url) => {
-    e.preventDefault()
-    openReviewLink(url)
-  }
-
-  const truncateReview = (review, length) => {
-    return review.length > length ? review.substring(0, length) + "..." : review
-  }
-
-  // Define la variable newReviews aquí
-  const newReviews = []
-
-  // Define el mapeo de imágenes aquí
-  const imageMapping = {
-    TripAdvisor: TripAdvisor,
-    Google: Google,
-    Facebook: Facebook,
-    DefaultImage: null,
-  }
-
-  console.log(googleR.tripAdvisorReviews)
-  console.log(googleR.facebookReviews)
-  console.log(googleR.googleReviews)
-
-  return (
-    <>
-      {/* Utiliza el componente GoogleReviewsCarousel para mostrar las reseñas de Google */}
-      <GoogleReviewsCarousel
-        reviews={[...googleR.googleReviews, ...newReviews]}
-        handleLinkClick={handleLinkClick}
-        imageMapping={imageMapping}
-        truncateReview={truncateReview}
-      />
-
-      {/* Agrega un carrusel similar para las reseñas de TripAdvisor */}
-      <TripAdvisorReviewsCarousel
-        reviews={[...googleR.tripAdvisorReviews, ...newReviews]}
-        handleLinkClick={handleLinkClick}
-        imageMapping={imageMapping}
-        truncateReview={truncateReview}
-      />
-      {/* Agrega un carrusel similar para las reseñas de TripAdvisor */}
-      <FacebookReviewsCarousel
-        reviews={[...googleR.facebookReviews, ...newReviews]}
-        handleLinkClick={handleLinkClick}
-        imageMapping={imageMapping}
-        truncateReview={truncateReview}
-      />
-    </>
-  )
-}
-
-const ReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  return (
-    <Slider {...settings} className="!flex m-5 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
 
 // Componentes personalizados para las flechas
 const PrevArrow = props => (
@@ -362,18 +72,98 @@ const NextArrow = props => (
   </button>
 )
 
-const MapContainerLayoutB = pageContext => {
-  const { data: allReviews, loading: allReviewsLoading } = useQuery(
-    GetAllReviews,
-    {
-      variables: {
-        // internalId: pageContext.remoteId,
-        locale: [pageContext.pageContext.langKey],
-      },
-    }
-  )
+const SLIDES_TO_SHOW_BREAKPOINTS = [
+  { maxWidth: 599, slidesToShow: 1 },
+  { maxWidth: 768, slidesToShow: 2 },
+  { maxWidth: 1024, slidesToShow: 3 },
+]
 
-  if (allReviewsLoading) return <p>Loading...</p>
+const resolveSlidesToShow = () => {
+  if (typeof window === "undefined") return 3
+  const match = SLIDES_TO_SHOW_BREAKPOINTS.find(
+    b => window.innerWidth <= b.maxWidth
+  )
+  return match ? match.slidesToShow : 3
+}
+
+/**
+ * react-slick solo re-evalúa `responsive` cuando el ancho de ventana cruza un
+ * breakpoint DESPUÉS del montaje (usa matchMedia().addListener, que no
+ * dispara en el mount inicial) — en un sitio server-rendered esto deja el
+ * carrusel mostrando el slidesToShow de escritorio en la primera carga
+ * mobile. Se calcula acá con window.innerWidth y se pasa como prop directa,
+ * que sí se respeta en cada render.
+ */
+const useSlidesToShow = () => {
+  const [slidesToShow, setSlidesToShow] = React.useState(resolveSlidesToShow)
+
+  React.useEffect(() => {
+    const handleResize = () => setSlidesToShow(resolveSlidesToShow())
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  return slidesToShow
+}
+
+/** Config compartida de los carruseles de reseñas; función (no constante) porque
+ * prevArrow/nextArrow son elementos JSX y cada <Slider> necesita su propia instancia. */
+const getCarouselSettings = slidesToShow => ({
+  infinite: true,
+  speed: 500,
+  slidesToShow,
+  slidesToScroll: 1,
+  prevArrow: <PrevArrow />,
+  nextArrow: <NextArrow />,
+})
+
+const ReviewsSlider = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+  className,
+}) => {
+  const slidesToShow = useSlidesToShow()
+
+  return (
+    <Slider
+      // Remonta al cruzar un breakpoint: react-slick no recalcula bien el
+      // ancho de los slides si slidesToShow cambia en un componente ya vivo.
+      key={slidesToShow}
+      {...getCarouselSettings(slidesToShow)}
+      className={`!flex [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full ${className}`}
+    >
+      {reviews.map((review, index) => (
+        <Review
+          key={index}
+          review={review}
+          handleLinkClick={handleLinkClick}
+          imageMapping={imageMapping}
+          truncateReview={truncateReview}
+        />
+      ))}
+    </Slider>
+  )
+}
+
+/**
+ * Contenedor de reseñas.
+ *
+ * Unifica MapContainer (separa por origen) y MapContainerLayoutB (mezcla todo).
+ * Ambos comparten la misma lógica de click, truncado y mapeo de imágenes.
+ *
+ * @param {object} props.pageContext  contexto de página de Gatsby
+ * @param {boolean} props.shuffle     si true, mezcla todas las reseñas
+ * @param {string} props.className    clase extra para el slider
+ */
+const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
+  const { data: allReviews, statusElement } = useLocalizedQuery(
+    GetAllReviews,
+    pageContext
+  )
+  if (statusElement) return statusElement
 
   const openReviewLink = url => {
     window.open(url, "Data", "height=700px,width=600px")
@@ -395,37 +185,70 @@ const MapContainerLayoutB = pageContext => {
     DefaultImage: null,
   }
 
-  function shuffleArray(array) {
-    // Crea una copia del arreglo original para no modificarlo directamente
-    const shuffledArray = [...array]
-
-    // Baraja el arreglo utilizando el algoritmo de Fisher-Yates
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
+  if (shuffle) {
+    function shuffleArray(array) {
+      const shuffledArray = [...array]
+      for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
         ;[shuffledArray[i], shuffledArray[j]] = [
           shuffledArray[j],
           shuffledArray[i],
         ]
+      }
+      return shuffledArray
     }
 
-    return shuffledArray
+    const shuffledReviews = shuffleArray([
+      ...allReviews.googleReviews,
+      ...allReviews.tripAdvisorReviews,
+      ...allReviews.facebookReviews,
+    ])
+
+    return (
+      <ReviewsSlider
+        reviews={shuffledReviews}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+        className={className}
+      />
+    )
   }
 
-  // Obtén una copia aleatoria de todas las reseñas
-  const shuffledReviews = shuffleArray([
-    ...allReviews.googleReviews,
-    ...allReviews.tripAdvisorReviews,
-    ...allReviews.facebookReviews,
-  ])
-
   return (
-    <ReviewsCarousel
-      reviews={shuffledReviews}
-      handleLinkClick={handleLinkClick}
-      imageMapping={imageMapping}
-      truncateReview={truncateReview}
-    />
+    <>
+      {/* Reseñas de Google */}
+      <ReviewsSlider
+        reviews={allReviews.googleReviews}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+        className="mb-5 lg:p-4"
+      />
+
+      {/* Reseñas de TripAdvisor */}
+      <ReviewsSlider
+        reviews={allReviews.tripAdvisorReviews}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+        className="mb-10 lg:p-4"
+      />
+
+      {/* Reseñas de Facebook */}
+      <ReviewsSlider
+        reviews={allReviews.facebookReviews}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+        className="mb-10 lg:p-4"
+      />
+    </>
   )
 }
 
-export { MapContainer, MapContainerLayoutB }
+// Mantener nombres de exportación originales para no romper los imports
+export const MapContainer = props => <ReviewsContainer {...props} />
+export const MapContainerLayoutB = props => (
+  <ReviewsContainer {...props} shuffle className="m-5" />
+)

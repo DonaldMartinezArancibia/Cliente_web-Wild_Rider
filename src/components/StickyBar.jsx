@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Link } from "gatsby"
-import { useQuery } from "@apollo/client/react"
 import { CombinedQuery } from "../gql/carQuotePageQuery"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { localePath } from "../lib/routes"
 
 const StickyBar = ({ pageContext }) => {
   const stickyRef = useRef(null)
-  const { data, loading, error } = useQuery(CombinedQuery, {
-    variables: {
-      locale: [pageContext.langKey],
-    },
-  })
+  const { data, statusElement } = useLocalizedQuery(CombinedQuery, pageContext)
 
   const [isScrollVisible, setIsScrollVisible] = useState(false)
 
@@ -33,10 +30,12 @@ const StickyBar = ({ pageContext }) => {
     }
   }, [])
 
-  if (loading) return <p>Loading...</p>
-  const { carQuoteForms, menu } = data
+  if (statusElement) return statusElement
 
-  const indexLink = menu.menuElements.find(item => item.__typename === "Index")
+  const quoteForm = data?.carQuoteForms?.[0]
+  const indexLink = data?.menu?.menuElements?.find(
+    item => item.__typename === "Index"
+  )
 
   return (
     <div
@@ -48,29 +47,21 @@ const StickyBar = ({ pageContext }) => {
       <div className="flex flex-col md:flex-row">
         <Link
           to={
-            carQuoteForms[0]?.localizations[0]
-              ? `/${
-                  pageContext.langKey === "en" ? "" : pageContext.langKey + "/"
-                }${carQuoteForms[0].slug}`
+            quoteForm?.localizations?.[0]
+              ? localePath(pageContext.langKey, quoteForm.slug)
               : ""
           }
-          className="bg-[#F6CC4D] text-[#0833a2] text-2xl sm:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-[#ffda6b] rounded-lg font-extrabold md:px-16"
+          className="bg-brand-yellow text-brand-blue text-2xl sm:text-4xl font-Poppins block my-1 m-auto p-5 hover:bg-brand-yellow-light rounded-lg font-extrabold md:px-16"
         >
-          {data?.carQuoteForms[0]?.buttonTextOfQuickQuote}
+          {quoteForm?.buttonTextOfQuickQuote}
         </Link>
         <Link
-          to={
-            indexLink.slug
-              ? `/${
-                  pageContext.langKey === "en" ? "" : pageContext.langKey + "/"
-                }`
-              : ""
-          }
-          className={`bg-[#0833a2] relative p-5 hover:bg-blue-800 text-white text-xl sm:text-xl md:ml-16 font-Poppins block m-auto rounded-lg font-extrabold ${
+          to={indexLink?.slug ? localePath(pageContext.langKey) : ""}
+          className={`bg-brand-blue relative p-5 hover:bg-blue-800 text-white text-xl sm:text-xl md:ml-16 font-Poppins block m-auto rounded-lg font-extrabold ${
             isScrollVisible ? "block" : "hidden"
           }`}
         >
-          {indexLink.title}
+          {indexLink?.title}
         </Link>
       </div>
     </div>

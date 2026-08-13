@@ -11,8 +11,8 @@ const Example = React.memo(({ iframeUrl, linkTitle }) => {
 
   const getLinkClass = to => {
     return location.pathname !== to
-      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d]"
-      : "mt-4 drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white hover:cursor-pointer hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out sm:mr-10 lg:mt-0"
+      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow"
+      : "mt-4 drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white hover:cursor-pointer hover:text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out sm:mr-10 lg:mt-0"
   }
 
   return (
@@ -87,5 +87,7 @@ const Example = React.memo(({ iframeUrl, linkTitle }) => {
     </>
   )
 })
+
+Example.displayName = "Popup"
 
 export default Example

@@ -1,8 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Carter+One&family=Montserrat&family=Inter&family=Poppins:wght@400;700&family=Inter+Tight:wght@700&display=swap");
-@import '@fortawesome/fontawesome-free/css/all.css';
-
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+/* El plugin typography se registra en tailwind.config.js, junto a su
+   personalización de colores; declararlo también aquí lo duplicaba. */
 @config "../../tailwind.config.js";
 
 @layer base {
@@ -38,6 +37,17 @@
 @layer components {
   img {
     @apply pointer-events-none;
+  }
+
+  /* Fondo de marca compartido por casi todas las páginas.
+     Antes era la misma cadena de ~180 caracteres copiada en 13 archivos. */
+  .hero-surface {
+    @apply bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] bg-[length:150%] md:bg-[right_-18rem_top_-2%] md:bg-[length:85%] lg:bg-[right_-30rem_top_-15rem] lg:bg-[length:75%];
+  }
+
+  /* Variante usada por las páginas con contenido alto (carros, travel planner). */
+  .hero-surface-low {
+    @apply lg:bg-[right_-40rem_bottom_-40rem];
   }
 
   .glass-effect {
@@ -96,11 +106,11 @@
     @apply font-bold mb-4 md:mt-12 !font-CarterOne;
   }
 
-  #sectionBellowTestimonialsTitle h2 {
+  .testimonials-intro h2 {
     @apply max-w-3xl mx-4 mb-8 text-4xl xl:px-16 font-CarterOne;
   }
 
-  #sectionBellowTestimonialsTitle p {
+  .testimonials-intro p {
     @apply mx-4 mb-5 xl:px-16;
   }
 
@@ -124,30 +134,30 @@
     @apply font-bold;
   }
 
-  #toggleContent div h1,
-  #toggleContent div h2,
-  #toggleContent div h3,
-  #toggleContent div h4,
-  #toggleContent div h5,
-  #toggleContent div h6 {
+  .toggle-content div h1,
+  .toggle-content div h2,
+  .toggle-content div h3,
+  .toggle-content div h4,
+  .toggle-content div h5,
+  .toggle-content div h6 {
     @apply font-CarterOne mb-5;
   }
 
-  #toggleContent div ul {
+  .toggle-content div ul {
     list-style: inside;
     @apply mb-5;
   }
 
-  #toggleContent div ol {
+  .toggle-content div ol {
     list-style: auto;
     @apply mb-5;
   }
 
-  #toggleContent div p {
+  .toggle-content div p {
     @apply mb-5;
   }
 
-  #toggleContent div a {
+  .toggle-content div a {
     @apply text-blue-500 hover:text-blue-700 transition duration-300;
   }
 

@@ -6,14 +6,8 @@
 
 // You can delete this file if you're not using it
 import React from "react"
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-} from "@apollo/client"
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client"
 import { ApolloProvider } from "@apollo/client/react"
-import { MDXProvider } from "@mdx-js/react"
-import fetch from "isomorphic-fetch"
 import Layout from "./src/components/layout"
 import "./src/styles/global.css"
 import "slick-carousel/slick/slick.css"
@@ -25,7 +19,6 @@ const httpLink = new HttpLink({
   headers: {
     Authorization: `Bearer ${process.env.GATSBY_GRAPHCMS_TOKEN}`,
   },
-  fetch,
 })
 
 // Hygraph returns the same `id` for every locale of a translated entry, so the
@@ -88,9 +81,7 @@ const wrapPageElement = ({ element, props }) => (
 )
 
 const wrapRootElement = ({ element }) => (
-  <ApolloProvider client={apolloClient}>
-    <MDXProvider>{element}</MDXProvider>
-  </ApolloProvider>
+  <ApolloProvider client={apolloClient}>{element}</ApolloProvider>
 )
 
 export { wrapPageElement, wrapRootElement }

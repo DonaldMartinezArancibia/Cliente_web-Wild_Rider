@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 import {
   Player,
   ControlBar,
@@ -11,22 +11,11 @@ import "video-react/dist/video-react.css"
 const VideoPlayer = ({ videos }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
-  const [isAudioMuted, setIsAudioMuted] = useState(true)
+  const [isAudioMuted] = useState(true)
   const playerRef = useRef(null)
-  // console.log(videos)
-  // useEffect(() => {
-  //   // Comienza la reproducción cuando el componente se monta
-  //   if (isFocused) {
-  //     playerRef.current.play()
-  //   }
-  // }, [isFocused])
 
   const handleEnded = () => {
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
-  }
-
-  const handleVideoClick = index => {
-    setCurrentVideoIndex(index)
   }
 
   const playPreviousVideo = () => {
@@ -39,21 +28,12 @@ const VideoPlayer = ({ videos }) => {
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
   }
 
-  const handleToggleAudio = () => {
-    // Cambia el estado de isAudioMuted
-    setIsAudioMuted(prev => !prev)
-    // Actualiza el estado del reproductor de audio
-    playerRef.current.muted = !playerRef.current.muted
-  }
-
   const handlePlayerFocus = () => {
     setIsFocused(true)
   }
 
   const handlePlayerBlur = () => {
     setIsFocused(false)
-    // Pausa la reproducción cuando pierde el foco
-    // playerRef.current.pause()
   }
 
   return (

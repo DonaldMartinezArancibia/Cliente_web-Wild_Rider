@@ -1,17 +1,14 @@
 import React from "react"
-import { useApolloClient, useQuery } from "@apollo/client/react"
-import { GetAllPosts, PostBySlug } from "../gql/allPost"
+import { GetAllPosts } from "../gql/allPost"
 import { Link } from "gatsby"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 
 export default function Showdata({ pageContext }) {
-  const client = useApolloClient()
-  const {
-    data: posts,
-    loading: postsQueryLoading,
-    error: postsQueryError,
-  } = useQuery(GetAllPosts, { variables: { locale: [pageContext.langKey] } })
-  if (postsQueryLoading) return <p>Loading...</p>
-  // if (postsQueryError) return <p>Error : {postBySlugQueryError.message}</p>
+  const { data: posts, statusElement } = useLocalizedQuery(
+    GetAllPosts,
+    pageContext
+  )
+  if (statusElement) return statusElement
 
   return (
     <section className="container flex flex-wrap justify-between w-4/6">
@@ -25,7 +22,7 @@ export default function Showdata({ pageContext }) {
           <div className="py-4 mr-20 text-end">
             <Link
               to={`/blog/${item.slug}`} // Usar una ruta absoluta aquí
-              className="px-14 py-4 font-medium text-white bg-[#0833a2] rounded hover:bg-indigo-600"
+              className="px-14 py-4 font-medium text-white bg-brand-blue rounded hover:bg-indigo-600"
             >
               View more
             </Link>

@@ -1,26 +1,21 @@
 import React from "react"
-import { useQuery, useApolloClient } from "@apollo/client/react"
 import { Cars } from "../gql/carsByIdQuery"
-import CarFormHtml from "./carQuoteForm"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import CarQuoteForm from "./forms/CarQuoteForm"
 
-const CarQuoteQuery = pageContext => {
-  const client = useApolloClient()
-
-  const {
-    data: carsById,
-    loading: carsByIdQueryLoading,
-    error: carsByIdQueryError,
-  } = useQuery(Cars, {
-    variables: {
-      internalId: pageContext.carId,
-      locale: [pageContext.pageContext.langKey],
-    },
+/**
+ * Carga el coche seleccionado y se lo pasa al formulario de cotización.
+ *
+ * La versión anterior nombraba `pageContext` al objeto de props completo, de
+ * donde venía el `pageContext.pageContext` repartido por carQuoteForm.
+ */
+const CarQuoteQuery = ({ pageContext, carId }) => {
+  const { data, statusElement } = useLocalizedQuery(Cars, pageContext, {
+    variables: { internalId: carId },
   })
-  if (carsByIdQueryLoading) return <p>Loading...</p>
-  if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
+  if (statusElement) return statusElement
 
-  return (
-    <div>{<CarFormHtml apolloData={carsById} pageContext={pageContext} />}</div>
-  )
+  return <CarQuoteForm apolloData={data} pageContext={pageContext} />
 }
+
 export default CarQuoteQuery

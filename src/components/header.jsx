@@ -3,9 +3,11 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
-import { useQuery } from "@apollo/client/react"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
+import { localePath } from "../lib/routes"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { transformMenuElements, createMenuLinks } from "../lib/menuUtils"
 
 export default function Header({ pageContext }) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -26,6 +28,7 @@ export default function Header({ pageContext }) {
   }, [isOpen])
 
   const [isHidden, setIsHidden] = React.useState(false)
+  const [unHidden, setUnHidden] = React.useState(false)
 
   const validateWindowSize = () => {
     setIsHidden(window.innerWidth > 1280)
@@ -49,89 +52,35 @@ export default function Header({ pageContext }) {
     }
   }, [])
 
-  const [unHidden, setUnHidden] = React.useState(false)
+  const { data: headerAndFooterElementsData } = useLocalizedQuery(
+    headerAndFooterElements,
+    pageContext
+  )
 
-  React.useEffect(() => {
-    validateWindowSize()
-    // Función para manejar el cambio en el tamaño de la pantalla
-    const handleWindowResize = () => {
-      validateWindowSize()
-    }
+  const { data: menuElementsData, statusElement } = useLocalizedQuery(
+    menuElements,
+    pageContext
+  )
 
-    // Agregar el evento de cambio en el tamaño de la pantalla al montar el componente
-    window.addEventListener("resize", handleWindowResize)
-
-    // Limpia el evento cuando el componente se desmonta
-    return () => {
-      window.removeEventListener("resize", handleWindowResize)
-    }
-  }, [])
-
-  // Antes de realizar la consulta, verifica si pageContext.langKey está definido
-  const langKey = pageContext && pageContext.langKey ? pageContext.langKey : ""
-
-  const {
-    data: headerAndFooterElementsData,
-  } = useQuery(headerAndFooterElements, {
-    variables: { locale: [pageContext.langKey] },
-  })
-
-  const {
-    data: menuElementsData,
-    loading: menuElementsDataQueryLoading,
-    error: menuElementsDataQueryError,
-  } = useQuery(menuElements, {
-    variables: { locale: [langKey] },
-  })
-
-  if (menuElementsDataQueryLoading) return <p>Loading...</p>
-  if (menuElementsDataQueryError)
-    return <p>Error : {menuElementsDataQueryError.message}</p>
+  if (statusElement) return statusElement
 
   const langSelectorTitle =
     headerAndFooterElementsData?.headerAndFooterElements[0]
 
   //Retira los slug de los diferentes idiomas solamente para la pagina index
-  function transformMenuElements(data) {
-    if (data && data.menus && data.menus.length > 0) {
-      const modifiedData = data.menus[3].menuElements.map(element => {
-        if (element.__typename === "Index") {
-          return {
-            ...element,
-            slug: "", // Modificamos el valor del slug para Index a ""
-          }
-        }
-        return element
-      })
-
-      return {
-        ...data,
-        menus: [
-          {
-            ...data.menus[0],
-            menuElements: modifiedData,
-          },
-        ],
-      }
-    }
-    return data
-  }
-  // Aplicamos la función de transformación al resultado de la consulta
-  const transformedMenuElementsData = transformMenuElements(menuElementsData)
+  const transformedMenuElementsData = transformMenuElements(menuElementsData, 3)
   const menuData = transformedMenuElementsData.menus[0].menuElements
-  const links = menuData.map(obj => ({
-    to:
-      pageContext.langKey === "en"
-        ? `/${obj.slug}`
-        : `/${pageContext.langKey}/${obj.slug}`,
-    text: `${obj.title}`,
-  }))
+  const links = createMenuLinks(
+    menuData,
+    pageContext.langKey,
+    localePath
+  )
 
   const getLinkClass = to => {
     // console.log(location.pathname, to, location.pathname === to)
     return location.pathname === to
-      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d]"
-      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white my-2 hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
+      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow"
+      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white my-2 hover:text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
   }
 
   return (
@@ -147,7 +96,7 @@ export default function Header({ pageContext }) {
           <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">
             <button type="button" aria-label="Abrir menú de navegación" onClick={() => setIsOpen(!isOpen)}>
               <svg
-                className="h-8 text-[#f6cc4d]"
+                className="h-8 text-brand-yellow"
                 fill="none"
                 viewBox="0 1 25 19"
                 stroke="currentColor"
@@ -176,12 +125,8 @@ export default function Header({ pageContext }) {
           </Link> */}
           <h1 className="text-center text-[10vw] leading-none tracking-wide sm:w-2/5 sm:text-[5vw] xl:w-full xl:self-center">
             <Link
-              to={
-                pageContext.langKey === "en"
-                  ? "/"
-                  : `/${pageContext.langKey || ""}`
-              }
-              className="font-bold text-[#f6cc4d] font-CarterOne"
+              to={localePath(pageContext.langKey)}
+              className="font-bold text-brand-yellow font-CarterOne"
             >
               {langSelectorTitle?.logoTextTitle}
               <br />
@@ -225,9 +170,9 @@ export default function Header({ pageContext }) {
           />
         )}
       </div>
-      <div className="flex items-center bg-[#0833A2] xl:py-4 w-full justify-between">
+      <div className="flex items-center bg-brand-blue xl:py-4 w-full justify-between">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
-          <Link to="/" className="font-bold text-[#f6cc4d] font-CarterOne">
+          <Link to="/" className="font-bold text-brand-yellow font-CarterOne">
             Wild Rider
             <br />
             <p className="text-base font-InterTight tracking-[.0001px]">
@@ -239,18 +184,9 @@ export default function Header({ pageContext }) {
           {links.map((link, index) => (
             <li
               key={index}
-              className={`${getLinkClass(link.to)} 
-    ${index === 0
+              className={`${getLinkClass(link.to)} ${index === 0
                   ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
                   : ""
-                } 
-    ${index === 3 && (
-                  <li
-                    key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
-                  >
-                    hi
-                  </li>
-                )
                 }`}
             >
               <Link to={link.to}>{link.text}</Link>

@@ -1,17 +1,15 @@
 import React from "react"
-import { Fragment, useRef, useState, useEffect } from "react"
+import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { useQuery, useApolloClient } from '@apollo/client/react';
 import { Cars } from "../gql/carsByIdQuery"
-import { Link } from "gatsby"
 import ReactMarkdown from "react-markdown"
-import { setDatos } from "./variableReactiva"
 import { navigate } from "gatsby"
-import he from "he" // Importar la biblioteca para desescapar HTML
+import { localePath } from "../lib/routes"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import PriceTable from "./ui/PriceTable"
 
 export default function OpenModal({ carId, pageContext }) {
-  const client = useApolloClient()
   const [isOpen, setIsOpen] = useState(false)
 
   const cancelButtonRef = useRef(null)
@@ -24,14 +22,8 @@ export default function OpenModal({ carId, pageContext }) {
     setIsOpen(true)
   }
 
-  const [selectedTransmission, setSelectedTransmission] = useState("")
-
-  const {
-    data: carsById,
-    loading: carsByIdQueryLoading,
-    error: carsByIdQueryError,
-  } = useQuery(Cars, {
-    variables: { internalId: carId, locale: [pageContext.langKey] },
+  const { data: carsById, statusElement } = useLocalizedQuery(Cars, pageContext, {
+    variables: { internalId: carId },
   })
   const [answerState, setAnswerState] = useState(false)
 
@@ -39,8 +31,7 @@ export default function OpenModal({ carId, pageContext }) {
     setAnswerState(!answerState)
   }
 
-  if (carsByIdQueryLoading) return <p>Loading...</p>
-  if (carsByIdQueryError) return <p>Error : {carsByIdQueryError.message}</p>
+  if (statusElement) return statusElement
 
   const car = carsById.cars[0]
 
@@ -48,15 +39,6 @@ export default function OpenModal({ carId, pageContext }) {
     const date = new Date(dateString)
     const options = { year: "numeric", month: "short", day: "numeric" }
     return date.toLocaleDateString(pageContext.langKey, options)
-  }
-  // Tu lógica para obtener datos
-  const datos = car?.id
-
-  setDatos(car.id)
-  // console.log(car.carDetails[0].markdown)
-
-  const handleTransmissionChange = event => {
-    setSelectedTransmission(event.target.value)
   }
 
   const handleButtonClick = () => {
@@ -66,32 +48,16 @@ export default function OpenModal({ carId, pageContext }) {
     const manualTransmissionValue =
       car.manualTransmission?.carTransmissionSelectorValue
 
-    console.log(
-      "Valor de automaticTransmissionValue:",
-      automaticTransmissionValue
-    )
-    console.log("Valor de manualTransmissionValue:", manualTransmissionValue)
+    const selectedTransmission =
+      manualTransmissionValue !== undefined && manualTransmissionValue !== null
+        ? manualTransmissionValue
+        : automaticTransmissionValue !== undefined
+          ? automaticTransmissionValue
+          : ""
 
-    // Agregar el valor de la transmisión al objeto datos
-    const datosConTransmision = {
-      ...datos, // Copiar los datos existentes
-      selectedTransmission:
-        manualTransmissionValue !== undefined &&
-          manualTransmissionValue !== null
-          ? manualTransmissionValue
-          : automaticTransmissionValue !== undefined
-            ? automaticTransmissionValue
-            : "",
-    }
-
-    // Realizar la navegación con el nuevo objeto datos
-    console.log(datosConTransmision)
-    navigate(
-      pageContext.langKey === "en"
-        ? `/${car.carQuoteForm.slug}`
-        : `/${pageContext.langKey || ""}/${car.carQuoteForm.slug}`,
-      { state: { datos: datosConTransmision } }
-    )
+    navigate(localePath(pageContext.langKey, car.carQuoteForm.slug), {
+      state: { carId: car.id, selectedTransmission },
+    })
   }
 
   return (
@@ -100,7 +66,7 @@ export default function OpenModal({ carId, pageContext }) {
         <button
           type="button"
           onClick={openModal}
-          className="bg-[#0833a2] text-white py-5 px-16 mt-4 hover:bg-blue-800 rounded-lg font-semibold text-lg"
+          className="bg-brand-blue text-white py-5 px-16 mt-4 hover:bg-blue-800 rounded-lg font-semibold text-lg"
         >
           {car.carsAndQuote.carsInformationButtonText}
         </button>
@@ -166,254 +132,13 @@ export default function OpenModal({ carId, pageContext }) {
 
                   <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-4">
                     <div className="overflow-x-auto xl:w-[50%] flex">
-                      {/* <div className="w-full overflow-x-auto">
-                        <table className="w-full border border-solid border-[#ccc] border-collapse m-0 p-0 table-fixed max-sm:border-0">
-                          <caption className="mb-3 m-[5px_0_10px] text-xl font-semibold max-sm:text-sm">
-                            Statement Summary
-                          </caption>
-                          <thead className="max-sm:absolute max-sm:w-1 max-sm:h-1 max-sm:p-0 max-sm:-m-1 max-sm:overflow-hidden max-sm:border-0">
-                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-200 border-[#ddd] border-solid border p-3">
-                              <th className="p-2 text-xs tracking-widest text-center uppercase">
-                                Account
-                              </th>
-                              <th className="p-2 text-xs tracking-widest text-center uppercase">
-                                Due Date
-                              </th>
-                              <th className="p-2 text-xs tracking-widest text-center uppercase">
-                                Amount
-                              </th>
-                              <th className="p-2 text-xs tracking-widest text-center uppercase">
-                                Period
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
-                              <td
-                                scope="row"
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Account"
-                              >
-                                Visa - 3412
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Due Date"
-                              >
-                                04/01/2016
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Amount"
-                              >
-                                $1,190
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Period"
-                              >
-                                03/01/2016 - 03/31/2016
-                              </td>
-                            </tr>
-                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
-                              <td
-                                scope="row"
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Account"
-                              >
-                                Visa - 6076
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Due Date"
-                              >
-                                03/01/2016
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Amount"
-                              >
-                                $2,443
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Period"
-                              >
-                                02/01/2016 - 02/29/2016
-                              </td>
-                            </tr>
-                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
-                              <td
-                                scope="row"
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Account"
-                              >
-                                Corporate AMEX
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Due Date"
-                              >
-                                03/01/2016
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Amount"
-                              >
-                                $1,181
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Period"
-                              >
-                                02/01/2016 - 02/29/2016
-                              </td>
-                            </tr>
-                            <tr className="max-sm:block max-sm:border-b-4 max-sm:border-solid max-sm:border-b-[#ddd] bg-gray-100">
-                              <td
-                                scope="row"
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Account"
-                              >
-                                Visa - 3412
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Due Date"
-                              >
-                                02/01/2016
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Amount"
-                              >
-                                $842
-                              </td>
-                              <td
-                                className="max-sm:block max-sm:border-b-2 max-sm:text-right p-2 max-sm:before:content-[attr(data-label)] max-sm:before:float-left max-sm:before:font-bold max-sm:before:uppercase sm:text-center"
-                                data-label="Period"
-                              >
-                                01/01/2016 - 01/31/2016
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div> */}
-                      <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
-                        <thead>
-                          <tr className="text-xl">
-                            <th className="p-2">
-                              {car.carsAndQuote.seasonTitle}
-                            </th>
-                            <th className="p-2">
-                              {car.carsAndQuote.datesTitle}
-                            </th>
-                            <th className="p-2">
-                              {car.carsAndQuote.priceTitleManual}
-                            </th>
-                            <th className="p-2">
-                              {car.carsAndQuote.priceTitleAutomatic}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <>
-                            {car.manualTransmission.priceOfCar.map(
-                              (manualPrice, priceIndex) => (
-                                <tr key={priceIndex}>
-                                  <td className="p-2">
-                                    {manualPrice.season?.seasonTitle}
-                                  </td>
-                                  <td className="p-2">
-                                    {formatDate(manualPrice.season?.startDate)}{" "}
-                                    | {formatDate(manualPrice.season?.endDate)}
-                                  </td>
-                                  <td className="text-center">
-                                    {manualPrice.priceOfCar !== 0 ? (
-                                      <>${manualPrice.priceOfCar}</>
-                                    ) : (
-                                      manualPrice.unsetPriceMessage?.html && (
-                                        <div
-                                          dangerouslySetInnerHTML={{
-                                            __html: he.decode(
-                                              manualPrice.unsetPriceMessage.html
-                                            ),
-                                          }}
-                                        />
-                                      )
-                                    )}
-                                  </td>
-                                  {car.automaticTransmission?.priceOfCar?.[
-                                    priceIndex
-                                  ] && (
-                                      <>
-                                        {car.automaticTransmission.priceOfCar[
-                                          priceIndex
-                                        ].priceOfCar !== 0 ? (
-                                          <td className="text-center">
-                                            $
-                                            {
-                                              car.automaticTransmission
-                                                .priceOfCar[priceIndex].priceOfCar
-                                            }
-                                          </td>
-                                        ) : (
-                                          <td className="text-center">
-                                            {car.automaticTransmission.priceOfCar[
-                                              priceIndex
-                                            ].unsetPriceMessage?.html && (
-                                                <div
-                                                  dangerouslySetInnerHTML={{
-                                                    __html: he.decode(
-                                                      car.automaticTransmission
-                                                        .priceOfCar[priceIndex]
-                                                        .unsetPriceMessage.html
-                                                    ),
-                                                  }}
-                                                />
-                                              )}
-                                          </td>
-                                        )}
-                                      </>
-                                    )}
-                                </tr>
-                              )
-                            )}
-                          </>
-                        </tbody>
-                      </table>
-                      {/* {car.manualTransmission?.priceOfCar?.length > 0 &&
-                        car.automaticTransmission?.priceOfCar?.length > 0 && (
-                          <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
-                            <thead>
-                              <tr className="text-xl">
-                                <th className="p-2">
-                                  {car.carsAndQuote?.priceTitleAutomatic}
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {car.automaticTransmission?.priceOfCar?.map(
-                                (price, priceIndex) => (
-                                  <tr key={priceIndex}>
-                                    <td className="text-center">
-                                      ${price.priceOfCar}
-                                      {price.unsetPriceMessage?.html && (
-                                        <div
-                                          dangerouslySetInnerHTML={{
-                                            __html: he.decode(
-                                              price.unsetPriceMessage.html
-                                            ),
-                                          }}
-                                        />
-                                      )}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
-                        )} */}
+                      <PriceTable
+                        carsAndQuote={car.carsAndQuote}
+                        manualTransmission={car.manualTransmission}
+                        automaticTransmission={car.automaticTransmission}
+                        formatDate={formatDate}
+                        locale={pageContext.langKey}
+                      />
                     </div>
                     <div className="xl:w-3/5 2xl:mr-2">
                       <div className="mb-10 lg:w-full">
@@ -481,7 +206,7 @@ export default function OpenModal({ carId, pageContext }) {
                     <div className="flex justify-center mt-4">
                       <button
                         onClick={handleButtonClick}
-                        className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
+                        className="bg-brand-blue text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
                       // disabled={
                       //   car.automaticTransmission
                       //     ?.carTransmissionSelectorValue !== null &&
