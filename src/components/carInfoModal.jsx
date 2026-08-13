@@ -8,6 +8,7 @@ import { Link } from "gatsby"
 import ReactMarkdown from "react-markdown"
 import { setDatos } from "./variableReactiva"
 import { navigate } from "gatsby"
+import { localePath } from "../lib/routes"
 import he from "he" // Importar la biblioteca para desescapar HTML
 
 export default function OpenModal({ carId, pageContext }) {
@@ -85,13 +86,9 @@ export default function OpenModal({ carId, pageContext }) {
     }
 
     // Realizar la navegación con el nuevo objeto datos
-    console.log(datosConTransmision)
-    navigate(
-      pageContext.langKey === "en"
-        ? `/${car.carQuoteForm.slug}`
-        : `/${pageContext.langKey || ""}/${car.carQuoteForm.slug}`,
-      { state: { datos: datosConTransmision } }
-    )
+    navigate(localePath(pageContext.langKey, car.carQuoteForm.slug), {
+      state: { datos: datosConTransmision },
+    })
   }
 
   return (
@@ -100,7 +97,7 @@ export default function OpenModal({ carId, pageContext }) {
         <button
           type="button"
           onClick={openModal}
-          className="bg-[#0833a2] text-white py-5 px-16 mt-4 hover:bg-blue-800 rounded-lg font-semibold text-lg"
+          className="bg-brand-blue text-white py-5 px-16 mt-4 hover:bg-blue-800 rounded-lg font-semibold text-lg"
         >
           {car.carsAndQuote.carsInformationButtonText}
         </button>
@@ -481,7 +478,7 @@ export default function OpenModal({ carId, pageContext }) {
                     <div className="flex justify-center mt-4">
                       <button
                         onClick={handleButtonClick}
-                        className="bg-[#0833a2] text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
+                        className="bg-brand-blue text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
                       // disabled={
                       //   car.automaticTransmission
                       //     ?.carTransmissionSelectorValue !== null &&

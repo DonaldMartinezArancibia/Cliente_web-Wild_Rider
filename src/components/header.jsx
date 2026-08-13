@@ -6,6 +6,7 @@ import LanguageSelector from "./languajeSelector"
 import { useQuery } from "@apollo/client/react"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
+import { localePath } from "../lib/routes"
 
 export default function Header({ pageContext }) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -120,18 +121,15 @@ export default function Header({ pageContext }) {
   const transformedMenuElementsData = transformMenuElements(menuElementsData)
   const menuData = transformedMenuElementsData.menus[0].menuElements
   const links = menuData.map(obj => ({
-    to:
-      pageContext.langKey === "en"
-        ? `/${obj.slug}`
-        : `/${pageContext.langKey}/${obj.slug}`,
+    to: localePath(pageContext.langKey, obj.slug),
     text: `${obj.title}`,
   }))
 
   const getLinkClass = to => {
     // console.log(location.pathname, to, location.pathname === to)
     return location.pathname === to
-      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d]"
-      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white my-2 hover:text-[#f6cc4d] relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-[#f6cc4d] before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
+      ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow"
+      : "drop-shadow-[1px_1px_rgba(0,0,0)] transition ease-in-out text-white my-2 hover:text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow before:scale-x-0 hover:before:scale-x-100 before:origin-center before:transition-transform before:duration-300 before:ease-in-out"
   }
 
   return (
@@ -147,7 +145,7 @@ export default function Header({ pageContext }) {
           <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">
             <button type="button" aria-label="Abrir menú de navegación" onClick={() => setIsOpen(!isOpen)}>
               <svg
-                className="h-8 text-[#f6cc4d]"
+                className="h-8 text-brand-yellow"
                 fill="none"
                 viewBox="0 1 25 19"
                 stroke="currentColor"
@@ -176,12 +174,8 @@ export default function Header({ pageContext }) {
           </Link> */}
           <h1 className="text-center text-[10vw] leading-none tracking-wide sm:w-2/5 sm:text-[5vw] xl:w-full xl:self-center">
             <Link
-              to={
-                pageContext.langKey === "en"
-                  ? "/"
-                  : `/${pageContext.langKey || ""}`
-              }
-              className="font-bold text-[#f6cc4d] font-CarterOne"
+              to={localePath(pageContext.langKey)}
+              className="font-bold text-brand-yellow font-CarterOne"
             >
               {langSelectorTitle?.logoTextTitle}
               <br />
@@ -225,9 +219,9 @@ export default function Header({ pageContext }) {
           />
         )}
       </div>
-      <div className="flex items-center bg-[#0833A2] xl:py-4 w-full justify-between">
+      <div className="flex items-center bg-brand-blue xl:py-4 w-full justify-between">
         {/* <h1 className="text-center text-[40px] leading-none tracking-wide">
-          <Link to="/" className="font-bold text-[#f6cc4d] font-CarterOne">
+          <Link to="/" className="font-bold text-brand-yellow font-CarterOne">
             Wild Rider
             <br />
             <p className="text-base font-InterTight tracking-[.0001px]">

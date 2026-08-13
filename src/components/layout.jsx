@@ -3,49 +3,48 @@ import Header from "./header"
 import Footer from "./footer"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import { menuElements } from "../gql/menuElements"
-import { useQuery } from "@apollo/client/react"
-import { StaticImage } from "gatsby-plugin-image"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { SiteDataProvider } from "../context/siteData"
+import { DEFAULT_LOCALE } from "../config/locales"
 
 export const Layout = ({ children, pageContext }) => {
-  const langKey = pageContext && pageContext.langKey ? pageContext.langKey : ""
+  // Las páginas que no genera gatsby-node (p. ej. la 404) llegan sin langKey.
+  const localizedContext = {
+    ...pageContext,
+    langKey: pageContext?.langKey || DEFAULT_LOCALE,
+  }
 
-  const {
-    data: headerAndFooterElementsData,
-    loading: headerAndFooterElementsQueryLoading,
-    error: headerAndFooterElementsQueryError,
-  } = useQuery(headerAndFooterElements, {
-    variables: { locale: [pageContext.langKey] },
-  })
+  const { data: headerAndFooterData } = useLocalizedQuery(
+    headerAndFooterElements,
+    localizedContext
+  )
+  const { data: menusData } = useLocalizedQuery(menuElements, localizedContext)
 
+  const headerAndFooter = headerAndFooterData?.headerAndFooterElements?.[0]
 
-  const {
-    data: menuElementsData,
-    loading: menuElementsDataQueryLoading,
-    error: menuElementsDataQueryError,
-  } = useQuery(menuElements, {
-    variables: { locale: [langKey] },
-  })
-
-  // Puedes clonar el elemento children y pasarle datos adicionales utilizando React.cloneElement
-  const childrenWithProps = React.Children.map(children, child => {
-    return React.cloneElement(child, {
-      headerAndFooterData:
-        headerAndFooterElementsData?.headerAndFooterElements[0].langKey, // Puedes ajustar esto según tus necesidades
-    })
-  })
+  const siteData = React.useMemo(
+    () => ({
+      headerAndFooter,
+      menus: menusData,
+      // Código de idioma del contenido en Hygraph; lo consumen widgets de
+      // terceros (reCAPTCHA) a través de `useContentLangKey`.
+      contentLangKey: headerAndFooter?.langKey,
+    }),
+    [headerAndFooter, menusData]
+  )
 
   return (
-    <>
+    <SiteDataProvider value={siteData}>
       <Header pageContext={pageContext} />
-      {childrenWithProps}
-      {headerAndFooterElementsData && (
+      {children}
+      {headerAndFooter && (
         <Footer
-          footerData={headerAndFooterElementsData.headerAndFooterElements[0]}
-          footerMenus={menuElementsData}
+          footerData={headerAndFooter}
+          footerMenus={menusData}
           pageContext={pageContext}
         />
       )}
-    </>
+    </SiteDataProvider>
   )
 }
 
