@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { navigate } from "gatsby"
-import { useQuery } from "@apollo/client/react"
 import { getLocalizationQuery } from "../gql/localizationQueries"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import {
   SELECTABLE_LANGUAGES,
   AUTO_REDIRECT_LANGUAGES,
@@ -44,9 +44,13 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   const { langKey, remoteTypeName, remoteId } = pageContext
   const isHome = remoteTypeName === "Index"
 
-  const { data, loading, error } = useQuery(
+  // No se usa statusElement acá a propósito: este widget vive en el header y
+  // Loading/ErrorState de ui/QueryState son pantallas completas, no encajan
+  // en un selector chico — mientras carga o falla, simplemente no se muestra.
+  const { data, loading, error } = useLocalizedQuery(
     getLocalizationQuery(remoteTypeName),
-    { variables: { internalId: remoteId, locale: [langKey] } }
+    pageContext,
+    { variables: { internalId: remoteId } }
   )
 
   // Primera visita: si el navegador está en otro idioma soportado y el usuario

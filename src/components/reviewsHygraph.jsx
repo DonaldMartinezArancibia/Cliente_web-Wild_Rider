@@ -6,7 +6,7 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/solid"
 import { GetAllReviews } from "../gql/allReviews"
-import { useQuery } from "@apollo/client/react"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import TripAdvisor from "../images/tripadvisor-logo.svg"
 import Google from "../images/google-logo.svg"
 import Facebook from "../images/facebook-logo.svg"
@@ -59,183 +59,85 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
   </div>
 )
 
-const GoogleReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
+// Componentes personalizados para las flechas
+const PrevArrow = props => (
+  <button {...props} className="slick-arrow custom-prev-arrow">
+    <ChevronLeftIcon className="w-10 md:w-16" />
+  </button>
+)
 
-  return (
-    <Slider {...settings} className="!flex mb-5 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-const TripAdvisorReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
+const NextArrow = props => (
+  <button {...props} className="slick-arrow custom-next-arrow">
+    <ChevronRightIcon className="w-10 md:w-16" />
+  </button>
+)
 
-  return (
-    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-const FacebookReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3, // Número de reseñas a mostrar en cada slide
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />, // Usa componentes personalizados para las flechas previas y siguientes
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
+/** Config compartida de los carruseles de reseñas; función (no constante) porque
+ * prevArrow/nextArrow son elementos JSX y cada <Slider> necesita su propia instancia. */
+const getCarouselSettings = () => ({
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3, // Número de reseñas a mostrar en cada slide
+  slidesToScroll: 3,
+  prevArrow: <PrevArrow />,
+  nextArrow: <NextArrow />,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+        dots: true,
       },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  return (
-    <Slider {...settings} className="!flex mb-10 lg:p-4 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-
-const MapContainer = pageContext => {
-  const {
-    data: googleR,
-    loading: googleRLoading,
-  } = useQuery(GetAllReviews, {
-    variables: {
-      // internalId: pageContext.remoteId,
-      locale: [pageContext.pageContext.langKey],
     },
-  })
-  if (googleRLoading) return <p>Loading...</p>
+    {
+      breakpoint: 1023,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        initialSlide: 2,
+      },
+    },
+    {
+      breakpoint: 599,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+})
+
+const ReviewsSlider = ({
+  reviews,
+  handleLinkClick,
+  imageMapping,
+  truncateReview,
+  className,
+}) => (
+  <Slider
+    {...getCarouselSettings()}
+    className={`!flex [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full ${className}`}
+  >
+    {reviews.map((review, index) => (
+      <Review
+        key={index}
+        review={review}
+        handleLinkClick={handleLinkClick}
+        imageMapping={imageMapping}
+        truncateReview={truncateReview}
+      />
+    ))}
+  </Slider>
+)
+
+const MapContainer = ({ pageContext }) => {
+  const { data: googleR, statusElement } = useLocalizedQuery(
+    GetAllReviews,
+    pageContext
+  )
+  if (statusElement) return statusElement
 
   const openReviewLink = url => {
     window.open(url, "Data", "height=700px,width=600px")
@@ -250,9 +152,6 @@ const MapContainer = pageContext => {
     return review.length > length ? review.substring(0, length) + "..." : review
   }
 
-  // Define la variable newReviews aquí
-  const newReviews = []
-
   // Define el mapeo de imágenes aquí
   const imageMapping = {
     TripAdvisor: TripAdvisor,
@@ -261,119 +160,44 @@ const MapContainer = pageContext => {
     DefaultImage: null,
   }
 
-  console.log(googleR.tripAdvisorReviews)
-  console.log(googleR.facebookReviews)
-  console.log(googleR.googleReviews)
-
   return (
     <>
-      {/* Utiliza el componente GoogleReviewsCarousel para mostrar las reseñas de Google */}
-      <GoogleReviewsCarousel
-        reviews={[...googleR.googleReviews, ...newReviews]}
+      {/* Reseñas de Google */}
+      <ReviewsSlider
+        reviews={googleR.googleReviews}
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        className="mb-5 lg:p-4"
       />
 
-      {/* Agrega un carrusel similar para las reseñas de TripAdvisor */}
-      <TripAdvisorReviewsCarousel
-        reviews={[...googleR.tripAdvisorReviews, ...newReviews]}
+      {/* Reseñas de TripAdvisor */}
+      <ReviewsSlider
+        reviews={googleR.tripAdvisorReviews}
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        className="mb-10 lg:p-4"
       />
-      {/* Agrega un carrusel similar para las reseñas de TripAdvisor */}
-      <FacebookReviewsCarousel
-        reviews={[...googleR.facebookReviews, ...newReviews]}
+
+      {/* Reseñas de Facebook */}
+      <ReviewsSlider
+        reviews={googleR.facebookReviews}
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        className="mb-10 lg:p-4"
       />
     </>
   )
 }
 
-const ReviewsCarousel = ({
-  reviews,
-  handleLinkClick,
-  imageMapping,
-  truncateReview,
-}) => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 599,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  return (
-    <Slider {...settings} className="!flex m-5 [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full">
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
-  )
-}
-
-// Componentes personalizados para las flechas
-const PrevArrow = props => (
-  <button {...props} className="slick-arrow custom-prev-arrow">
-    <ChevronLeftIcon className="w-10 md:w-16" />
-  </button>
-)
-
-const NextArrow = props => (
-  <button {...props} className="slick-arrow custom-next-arrow">
-    <ChevronRightIcon className="w-10 md:w-16" />
-  </button>
-)
-
-const MapContainerLayoutB = pageContext => {
-  const { data: allReviews, loading: allReviewsLoading } = useQuery(
+const MapContainerLayoutB = ({ pageContext }) => {
+  const { data: allReviews, statusElement } = useLocalizedQuery(
     GetAllReviews,
-    {
-      variables: {
-        // internalId: pageContext.remoteId,
-        locale: [pageContext.pageContext.langKey],
-      },
-    }
+    pageContext
   )
-
-  if (allReviewsLoading) return <p>Loading...</p>
+  if (statusElement) return statusElement
 
   const openReviewLink = url => {
     window.open(url, "Data", "height=700px,width=600px")
@@ -419,11 +243,12 @@ const MapContainerLayoutB = pageContext => {
   ])
 
   return (
-    <ReviewsCarousel
+    <ReviewsSlider
       reviews={shuffledReviews}
       handleLinkClick={handleLinkClick}
       imageMapping={imageMapping}
       truncateReview={truncateReview}
+      className="m-5"
     />
   )
 }

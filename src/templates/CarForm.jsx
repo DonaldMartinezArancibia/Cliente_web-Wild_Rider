@@ -1,12 +1,11 @@
 import React from "react"
 import CarQuoteQuery from "../components/carQuoteQuery"
-import { datosVar } from "../components/variableReactiva"
 import CarFormHtml from "../components/carQuoteForm"
 
 const CarForm = ({ pageContext, location }) => {
   // Coche seleccionado en el modal de la página de carros.
-  const carId = datosVar()
-  const selectedTransmission = location.state?.datos?.selectedTransmission
+  const carId = location.state?.carId
+  const selectedTransmission = location.state?.selectedTransmission
 
   // Con transmisión elegida se cotiza un coche concreto; sin ella se muestra
   // el formulario vacío.

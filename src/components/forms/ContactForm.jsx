@@ -4,16 +4,10 @@ import ReCAPTCHA from "react-google-recaptcha"
 import { useEmailSuggestion } from "../../hooks/useEmailSuggestion"
 import EmailField from "./EmailField"
 import SubmitDialog from "../ui/SubmitDialog"
+import { setValidationMessage } from "../../lib/quoteForm"
 
 const ZAPIER_WEBHOOK = "https://hooks.zapier.com/hooks/catch/17251260/3wu1vz2/"
 const RECAPTCHA_SITE_KEY = "6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-
-/** Muestra el mensaje del CMS cuando un campo obligatorio queda vacío. */
-const setValidationMessage = (event, message) => {
-  event.target.setCustomValidity(
-    event.target.value.trim() ? "" : message || "This field is required"
-  )
-}
 
 /**
  * Formulario de contacto.

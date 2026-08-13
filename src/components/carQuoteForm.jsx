@@ -35,7 +35,6 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   // console.log(pageContext.pageContext.langKey)
   // const datos = apolloData
   // console.log(datos)
-  // console.log(datosVar())
   // const { carName, remoteId } = pageContext
   const carsById = apolloData?.cars[0]
   // console.log(carsById)

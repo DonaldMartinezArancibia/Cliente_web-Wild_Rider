@@ -3,10 +3,10 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
-import { useQuery } from "@apollo/client/react"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import { localePath } from "../lib/routes"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 
 export default function Header({ pageContext }) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -27,6 +27,7 @@ export default function Header({ pageContext }) {
   }, [isOpen])
 
   const [isHidden, setIsHidden] = React.useState(false)
+  const [unHidden, setUnHidden] = React.useState(false)
 
   const validateWindowSize = () => {
     setIsHidden(window.innerWidth > 1280)
@@ -50,44 +51,17 @@ export default function Header({ pageContext }) {
     }
   }, [])
 
-  const [unHidden, setUnHidden] = React.useState(false)
+  const { data: headerAndFooterElementsData } = useLocalizedQuery(
+    headerAndFooterElements,
+    pageContext
+  )
 
-  React.useEffect(() => {
-    validateWindowSize()
-    // Función para manejar el cambio en el tamaño de la pantalla
-    const handleWindowResize = () => {
-      validateWindowSize()
-    }
+  const { data: menuElementsData, statusElement } = useLocalizedQuery(
+    menuElements,
+    pageContext
+  )
 
-    // Agregar el evento de cambio en el tamaño de la pantalla al montar el componente
-    window.addEventListener("resize", handleWindowResize)
-
-    // Limpia el evento cuando el componente se desmonta
-    return () => {
-      window.removeEventListener("resize", handleWindowResize)
-    }
-  }, [])
-
-  // Antes de realizar la consulta, verifica si pageContext.langKey está definido
-  const langKey = pageContext && pageContext.langKey ? pageContext.langKey : ""
-
-  const {
-    data: headerAndFooterElementsData,
-  } = useQuery(headerAndFooterElements, {
-    variables: { locale: [pageContext.langKey] },
-  })
-
-  const {
-    data: menuElementsData,
-    loading: menuElementsDataQueryLoading,
-    error: menuElementsDataQueryError,
-  } = useQuery(menuElements, {
-    variables: { locale: [langKey] },
-  })
-
-  if (menuElementsDataQueryLoading) return <p>Loading...</p>
-  if (menuElementsDataQueryError)
-    return <p>Error : {menuElementsDataQueryError.message}</p>
+  if (statusElement) return statusElement
 
   const langSelectorTitle =
     headerAndFooterElementsData?.headerAndFooterElements[0]
@@ -233,18 +207,9 @@ export default function Header({ pageContext }) {
           {links.map((link, index) => (
             <li
               key={index}
-              className={`${getLinkClass(link.to)} 
-    ${index === 0
+              className={`${getLinkClass(link.to)} ${index === 0
                   ? "col-span-1 row-span-3 content-center text-3xl before:bottom-8 before:top-16 lg:before:top-20 xl:before:top-16"
                   : ""
-                } 
-    ${index === 3 && (
-                  <li
-                    key="empty-space" // Puedes agregar clases para personalizar el espacio vacío
-                  >
-                    hi
-                  </li>
-                )
                 }`}
             >
               <Link to={link.to}>{link.text}</Link>

@@ -1,9 +1,6 @@
-import React, { useState, Fragment, useRef } from "react"
-import ReactMarkdown from "react-markdown"
+import React from "react"
 import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
-import { Dialog, Transition } from "@headlessui/react"
-import { XMarkIcon } from "@heroicons/react/24/outline"
 import { IubendaCookieConsent } from "./iubendaComponent"
 import Example from "./popup"
 import { localePath } from "../lib/routes"
@@ -11,18 +8,6 @@ import { localePath } from "../lib/routes"
 const Footer = ({ footerData, footerMenus, pageContext }) => {
   const currentYear = new Date().getFullYear()
   const location = useLocation()
-
-  const cancelButtonRef = useRef(null)
-
-  let [isOpen, setOpen] = useState(false)
-
-  function open() {
-    setOpen(true)
-  }
-
-  function close() {
-    setOpen(false)
-  }
 
   // Configuración de idioma y cookiePolicyId
   const iubendaConfig = {
@@ -62,7 +47,6 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
   }
   const transformedMenuElementsData = transformMenuElements(footerMenus)
   const menuData = transformedMenuElementsData?.menus[0].menuElements
-  const menu3Data = footerMenus?.menus[2].menuElements
 
   const links = menuData?.map(obj => ({
     to: localePath(pageContext.langKey, obj.slug),
@@ -82,9 +66,6 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
               <Link to={link.to}>{link.text}</Link>
             </li>
           ))}
-          {/* <li onClick={open} className={`${getLinkClass()} !mr-0`}>
-            {footerData.imprintTitle}
-          </li> */}
           <Example
             iframeUrl={footerData.iFrameLinkOfTermsAndConditions}
             linkTitle={footerData.termsAndConditionsTitle}
@@ -125,66 +106,6 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
           &copy; {"1998 - " + currentYear + " " + footerData.footerCopyright}
         </p>
       </div>
-      {/* <Transition.Root show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          initialFocus={cancelButtonRef}
-          onClose={setOpen}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 z-10 overflow-y-auto">
-            <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enterTo="opacity-100 translate-y-0 sm:scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              >
-                <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-9/12">
-                  <div className="px-4 py-3 text-right bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6 md:-mb-8">
-                    <button
-                      type="button"
-                      className="z-10 inline-flex justify-center px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => setOpen(false)}
-                    >
-                      <XMarkIcon className="w-6 h-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div className="px-1 pb-4 bg-white">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
-                        <div
-                          id="contentBelowVideo"
-                          className="!max-w-full !text-base px-2 md:px-4 md:mx-4 md:mb-8 prose lg:prose-lg xl:prose-xl xl:px-6"
-                        >
-                          <ReactMarkdown>
-                            {footerData.imprintDetailText.markdown}
-                          </ReactMarkdown>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition.Root> */}
     </footer>
   )
 }
