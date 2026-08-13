@@ -1,14 +1,13 @@
 import React from "react"
-import { Fragment, useRef, useState, useEffect } from "react"
+import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { Cars } from "../gql/carsByIdQuery"
-import { Link } from "gatsby"
 import ReactMarkdown from "react-markdown"
 import { navigate } from "gatsby"
 import { localePath } from "../lib/routes"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import he from "he" // Importar la biblioteca para desescapar HTML
+import PriceTable from "./ui/PriceTable"
 
 export default function OpenModal({ carId, pageContext }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -22,8 +21,6 @@ export default function OpenModal({ carId, pageContext }) {
   function openModal() {
     setIsOpen(true)
   }
-
-  const [selectedTransmission, setSelectedTransmission] = useState("")
 
   const { data: carsById, statusElement } = useLocalizedQuery(Cars, pageContext, {
     variables: { internalId: carId },
@@ -42,10 +39,6 @@ export default function OpenModal({ carId, pageContext }) {
     const date = new Date(dateString)
     const options = { year: "numeric", month: "short", day: "numeric" }
     return date.toLocaleDateString(pageContext.langKey, options)
-  }
-
-  const handleTransmissionChange = event => {
-    setSelectedTransmission(event.target.value)
   }
 
   const handleButtonClick = () => {
@@ -139,89 +132,13 @@ export default function OpenModal({ carId, pageContext }) {
 
                   <div className="flex flex-col mt-4 xl:flex-row 2xl:mt-4">
                     <div className="overflow-x-auto xl:w-[50%] flex">
-                      <table className="w-full whitespace-nowrap sm:w-auto sm:table-auto">
-                        <thead>
-                          <tr className="text-xl">
-                            <th className="p-2">
-                              {car.carsAndQuote.seasonTitle}
-                            </th>
-                            <th className="p-2">
-                              {car.carsAndQuote.datesTitle}
-                            </th>
-                            <th className="p-2">
-                              {car.carsAndQuote.priceTitleManual}
-                            </th>
-                            <th className="p-2">
-                              {car.carsAndQuote.priceTitleAutomatic}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <>
-                            {car.manualTransmission.priceOfCar.map(
-                              (manualPrice, priceIndex) => (
-                                <tr key={priceIndex}>
-                                  <td className="p-2">
-                                    {manualPrice.season?.seasonTitle}
-                                  </td>
-                                  <td className="p-2">
-                                    {formatDate(manualPrice.season?.startDate)}{" "}
-                                    | {formatDate(manualPrice.season?.endDate)}
-                                  </td>
-                                  <td className="text-center">
-                                    {manualPrice.priceOfCar !== 0 ? (
-                                      <>${manualPrice.priceOfCar}</>
-                                    ) : (
-                                      manualPrice.unsetPriceMessage?.html && (
-                                        <div
-                                          dangerouslySetInnerHTML={{
-                                            __html: he.decode(
-                                              manualPrice.unsetPriceMessage.html
-                                            ),
-                                          }}
-                                        />
-                                      )
-                                    )}
-                                  </td>
-                                  {car.automaticTransmission?.priceOfCar?.[
-                                    priceIndex
-                                  ] && (
-                                      <>
-                                        {car.automaticTransmission.priceOfCar[
-                                          priceIndex
-                                        ].priceOfCar !== 0 ? (
-                                          <td className="text-center">
-                                            $
-                                            {
-                                              car.automaticTransmission
-                                                .priceOfCar[priceIndex].priceOfCar
-                                            }
-                                          </td>
-                                        ) : (
-                                          <td className="text-center">
-                                            {car.automaticTransmission.priceOfCar[
-                                              priceIndex
-                                            ].unsetPriceMessage?.html && (
-                                                <div
-                                                  dangerouslySetInnerHTML={{
-                                                    __html: he.decode(
-                                                      car.automaticTransmission
-                                                        .priceOfCar[priceIndex]
-                                                        .unsetPriceMessage.html
-                                                    ),
-                                                  }}
-                                                />
-                                              )}
-                                          </td>
-                                        )}
-                                      </>
-                                    )}
-                                </tr>
-                              )
-                            )}
-                          </>
-                        </tbody>
-                      </table>
+                      <PriceTable
+                        carsAndQuote={car.carsAndQuote}
+                        manualTransmission={car.manualTransmission}
+                        automaticTransmission={car.automaticTransmission}
+                        formatDate={formatDate}
+                        locale={pageContext.langKey}
+                      />
                     </div>
                     <div className="xl:w-3/5 2xl:mr-2">
                       <div className="mb-10 lg:w-full">

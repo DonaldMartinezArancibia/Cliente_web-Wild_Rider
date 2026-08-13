@@ -7,6 +7,7 @@ import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import { localePath } from "../lib/routes"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { transformMenuElements, createMenuLinks } from "../lib/menuUtils"
 
 export default function Header({ pageContext }) {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -67,37 +68,13 @@ export default function Header({ pageContext }) {
     headerAndFooterElementsData?.headerAndFooterElements[0]
 
   //Retira los slug de los diferentes idiomas solamente para la pagina index
-  function transformMenuElements(data) {
-    if (data && data.menus && data.menus.length > 0) {
-      const modifiedData = data.menus[3].menuElements.map(element => {
-        if (element.__typename === "Index") {
-          return {
-            ...element,
-            slug: "", // Modificamos el valor del slug para Index a ""
-          }
-        }
-        return element
-      })
-
-      return {
-        ...data,
-        menus: [
-          {
-            ...data.menus[0],
-            menuElements: modifiedData,
-          },
-        ],
-      }
-    }
-    return data
-  }
-  // Aplicamos la función de transformación al resultado de la consulta
-  const transformedMenuElementsData = transformMenuElements(menuElementsData)
+  const transformedMenuElementsData = transformMenuElements(menuElementsData, 3)
   const menuData = transformedMenuElementsData.menus[0].menuElements
-  const links = menuData.map(obj => ({
-    to: localePath(pageContext.langKey, obj.slug),
-    text: `${obj.title}`,
-  }))
+  const links = createMenuLinks(
+    menuData,
+    pageContext.langKey,
+    localePath
+  )
 
   const getLinkClass = to => {
     // console.log(location.pathname, to, location.pathname === to)

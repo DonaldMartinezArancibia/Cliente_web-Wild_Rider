@@ -1,7 +1,7 @@
 import React from "react"
 import { Cars } from "../gql/carsByIdQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import CarFormHtml from "./carQuoteForm"
+import CarQuoteForm from "./forms/CarQuoteForm"
 
 /**
  * Carga el coche seleccionado y se lo pasa al formulario de cotización.
@@ -15,7 +15,7 @@ const CarQuoteQuery = ({ pageContext, carId }) => {
   })
   if (statusElement) return statusElement
 
-  return <CarFormHtml apolloData={data} pageContext={pageContext} />
+  return <CarQuoteForm apolloData={data} pageContext={pageContext} />
 }
 
 export default CarQuoteQuery

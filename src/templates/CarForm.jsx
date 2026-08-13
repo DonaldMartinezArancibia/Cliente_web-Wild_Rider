@@ -1,6 +1,6 @@
 import React from "react"
 import CarQuoteQuery from "../components/carQuoteQuery"
-import CarFormHtml from "../components/carQuoteForm"
+import CarQuoteForm from "../components/forms/CarQuoteForm"
 
 const CarForm = ({ pageContext, location }) => {
   // Coche seleccionado en el modal de la página de carros.
@@ -10,7 +10,7 @@ const CarForm = ({ pageContext, location }) => {
   // Con transmisión elegida se cotiza un coche concreto; sin ella se muestra
   // el formulario vacío.
   if (selectedTransmission === undefined) {
-    return <CarFormHtml pageContext={pageContext} />
+    return <CarQuoteForm pageContext={pageContext} />
   }
 
   return (

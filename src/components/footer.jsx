@@ -4,6 +4,7 @@ import { useLocation } from "@reach/router"
 import { IubendaCookieConsent } from "./iubendaComponent"
 import Example from "./popup"
 import { localePath } from "../lib/routes"
+import { transformMenuElements, createMenuLinks } from "../lib/menuUtils"
 
 const Footer = ({ footerData, footerMenus, pageContext }) => {
   const currentYear = new Date().getFullYear()
@@ -21,37 +22,14 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
   const cookiePolicyId = iubendaConfig[pageContext.langKey] || 44395300
 
   //Retira los slug de los diferentes idiomas solamente para la pagina index
-  function transformMenuElements(data) {
-    if (data && data.menus && data.menus.length > 0) {
-      const modifiedData = data.menus[1].menuElements.map(element => {
-        if (element.__typename === "Index") {
-          return {
-            ...element,
-            slug: "", // Modificamos el valor del slug para Index a ""
-          }
-        }
-        return element
-      })
-
-      return {
-        ...data,
-        menus: [
-          {
-            ...data.menus[1],
-            menuElements: modifiedData,
-          },
-        ],
-      }
-    }
-    return data
-  }
-  const transformedMenuElementsData = transformMenuElements(footerMenus)
+  const transformedMenuElementsData = transformMenuElements(footerMenus, 1)
   const menuData = transformedMenuElementsData?.menus[0].menuElements
 
-  const links = menuData?.map(obj => ({
-    to: localePath(pageContext.langKey, obj.slug),
-    text: `${obj.title}`,
-  }))
+  const links = createMenuLinks(
+    menuData,
+    pageContext.langKey,
+    localePath
+  )
   const getLinkClass = to => {
     return location.pathname === to
       ? "transition ease-in-out drop-shadow-[1px_1px_rgba(0,0,0)] text-brand-yellow relative before:content-[''] before:absolute before:bottom-0 before:top-8 before:left-0 before:right-0 before:h-[3px] before:rounded-3xl before:bg-brand-yellow"
