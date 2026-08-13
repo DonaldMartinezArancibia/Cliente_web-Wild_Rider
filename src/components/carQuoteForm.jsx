@@ -1,37 +1,34 @@
-import React, { useState, useEffect, useMemo, useRef, Fragment } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
-import mailcheck from "mailcheck"
 import { PhoneInput } from "react-international-phone"
 import "react-international-phone/style.css"
-import countryList from "react-select-country-list"
 import "flatpickr/dist/themes/airbnb.css"
 import Flatpickr from "react-flatpickr"
 import ReCAPTCHA from "react-google-recaptcha"
-import { navigate } from "gatsby"
-import { datosVar } from "./variableReactiva"
-import { useQuery, useApolloClient } from '@apollo/client/react';
 import { CarQuoteFormContent } from "../gql/carQuotePageQuery"
-import { Dialog, Transition } from "@headlessui/react"
-import { XMarkIcon } from "@heroicons/react/24/outline"
-import { data } from "autoprefixer"
-import { addMinutes, format, parse } from "date-fns"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { useEmailSuggestion } from "../hooks/useEmailSuggestion"
+import { useContentLangKey } from "../context/siteData"
+import SubmitDialog from "./ui/SubmitDialog"
+import {
+  generateTimeOptions,
+  formatRentalDuration,
+  formatSelections,
+  setValidationMessage,
+} from "../lib/quoteForm"
 import he from "he" // Importar la biblioteca para desescapar HTML
+
+const ZAPIER_QUOTE_WEBHOOK =
+  "https://hooks.zapier.com/hooks/catch/17251260/3f91vun"
 
 const CarFormHtml = ({ apolloData, pageContext }) => {
   let [open, setOpen] = useState(true)
-  // console.log(pageContext.langKey)
-  const locale = pageContext.langKey || pageContext.pageContext.langKey
-  const cancelButtonRef = useRef(null)
-  const client = useApolloClient()
-  const {
-    data: CarQuoteFormData,
-    loading: CarQuoteFormQueryLoading,
-    error: CarQuoteFormQueryError,
-  } = useQuery(CarQuoteFormContent, {
-    variables: {
-      locale: [locale],
-    },
-  })
+  const locale = pageContext.langKey
+  const contentLangKey = useContentLangKey()
+  const { data: CarQuoteFormData, statusElement } = useLocalizedQuery(
+    CarQuoteFormContent,
+    pageContext
+  )
   const captcha = useRef(null)
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false)
   // console.log(data)
@@ -46,22 +43,13 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
   const [phone, setPhone] = useState("")
 
-  const [value, setValue] = useState("")
   const [formError, setFormError] = useState(null)
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [submissionError, setSubmissionError] = useState(null)
 
-  const formRef = useRef(null)
 
   const [startDate, setStartDate] = useState(new Date())
-  const [startTime, setStartTime] = useState(new Date())
   const [defaultValue, setDefaultValue] = useState("")
-
-  const handleTimeChange = (selectedTime, setState) => {
-    if (selectedTime && selectedTime.length > 0) {
-      setState(selectedTime[0])
-    }
-  }
 
   const [selectedCountry, setSelectedCountry] = useState("")
   const [selectedPaidServices, setSelectedPaidServices] = useState([])
@@ -98,12 +86,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     setSelectedCountry(e.target.value)
   }
 
-  const changeHandler = e => {
-    setValue(e.target.value)
-  }
-
   const [endDate, setEndDate] = useState(new Date())
-  const [endTime, setEndTime] = useState("")
 
   useEffect(() => {
     // Actualizar minDate de endDate cada vez que startDate cambie
@@ -135,61 +118,14 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     }
   }
 
-  const [email, setEmail] = useState("")
-  const [emailConfirm, setEmailConfirm] = useState("")
-  const [suggestion, setSuggestion] = useState(null)
-  const [suggestionConfirm, setSuggestionConfirm] = useState(null)
+  const emailField = useEmailSuggestion()
+  const emailConfirmField = useEmailSuggestion()
 
-  useEffect(() => {
-    mailcheck.run({
-      email: email,
-      suggested(s) {
-        setSuggestion(s.full)
-      },
-      empty() {
-        setSuggestion(null)
-      },
-    })
-  }, [email])
-
-  useEffect(() => {
-    mailcheck.run({
-      email: emailConfirm,
-      suggested(s) {
-        setSuggestionConfirm(s.full)
-      },
-      empty() {
-        setSuggestionConfirm(null)
-      },
-    })
-  }, [emailConfirm])
-
-  const handleChange = (e, setEmailFunc, setSuggestionFunc) => {
-    const newValue = e.currentTarget.value
-    setEmailFunc(newValue)
-
-    // Run mailcheck for suggestions
-    mailcheck.run({
-      email: newValue,
-      suggested(s) {
-        setSuggestionFunc(s.full)
-      },
-      empty() {
-        setSuggestionFunc(null)
-      },
-    })
-  }
-
-  const acceptSuggestion = (suggestion, setEmailFunc) => {
-    if (suggestion != null) setEmailFunc(suggestion)
-  }
   const formatDate = dateString => {
     const date = new Date(dateString)
     const options = { year: "numeric", month: "short", day: "numeric" }
-    return date.toLocaleDateString(pageContext.pageContext.langKey, options)
+    return date.toLocaleDateString(locale, options)
   }
-
-  const [redirecting, setRedirecting] = useState(false)
 
   const [selectedServices, setSelectedServices] = useState({})
   const [customSelectedFreeServices, setCustomSelectedFreeServices] = useState(
@@ -248,60 +184,23 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     }
 
     if (email !== emailConfirm) {
-      const errorMessage = pageData.emailAndEmailConfirmNotEqualErrorMessage
-        ? pageData.emailAndEmailConfirmNotEqualErrorMessage
-        : "Email and Confirm Email must match."
-
-      setFormError(pageData.emailAndEmailConfirmNotEqualErrorMessage)
+      setFormError(
+        pageData.emailAndEmailConfirmNotEqualErrorMessage ||
+          "Email and Confirm Email must match."
+      )
       return
     }
-
-    // Obtener las fechas y horas seleccionadas
-    const startDateValue = document.getElementById("startDate").value
-    const startTimeValue = document.getElementById("startTime").value
-
-    const endDateValue = document.getElementById("endDate").value
-    const endTimeValue = document.getElementById("endTime").value
-
-    // Crear objetos Date para las fechas y horas seleccionadas
-    const startDateObject = new Date(`${startDateValue} ${startTimeValue}`)
-    const endDateObject = new Date(`${endDateValue} ${endTimeValue}`)
-
-    // Calcular la diferencia en milisegundos
-    const timeDifference = endDateObject - startDateObject
-
-    // Calcular la diferencia en días, horas y minutos
-    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
-    const remainingHours = Math.floor(
-      (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    )
-    const remainingMinutes = Math.floor(
-      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-    )
-
-    // Generar el texto con las selecciones de servicios pagados
-    const selectedServicesText = Object.entries(selectedServices)
-      .map(
-        ([selectorTitle, selectedValue]) =>
-          `${selectorTitle}:<br><strong>${selectedValue}</strong>`
-      )
-      .join("<br><br>")
-
-    // Generar el texto con las selecciones de servicios gratuitos
-    const customSelectedFreeServicesText = Object.entries(
-      customSelectedFreeServices
-    )
-      .map(
-        ([selectorTitle, selectedValue]) =>
-          `${selectorTitle}:<br><strong>${selectedValue}</strong>`
-      )
-      .join("<br><br>")
 
     const formData = new FormData(form)
 
     formData.append(
       "timeDifference",
-      `${daysDifference} Days, ${remainingHours} hours and ${remainingMinutes} minutes`
+      formatRentalDuration(
+        document.getElementById("startDate").value,
+        document.getElementById("startTime").value,
+        document.getElementById("endDate").value,
+        document.getElementById("endTime").value
+      )
     )
 
     formData.append(
@@ -314,25 +213,24 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       selectedFreeServices.join("<br><br>")
     )
 
-    formData.append("quantityOfSelectedPaidServices", selectedServicesText)
+    formData.append(
+      "quantityOfSelectedPaidServices",
+      formatSelections(selectedServices)
+    )
 
     formData.append(
       "customSelectedFreeServices",
-      customSelectedFreeServicesText
+      formatSelections(customSelectedFreeServices)
     )
 
     try {
-      const response = await fetch(
-        "https://hooks.zapier.com/hooks/catch/17251260/3f91vun",
-        // "https://hooks.zapier.com/hooks/catch/alnf92837492/q983749q2832q",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams(formData).toString(),
-        }
-      )
+      const response = await fetch(ZAPIER_QUOTE_WEBHOOK, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(formData).toString(),
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`)
@@ -343,90 +241,23 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
       setOpen(true)
       e.target.reset()
 
-      // Resetear input de correo electrónico y mensajes de validación
-      setEmail("")
-      setEmailConfirm("")
-      setSuggestion(null)
-      setSuggestionConfirm(null)
+      // Resetear inputs de correo y mensajes de validación
+      emailField.reset()
+      emailConfirmField.reset()
 
-      if (captcha.current) {
-        captcha.current.reset()
-      }
-
-      // setTimeout(() => {
-      //   setRedirecting(false)
-      //   navigate(
-      //     pageContext.pageContext.langKey === "en"
-      //       ? "/"
-      //       : `/${pageContext.pageContext.langKey}`
-      //   )
-      // }, 5000) // 5000 milisegundos = 5 segundos
-
-      // Limpiar errores después de enviar el formulario con éxito
+      captcha.current?.reset()
+      setIsCaptchaVerified(false)
       setFormError(null)
     } catch (error) {
       setSubmissionError(`Error submitting form: ${error.message}`)
     }
-
-    // Limpiar errores después de enviar el formulario con éxito
-    setFormError(null)
-    // Resto del código para manejar la respuesta del envío
   }
 
   const pageData = CarQuoteFormData?.carQuoteForms[0]
 
-  // function generateTimeOptions(minTime, maxTime) {
-  //   const options = []
-  //   let currentTime = new Date(`2000-01-01 ${minTime}`)
+  const handleInputChange = setValidationMessage
 
-  //   while (currentTime <= new Date(`2000-01-01 ${maxTime}`)) {
-  //     options.push(
-  //       <option key={currentTime.toISOString()} value={formatTime(currentTime)}>
-  //         {formatTime(currentTime)}
-  //       </option>
-  //     )
-
-  //     currentTime.setMinutes(currentTime.getMinutes() + 15) // Puedes ajustar el intervalo de tiempo según tus necesidades
-  //   }
-
-  //   return options
-  // }
-  function generateTimeOptions2(minTime, maxTime) {
-    const options = []
-    let currentTime = parse(minTime, "HH:mm", new Date(2000, 0, 1))
-    const endTime = parse(maxTime, "HH:mm", new Date(2000, 0, 1))
-
-    while (currentTime <= endTime) {
-      const formattedTime = format(currentTime, "HH:mm")
-      options.push(
-        <option key={formattedTime} value={formattedTime}>
-          {formattedTime}
-        </option>
-      )
-
-      currentTime = addMinutes(currentTime, 15) // Puedes ajustar el intervalo de tiempo según tus necesidades
-    }
-
-    return options
-  }
-
-  function formatTime(date) {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: false,
-    })
-  }
-
-  const handleInputChange = (event, customMessage) => {
-    if (!event.target.value.trim()) {
-      event.target.setCustomValidity(customMessage || "This field is required")
-    } else {
-      event.target.setCustomValidity("")
-    }
-  }
-
-  const selectedTransmission = pageContext?.pageContext?.selectedTransmission
+  const selectedTransmission = pageContext?.selectedTransmission
   // console.log(pageContext.pageContext)
   // console.log(selectedTransmission)
 
@@ -480,9 +311,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
     setDefaultValue(defaultOption)
   }, [selectedTransmission, pageData?.cars])
 
-  if (CarQuoteFormQueryLoading) return <p>Loading...</p>
-  if (CarQuoteFormQueryError)
-    return <p>Error : {CarQuoteFormQueryError.message}</p>
+  if (statusElement) return statusElement
 
   const ConditionalLabel = ({ text, htmlFor }) => {
     const hasAsterisk = text?.includes("*")
@@ -497,7 +326,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
   }
 
   return (
-    <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
+    <main className="p-3 hero-surface lg:p-14">
       <h1 className="mb-4 font-CarterOne lg:text-5xl">{pageData.title}</h1>
       <div className="mb-10 lg:grid lg:grid-cols-2 lg:ml-0">
         <p className="mb-4 lg:col-span-2">
@@ -671,26 +500,24 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   type="email"
                   id="email"
                   name="email"
-                  value={email}
-                  onChange={e => handleChange(e, setEmail, setSuggestion)}
+                  value={emailField.value}
+                  onChange={emailField.onChange}
                   required={pageData.emailField?.includes("*")}
                   onInvalid={e =>
                     handleInputChange(e, pageData.emailFieldErrorMessage)
                   }
                 />
 
-                {suggestion && (
+                {emailField.suggestion && (
                   <div>
                     Did you mean{" "}
-                    <a
-                      href=""
-                      onClick={e => {
-                        e.preventDefault()
-                        acceptSuggestion(suggestion, setEmail)
-                      }}
+                    <button
+                      type="button"
+                      className="underline"
+                      onClick={emailField.acceptSuggestion}
                     >
-                      {suggestion}
-                    </a>
+                      {emailField.suggestion}
+                    </button>
                   </div>
                 )}
               </div>
@@ -705,28 +532,24 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
                   type="email"
                   id="emailConfirm"
                   name="emailConfirm"
-                  value={emailConfirm}
-                  onChange={e =>
-                    handleChange(e, setEmailConfirm, setSuggestionConfirm)
-                  }
+                  value={emailConfirmField.value}
+                  onChange={emailConfirmField.onChange}
                   required={pageData.confirmEmailField?.includes("*")}
                   onInvalid={e =>
                     handleInputChange(e, pageData.confirmEmailFieldErrorMessage)
                   }
                 />
 
-                {suggestionConfirm && (
+                {emailConfirmField.suggestion && (
                   <div>
                     Did you mean{" "}
-                    <a
-                      href=""
-                      onClick={e => {
-                        e.preventDefault()
-                        acceptSuggestion(suggestionConfirm, setEmailConfirm)
-                      }}
+                    <button
+                      type="button"
+                      className="underline"
+                      onClick={emailConfirmField.acceptSuggestion}
                     >
-                      {suggestionConfirm}
-                    </a>
+                      {emailConfirmField.suggestion}
+                    </button>
                   </div>
                 )}
               </div>
@@ -869,7 +692,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10 px-4 py-2 bg-white"
               required={pageData.takeoverHourField?.includes("*")}
             >
-              {generateTimeOptions2("6:00", "20:00")}
+              {generateTimeOptions("6:00", "20:00")}
               <option value={pageData.otherHour}>{pageData.otherHour}</option>
             </select>
             <sub className="mt-2 text-sm text-gray-500">
@@ -938,7 +761,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
               className="w-full h-10 px-4 py-2 bg-white"
               required={pageData.returnHourField?.includes("*")}
             >
-              {generateTimeOptions2("6:00", "20:00")}
+              {generateTimeOptions("6:00", "20:00")}
               <option value={pageData.otherHour}>{pageData.otherHour}</option>
             </select>
             <sub className="mt-2 text-sm text-gray-500">
@@ -1100,10 +923,7 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
           <ReCAPTCHA
             ref={captcha}
             sitekey="6Lf0V-0nAAAAAEENM44sYr38XhTfqXbPoGJNZ651"
-            hl={
-              pageContext.pageContext?.headerAndFooterData ||
-              pageContext.langKey
-            }
+            hl={contentLangKey || locale}
             onChange={onChange}
             className="flex my-2 justify-evenly lg:justify-start"
           />
@@ -1122,73 +942,18 @@ const CarFormHtml = ({ apolloData, pageContext }) => {
 
         <button
           type="submit"
-          className="bg-[#F6CC4D] text-white h-14 font-bold text-lg w-full md:col-span-2 lg:w-1/2 lg:col-span-1"
+          className="bg-brand-yellow text-white h-14 font-bold text-lg w-full md:col-span-2 lg:w-1/2 lg:col-span-1"
         >
           {pageData.buttonText}
         </button>
       </form>
 
-      {formSubmitted ? (
-        <Transition.Root show={open} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-10"
-            initialFocus={cancelButtonRef}
-            onClose={setOpen}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
-            </Transition.Child>
+      <SubmitDialog
+        open={formSubmitted && open}
+        onClose={() => setOpen(false)}
+        markdown={pageData?.formOnSubmitMessage}
+      />
 
-            <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                  <Dialog.Panel className="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
-                    <div className="px-1 pt-5 pb-4 bg-white">
-                      <div className="sm:flex sm:items-start">
-                        <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                          <div className="mt-2">
-                            <ReactMarkdown>
-                              {pageData?.formOnSubmitMessage}
-                            </ReactMarkdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="px-4 py-3 bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                        onClick={() => setOpen(false)}
-                      >
-                        ok
-                      </button>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition.Root>
-      ) : (
-        <></>
-      )}
       {submissionError && <p style={{ color: "red" }}>{submissionError}</p>}
     </main>
   )

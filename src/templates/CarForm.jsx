@@ -3,30 +3,22 @@ import CarQuoteQuery from "../components/carQuoteQuery"
 import { datosVar } from "../components/variableReactiva"
 import CarFormHtml from "../components/carQuoteForm"
 
-const CarForm = ({ pageContext, location, headerAndFooterData }) => {
-  // Obtén el objeto datos desde la variable reactiva
-  const datos = datosVar()
-
-  // Obtén el valor de selectedTransmission desde location.state
+const CarForm = ({ pageContext, location }) => {
+  // Coche seleccionado en el modal de la página de carros.
+  const carId = datosVar()
   const selectedTransmission = location.state?.datos?.selectedTransmission
 
-  // Crea un nuevo objeto pageContext y agrega el valor de selectedTransmission
-  const newPageContext = {
-    ...pageContext,
-    selectedTransmission: selectedTransmission,
-    headerAndFooterData: headerAndFooterData,
+  // Con transmisión elegida se cotiza un coche concreto; sin ella se muestra
+  // el formulario vacío.
+  if (selectedTransmission === undefined) {
+    return <CarFormHtml pageContext={pageContext} />
   }
 
-  // console.log(pageContext)
-
   return (
-    <div>
-      {newPageContext.selectedTransmission !== undefined ? (
-        <CarQuoteQuery pageContext={newPageContext} carId={datos} />
-      ) : (
-        <CarFormHtml pageContext={pageContext} />
-      )}
-    </div>
+    <CarQuoteQuery
+      pageContext={{ ...pageContext, selectedTransmission }}
+      carId={carId}
+    />
   )
 }
 
