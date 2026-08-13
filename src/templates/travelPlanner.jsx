@@ -1,19 +1,13 @@
 import React from "react"
-import { useApolloClient, useQuery } from "@apollo/client/react"
+import Slider from "react-slick"
 import Showdata from "../components/showdata"
 import img1 from "../images/slider-img-1.webp"
 import img2 from "../images/slider-img-2.webp"
 import img3 from "../images/slider-img-3.webp"
-import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import {
-  StarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/24/solid"
 
-export default function AboutUs({ pageContext }) {
+export default function TravelPlanner({ pageContext }) {
   const images = [img1, img2, img3]
 
   const settings = {
@@ -53,7 +47,7 @@ export default function AboutUs({ pageContext }) {
   }
 
   return (
-    <main className="p-3 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-40rem_bottom_-40rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%] lg:p-14">
+    <main className="p-3 hero-surface hero-surface-low lg:p-14">
       <h1 className="mb-10 font-CarterOne lg:text-5xl">Travel Planner</h1>
       <div>
         <Slider {...settings}>

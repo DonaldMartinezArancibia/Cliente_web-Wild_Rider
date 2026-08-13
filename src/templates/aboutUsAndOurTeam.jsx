@@ -1,126 +1,59 @@
-import React, { useState } from "react"
-import { useQuery, useApolloClient } from '@apollo/client/react';
-import { AboutUsAndOurTeams } from "../gql/ourTeam"
+import React from "react"
 import ReactHtmlParser from "react-html-parser"
+import { AboutUsAndOurTeams } from "../gql/ourTeam"
 import { AboutUsContent } from "../gql/aboutusPageQuery"
-import ReactMarkdown from "react-markdown"
+import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import ContentToggle from "../components/ui/ContentToggle"
 import StickyBar from "../components/StickyBar"
 
 const AboutUs = ({ pageContext }) => {
-  const client = useApolloClient()
+  const team = useLocalizedQuery(AboutUsAndOurTeams, pageContext)
+  const page = useLocalizedQuery(AboutUsContent, pageContext)
 
-  const {
-    data: ourTeamsData,
-    loading: ourTeamsLoading,
-    error: ourTeamsError,
-  } = useQuery(AboutUsAndOurTeams, {
-    variables: { locale: [pageContext.langKey] },
-  })
+  const statusElement = team.statusElement ?? page.statusElement
+  if (statusElement) return statusElement
 
-  const {
-    data: ourTeamsPageData,
-    loading: ourTeamsPageLoading,
-    error: ourTeamsPageError,
-  } = useQuery(AboutUsContent, {
-    variables: { locale: [pageContext.langKey] },
-  })
-
-  if (ourTeamsLoading || ourTeamsPageLoading) return <p>Loading...</p>
-  if (ourTeamsError || ourTeamsPageError)
-    return <p>Error: {ourTeamsError?.message || ourTeamsPageError?.message}</p>
-
-  const aboutUsMainContent =
-    ourTeamsData.aboutUsAndOurTeams[0]?.aboutUsMainContent?.raw
-
-  const theTeams = ourTeamsData.aboutUsAndOurTeams[0]?.theTeam || []
-  const ourTeamPage = ourTeamsPageData.aboutUsAndOurTeams[0] || []
+  const aboutUs = team.data?.aboutUsAndOurTeams?.[0] ?? {}
+  const ourTeamPage = page.data?.aboutUsAndOurTeams?.[0] ?? {}
 
   return (
-    <main className="py-8 bg-hero-pattern bg-no-repeat bg-[right_60%_top_6%] md:bg-[right_-18rem_top_-2%] lg:bg-[right_-30rem_top_-15rem] bg-[length:150%] md:bg-[length:85%] lg:bg-[length:75%]">
+    <main className="py-8 hero-surface">
       <StickyBar pageContext={pageContext} />
+
       <h1 className="p-4 font-CarterOne lg:text-5xl lg:px-14">
         {ourTeamPage.title}
       </h1>
 
-      {aboutUsMainContent && ReactHtmlParser(aboutUsMainContent)}
+      {aboutUs.aboutUsMainContent?.raw &&
+        ReactHtmlParser(aboutUs.aboutUsMainContent.raw)}
 
       <div className="sm:grid lg:px-14 lg:grid-cols-3">
-        {theTeams.map((team, index) => (
+        {(aboutUs.theTeam ?? []).map((member, index) => (
           <div key={index} className="flex flex-col items-center mb-8">
             <img
-              src={team.photo.url}
-              alt={team.photo.altText}
+              src={member.photo.url}
+              alt={member.photo.altText}
               className="w-40 mt-5 border-[3px] border-black rounded-full"
             />
-            <h2 className="my-8 font-bold">{team.name}</h2>
+            <h2 className="my-8 font-bold">{member.name}</h2>
             <p className="mx-4 mb-4 font-semibold md:w-2/3 lg:w-full xl:pl-16">
-              {team.description}
+              {member.description}
             </p>
           </div>
         ))}
 
-        {ourTeamPage.toggleContent.map((content, contentIndex) => (
+        {(ourTeamPage.toggleContent ?? []).map((content, index) => (
           <ContentToggle
-            key={contentIndex}
+            key={index}
             content={content}
-            index={contentIndex}
-            ourTeamPage={ourTeamPage}
+            index={index}
+            showText={ourTeamPage.showText}
+            hideText={ourTeamPage.hideText}
+            sectionClassName="p-4 mb-14 col-[1/4]"
           />
         ))}
       </div>
     </main>
-  )
-}
-
-const ContentToggle = ({ content, index, ourTeamPage }) => {
-  const [isExtendedContentVisible, setIsExtendedContentVisible] =
-    useState(false)
-
-  const handleToggleContent = () => {
-    setIsExtendedContentVisible(prev => !prev)
-  }
-
-  return (
-    <section id="toggleContent" className="p-4 mb-14 col-[1/4]">
-      <div className="mb-2">
-        <ReactMarkdown
-          components={{
-            img: ({ src, alt }) => (
-              <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
-            ),
-          }}
-        >
-          {content.displayContent?.markdown}
-        </ReactMarkdown>
-      </div>
-
-      {content.extendedContent && (
-        <div
-          className={`extended-content-${index} ${isExtendedContentVisible ? "" : "hidden"
-            }`}
-        >
-          <ReactMarkdown
-            components={{
-              img: ({ src, alt }) => (
-                <img src={src} alt={alt} style={{ maxWidth: "100%" }} />
-              ),
-            }}
-          >
-            {content.extendedContent?.markdown}
-          </ReactMarkdown>
-        </div>
-      )}
-      {content.extendedContent && (
-        <button
-          className="text-[#0833a2] hover:underline"
-          onClick={handleToggleContent}
-        >
-          {isExtendedContentVisible
-            ? ourTeamPage.hideText
-            : ourTeamPage.showText}
-        </button>
-      )}
-    </section>
   )
 }
 
