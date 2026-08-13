@@ -1,5 +1,5 @@
 import React from "react"
-import CarQuoteQuery from "../components/carQuoteQuery"
+import { useCarData } from "../hooks/useCarData"
 import CarQuoteForm from "../components/forms/CarQuoteForm"
 
 const CarForm = ({ pageContext, location }) => {
@@ -13,12 +13,14 @@ const CarForm = ({ pageContext, location }) => {
     return <CarQuoteForm pageContext={pageContext} />
   }
 
-  return (
-    <CarQuoteQuery
-      pageContext={{ ...pageContext, selectedTransmission }}
-      carId={carId}
-    />
+  const { car, statusElement } = useCarData(
+    { ...pageContext, selectedTransmission },
+    carId
   )
+
+  if (statusElement) return statusElement
+
+  return <CarQuoteForm apolloData={{ cars: [car] }} pageContext={pageContext} />
 }
 
 export default CarForm
