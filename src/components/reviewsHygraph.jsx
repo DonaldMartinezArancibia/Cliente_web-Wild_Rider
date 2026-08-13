@@ -50,7 +50,7 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
         <a
           href={review.reviewLink}
           onClick={e => handleLinkClick(e, review.reviewLink)}
-          className="text-[#0833a2] ml-1 hover:underline"
+          className="text-brand-blue ml-1 hover:underline"
         >
           {review.testimonial.reviewsLinkText}
         </a>

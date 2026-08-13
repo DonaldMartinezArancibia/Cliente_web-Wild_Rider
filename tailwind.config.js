@@ -1,19 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/pages/**/*.{js,jsx,ts,tsx}",
-    "./src/components/**/*.{js,jsx,ts,tsx}",
-    "./src/templates/**/*.{js,jsx,ts,tsx}",
-  ],
-  mode: "jit",
+  // Un único glob sobre src/: los globs anteriores sólo cubrían pages,
+  // components y templates, así que las clases de hooks/, lib/ o context/
+  // quedaban fuera del CSS generado.
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
         footer: {
           bg: "#E8E8E8",
         },
+        // Colores de marca. Antes se repetían como valores arbitrarios
+        // (bg-[#0833a2], bg-[#F6CC4D]) por toda la interfaz.
+        brand: {
+          blue: "#0833a2",
+          yellow: "#F6CC4D",
+          "yellow-light": "#ffda6b",
+        },
       },
-      typography: theme => ({
+      typography: () => ({
         DEFAULT: {
           css: {
             color: "#303844",
@@ -40,9 +45,6 @@ module.exports = {
           "100%": { transform: "translate3d(-100%, 0, 0)" },
         },
       },
-      // animation: {
-      //   textScroll: "textScroll 25s linear infinite",
-      // },
     },
   },
   plugins: [require("@tailwindcss/typography")],

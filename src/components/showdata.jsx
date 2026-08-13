@@ -25,7 +25,7 @@ export default function Showdata({ pageContext }) {
           <div className="py-4 mr-20 text-end">
             <Link
               to={`/blog/${item.slug}`} // Usar una ruta absoluta aquí
-              className="px-14 py-4 font-medium text-white bg-[#0833a2] rounded hover:bg-indigo-600"
+              className="px-14 py-4 font-medium text-white bg-brand-blue rounded hover:bg-indigo-600"
             >
               View more
             </Link>
