@@ -4,7 +4,7 @@ import * as JsSearch from "js-search"
 import { FrequentAnswersAndQuestions } from "../gql/allAnswersAndQuestions"
 import { FaqContent } from "../gql/faqPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import StickyBar from "../components/StickyBar"
+import StickyBar from "../components/ui/StickyBar"
 
 const ChevronIcon = ({ className }) => (
   <svg

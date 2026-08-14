@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown"
 import { MapContainer } from "../components/reviewsHygraph"
 import { TestimonialPageContent } from "../gql/testimonialPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import StickyBar from "../components/StickyBar"
+import StickyBar from "../components/ui/StickyBar"
 
 const Testimonials = ({ pageContext }) => {
   const { data, statusElement } = useLocalizedQuery(

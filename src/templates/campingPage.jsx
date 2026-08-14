@@ -2,8 +2,8 @@ import React from "react"
 import { CampingPageContent } from "../gql/campingPage"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import ContentToggle from "../components/ui/ContentToggle"
-import VideoPlayer from "../components/videoPlayer"
-import StickyBar from "../components/StickyBar"
+import VideoPlayer from "../components/ui/videoPlayer"
+import StickyBar from "../components/ui/StickyBar"
 
 /** Empareja cada vídeo con su portada por posición. */
 const buildVideoList = campingPage =>

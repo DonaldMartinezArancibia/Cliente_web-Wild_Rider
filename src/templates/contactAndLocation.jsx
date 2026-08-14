@@ -6,7 +6,7 @@ import ContentToggle from "../components/ui/ContentToggle"
 import ContactElements from "../components/ui/ContactElements"
 import AddressBlock from "../components/ui/AddressBlock"
 import GoogleMapBlock from "../components/ui/GoogleMapBlock"
-import StickyBar from "../components/StickyBar"
+import StickyBar from "../components/ui/StickyBar"
 import { useContentLangKey } from "../context/siteData"
 
 const ContactAndLocationPage = ({ pageContext }) => {

@@ -3,7 +3,7 @@ import { Car } from "../gql/carsQuery"
 import { CarContent } from "../gql/carsPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import OpenModal from "../components/carInfoModal"
-import StickyBar from "../components/StickyBar"
+import StickyBar from "../components/ui/StickyBar"
 
 const OurCarsAndReservation = ({ pageContext }) => {
   const carsQuery = useLocalizedQuery(Car, pageContext)

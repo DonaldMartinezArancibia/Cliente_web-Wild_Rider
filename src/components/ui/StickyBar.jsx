@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Link } from "gatsby"
-import { CombinedQuery } from "../gql/carQuotePageQuery"
-import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import { localePath } from "../lib/routes"
+import { CombinedQuery } from "../../gql/carQuotePageQuery"
+import { useLocalizedQuery } from "../../hooks/useLocalizedQuery"
+import { localePath } from "../../lib/routes"
 
 const StickyBar = ({ pageContext }) => {
   const stickyRef = useRef(null)

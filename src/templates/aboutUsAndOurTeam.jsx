@@ -4,7 +4,7 @@ import { AboutUsAndOurTeams } from "../gql/ourTeam"
 import { AboutUsContent } from "../gql/aboutusPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import ContentToggle from "../components/ui/ContentToggle"
-import StickyBar from "../components/StickyBar"
+import StickyBar from "../components/ui/StickyBar"
 
 const AboutUs = ({ pageContext }) => {
   const team = useLocalizedQuery(AboutUsAndOurTeams, pageContext)

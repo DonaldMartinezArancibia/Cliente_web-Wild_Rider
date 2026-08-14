@@ -2,7 +2,7 @@ import React from "react"
 import ReactMarkdown from "react-markdown"
 import { ImprintContent } from "../gql/imprintPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import StickyBar from "../components/StickyBar"
+import StickyBar from "../components/ui/StickyBar"
 
 const Imprint = ({ pageContext }) => {
   const { data, statusElement } = useLocalizedQuery(ImprintContent, pageContext)

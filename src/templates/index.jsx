@@ -6,8 +6,8 @@ import { IndexContent } from "../gql/indexQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import { useDocumentSeo } from "../hooks/useDocumentSeo"
 import { MapContainerLayoutB } from "../components/reviewsHygraph"
-import VideoPlayer from "../components/videoPlayer"
-import StickyBar from "../components/StickyBar"
+import VideoPlayer from "../components/ui/videoPlayer"
+import StickyBar from "../components/ui/StickyBar"
 
 const OPEN_GRAPH = {
   description:
