@@ -76,8 +76,12 @@ const apolloClient = new ApolloClient({
   },
 })
 
+import { I18nProvider } from "./src/context/i18nContext"
+// ...existing code...
 const wrapPageElement = ({ element, props }) => (
-  <Layout {...props}>{element}</Layout>
+  <I18nProvider>
+    <Layout {...props}>{element}</Layout>
+  </I18nProvider>
 )
 
 const wrapRootElement = ({ element }) => (

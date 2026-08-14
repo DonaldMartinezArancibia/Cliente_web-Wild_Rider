@@ -3,7 +3,7 @@ import { Car } from "../gql/carsQuery"
 import { CarContent } from "../gql/carsPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import OpenModal from "../components/carInfoModal"
-import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 const OurCarsAndReservation = ({ pageContext }) => {
   const carsQuery = useLocalizedQuery(Car, pageContext)
@@ -15,13 +15,14 @@ const OurCarsAndReservation = ({ pageContext }) => {
   const cars = carsQuery.data?.cars ?? []
   const carsPage = pageQuery.data?.carsAndQuotes?.[0] ?? {}
 
-  return (
-    <main className="py-8 hero-surface hero-surface-low">
-      <StickyBar pageContext={pageContext} />
+  const seo = carsPage?.searchEngineOptimization
 
-      <h1 className="p-4 mb-10 font-CarterOne lg:text-5xl xl:p-14">
-        {carsPage.title}
-      </h1>
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface hero-surface-low">
+        <h1 className="p-4 mb-10 font-CarterOne lg:text-5xl xl:p-14">
+          {carsPage.title}
+        </h1>
 
       <section className="p-[10px_10px_10px] sm:grid sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr] md:gap-10 xl:gap-28 xl:p-14">
         {cars.map(item => (
@@ -61,6 +62,7 @@ const OurCarsAndReservation = ({ pageContext }) => {
         ))}
       </section>
     </main>
+  </TemplateBase>
   )
 }
 

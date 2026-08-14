@@ -8,6 +8,7 @@ import { useDocumentSeo } from "../hooks/useDocumentSeo"
 import { MapContainerLayoutB } from "../components/reviewsHygraph"
 import VideoPlayer from "../components/ui/videoPlayer"
 import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 const OPEN_GRAPH = {
   description:
@@ -88,15 +89,17 @@ const IndexPage = ({ pageContext }) => {
   const index = data?.indices?.[0] ?? {}
   const videos = buildVideoList(index)
 
-  return (
-    <main className="pt-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
-      <TripAdvisorBadge />
+  const seo = data?.indices?.[0]?.searchEngineOptimization
 
-      <section id="sectionBellowHeader">
-        <ReactMarkdown
-          rehypePlugins={[rehypeRaw]}
-          components={markdownComponents}
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="pt-8 hero-surface">
+        <TripAdvisorBadge />
+
+        <section id="sectionBellowHeader">
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            components={markdownComponents}
         >
           {index.mainTextBelow?.markdown}
         </ReactMarkdown>
@@ -156,6 +159,7 @@ const IndexPage = ({ pageContext }) => {
 
       <MapContainerLayoutB pageContext={pageContext} />
     </main>
+  </TemplateBase>
   )
 }
 

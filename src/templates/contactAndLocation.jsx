@@ -6,7 +6,7 @@ import ContentToggle from "../components/ui/ContentToggle"
 import ContactElements from "../components/ui/ContactElements"
 import AddressBlock from "../components/ui/AddressBlock"
 import GoogleMapBlock from "../components/ui/GoogleMapBlock"
-import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 import { useContentLangKey } from "../context/siteData"
 
 const ContactAndLocationPage = ({ pageContext }) => {
@@ -17,11 +17,12 @@ const ContactAndLocationPage = ({ pageContext }) => {
   const pageData = data?.contactAndLocations?.[0] ?? {}
   const showLocationBlocks = Boolean(pageData.showContentBellowFormAndTwoImages)
 
-  return (
-    <main className="py-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
+  const seo = pageData?.searchEngineOptimization
 
-      <section className="p-4 pt-3 lg:p-16 lg:grid lg:grid-cols-[1fr_1fr] min-[2000px]:grid-cols-[35%_35%_30%]">
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface">
+        <section className="p-4 pt-3 lg:p-16 lg:grid lg:grid-cols-[1fr_1fr] min-[2000px]:grid-cols-[35%_35%_30%]">
         <h1 className="font-CarterOne lg:pb-4 lg:text-5xl lg:col-[1/3]">
           {pageData.title}
         </h1>
@@ -84,6 +85,7 @@ const ContactAndLocationPage = ({ pageContext }) => {
         />
       )}
     </main>
+  </TemplateBase>
   )
 }
 

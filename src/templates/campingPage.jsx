@@ -3,7 +3,7 @@ import { CampingPageContent } from "../gql/campingPage"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import ContentToggle from "../components/ui/ContentToggle"
 import VideoPlayer from "../components/ui/videoPlayer"
-import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 /** Empareja cada vídeo con su portada por posición. */
 const buildVideoList = campingPage =>
@@ -22,13 +22,14 @@ const Camping = ({ pageContext }) => {
   const campingPage = data?.campingPages?.[0] ?? {}
   const videos = buildVideoList(campingPage)
 
-  return (
-    <main className="py-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
+  const seo = campingPage?.searchEngineOptimization
 
-      <h1 className="p-4 lg:mb-10 font-CarterOne lg:text-5xl lg:px-14">
-        {campingPage.title}
-      </h1>
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface">
+        <h1 className="p-4 lg:mb-10 font-CarterOne lg:text-5xl lg:px-14">
+          {campingPage.title}
+        </h1>
 
       <div className="sm:grid lg:grid-cols-3 lg:px-14">
         {(campingPage.toggleContent ?? []).map((content, index) => (
@@ -45,6 +46,7 @@ const Camping = ({ pageContext }) => {
         <VideoPlayer videos={videos} />
       </div>
     </main>
+  </TemplateBase>
   )
 }
 

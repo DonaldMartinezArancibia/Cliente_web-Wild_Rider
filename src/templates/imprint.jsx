@@ -2,7 +2,7 @@ import React from "react"
 import ReactMarkdown from "react-markdown"
 import { ImprintContent } from "../gql/imprintPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 const Imprint = ({ pageContext }) => {
   const { data, statusElement } = useLocalizedQuery(ImprintContent, pageContext)
@@ -10,11 +10,12 @@ const Imprint = ({ pageContext }) => {
 
   const imprint = data?.imprints?.[0] ?? {}
 
-  return (
-    <main className="py-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
+  const seo = imprint?.searchEngineOptimization
 
-      <div className="px-1 pb-4">
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface">
+        <div className="px-1 pb-4">
         <div className="sm:flex sm:items-start">
           <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
             <div
@@ -27,6 +28,7 @@ const Imprint = ({ pageContext }) => {
         </div>
       </div>
     </main>
+  </TemplateBase>
   )
 }
 

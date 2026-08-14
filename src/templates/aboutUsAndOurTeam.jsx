@@ -4,7 +4,7 @@ import { AboutUsAndOurTeams } from "../gql/ourTeam"
 import { AboutUsContent } from "../gql/aboutusPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import ContentToggle from "../components/ui/ContentToggle"
-import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 const AboutUs = ({ pageContext }) => {
   const team = useLocalizedQuery(AboutUsAndOurTeams, pageContext)
@@ -16,13 +16,14 @@ const AboutUs = ({ pageContext }) => {
   const aboutUs = team.data?.aboutUsAndOurTeams?.[0] ?? {}
   const ourTeamPage = page.data?.aboutUsAndOurTeams?.[0] ?? {}
 
-  return (
-    <main className="py-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
+  const seo = ourTeamPage?.searchEngineOptimization
 
-      <h1 className="p-4 font-CarterOne lg:text-5xl lg:px-14">
-        {ourTeamPage.title}
-      </h1>
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface">
+        <h1 className="p-4 font-CarterOne lg:text-5xl lg:px-14">
+          {ourTeamPage.title}
+        </h1>
 
       {aboutUs.aboutUsMainContent?.raw &&
         ReactHtmlParser(aboutUs.aboutUsMainContent.raw)}
@@ -54,6 +55,7 @@ const AboutUs = ({ pageContext }) => {
         ))}
       </div>
     </main>
+  </TemplateBase>
   )
 }
 
