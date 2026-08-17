@@ -4,7 +4,7 @@ import * as JsSearch from "js-search"
 import { FrequentAnswersAndQuestions } from "../gql/allAnswersAndQuestions"
 import { FaqContent } from "../gql/faqPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
-import StickyBar from "../components/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 const ChevronIcon = ({ className }) => (
   <svg
@@ -51,13 +51,14 @@ const Faq = ({ pageContext }) => {
   const toggleAnswer = index =>
     setOpenAnswers(prev => ({ ...prev, [index]: !prev[index] }))
 
-  return (
-    <main className="py-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
+  const seo = faqPage?.searchEngineOptimization
 
-      <h1 className="p-4 font-CarterOne lg:pt-14 lg:text-5xl lg:px-14">
-        {faqPage?.title}
-      </h1>
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface">
+        <h1 className="p-4 font-CarterOne lg:pt-14 lg:text-5xl lg:px-14">
+          {faqPage?.title}
+        </h1>
 
       <section className="p-4 my-4 lg:px-14">
         <ReactMarkdown>{faqPage?.faqSubtitleText?.markdown}</ReactMarkdown>
@@ -124,6 +125,7 @@ const Faq = ({ pageContext }) => {
         ))}
       </ul>
     </main>
+  </TemplateBase>
   )
 }
 

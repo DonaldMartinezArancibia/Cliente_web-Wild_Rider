@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { IubendaCookieConsent } from "./iubendaComponent"
-import Example from "./popup"
+import Example from "./ui/popup"
 import { localePath } from "../lib/routes"
 import { transformMenuElements, createMenuLinks } from "../lib/menuUtils"
 

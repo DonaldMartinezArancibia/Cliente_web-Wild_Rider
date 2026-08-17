@@ -5,7 +5,7 @@ import ContentToggle from "../components/ui/ContentToggle"
 import ContactElements from "../components/ui/ContactElements"
 import AddressBlock from "../components/ui/AddressBlock"
 import GoogleMapBlock from "../components/ui/GoogleMapBlock"
-import StickyBar from "../components/StickyBar"
+import TemplateBase from "../components/TemplateBase"
 
 const AirportAndOffice = ({ pageContext }) => {
   const { data, statusElement } = useLocalizedQuery(
@@ -16,13 +16,14 @@ const AirportAndOffice = ({ pageContext }) => {
 
   const page = data?.airportAndOfficePages?.[0] ?? {}
 
-  return (
-    <main className="py-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
+  const seo = page?.searchEngineOptimization
 
-      <h1 className="p-4 font-CarterOne lg:mb-10 lg:text-5xl lg:px-14 xl:pb-10">
-        {page.title}
-      </h1>
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="py-8 hero-surface">
+        <h1 className="p-4 font-CarterOne lg:mb-10 lg:text-5xl lg:px-14 xl:pb-10">
+          {page.title}
+        </h1>
 
       <div className="sm:grid lg:grid-cols-3 lg:px-14">
         {(page.toggleContent ?? []).map((content, index) => (
@@ -53,6 +54,7 @@ const AirportAndOffice = ({ pageContext }) => {
         title={page.titleOfAddress}
       />
     </main>
+  </TemplateBase>
   )
 }
 

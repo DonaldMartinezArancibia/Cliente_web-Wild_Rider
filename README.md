@@ -6,13 +6,15 @@ Sitio web multiidioma y plataforma de cotización/reserva para **Wild Rider** (s
 
 ## 🏗️ Arquitectura del Proyecto
 
-El proyecto sigue un enfoque JAMstack de alto rendimiento con renderizado híbrido:
+El proyecto sigue un enfoque JAMstack de alto rendimiento:
 
-- **Generador de Sitio Estático (SSG)**: Gatsby compila las páginas principales y la estructura del sitio a HTML estático en tiempo de compilación.
-- **Dynamic & Server-Side Rendering**: Ciertas vistas específicas emplean Deferred Static Generation (DSG) o Server-Side Rendering (SSR) a través de [src/pages/ssr.jsx](./src/pages/ssr.jsx).
+- **Generador de Sitio Estático (SSG)**: Gatsby compila cada tipo de contenido de Hygraph a una plantilla en `src/templates/`, orquestado por `gatsby-node.js` a partir de `src/config/routes.js` (`CONTENT_ROUTES`).
 - **Headless CMS**: El contenido, vehículos y textos dinámicos son gestionados en **Hygraph (GraphCMS)** y consultados mediante GraphQL.
-- **Consultas Dinámicas**: **Apollo Client** interactúa con las APIs en tiempo de ejecución (ej. formularios de cotización/contacto).
-- **Internacionalización (i18n)**: Enrutamiento localizado gestionado por `gatsby-plugin-i18n` para dar soporte a: Inglés (`en`, idioma por defecto sin prefijo), Español (`es`), Alemán (`de`), Francés (`fr`) y otros (`other`).
+- **Consultas Dinámicas**: **Apollo Client** (`gatsby-browser.js`) interactúa con las APIs en tiempo de ejecución. Su `InMemoryCache` usa `typePolicies` con clave por idioma (`localizedTypenames` / `localizedKeyFields`) para que Hygraph, que reutiliza el mismo `id` entre localizaciones de una misma entrada, no mezcle contenido de distintos idiomas en caché.
+- **Estado Global**: **Zustand** (`src/store/useStore.js`) gestiona el estado global de la aplicación (idioma, aceptación de cookies, visibilidad de la UI), proporcionando una alternativa ligera y eficiente a Redux o Context API pura para estados reactivos.
+- **Capa de datos y i18n unificada**: el hook `useI18n` (`src/hooks/useI18n.js`) centraliza el acceso a consultas localizadas (`useLocalizedQuery`), rutas traducidas (`localePath`) y claves de idioma de contenido, simplificando la lógica de los componentes.
+- **Base de Plantillas**: El componente `TemplateBase` (`src/components/TemplateBase.jsx`) estandariza la estructura de todas las páginas, integrando automáticamente SEO, StickyBar y el proveedor de i18n, eliminando la duplicación de código en los templates.
+- **Internacionalización (i18n)**: enrutamiento localizado vía `gatsby-plugin-i18n` y helpers propios en `src/lib/i18n.js` / `src/config/languages.js` / `src/config/locales.js`, con soporte para Inglés (`en`, sin prefijo), Español (`es`), Alemán (`de`), Francés (`fr`) y otros (`other`).
 
 ---
 
@@ -25,21 +27,30 @@ A continuación se detalla la organización de los directorios clave:
 ├── public/                  # Directorio de salida compilado (generado por Gatsby)
 ├── static/                  # Recursos estáticos servidos directamente
 ├── src/                     # Código fuente de la aplicación
-│   ├── components/          # Componentes de la interfaz de usuario (formularios, modales, etc.)
-│   ├── context/             # Proveedores de estado global / Context API
+│   ├── components/          # Componentes de la interfaz (header, footer, carrusel de reseñas, etc.)
+│   │   ├── forms/           # Formularios de contacto/cotización y sus campos
+│   │   ├── pages/           # Wrappers de página compartidos (ToggleContentPage.jsx)
+│   │   └── ui/              # Piezas de UI reutilizables (ContentToggle, AddressBlock, QueryState, ...)
+│   ├── config/              # Rutas por content type, idiomas y locales (config estática)
+│   ├── context/             # Context API (datos de sitio compartidos entre páginas)
 │   ├── gql/                 # Consultas y fragmentos de GraphQL para el CMS
+│   ├── hooks/               # Hooks compartidos (useI18n, useLocalizedQuery, useCarData, ...)
 │   ├── images/              # Recursos visuales locales optimizados
-│   ├── pages/               # Vistas directas (páginas independientes, 404 y SSR)
+│   ├── lib/                 # Helpers puros (i18n, markdown, rutas, lógica de formularios)
+│   ├── pages/               # Vistas directas (solo 404.jsx; el resto nace de gatsby-node.js)
+│   ├── store/               # Estado global con Zustand (useStore.js)
 │   ├── styles/              # Archivos CSS y configuración de estilos globales
 │   ├── templates/           # Plantillas dinámicas utilizadas en la generación de rutas
-│   └── utils/               # Funciones y helpers de utilidad global
+│   └── utils/               # Funciones sueltas de utilidad global
 ├── Dockerfile               # Configuración del contenedor de desarrollo
 ├── docker-compose.yml       # Orquestación de servicios en Docker
 ├── gatsby-config.js         # Configuración centralizada de Gatsby y sus plugins
 ├── gatsby-node.js           # Orquestación de rutas dinámicas a partir del CMS
-├── gatsby-browser.js        # Integraciones con APIs del navegador
+├── gatsby-browser.js        # Cliente Apollo, typePolicies por idioma, wrapPageElement/wrapRootElement
 ├── gatsby-ssr.js            # Personalización de la cabecera e inyección en SSR
 ├── package.json             # Manifiesto del proyecto y scripts
+├── .eslintrc.js             # Configuración de ESLint
+├── jsconfig.json            # Alias de rutas para el editor
 └── tailwind.config.js       # Configuración de Tailwind CSS
 ```
 
@@ -71,6 +82,7 @@ GATSBY_GRAPHCMS_TOKEN= # Token de acceso a la API
 | `npm run serve` | Sirve localmente la versión compilada de producción en `http://localhost:9000`. |
 | `npm run clean` | Limpia la caché interna y el directorio de build de Gatsby. |
 | `npm run format` | Da formato a todo el código utilizando Prettier. |
+| `npm run lint` | Corre ESLint sobre `src/` y los archivos `gatsby-*.js`. |
 
 ### Ejecución con Docker
 
@@ -91,10 +103,16 @@ La aplicación estará disponible en `http://localhost:8000`.
 - **`react` & `react-dom`**: Motor de la interfaz (`^19.2.7`).
 - **`@apollo/client` & `graphql`**: Cliente GraphQL para peticiones en runtime.
 - **`gatsby-source-graphcms`**: Origen de datos para la ingesta de Hygraph en build-time.
+- **`zustand`**: Gestión de estado global ligero y reactivo.
 
 ### Experiencia de Usuario y Plugins
 - **`gatsby-plugin-i18n`**: Enrutamiento localizado para multiidioma.
-- **`gatsby-plugin-google-gtag`**: Integración con Google Analytics.
+- **`gatsby-plugin-google-gtag`**: Integración con Google Tag Manager / Analytics.
 - **`gatsby-plugin-gdpr-cookies`**: Control y consentimiento de cookies.
-- **`gatsby-source-google-places`**: Sincronización de opiniones y ubicaciones de Google.
-- **`tailwindcss` & `postcss`**: Estilizado utility-first con Tailwind CSS.
+- **`react-slick` & `slick-carousel`**: Carrusel de reseñas (Google/TripAdvisor/Facebook).
+- **`react-international-phone`, `react-flatpickr`, `react-google-recaptcha`**: Campos de los formularios de contacto/cotización.
+- **`tailwindcss` & `postcss`**: Estilizado utility-first con Tailwind CSS v4.
+
+### Calidad de Código
+- **`eslint`, `eslint-plugin-react`, `eslint-plugin-react-hooks`**: Linting (`npm run lint`).
+- **`prettier`**: Formateo automático (`npm run format`).

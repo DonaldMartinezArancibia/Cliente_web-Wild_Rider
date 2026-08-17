@@ -6,8 +6,10 @@ import { IndexContent } from "../gql/indexQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import { useDocumentSeo } from "../hooks/useDocumentSeo"
 import { MapContainerLayoutB } from "../components/reviewsHygraph"
-import VideoPlayer from "../components/videoPlayer"
-import StickyBar from "../components/StickyBar"
+import VideoPlayer from "../components/ui/videoPlayer"
+import StickyBar from "../components/ui/StickyBar"
+import TemplateBase from "../components/TemplateBase"
+import { markdownComponents } from "../lib/markdown"
 
 const OPEN_GRAPH = {
   description:
@@ -27,17 +29,6 @@ const THIRD_PARTY_SCRIPTS = [
   },
 ]
 
-const markdownComponents = {
-  img: ({ src, alt }) => <img src={src} alt={alt} className="max-w-full" />,
-  iframe: ({ title, ...props }) => (
-    <iframe
-      {...props}
-      title={title || "Embedded content"}
-      className="w-full h-[775px] border-none"
-      allowFullScreen
-    />
-  ),
-}
 
 /** Insignia flotante de TripAdvisor. */
 const TripAdvisorBadge = () => (
@@ -88,15 +79,17 @@ const IndexPage = ({ pageContext }) => {
   const index = data?.indices?.[0] ?? {}
   const videos = buildVideoList(index)
 
-  return (
-    <main className="pt-8 hero-surface">
-      <StickyBar pageContext={pageContext} />
-      <TripAdvisorBadge />
+  const seo = data?.indices?.[0]?.searchEngineOptimization
 
-      <section id="sectionBellowHeader">
-        <ReactMarkdown
-          rehypePlugins={[rehypeRaw]}
-          components={markdownComponents}
+  return (
+    <TemplateBase pageContext={pageContext} seoData={seo}>
+      <main className="pt-8 hero-surface">
+        <TripAdvisorBadge />
+
+        <section id="sectionBellowHeader">
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            components={markdownComponents}
         >
           {index.mainTextBelow?.markdown}
         </ReactMarkdown>
@@ -156,6 +149,7 @@ const IndexPage = ({ pageContext }) => {
 
       <MapContainerLayoutB pageContext={pageContext} />
     </main>
+  </TemplateBase>
   )
 }
 

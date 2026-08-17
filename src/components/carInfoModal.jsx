@@ -2,11 +2,10 @@ import React from "react"
 import { Fragment, useRef, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
-import { Cars } from "../gql/carsByIdQuery"
 import ReactMarkdown from "react-markdown"
 import { navigate } from "gatsby"
 import { localePath } from "../lib/routes"
-import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { useCarData } from "../hooks/useCarData"
 import PriceTable from "./ui/PriceTable"
 
 export default function OpenModal({ carId, pageContext }) {
@@ -22,9 +21,7 @@ export default function OpenModal({ carId, pageContext }) {
     setIsOpen(true)
   }
 
-  const { data: carsById, statusElement } = useLocalizedQuery(Cars, pageContext, {
-    variables: { internalId: carId },
-  })
+  const { car, statusElement } = useCarData(pageContext, carId)
   const [answerState, setAnswerState] = useState(false)
 
   const toggleAnswerVisibility = () => {
@@ -32,8 +29,6 @@ export default function OpenModal({ carId, pageContext }) {
   }
 
   if (statusElement) return statusElement
-
-  const car = carsById.cars[0]
 
   const formatDate = dateString => {
     const date = new Date(dateString)
@@ -207,17 +202,7 @@ export default function OpenModal({ carId, pageContext }) {
                       <button
                         onClick={handleButtonClick}
                         className="bg-brand-blue text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
-                      // disabled={
-                      //   car.automaticTransmission
-                      //     ?.carTransmissionSelectorValue !== null &&
-                      //   car.automaticTransmission
-                      //     ?.carTransmissionSelectorValue !== undefined &&
-                      //   car.manualTransmission
-                      //     ?.carTransmissionSelectorValue !== null &&
-                      //   car.manualTransmission
-                      //     ?.carTransmissionSelectorValue !== undefined &&
-                      //   selectedTransmission === ""
-                      // }
+
                       >
                         {car.carsAndQuote.quoteButtonText}
                       </button>

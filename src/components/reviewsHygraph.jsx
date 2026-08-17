@@ -6,7 +6,7 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/solid"
 import { GetAllReviews } from "../gql/allReviews"
-import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
+import { useI18n } from "../hooks/useI18n"
 import TripAdvisor from "../images/tripadvisor-logo.svg"
 import Google from "../images/google-logo.svg"
 import Facebook from "../images/facebook-logo.svg"
@@ -159,9 +159,9 @@ const ReviewsSlider = ({
  * @param {string} props.className    clase extra para el slider
  */
 const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
-  const { data: allReviews, statusElement } = useLocalizedQuery(
-    GetAllReviews,
-    pageContext
+  const { localizedQuery } = useI18n(pageContext)
+  const { data: allReviews, statusElement } = localizedQuery(
+    GetAllReviews
   )
   if (statusElement) return statusElement
 

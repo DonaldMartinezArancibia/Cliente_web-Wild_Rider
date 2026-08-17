@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { navigate } from "gatsby"
+import { useI18n } from "../hooks/useI18n"
 import { getLocalizationQuery } from "../gql/localizationQueries"
-import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import {
   SELECTABLE_LANGUAGES,
   AUTO_REDIRECT_LANGUAGES,
@@ -41,15 +41,15 @@ const GlobeIcon = () => (
  * idioma.
  */
 export default function LanguageSelector({ pageContext, langSelectorTitle }) {
-  const { langKey, remoteTypeName, remoteId } = pageContext
+  const { localizedQuery, langKey } = useI18n(pageContext)
+  const { remoteTypeName, remoteId } = pageContext
   const isHome = remoteTypeName === "Index"
 
   // No se usa statusElement acá a propósito: este widget vive en el header y
   // Loading/ErrorState de ui/QueryState son pantallas completas, no encajan
   // en un selector chico — mientras carga o falla, simplemente no se muestra.
-  const { data, loading, error } = useLocalizedQuery(
+  const { data, loading, error } = localizedQuery(
     getLocalizationQuery(remoteTypeName),
-    pageContext,
     { variables: { internalId: remoteId } }
   )
 

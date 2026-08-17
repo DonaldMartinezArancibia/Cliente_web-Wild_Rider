@@ -1,7 +1,7 @@
 import React from "react"
 import { useLocalizedQuery } from "../../hooks/useLocalizedQuery"
 import ContentToggle from "../ui/ContentToggle"
-import StickyBar from "../StickyBar"
+import StickyBar from "../ui/StickyBar"
 
 /**
  * Página de contenido plegable (seguros, seguridad vial, …).

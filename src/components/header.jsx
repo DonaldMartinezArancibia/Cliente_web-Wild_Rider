@@ -5,11 +5,12 @@ import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
+import { useI18n } from "../hooks/useI18n"
 import { localePath } from "../lib/routes"
-import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import { transformMenuElements, createMenuLinks } from "../lib/menuUtils"
 
 export default function Header({ pageContext }) {
+  const { localizedQuery } = useI18n(pageContext)
   const [isOpen, setIsOpen] = React.useState(false)
   const location = useLocation()
 
@@ -30,36 +31,23 @@ export default function Header({ pageContext }) {
   const [isHidden, setIsHidden] = React.useState(false)
   const [unHidden, setUnHidden] = React.useState(false)
 
-  const validateWindowSize = () => {
-    setIsHidden(window.innerWidth > 1280)
-    setUnHidden(window.innerWidth < 1280)
-  }
-
   React.useEffect(() => {
-    validateWindowSize()
-
-    // Función para manejar el cambio en el tamaño de la pantalla
-    const handleWindowResize = () => {
-      validateWindowSize()
-    }
-
-    // Agregar el evento de cambio en el tamaño de la pantalla al montar el componente
-    window.addEventListener("resize", handleWindowResize)
-
-    // Limpia el evento cuando el componente se desmonta
-    return () => {
-      window.removeEventListener("resize", handleWindowResize)
-    }
+    const handleResize = () => {
+      const isWide = window.innerWidth > 1280;
+      setIsHidden(isWide);
+      setUnHidden(!isWide);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [])
 
-  const { data: headerAndFooterElementsData } = useLocalizedQuery(
-    headerAndFooterElements,
-    pageContext
+  const { data: headerAndFooterElementsData } = localizedQuery(
+    headerAndFooterElements
   )
 
-  const { data: menuElementsData, statusElement } = useLocalizedQuery(
-    menuElements,
-    pageContext
+  const { data: menuElementsData, statusElement } = localizedQuery(
+    menuElements
   )
 
   if (statusElement) return statusElement
