@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Link } from "gatsby"
 import { CombinedQuery } from "../../gql/carQuotePageQuery"
-import { useLocalizedQuery } from "../../hooks/useLocalizedQuery"
+import { useI18n } from "../../hooks/useI18n"
 import { localePath } from "../../lib/routes"
 
 const StickyBar = ({ pageContext }) => {
   const stickyRef = useRef(null)
-  const { data, statusElement } = useLocalizedQuery(CombinedQuery, pageContext)
+  const { localizedQuery, langKey } = useI18n(pageContext)
+  const { data, statusElement } = localizedQuery(CombinedQuery)
 
   const [isScrollVisible, setIsScrollVisible] = useState(false)
 

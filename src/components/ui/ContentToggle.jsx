@@ -9,12 +9,7 @@ import ReactMarkdown from "react-markdown"
  * diferencias están unificadas aquí: los enlaces abren en pestaña nueva y las
  * imágenes nunca desbordan su columna.
  */
-const markdownComponents = {
-  a: props => <a {...props} target="_blank" rel="noopener noreferrer" />,
-  img: ({ src, alt }) => (
-    <img src={src} alt={alt} className="max-w-full h-auto" />
-  ),
-}
+import { markdownComponents } from "../../lib/markdown"
 
 const ContentToggle = ({
   content,

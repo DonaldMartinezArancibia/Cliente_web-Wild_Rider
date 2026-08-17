@@ -9,6 +9,7 @@ import { MapContainerLayoutB } from "../components/reviewsHygraph"
 import VideoPlayer from "../components/ui/videoPlayer"
 import StickyBar from "../components/ui/StickyBar"
 import TemplateBase from "../components/TemplateBase"
+import { markdownComponents } from "../lib/markdown"
 
 const OPEN_GRAPH = {
   description:
@@ -28,17 +29,6 @@ const THIRD_PARTY_SCRIPTS = [
   },
 ]
 
-const markdownComponents = {
-  img: ({ src, alt }) => <img src={src} alt={alt} className="max-w-full" />,
-  iframe: ({ title, ...props }) => (
-    <iframe
-      {...props}
-      title={title || "Embedded content"}
-      className="w-full h-[775px] border-none"
-      allowFullScreen
-    />
-  ),
-}
 
 /** Insignia flotante de TripAdvisor. */
 const TripAdvisorBadge = () => (

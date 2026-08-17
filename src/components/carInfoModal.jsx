@@ -202,17 +202,7 @@ export default function OpenModal({ carId, pageContext }) {
                       <button
                         onClick={handleButtonClick}
                         className="bg-brand-blue text-white py-5 px-16 hover:bg-blue-800 rounded-lg font-semibold text-lg"
-                      // disabled={
-                      //   car.automaticTransmission
-                      //     ?.carTransmissionSelectorValue !== null &&
-                      //   car.automaticTransmission
-                      //     ?.carTransmissionSelectorValue !== undefined &&
-                      //   car.manualTransmission
-                      //     ?.carTransmissionSelectorValue !== null &&
-                      //   car.manualTransmission
-                      //     ?.carTransmissionSelectorValue !== undefined &&
-                      //   selectedTransmission === ""
-                      // }
+
                       >
                         {car.carsAndQuote.quoteButtonText}
                       </button>
