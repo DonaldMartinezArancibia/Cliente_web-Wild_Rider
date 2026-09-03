@@ -1,5 +1,5 @@
 import React from "react"
-import ReactHtmlParser from "react-html-parser"
+import parse from "html-react-parser"
 import { AboutUsAndOurTeams } from "../gql/ourTeam"
 import { AboutUsContent } from "../gql/aboutusPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
@@ -26,7 +26,7 @@ const AboutUs = ({ pageContext }) => {
         </h1>
 
       {aboutUs.aboutUsMainContent?.raw &&
-        ReactHtmlParser(aboutUs.aboutUsMainContent.raw)}
+        parse(aboutUs.aboutUsMainContent.raw)}
 
       <div className="sm:grid lg:px-14 lg:grid-cols-3">
         {(aboutUs.theTeam ?? []).map((member, index) => (

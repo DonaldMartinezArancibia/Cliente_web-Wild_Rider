@@ -12,7 +12,6 @@ import Layout from "./src/components/layout"
 import "./src/styles/global.css"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import "video-react/dist/video-react.css"
 
 const httpLink = new HttpLink({
   uri: process.env.GATSBY_GRAPHCMS_ENDPOINT,

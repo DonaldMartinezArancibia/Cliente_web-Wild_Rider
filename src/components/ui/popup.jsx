@@ -6,6 +6,7 @@ import { useLocation } from "@reach/router"
 const Example = React.memo(({ iframeUrl, linkTitle }) => {
   // Memo para evitar renders innecesarios
   let [open, setOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const cancelButtonRef = useRef(null)
   const location = useLocation()
 
@@ -21,6 +22,7 @@ const Example = React.memo(({ iframeUrl, linkTitle }) => {
       <button
         onClick={e => {
           e.preventDefault() // Evitar el comportamiento predeterminado del enlace
+          setIsLoading(true) // Reinicia el loader cada vez que se abre
           setOpen(true) // Abrir el modal
         }}
         className={`${getLinkClass(location.pathname)} block`}
@@ -68,13 +70,22 @@ const Example = React.memo(({ iframeUrl, linkTitle }) => {
                   >
                     <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                   </button>
-                  <div className="sm:text-left">
+                  <div className="relative sm:text-left">
+                    {isLoading && (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center bg-white"
+                        style={{ height: "750px" }}
+                      >
+                        <div className="w-10 h-10 border-4 border-gray-200 rounded-full border-t-brand-yellow animate-spin" />
+                      </div>
+                    )}
                     {open && ( // Solo carga el iframe si el modal está abierto
                       <iframe
                         src={iframeUrl} // Usa la URL pasada como prop
                         title="Cookie Policy"
                         className="w-full h-full border-none"
                         style={{ width: "100%", height: "750px" }}
+                        onLoad={() => setIsLoading(false)}
                       />
                     )}
                   </div>
