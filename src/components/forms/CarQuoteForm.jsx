@@ -46,6 +46,7 @@ const CarQuoteForm = ({ apolloData, pageContext }) => {
     emailField,
     emailConfirmField,
     isCaptchaVerified,
+    isSubmitting,
     captcha,
     calculateMinEndDate,
     formatDate,
@@ -194,9 +195,10 @@ const CarQuoteForm = ({ apolloData, pageContext }) => {
 
         <button
           type="submit"
-          className="bg-brand-yellow text-white h-14 font-bold text-lg w-full md:col-span-2 lg:w-1/2 lg:col-span-1"
+          disabled={isSubmitting || !isCaptchaVerified}
+          className="bg-brand-yellow text-white h-14 font-bold text-lg w-full md:col-span-2 lg:w-1/2 lg:col-span-1 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {pageData.buttonText}
+          {isSubmitting ? "Enviando..." : pageData.buttonText}
         </button>
       </form>
 

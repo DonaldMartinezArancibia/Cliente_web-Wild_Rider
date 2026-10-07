@@ -21,6 +21,7 @@ export function useCarQuoteForm({ pageData, pageContext, locale, setOpen }) {
   const [formError, setFormError] = useState(null)
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [submissionError, setSubmissionError] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Initialize dates without time component to avoid Flatpickr warnings
   const getInitialDate = () => {
@@ -130,15 +131,28 @@ export function useCarQuoteForm({ pageData, pageContext, locale, setOpen }) {
     setFormError(null)
     setSubmissionError(null)
 
+    if (!isCaptchaVerified) {
+      setFormError("Please verify the reCAPTCHA.")
+      return
+    }
+
+    if (isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+
     const form = e.target
     const fullName = form.name.value.trim()
 
     if (!form.email || !form.emailConfirm) {
+      setIsSubmitting(false)
       return
     }
 
     if (!fullName.includes(" ")) {
       setFormError("Please enter at least a name and a last name.")
+      setIsSubmitting(false)
       return
     }
 
@@ -147,6 +161,7 @@ export function useCarQuoteForm({ pageData, pageContext, locale, setOpen }) {
 
     if (email === "" || emailConfirm === "") {
       setFormError("Email or Email Confirm element is empty.")
+      setIsSubmitting(false)
       return
     }
 
@@ -155,6 +170,7 @@ export function useCarQuoteForm({ pageData, pageContext, locale, setOpen }) {
         pageData.emailAndEmailConfirmNotEqualErrorMessage ||
           "Email and Confirm Email must match."
       )
+      setIsSubmitting(false)
       return
     }
 
@@ -217,6 +233,8 @@ export function useCarQuoteForm({ pageData, pageContext, locale, setOpen }) {
       setFormError(null)
     } catch (error) {
       setSubmissionError(`Error submitting form: ${error.message}`)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -259,6 +277,7 @@ export function useCarQuoteForm({ pageData, pageContext, locale, setOpen }) {
     formSubmitted,
     setFormSubmitted,
     submissionError,
+    isSubmitting,
     startDate,
     setStartDate,
     endDate,

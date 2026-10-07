@@ -37,7 +37,7 @@ const OurCarsAndReservation = ({ pageContext }) => {
             )}
 
             <img
-              className="m-auto w-11/12 md:w-auto lg:h-[355px]"
+              className="m-auto w-11/12 md:w-auto lg:w-[90%]"
               src={item.carMainPhoto?.url}
               alt={item.carMainPhoto?.altText}
             />

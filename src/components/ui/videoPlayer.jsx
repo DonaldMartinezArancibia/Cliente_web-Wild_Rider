@@ -1,30 +1,26 @@
-import React, { useState, useRef } from "react"
-import {
-  Player,
-  ControlBar,
-  CurrentTimeDisplay,
-  TimeDivider,
-  BigPlayButton,
-} from "video-react"
-import "video-react/dist/video-react.css"
+import React, { useState } from "react"
+import ReactPlayer from "react-player"
 
 const VideoPlayer = ({ videos }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
   const [isAudioMuted] = useState(true)
-  const playerRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const handleEnded = () => {
+    setIsPlaying(false)
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
   }
 
   const playPreviousVideo = () => {
+    setIsPlaying(false)
     setCurrentVideoIndex(
       prevIndex => (prevIndex - 1 + videos.length) % videos.length
     )
   }
 
   const playNextVideo = () => {
+    setIsPlaying(false)
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % videos.length)
   }
 
@@ -45,35 +41,21 @@ const VideoPlayer = ({ videos }) => {
       onBlur={handlePlayerBlur}
     >
       {videos[currentVideoIndex].sources[0].src ? (
-        <Player
-          ref={playerRef}
-          fluid
-          aspectRatio="16:9"
-          poster={videos[currentVideoIndex].cover?.url}
-          src={videos[currentVideoIndex].sources[0].src}
-          onEnded={handleEnded}
-          muted={isAudioMuted}
-          onError={e => console.error("Error al cargar el video", e)}
-          className="!font-Poppins"
-        >
-          <BigPlayButton position="center" />
-          <ControlBar autoHide={!isFocused}>
-            <CurrentTimeDisplay order={4.1} />
-            <TimeDivider order={4.2} />
-          </ControlBar>
-          {/* Botón para activar/desactivar el audio */}
-          {/* {isAudioMuted && (
-            <div className="absolute z-10 top-4 left-[48%]">
-              <button
-                className="px-4 py-2 text-white bg-gray-700 bg-opacity-70"
-                onClick={handleToggleAudio}
-                onTouchStart={handleToggleAudio}
-              >
-                Activar Audio
-              </button>
-            </div>
-          )} */}
-        </Player>
+        <div style={{ aspectRatio: "16 / 9" }}>
+          <ReactPlayer
+            src={videos[currentVideoIndex].sources[0].src}
+            light={videos[currentVideoIndex].cover?.url}
+            playing={isPlaying}
+            onClickPreview={() => setIsPlaying(true)}
+            width="100%"
+            height="100%"
+            controls
+            muted={isAudioMuted}
+            onEnded={handleEnded}
+            onError={e => console.error("Error al cargar el video", e)}
+            className="!font-Poppins"
+          />
+        </div>
       ) : (
         <p>No se encontró un enlace de video válido.</p>
       )}
