@@ -25,6 +25,7 @@ const ContactForm = ({ content, successMarkdown, recaptchaLang }) => {
   const [phone, setPhone] = useState("")
   const [formError, setFormError] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const email = useEmailSuggestion()
   const emailConfirm = useEmailSuggestion()
@@ -33,12 +34,24 @@ const ContactForm = ({ content, successMarkdown, recaptchaLang }) => {
     event.preventDefault()
     setFormError(null)
 
+    if (!isCaptchaVerified) {
+      setFormError("Please verify the reCAPTCHA.")
+      return
+    }
+
+    if (isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+
     const form = event.target
     const emailValue = form.email?.value.trim()
     const emailConfirmValue = form.emailConfirm?.value.trim()
 
     if (!emailValue || !emailConfirmValue) {
       setFormError("Email or Email Confirm element is empty.")
+      setIsSubmitting(false)
       return
     }
 
@@ -47,6 +60,7 @@ const ContactForm = ({ content, successMarkdown, recaptchaLang }) => {
         content.emailAndEmailConfirmNotEqualErrorMessage ||
           "Email and Confirm Email must match."
       )
+      setIsSubmitting(false)
       return
     }
 
@@ -71,6 +85,8 @@ const ContactForm = ({ content, successMarkdown, recaptchaLang }) => {
       setFormError(
         `There was an error submitting the form. Please try again later. (${error.message})`
       )
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -208,9 +224,10 @@ const ContactForm = ({ content, successMarkdown, recaptchaLang }) => {
 
       <button
         type="submit"
-        className="bg-brand-yellow text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full"
+        disabled={isSubmitting || !isCaptchaVerified}
+        className="bg-brand-yellow text-white font-bold h-10 w-full font-Poppins md:col-span-2 md:w-1/3 md:m-auto lg:col-span-1 lg:w-full disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {content.sendButton}
+        {isSubmitting ? "Enviando..." : content.sendButton}
       </button>
 
       <SubmitDialog
