@@ -72,6 +72,16 @@
     "clean": "gatsby clean"
   },
   "main": "gatsby-browser.js",
+  "browserslist": [
+    "chrome >= 80",
+    "and_chr >= 80",
+    "edge >= 80",
+    "firefox >= 78",
+    "safari >= 13.1",
+    "ios_saf >= 13.4",
+    "samsung >= 13",
+    "not dead"
+  ],
   "engines": {
     "node": ">=24.0.0"
   },
