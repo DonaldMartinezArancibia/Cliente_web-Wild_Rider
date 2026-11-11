@@ -1,7 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
 import ReactMarkdown from "react-markdown"
-import rehypeRaw from "rehype-raw"
 import { IndexContent } from "../gql/indexQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import { useDocumentSeo } from "../hooks/useDocumentSeo"
@@ -102,12 +101,13 @@ const IndexPage = ({ pageContext }) => {
         <TripAdvisorBadge />
 
         <section id="sectionBellowHeader">
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            components={markdownComponents}
-        >
-          {index.mainTextBelow?.markdown}
-        </ReactMarkdown>
+          {/* Sin rehype-raw: el texto no lleva HTML crudo (comprobado en los 5
+              idiomas, el resultado es idéntico) y ese plugin metía en el
+              navegador el analizador parse5 (~26 KiB sin usar). Si un editor
+              añade HTML dentro de este campo, react-markdown lo omite. */}
+          <ReactMarkdown components={markdownComponents}>
+            {index.mainTextBelow?.markdown}
+          </ReactMarkdown>
       </section>
 
       <Link to={index.viewCarsbuttonurl?.slug}>
