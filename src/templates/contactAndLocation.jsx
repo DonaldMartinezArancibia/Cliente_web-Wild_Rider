@@ -7,6 +7,7 @@ import ContactElements from "../components/ui/ContactElements"
 import AddressBlock from "../components/ui/AddressBlock"
 import GoogleMapBlock from "../components/ui/GoogleMapBlock"
 import TemplateBase from "../components/TemplateBase"
+import OptimizedImage from "../components/ui/OptimizedImage"
 import { useContentLangKey } from "../context/siteData"
 
 const ContactAndLocationPage = ({ pageContext }) => {
@@ -55,14 +56,18 @@ const ContactAndLocationPage = ({ pageContext }) => {
         )}
 
         <div className="w-11/12 m-auto mb-4 md:w-1/2 lg:row-[3/4] lg:col-[2/3] lg:w-10/12 xl:m-auto min-[2000px]:row-[2/3]">
-          <img
+          <OptimizedImage
             src={pageData.topImage?.url}
             alt="Profile"
+            widths={[600, 900]}
+            sizes="(min-width: 1024px) 40vw, 90vw"
             className="mb-10 min-[2000px]:mx-auto"
           />
-          <img
+          <OptimizedImage
             src={pageData.bottomImage?.url}
             alt="Profile"
+            widths={[600, 900]}
+            sizes="(min-width: 1024px) 40vw, 90vw"
             className="min-[2000px]:m-auto"
           />
         </div>

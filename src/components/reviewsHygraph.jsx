@@ -10,6 +10,7 @@ import { useI18n } from "../hooks/useI18n"
 import TripAdvisor from "../images/tripadvisor-logo.svg"
 import Google from "../images/google-logo.svg"
 import Facebook from "../images/facebook-logo.svg"
+import OptimizedImage from "./ui/OptimizedImage"
 
 // Componente Review
 const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
@@ -19,9 +20,12 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
       onClick={e => handleLinkClick(e, review.reviewLink)}
       className="flex"
     >
-      <img
+      <OptimizedImage
         src={review.reviewImage.url}
         alt="Profile"
+        widths={[96]}
+        width={48}
+        height={48}
         className="w-12 h-12 mr-4 rounded-full"
       />
       <div>

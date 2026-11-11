@@ -9,6 +9,7 @@ import { MapContainerLayoutB } from "../components/reviewsHygraph"
 import VideoPlayer from "../components/ui/videoPlayer"
 import StickyBar from "../components/ui/StickyBar"
 import TemplateBase from "../components/TemplateBase"
+import OptimizedImage from "../components/ui/OptimizedImage"
 import { markdownComponents } from "../lib/markdown"
 
 const OPEN_GRAPH = {
@@ -129,9 +130,10 @@ const IndexPage = ({ pageContext }) => {
       <section className="grid px-5 font-bold sm:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-y-7 lg:gap-y-10 md:mx-4 md:my-12 justify-items-start md:text-center xl:px-16">
         {(index.freeBenefitsElements ?? []).map((benefit, position) => (
           <div key={position} className="flex items-center">
-            <img
+            <OptimizedImage
               src={benefit.benefitImage?.url}
               alt={benefit.benefitImage?.altText}
+              widths={[256]}
               className="h-12"
             />
             <p className="col-span-1 ml-5">{benefit.benefitTitle}</p>

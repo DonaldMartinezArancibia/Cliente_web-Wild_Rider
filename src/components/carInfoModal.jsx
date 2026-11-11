@@ -7,6 +7,7 @@ import { navigate } from "gatsby"
 import { localePath } from "../lib/routes"
 import { useCarData } from "../hooks/useCarData"
 import PriceTable from "./ui/PriceTable"
+import OptimizedImage from "./ui/OptimizedImage"
 
 export default function OpenModal({ carId, pageContext }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -187,10 +188,12 @@ export default function OpenModal({ carId, pageContext }) {
                     {/* Incluye la imagen principal junto con las demás imágenes */}
                     {[car.carMainPhoto, ...car.carPhotos].map(
                       (photo, index) => (
-                        <img
+                        <OptimizedImage
                           key={index}
                           src={photo?.url}
                           alt={photo?.altText}
+                          widths={[600, 900]}
+                          sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
                         />
                       )
                     )}

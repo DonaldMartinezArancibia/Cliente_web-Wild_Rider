@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
+import OptimizedImage from "./ui/OptimizedImage"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import { useI18n } from "../hooks/useI18n"
@@ -75,10 +76,16 @@ export default function Header({ pageContext }) {
     <header className="w-full text-white font-Montserrat">
       <div className="bg-[#4f5153] w-full xl:grid xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
         <div className="relative xl:col-[1/5]">
-          <img
+          <OptimizedImage
             src={langSelectorTitle?.imageOverLogo?.url}
             alt={langSelectorTitle?.imageOverLogoAlt}
-            className="w-full mb-4"
+            widths={[640, 1024, 1600]}
+            sizes="100vw"
+            width={langSelectorTitle?.imageOverLogo?.width}
+            height={langSelectorTitle?.imageOverLogo?.height}
+            loading="eager"
+            fetchPriority="high"
+            className="w-full h-auto mb-4"
           />
 
           <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">

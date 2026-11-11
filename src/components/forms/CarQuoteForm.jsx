@@ -6,6 +6,7 @@ import { useLocalizedQuery } from "../../hooks/useLocalizedQuery"
 import { useContentLangKey } from "../../context/siteData"
 import SubmitDialog from "../ui/SubmitDialog"
 import PriceTable from "../ui/PriceTable"
+import OptimizedImage from "../ui/OptimizedImage"
 import { useCarQuoteForm } from "../../hooks/useCarQuoteForm"
 import {
   BasicInfoFields,
@@ -91,10 +92,15 @@ const CarQuoteForm = ({ apolloData, pageContext }) => {
               {carsById.insuranceAndTaxInfo}
             </span>
           )}
-        <img
+        <OptimizedImage
           src={carsById?.carMainPhoto.url}
           alt={carsById?.carMainPhoto.altText}
-          className="w-full m-auto sm:w-4/5 lg:m-0 lg:col-[2/3]"
+          widths={[600, 1000]}
+          sizes="(min-width: 1024px) 40vw, (min-width: 640px) 80vw, 100vw"
+          width={carsById?.carMainPhoto.width}
+          height={carsById?.carMainPhoto.height}
+          loading="eager"
+          className="w-full h-auto m-auto sm:w-4/5 lg:m-0 lg:col-[2/3]"
         />
         <div className="flex flex-col xl:flex-row lg:col-[1/2] lg:row-[4/5]">
           <div className="overflow-x-auto flex sm:m-auto xl:m-[auto_0_auto_8%]">

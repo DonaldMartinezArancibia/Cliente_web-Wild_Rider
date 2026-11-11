@@ -8,6 +8,8 @@ const Car = gql`
       carMainPhoto {
         url
         altText
+        width
+        height
       }
       yearOfCarTitle
       yearOfCarValue

@@ -7,6 +7,8 @@ const headerAndFooterElements = gql`
       logoTextSubtitle
       imageOverLogo(locales: en) {
         url
+        width
+        height
       }
       imageOverLogoAlt
       textOfButtonOfHQrentalEngine

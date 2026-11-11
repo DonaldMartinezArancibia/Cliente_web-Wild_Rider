@@ -8,6 +8,8 @@ const Cars = gql`
       carMainPhoto(locales: $locale) {
         url
         altText
+        width
+        height
       }
       carPhotos(locales: $locale) {
         url
