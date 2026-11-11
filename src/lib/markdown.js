@@ -7,8 +7,9 @@ export const markdownComponents = {
     <OptimizedImage
       src={src}
       alt={alt}
-      widths={[480, 768, 1200]}
-      sizes="(min-width: 1024px) 60vw, 100vw"
+      widths={[480, 768, 1062]}
+      // En escritorio la imagen ocupa ~40 % del ancho (medido a 1280 px: 502 px).
+      sizes="(min-width: 1024px) 45vw, 100vw"
       className="max-w-full h-auto"
     />
   ),

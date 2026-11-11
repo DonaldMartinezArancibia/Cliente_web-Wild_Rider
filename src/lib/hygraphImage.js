@@ -59,9 +59,15 @@ export function hygraphImageSize(url) {
     : null
 }
 
+// Calidad WebP. Sin ella Hygraph usa la máxima: a 768 px una foto pasa de 91 KB
+// a 51 KB con 80 sin diferencia apreciable (el banner, de 44 KB a 22 KB).
+// Va dentro de output=...: como transformación aparte (/quality=value:80) no
+// hace nada.
+const WEBP_QUALITY = 80
+
 export function optimizeImageUrl(url, width) {
   const parts = parseHygraphUrl(url)
   if (!parts || !width || parts.keepAsIs) return url
 
-  return `${parts.base}/resize=width:${width},fit:max/output=format:webp/${parts.handle}`
+  return `${parts.base}/resize=width:${width},fit:max/output=format:webp,quality:${WEBP_QUALITY}/${parts.handle}`
 }
