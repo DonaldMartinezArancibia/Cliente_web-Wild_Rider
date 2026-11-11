@@ -82,6 +82,24 @@ const SLIDES_TO_SHOW_BREAKPOINTS = [
   { maxWidth: 1024, slidesToShow: 3 },
 ]
 
+// PRNG determinista (mulberry32): la misma semilla da siempre el mismo orden.
+const seededRandom = seed => () => {
+  seed = (seed + 0x6d2b79f5) | 0
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+}
+
+const shuffleWithSeed = (array, seed) => {
+  const random = seededRandom(seed)
+  const result = [...array]
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1))
+    ;[result[i], result[j]] = [result[j], result[i]]
+  }
+  return result
+}
+
 const resolveSlidesToShow = () => {
   if (typeof window === "undefined") return 3
   const match = SLIDES_TO_SHOW_BREAKPOINTS.find(
@@ -99,7 +117,10 @@ const resolveSlidesToShow = () => {
  * que sí se respeta en cada render.
  */
 const useSlidesToShow = () => {
-  const [slidesToShow, setSlidesToShow] = React.useState(resolveSlidesToShow)
+  // Arranca en 3, igual que el servidor: si el primer render del navegador
+  // usara window.innerWidth, el HTML no coincidiría y fallaría la hidratación.
+  // El efecto de abajo lo ajusta al ancho real justo después de montar.
+  const [slidesToShow, setSlidesToShow] = React.useState(3)
 
   React.useEffect(() => {
     const handleResize = () => setSlidesToShow(resolveSlidesToShow())
@@ -167,6 +188,16 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
   const { data: allReviews, statusElement } = localizedQuery(
     GetAllReviews
   )
+
+  // La mezcla no puede ocurrir durante el render: el servidor y el navegador
+  // sacarían órdenes distintos y la hidratación fallaría (error #418). Se
+  // renderiza en el orden original y la semilla se elige tras montar. Una
+  // semilla fija evita que se vuelvan a mezclar cuando Apollo revalida.
+  const [shuffleSeed, setShuffleSeed] = React.useState(null)
+  React.useEffect(() => {
+    if (shuffle) setShuffleSeed(Math.floor(Math.random() * 2 ** 32))
+  }, [shuffle])
+
   if (statusElement) return statusElement
 
   const openReviewLink = url => {
@@ -190,23 +221,15 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
   }
 
   if (shuffle) {
-    function shuffleArray(array) {
-      const shuffledArray = [...array]
-      for (let i = shuffledArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[shuffledArray[i], shuffledArray[j]] = [
-          shuffledArray[j],
-          shuffledArray[i],
-        ]
-      }
-      return shuffledArray
-    }
-
-    const shuffledReviews = shuffleArray([
+    const combinedReviews = [
       ...allReviews.googleReviews,
       ...allReviews.tripAdvisorReviews,
       ...allReviews.facebookReviews,
-    ])
+    ]
+    const shuffledReviews =
+      shuffleSeed === null
+        ? combinedReviews
+        : shuffleWithSeed(combinedReviews, shuffleSeed)
 
     return (
       <ReviewsSlider

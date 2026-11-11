@@ -48,7 +48,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // No se usa statusElement acá a propósito: este widget vive en el header y
   // Loading/ErrorState de ui/QueryState son pantallas completas, no encajan
   // en un selector chico — mientras carga o falla, simplemente no se muestra.
-  const { data, loading, error } = localizedQuery(
+  const { data, error } = localizedQuery(
     getLocalizationQuery(remoteTypeName),
     { variables: { internalId: remoteId } }
   )
@@ -64,7 +64,9 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     navigate(localePath(browserLanguage))
   }, [langKey])
 
-  if (loading || error) return null
+  // `loading` sigue en true mientras se revalida contra la red aunque ya haya
+  // datos en caché (los del build), así que se decide por `data`.
+  if (!data || error) return null
 
   const goToLanguage = locale => {
     rememberLanguage(locale)
