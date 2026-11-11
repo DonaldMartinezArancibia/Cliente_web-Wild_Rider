@@ -12,6 +12,7 @@ import {
   getRememberedLanguage,
 } from "../lib/i18n"
 import { localePath } from "../lib/routes"
+import { HTML_LANG } from "../config/locales"
 
 const GlobeIcon = () => (
   <svg
@@ -84,7 +85,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
             langSelectorTitle?.[language.displayField] !== false
         ).map(language => (
           <li key={language.code}>
+            {/* href real: sin él el enlace no es rastreable y los buscadores no
+                descubren las otras versiones de idioma. El clic sigue pasando
+                por goToLanguage (guarda la preferencia y navega sin recargar). */}
             <a
+              href={translatedPath(data, language.code, isHome)}
+              hrefLang={HTML_LANG[language.code]}
               className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
               onClick={event => {
                 event.preventDefault()

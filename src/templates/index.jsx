@@ -48,13 +48,16 @@ const TripAdvisorBadge = () => (
   </div>
 )
 
-/** Título de sección con el guion largo de la maqueta. */
+/**
+ * Título de sección con el guion largo de la maqueta.
+ * Es un h2 (antes h4, que saltaba de nivel desde el h1) con el tamaño de h4.
+ */
 const SectionTitle = ({ children, className = "" }) => (
-  <h4
-    className={`text-brand-blue font-black font-Inter tracking-widest uppercase mb-8 xl:pl-16 ${className}`}
+  <h2
+    className={`text-[20px] text-brand-blue font-black font-Inter tracking-widest uppercase mb-8 xl:pl-16 ${className}`}
   >
     — {children}
-  </h4>
+  </h2>
 )
 
 /** Empareja cada vídeo con su portada por posición. */

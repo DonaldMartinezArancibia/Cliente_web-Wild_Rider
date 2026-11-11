@@ -9,13 +9,16 @@ import React from "react"
 import { ApolloProvider } from "@apollo/client/react"
 import Layout from "./src/components/layout"
 // Fuentes autoalojadas (antes: @import de Google Fonts, que bloqueaba el render).
-// Mismos pesos que se cargaban antes.
-import "@fontsource/carter-one/400.css"
-import "@fontsource/montserrat/400.css"
-import "@fontsource/inter/400.css"
-import "@fontsource/poppins/400.css"
-import "@fontsource/poppins/700.css"
-import "@fontsource/inter-tight/700.css"
+// Mismos pesos que se cargaban antes, pero solo el subconjunto latino: las
+// versiones sin sufijo traen también cirílico, griego y vietnamita, y webpack
+// incrusta en base64 dentro del CSS (y por tanto del HTML de cada página) los
+// archivos pequeños. El latino cubre inglés, español, alemán y francés.
+import "@fontsource/carter-one/latin-400.css"
+import "@fontsource/montserrat/latin-400.css"
+import "@fontsource/inter/latin-400.css"
+import "@fontsource/poppins/latin-400.css"
+import "@fontsource/poppins/latin-700.css"
+import "@fontsource/inter-tight/latin-700.css"
 import "./src/styles/global.css"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"

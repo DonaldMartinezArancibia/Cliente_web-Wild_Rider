@@ -15,8 +15,13 @@ import OptimizedImage from "./ui/OptimizedImage"
 // Componente Review
 const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
   <div className="m-2 p-4 border border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
+    {/* href real: antes era "view-original-review", una ruta relativa que no
+        existe y que los buscadores seguían hasta dar 404. El clic sigue
+        abriendo el popup (handleLinkClick hace preventDefault). */}
     <a
-      href="view-original-review"
+      href={review.reviewLink || undefined}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={e => handleLinkClick(e, review.reviewLink)}
       className="flex"
     >
@@ -53,26 +58,51 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
       {review.review.length > 250 && (
         <a
           href={review.reviewLink}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={e => handleLinkClick(e, review.reviewLink)}
-          className="text-brand-blue ml-1 hover:underline"
+          className="text-brand-blue ml-1 underline"
         >
           {review.testimonial?.reviewsLinkText || "Read more"}
+          {/* "Read more" suelto no dice a dónde lleva: se añade el autor para
+              lectores de pantalla y buscadores. */}
+          <span className="sr-only"> – {review.reviewerName}</span>
         </a>
       )}
     </p>
   </div>
 )
 
-// Componentes personalizados para las flechas
-const PrevArrow = props => (
-  <button {...props} className="slick-arrow custom-prev-arrow">
-    <ChevronLeftIcon className="w-10 md:w-16" />
+const ARROW_LABELS = {
+  en: { prev: "Previous reviews", next: "Next reviews" },
+  es: { prev: "Reseñas anteriores", next: "Reseñas siguientes" },
+  de: { prev: "Vorherige Bewertungen", next: "Nächste Bewertungen" },
+  fr: { prev: "Avis précédents", next: "Avis suivants" },
+}
+
+// Componentes personalizados para las flechas. react-slick les pasa también
+// currentSlide y slideCount; no deben llegar al <button> del DOM.
+const PrevArrow = ({ onClick, style, label }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    style={style}
+    aria-label={label}
+    className="slick-arrow custom-prev-arrow"
+  >
+    <ChevronLeftIcon className="w-10 md:w-16" aria-hidden="true" />
   </button>
 )
 
-const NextArrow = props => (
-  <button {...props} className="slick-arrow custom-next-arrow">
-    <ChevronRightIcon className="w-10 md:w-16" />
+const NextArrow = ({ onClick, style, label }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    style={style}
+    aria-label={label}
+    className="slick-arrow custom-next-arrow"
+  >
+    <ChevronRightIcon className="w-10 md:w-16" aria-hidden="true" />
   </button>
 )
 
@@ -134,13 +164,13 @@ const useSlidesToShow = () => {
 
 /** Config compartida de los carruseles de reseñas; función (no constante) porque
  * prevArrow/nextArrow son elementos JSX y cada <Slider> necesita su propia instancia. */
-const getCarouselSettings = slidesToShow => ({
+const getCarouselSettings = (slidesToShow, langKey) => ({
   infinite: true,
   speed: 500,
   slidesToShow,
   slidesToScroll: 1,
-  prevArrow: <PrevArrow />,
-  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow label={(ARROW_LABELS[langKey] ?? ARROW_LABELS.en).prev} />,
+  nextArrow: <NextArrow label={(ARROW_LABELS[langKey] ?? ARROW_LABELS.en).next} />,
 })
 
 const ReviewsSlider = ({
@@ -149,27 +179,56 @@ const ReviewsSlider = ({
   imageMapping,
   truncateReview,
   className,
+  langKey,
 }) => {
   const slidesToShow = useSlidesToShow()
+  const containerRef = React.useRef(null)
+
+  // react-slick marca con aria-hidden las diapositivas fuera de vista y las
+  // clonadas, pero los enlaces de dentro siguen siendo enfocables, y eso rompe
+  // el árbol de accesibilidad. `inert` las saca del foco y de ese árbol.
+  React.useEffect(() => {
+    const container = containerRef.current
+    if (!container) return undefined
+
+    const syncInert = () => {
+      container.querySelectorAll(".slick-slide").forEach(slide => {
+        slide.inert = slide.getAttribute("aria-hidden") === "true"
+      })
+    }
+
+    syncInert()
+    const observer = new MutationObserver(syncInert)
+    observer.observe(container, {
+      attributes: true,
+      attributeFilter: ["aria-hidden"],
+      childList: true,
+      subtree: true,
+    })
+    return () => observer.disconnect()
+  }, [slidesToShow])
 
   return (
-    <Slider
-      // Remonta al cruzar un breakpoint: react-slick no recalcula bien el
-      // ancho de los slides si slidesToShow cambia en un componente ya vivo.
-      key={slidesToShow}
-      {...getCarouselSettings(slidesToShow)}
-      className={`!flex [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full ${className}`}
-    >
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
+    // display: contents: el contenedor no altera el layout del slider.
+    <div ref={containerRef} className="contents">
+      <Slider
+        // Remonta al cruzar un breakpoint: react-slick no recalcula bien el
+        // ancho de los slides si slidesToShow cambia en un componente ya vivo.
+        key={slidesToShow}
+        {...getCarouselSettings(slidesToShow, langKey)}
+        className={`!flex [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full ${className}`}
+      >
+        {reviews.map((review, index) => (
+          <Review
+            key={index}
+            review={review}
+            handleLinkClick={handleLinkClick}
+            imageMapping={imageMapping}
+            truncateReview={truncateReview}
+          />
+        ))}
+      </Slider>
+    </div>
   )
 }
 
@@ -237,6 +296,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className={className}
       />
     )
@@ -250,6 +310,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className="mb-5 lg:p-4"
       />
 
@@ -259,6 +320,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className="mb-10 lg:p-4"
       />
 
@@ -268,6 +330,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className="mb-10 lg:p-4"
       />
     </>

@@ -8,8 +8,17 @@ import { renderToString } from "react-dom/server"
 import { ApolloProvider } from "@apollo/client/react"
 import { prerenderStatic } from "@apollo/client/react/ssr"
 import { createApolloClient } from "./src/lib/apolloClient"
+import { LOCALES, DEFAULT_LOCALE, HTML_LANG } from "./src/config/locales"
 
 export { wrapPageElement } from "./gatsby-browser"
+
+// `lang` de <html> según el prefijo de idioma de la ruta (/es/, /de/, ...; sin
+// prefijo es inglés). Lectores de pantalla, traductores y buscadores lo usan.
+export const onRenderBody = ({ pathname, setHtmlAttributes }) => {
+  const segment = pathname.split("/")[1]
+  const locale = LOCALES.includes(segment) ? segment : DEFAULT_LOCALE
+  setHtmlAttributes({ lang: HTML_LANG[locale] })
+}
 
 // PRUEBA DE CONCEPTO: solo las páginas de inicio salen del build con el
 // contenido de Hygraph ya dentro del HTML. El resto sigue como antes (spinner).

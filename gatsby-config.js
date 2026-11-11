@@ -107,6 +107,9 @@ module.exports = {
         endpoint: process.env.GATSBY_GRAPHCMS_ENDPOINT,
         token: process.env.GATSBY_GRAPHCMS_TOKEN,
         locales: ["en", "es", "de", "fr", "other"],
+        // Por defecto lanza 10 consultas a la vez (tipos x idiomas); Hygraph
+        // respondió "Too Many Requests" y el build/develop fallaba.
+        queryConcurrency: 3,
       },
     },
     // Add to gatsby-config.js
