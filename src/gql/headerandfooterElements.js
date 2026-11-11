@@ -20,6 +20,8 @@ const headerAndFooterElements = gql`
         elementTitle
         elementIcon(locales: en) {
           url
+          width
+          height
         }
         elementValue
       }
@@ -45,6 +47,8 @@ const headerAndFooterElements = gql`
         socialNetworkTitle
         socialNetworkLogo(locales: en) {
           url
+          width
+          height
         }
         urlToSocialNetwork
       }

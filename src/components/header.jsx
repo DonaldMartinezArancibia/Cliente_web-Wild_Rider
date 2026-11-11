@@ -79,7 +79,7 @@ export default function Header({ pageContext }) {
           <OptimizedImage
             src={langSelectorTitle?.imageOverLogo?.url}
             alt={langSelectorTitle?.imageOverLogoAlt}
-            widths={[640, 1024, 1600]}
+            widths={[480, 768, 1024, 1600]}
             sizes="100vw"
             width={langSelectorTitle?.imageOverLogo?.width}
             height={langSelectorTitle?.imageOverLogo?.height}
@@ -149,6 +149,8 @@ export default function Header({ pageContext }) {
               <img
                 className="mr-2 h-7 lg:h-9"
                 src={element?.elementIcon?.url}
+                width={element?.elementIcon?.width}
+                height={element?.elementIcon?.height}
                 alt={`${element.elementTitle} Icon`}
               />
               <div className="text-base">

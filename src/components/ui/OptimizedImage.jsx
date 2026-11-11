@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { optimizeImageUrl } from "../../lib/hygraphImage"
+import { hygraphImageSize, optimizeImageUrl } from "../../lib/hygraphImage"
 
 /**
  * <img> para assets de Hygraph: pide la imagen redimensionada y en WebP.
@@ -8,7 +8,10 @@ import { optimizeImageUrl } from "../../lib/hygraphImage"
  *   srcSet y el navegador elige según `sizes`.
  * - Si Hygraph no puede transformar el archivo (p. ej. un SVG) o la URL falla,
  *   vuelve a la URL original.
- * - Es `lazy` solo si se pasan `width` y `height`. Sin dimensiones una imagen
+ * - `width` y `height` reservan el espacio y evitan saltos de layout. Si no se
+ *   pasan se toman de la URL cuando esta los trae (imágenes que el editor ya
+ *   transformó en el CMS: resize=width:W,height:H).
+ * - Es `lazy` solo si se conocen `width` y `height`. Sin dimensiones una imagen
  *   de ancho automático mide 0×0 hasta cargar y el navegador nunca la carga;
  *   en ese caso es `eager`. Se puede forzar con `loading`.
  */
@@ -18,9 +21,14 @@ const OptimizedImage = ({
   sizes,
   loading,
   alt = "",
+  width,
+  height,
   ...rest
 }) => {
-  const knowsSize = Boolean(rest.width && rest.height)
+  const intrinsic = hygraphImageSize(src)
+  const imgWidth = width || intrinsic?.width
+  const imgHeight = height || intrinsic?.height
+  const knowsSize = Boolean(imgWidth && imgHeight)
   const effectiveLoading = loading ?? (knowsSize ? "lazy" : "eager")
 
   const [failed, setFailed] = useState(false)
@@ -39,6 +47,8 @@ const OptimizedImage = ({
       src={useOriginal ? src : optimizeImageUrl(src, largest)}
       srcSet={srcSet}
       sizes={srcSet ? sizes : undefined}
+      width={imgWidth}
+      height={imgHeight}
       loading={effectiveLoading}
       decoding="async"
       alt={alt}

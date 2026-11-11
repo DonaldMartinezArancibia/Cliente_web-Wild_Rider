@@ -78,6 +78,8 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
               >
                 <img
                   src={network.socialNetworkLogo.url}
+                  width={network.socialNetworkLogo.width}
+                  height={network.socialNetworkLogo.height}
                   alt="Social Network Logo"
                 />
               </a>

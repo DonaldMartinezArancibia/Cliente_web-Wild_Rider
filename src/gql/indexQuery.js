@@ -47,6 +47,8 @@ const IndexContent = gql`
         benefitImage {
           url
           altText
+          width
+          height
         }
         benefitTitle
       }

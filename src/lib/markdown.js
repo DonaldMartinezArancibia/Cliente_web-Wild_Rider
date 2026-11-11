@@ -7,7 +7,7 @@ export const markdownComponents = {
     <OptimizedImage
       src={src}
       alt={alt}
-      widths={[640, 1200]}
+      widths={[480, 768, 1200]}
       sizes="(min-width: 1024px) 60vw, 100vw"
       className="max-w-full h-auto"
     />

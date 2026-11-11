@@ -60,6 +60,17 @@ const SectionTitle = ({ children, className = "" }) => (
   </h2>
 )
 
+/**
+ * Ancho que hace falta para un ícono de beneficio: se muestra a 48 px de alto
+ * (h-12), y se pide al doble para pantallas de alta densidad. Antes se pedían
+ * 256 px de ancho para un ícono que ocupa ~50-120.
+ */
+const BENEFIT_ICON_HEIGHT = 48
+const benefitIconWidth = image =>
+  image?.width && image?.height
+    ? Math.ceil((BENEFIT_ICON_HEIGHT * 2 * image.width) / image.height)
+    : 192
+
 /** Empareja cada vídeo con su portada por posición. */
 const buildVideoList = index => {
   const covers = index?.coverOfVideo ?? []
@@ -136,7 +147,9 @@ const IndexPage = ({ pageContext }) => {
             <OptimizedImage
               src={benefit.benefitImage?.url}
               alt={benefit.benefitImage?.altText}
-              widths={[256]}
+              widths={[benefitIconWidth(benefit.benefitImage)]}
+              width={benefit.benefitImage?.width}
+              height={benefit.benefitImage?.height}
               className="h-12"
             />
             <p className="col-span-1 ml-5">{benefit.benefitTitle}</p>
