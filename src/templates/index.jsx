@@ -150,7 +150,7 @@ const IndexPage = ({ pageContext }) => {
               widths={[benefitIconWidth(benefit.benefitImage)]}
               width={benefit.benefitImage?.width}
               height={benefit.benefitImage?.height}
-              className="h-12"
+              className="h-12 w-auto"
             />
             <p className="col-span-1 ml-5">{benefit.benefitTitle}</p>
           </div>

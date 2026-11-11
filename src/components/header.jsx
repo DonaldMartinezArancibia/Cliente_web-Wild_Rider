@@ -146,11 +146,14 @@ export default function Header({ pageContext }) {
         <div className="grid min-[412px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
           {langSelectorTitle?.contactElements?.map((element, index) => (
             <div className="flex items-center col-span-1" key={index}>
+              {/* Hygraph devuelve width/height = 0 para los SVG: con
+                  width="0" el ícono desaparecía. Solo se pasan si son > 0, y
+                  w-auto evita que el atributo estire un ícono de altura fija. */}
               <img
-                className="mr-2 h-7 lg:h-9"
+                className="mr-2 h-7 w-auto lg:h-9"
                 src={element?.elementIcon?.url}
-                width={element?.elementIcon?.width}
-                height={element?.elementIcon?.height}
+                width={element?.elementIcon?.width || undefined}
+                height={element?.elementIcon?.height || undefined}
                 alt={`${element.elementTitle} Icon`}
               />
               <div className="text-base">
