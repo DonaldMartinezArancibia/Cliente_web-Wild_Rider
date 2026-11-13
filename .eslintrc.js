@@ -9,10 +9,11 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es2022: true,
+    // ESLint 7 (el que espera Gatsby 5 internamente) no conoce es2022.
+    es2021: true,
   },
   parserOptions: {
-    ecmaVersion: 2022,
+    ecmaVersion: 2021,
     sourceType: "module",
     ecmaFeatures: { jsx: true },
   },

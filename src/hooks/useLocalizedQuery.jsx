@@ -27,9 +27,12 @@ export function useLocalizedQuery(query, pageContext, options = {}) {
     variables: { locale: [pageContext?.langKey], ...variables },
   })
 
+  // Con `cache-and-network`, `loading` sigue en true mientras se revalida aunque
+  // ya haya datos en caché (los del build). Solo hay spinner si no hay nada
+  // que mostrar.
   let statusElement = null
-  if (loading) statusElement = <Loading />
-  else if (error) statusElement = <ErrorState error={error} />
+  if (loading && !data) statusElement = <Loading />
+  else if (error && !data) statusElement = <ErrorState error={error} />
 
   return { data, loading, error, statusElement, ...result }
 }

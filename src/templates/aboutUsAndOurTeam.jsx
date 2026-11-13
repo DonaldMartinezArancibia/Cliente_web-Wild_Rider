@@ -5,6 +5,7 @@ import { AboutUsContent } from "../gql/aboutusPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import ContentToggle from "../components/ui/ContentToggle"
 import TemplateBase from "../components/TemplateBase"
+import OptimizedImage from "../components/ui/OptimizedImage"
 
 const AboutUs = ({ pageContext }) => {
   const team = useLocalizedQuery(AboutUsAndOurTeams, pageContext)
@@ -31,9 +32,13 @@ const AboutUs = ({ pageContext }) => {
       <div className="sm:grid lg:px-14 lg:grid-cols-3">
         {(aboutUs.theTeam ?? []).map((member, index) => (
           <div key={index} className="flex flex-col items-center mb-8">
-            <img
+            <OptimizedImage
               src={member.photo.url}
               alt={member.photo.altText}
+              widths={[160, 320]}
+              sizes="160px"
+              width={member.photo.width}
+              height={member.photo.height}
               className="w-40 mt-5 border-[3px] border-black rounded-full"
             />
             <h2 className="my-8 font-bold">{member.name}</h2>

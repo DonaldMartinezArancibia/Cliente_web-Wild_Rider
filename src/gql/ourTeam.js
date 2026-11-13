@@ -9,6 +9,8 @@ const AboutUsAndOurTeams = gql`
         photo(locales: en) {
           url
           altText
+          width
+          height
         }
       }
     }

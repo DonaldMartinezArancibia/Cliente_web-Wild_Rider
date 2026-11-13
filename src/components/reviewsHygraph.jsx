@@ -10,18 +10,27 @@ import { useI18n } from "../hooks/useI18n"
 import TripAdvisor from "../images/tripadvisor-logo.svg"
 import Google from "../images/google-logo.svg"
 import Facebook from "../images/facebook-logo.svg"
+import OptimizedImage from "./ui/OptimizedImage"
 
 // Componente Review
 const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
   <div className="m-2 p-4 border border-gray-300 bg-[#d9eaf9] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 md:m-3">
+    {/* href real: antes era "view-original-review", una ruta relativa que no
+        existe y que los buscadores seguían hasta dar 404. El clic sigue
+        abriendo el popup (handleLinkClick hace preventDefault). */}
     <a
-      href="view-original-review"
+      href={review.reviewLink || undefined}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={e => handleLinkClick(e, review.reviewLink)}
       className="flex"
     >
-      <img
+      <OptimizedImage
         src={review.reviewImage.url}
         alt="Profile"
+        widths={[96]}
+        width={48}
+        height={48}
         className="w-12 h-12 mr-4 rounded-full"
       />
       <div>
@@ -49,26 +58,51 @@ const Review = ({ review, handleLinkClick, imageMapping, truncateReview }) => (
       {review.review.length > 250 && (
         <a
           href={review.reviewLink}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={e => handleLinkClick(e, review.reviewLink)}
-          className="text-brand-blue ml-1 hover:underline"
+          className="text-brand-blue ml-1 underline"
         >
           {review.testimonial?.reviewsLinkText || "Read more"}
+          {/* "Read more" suelto no dice a dónde lleva: se añade el autor para
+              lectores de pantalla y buscadores. */}
+          <span className="sr-only"> – {review.reviewerName}</span>
         </a>
       )}
     </p>
   </div>
 )
 
-// Componentes personalizados para las flechas
-const PrevArrow = props => (
-  <button {...props} className="slick-arrow custom-prev-arrow">
-    <ChevronLeftIcon className="w-10 md:w-16" />
+const ARROW_LABELS = {
+  en: { prev: "Previous reviews", next: "Next reviews" },
+  es: { prev: "Reseñas anteriores", next: "Reseñas siguientes" },
+  de: { prev: "Vorherige Bewertungen", next: "Nächste Bewertungen" },
+  fr: { prev: "Avis précédents", next: "Avis suivants" },
+}
+
+// Componentes personalizados para las flechas. react-slick les pasa también
+// currentSlide y slideCount; no deben llegar al <button> del DOM.
+const PrevArrow = ({ onClick, style, label }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    style={style}
+    aria-label={label}
+    className="slick-arrow custom-prev-arrow"
+  >
+    <ChevronLeftIcon className="w-10 md:w-16" aria-hidden="true" />
   </button>
 )
 
-const NextArrow = props => (
-  <button {...props} className="slick-arrow custom-next-arrow">
-    <ChevronRightIcon className="w-10 md:w-16" />
+const NextArrow = ({ onClick, style, label }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    style={style}
+    aria-label={label}
+    className="slick-arrow custom-next-arrow"
+  >
+    <ChevronRightIcon className="w-10 md:w-16" aria-hidden="true" />
   </button>
 )
 
@@ -77,6 +111,24 @@ const SLIDES_TO_SHOW_BREAKPOINTS = [
   { maxWidth: 768, slidesToShow: 2 },
   { maxWidth: 1024, slidesToShow: 3 },
 ]
+
+// PRNG determinista (mulberry32): la misma semilla da siempre el mismo orden.
+const seededRandom = seed => () => {
+  seed = (seed + 0x6d2b79f5) | 0
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+}
+
+const shuffleWithSeed = (array, seed) => {
+  const random = seededRandom(seed)
+  const result = [...array]
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1))
+    ;[result[i], result[j]] = [result[j], result[i]]
+  }
+  return result
+}
 
 const resolveSlidesToShow = () => {
   if (typeof window === "undefined") return 3
@@ -95,7 +147,10 @@ const resolveSlidesToShow = () => {
  * que sí se respeta en cada render.
  */
 const useSlidesToShow = () => {
-  const [slidesToShow, setSlidesToShow] = React.useState(resolveSlidesToShow)
+  // Arranca en 3, igual que el servidor: si el primer render del navegador
+  // usara window.innerWidth, el HTML no coincidiría y fallaría la hidratación.
+  // El efecto de abajo lo ajusta al ancho real justo después de montar.
+  const [slidesToShow, setSlidesToShow] = React.useState(3)
 
   React.useEffect(() => {
     const handleResize = () => setSlidesToShow(resolveSlidesToShow())
@@ -109,13 +164,13 @@ const useSlidesToShow = () => {
 
 /** Config compartida de los carruseles de reseñas; función (no constante) porque
  * prevArrow/nextArrow son elementos JSX y cada <Slider> necesita su propia instancia. */
-const getCarouselSettings = slidesToShow => ({
+const getCarouselSettings = (slidesToShow, langKey) => ({
   infinite: true,
   speed: 500,
   slidesToShow,
   slidesToScroll: 1,
-  prevArrow: <PrevArrow />,
-  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow label={(ARROW_LABELS[langKey] ?? ARROW_LABELS.en).prev} />,
+  nextArrow: <NextArrow label={(ARROW_LABELS[langKey] ?? ARROW_LABELS.en).next} />,
 })
 
 const ReviewsSlider = ({
@@ -124,27 +179,56 @@ const ReviewsSlider = ({
   imageMapping,
   truncateReview,
   className,
+  langKey,
 }) => {
   const slidesToShow = useSlidesToShow()
+  const containerRef = React.useRef(null)
+
+  // react-slick marca con aria-hidden las diapositivas fuera de vista y las
+  // clonadas, pero los enlaces de dentro siguen siendo enfocables, y eso rompe
+  // el árbol de accesibilidad. `inert` las saca del foco y de ese árbol.
+  React.useEffect(() => {
+    const container = containerRef.current
+    if (!container) return undefined
+
+    const syncInert = () => {
+      container.querySelectorAll(".slick-slide").forEach(slide => {
+        slide.inert = slide.getAttribute("aria-hidden") === "true"
+      })
+    }
+
+    syncInert()
+    const observer = new MutationObserver(syncInert)
+    observer.observe(container, {
+      attributes: true,
+      attributeFilter: ["aria-hidden"],
+      childList: true,
+      subtree: true,
+    })
+    return () => observer.disconnect()
+  }, [slidesToShow])
 
   return (
-    <Slider
-      // Remonta al cruzar un breakpoint: react-slick no recalcula bien el
-      // ancho de los slides si slidesToShow cambia en un componente ya vivo.
-      key={slidesToShow}
-      {...getCarouselSettings(slidesToShow)}
-      className={`!flex [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full ${className}`}
-    >
-      {reviews.map((review, index) => (
-        <Review
-          key={index}
-          review={review}
-          handleLinkClick={handleLinkClick}
-          imageMapping={imageMapping}
-          truncateReview={truncateReview}
-        />
-      ))}
-    </Slider>
+    // display: contents: el contenedor no altera el layout del slider.
+    <div ref={containerRef} className="contents">
+      <Slider
+        // Remonta al cruzar un breakpoint: react-slick no recalcula bien el
+        // ancho de los slides si slidesToShow cambia en un componente ya vivo.
+        key={slidesToShow}
+        {...getCarouselSettings(slidesToShow, langKey)}
+        className={`!flex [&_.slick-track]:flex [&_.slick-slide]:h-auto [&_.slick-slide>div]:h-full ${className}`}
+      >
+        {reviews.map((review, index) => (
+          <Review
+            key={index}
+            review={review}
+            handleLinkClick={handleLinkClick}
+            imageMapping={imageMapping}
+            truncateReview={truncateReview}
+          />
+        ))}
+      </Slider>
+    </div>
   )
 }
 
@@ -163,6 +247,16 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
   const { data: allReviews, statusElement } = localizedQuery(
     GetAllReviews
   )
+
+  // La mezcla no puede ocurrir durante el render: el servidor y el navegador
+  // sacarían órdenes distintos y la hidratación fallaría (error #418). Se
+  // renderiza en el orden original y la semilla se elige tras montar. Una
+  // semilla fija evita que se vuelvan a mezclar cuando Apollo revalida.
+  const [shuffleSeed, setShuffleSeed] = React.useState(null)
+  React.useEffect(() => {
+    if (shuffle) setShuffleSeed(Math.floor(Math.random() * 2 ** 32))
+  }, [shuffle])
+
   if (statusElement) return statusElement
 
   const openReviewLink = url => {
@@ -186,23 +280,15 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
   }
 
   if (shuffle) {
-    function shuffleArray(array) {
-      const shuffledArray = [...array]
-      for (let i = shuffledArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[shuffledArray[i], shuffledArray[j]] = [
-          shuffledArray[j],
-          shuffledArray[i],
-        ]
-      }
-      return shuffledArray
-    }
-
-    const shuffledReviews = shuffleArray([
+    const combinedReviews = [
       ...allReviews.googleReviews,
       ...allReviews.tripAdvisorReviews,
       ...allReviews.facebookReviews,
-    ])
+    ]
+    const shuffledReviews =
+      shuffleSeed === null
+        ? combinedReviews
+        : shuffleWithSeed(combinedReviews, shuffleSeed)
 
     return (
       <ReviewsSlider
@@ -210,6 +296,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className={className}
       />
     )
@@ -223,6 +310,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className="mb-5 lg:p-4"
       />
 
@@ -232,6 +320,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className="mb-10 lg:p-4"
       />
 
@@ -241,6 +330,7 @@ const ReviewsContainer = ({ pageContext, shuffle = false, className = "" }) => {
         handleLinkClick={handleLinkClick}
         imageMapping={imageMapping}
         truncateReview={truncateReview}
+        langKey={pageContext?.langKey}
         className="mb-10 lg:p-4"
       />
     </>

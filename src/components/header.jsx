@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import { useLocation } from "@reach/router"
 import { Transition } from "@headlessui/react"
 import LanguageSelector from "./languajeSelector"
+import OptimizedImage from "./ui/OptimizedImage"
 import { menuElements } from "../gql/menuElements"
 import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import { useI18n } from "../hooks/useI18n"
@@ -75,10 +76,16 @@ export default function Header({ pageContext }) {
     <header className="w-full text-white font-Montserrat">
       <div className="bg-[#4f5153] w-full xl:grid xl:grid-cols-[1fr_1fr_1fr_12%] xl:grid-rows-[1fr] p-[10px_10px_10px] rounded-tr-2xl rounded-tl-2xl">
         <div className="relative xl:col-[1/5]">
-          <img
+          <OptimizedImage
             src={langSelectorTitle?.imageOverLogo?.url}
             alt={langSelectorTitle?.imageOverLogoAlt}
-            className="w-full mb-4"
+            widths={[480, 768, 1024, 1600]}
+            sizes="100vw"
+            width={langSelectorTitle?.imageOverLogo?.width}
+            height={langSelectorTitle?.imageOverLogo?.height}
+            loading="eager"
+            fetchPriority="high"
+            className="w-full h-auto mb-4"
           />
 
           <div className="absolute transform -translate-y-1/2 top-1/2 left-6 xl:m-auto xl:hidden">
@@ -139,9 +146,14 @@ export default function Header({ pageContext }) {
         <div className="grid min-[412px]:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2">
           {langSelectorTitle?.contactElements?.map((element, index) => (
             <div className="flex items-center col-span-1" key={index}>
+              {/* Hygraph devuelve width/height = 0 para los SVG: con
+                  width="0" el ícono desaparecía. Solo se pasan si son > 0, y
+                  w-auto evita que el atributo estire un ícono de altura fija. */}
               <img
-                className="mr-2 h-7 lg:h-9"
+                className="mr-2 h-7 w-auto lg:h-9"
                 src={element?.elementIcon?.url}
+                width={element?.elementIcon?.width || undefined}
+                height={element?.elementIcon?.height || undefined}
                 alt={`${element.elementTitle} Icon`}
               />
               <div className="text-base">

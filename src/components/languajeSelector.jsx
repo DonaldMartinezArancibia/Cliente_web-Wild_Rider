@@ -12,6 +12,7 @@ import {
   getRememberedLanguage,
 } from "../lib/i18n"
 import { localePath } from "../lib/routes"
+import { HTML_LANG } from "../config/locales"
 
 const GlobeIcon = () => (
   <svg
@@ -48,7 +49,7 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
   // No se usa statusElement acá a propósito: este widget vive en el header y
   // Loading/ErrorState de ui/QueryState son pantallas completas, no encajan
   // en un selector chico — mientras carga o falla, simplemente no se muestra.
-  const { data, loading, error } = localizedQuery(
+  const { data, error } = localizedQuery(
     getLocalizationQuery(remoteTypeName),
     { variables: { internalId: remoteId } }
   )
@@ -64,7 +65,9 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
     navigate(localePath(browserLanguage))
   }, [langKey])
 
-  if (loading || error) return null
+  // `loading` sigue en true mientras se revalida contra la red aunque ya haya
+  // datos en caché (los del build), así que se decide por `data`.
+  if (!data || error) return null
 
   const goToLanguage = locale => {
     rememberLanguage(locale)
@@ -82,7 +85,12 @@ export default function LanguageSelector({ pageContext, langSelectorTitle }) {
             langSelectorTitle?.[language.displayField] !== false
         ).map(language => (
           <li key={language.code}>
+            {/* href real: sin él el enlace no es rastreable y los buscadores no
+                descubren las otras versiones de idioma. El clic sigue pasando
+                por goToLanguage (guarda la preferencia y navega sin recargar). */}
             <a
+              href={translatedPath(data, language.code, isHome)}
+              hrefLang={HTML_LANG[language.code]}
               className="block px-4 py-1 text-white whitespace-no-wrap cursor-pointer hover:bg-gray-400 text"
               onClick={event => {
                 event.preventDefault()

@@ -5,7 +5,7 @@ import { headerAndFooterElements } from "../gql/headerandfooterElements"
 import { menuElements } from "../gql/menuElements"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import { SiteDataProvider } from "../context/siteData"
-import { DEFAULT_LOCALE } from "../config/locales"
+import { DEFAULT_LOCALE, HTML_LANG } from "../config/locales"
 
 export const Layout = ({ children, pageContext }) => {
   // Las páginas que no genera gatsby-node (p. ej. la 404) llegan sin langKey.
@@ -13,6 +13,13 @@ export const Layout = ({ children, pageContext }) => {
     ...pageContext,
     langKey: pageContext?.langKey || DEFAULT_LOCALE,
   }
+
+  // El HTML del build ya trae el `lang` de la primera página; al cambiar de
+  // idioma navegando dentro del sitio hay que actualizarlo aquí.
+  React.useEffect(() => {
+    document.documentElement.lang =
+      HTML_LANG[localizedContext.langKey] ?? HTML_LANG[DEFAULT_LOCALE]
+  }, [localizedContext.langKey])
 
   const { data: headerAndFooterData } = useLocalizedQuery(
     headerAndFooterElements,

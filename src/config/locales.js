@@ -10,4 +10,10 @@ const LOCALES = ["es", "en", "de", "fr", "other"]
 
 const DEFAULT_LOCALE = "en"
 
-module.exports = { LOCALES, DEFAULT_LOCALE }
+/**
+ * Código BCP 47 de cada locale para el atributo `lang` de <html>.
+ * "other" es el contenido en portugués.
+ */
+const HTML_LANG = { en: "en", es: "es", de: "de", fr: "fr", other: "pt" }
+
+module.exports = { LOCALES, DEFAULT_LOCALE, HTML_LANG }

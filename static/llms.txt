@@ -1,0 +1,36 @@
+# Wild Rider
+
+> Wild Rider offers car rental, 4x4 car rental and camper rental in Costa Rica, including budget long-term rental, with the best rates in the country.
+
+The website is available in English (default, no URL prefix), Spanish (/es/), German (/de/) and French (/fr/). The pages below link to the English version; the same page exists under each language prefix.
+
+## Vehicles and booking
+
+- [Our cars and reservation](https://wild-rider.com/our-cars-and-reservation/): the rental fleet of 4x4 vehicles and campers, with details for each vehicle.
+- [Quote](https://wild-rider.com/quote/): request a quote for a vehicle.
+- [Long-term rental](https://wild-rider.com/longtherm-rental/): long-term rental options.
+- [Camping](https://wild-rider.com/camping/): camping and camper information.
+
+## Pick-up, insurance and safety
+
+- [Airport pick-up and office location](https://wild-rider.com/airport-pick-up-and-office-location/): where and how to pick up the vehicle.
+- [Insurance](https://wild-rider.com/insurance/): insurance information.
+- [Road safety](https://wild-rider.com/road-safety/): road safety information for driving in Costa Rica.
+
+## About and support
+
+- [About us and our team](https://wild-rider.com/about-us-and-our-team/): who Wild Rider is.
+- [Testimonials](https://wild-rider.com/testimonials/): customer reviews.
+- [FAQ](https://wild-rider.com/faq/): frequently asked questions.
+
+## Contact
+
+- Phone (toll-free from the US and Canada): 1 (800) 725-1637
+- WhatsApp: +506-8973-2759
+- Phone (Costa Rica): +506-2258-4604
+- Email: info@wild-rider.com
+
+## Optional
+
+- [Home](https://wild-rider.com/): overview of the service.
+- [Imprint](https://wild-rider.com/imprint/): legal notice.

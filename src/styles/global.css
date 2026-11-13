@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Carter+One&family=Montserrat&family=Inter&family=Poppins:wght@400;700&family=Inter+Tight:wght@700&display=swap");
 @import "tailwindcss";
 /* El plugin typography se registra en tailwind.config.js, junto a su
    personalización de colores; declararlo también aquí lo duplicaba. */

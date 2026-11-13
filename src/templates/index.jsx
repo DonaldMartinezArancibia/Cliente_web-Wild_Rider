@@ -1,7 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
 import ReactMarkdown from "react-markdown"
-import rehypeRaw from "rehype-raw"
 import { IndexContent } from "../gql/indexQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import { useDocumentSeo } from "../hooks/useDocumentSeo"
@@ -9,6 +8,7 @@ import { MapContainerLayoutB } from "../components/reviewsHygraph"
 import VideoPlayer from "../components/ui/videoPlayer"
 import StickyBar from "../components/ui/StickyBar"
 import TemplateBase from "../components/TemplateBase"
+import OptimizedImage from "../components/ui/OptimizedImage"
 import { markdownComponents } from "../lib/markdown"
 
 const OPEN_GRAPH = {
@@ -47,14 +47,28 @@ const TripAdvisorBadge = () => (
   </div>
 )
 
-/** Título de sección con el guion largo de la maqueta. */
+/**
+ * Título de sección con el guion largo de la maqueta.
+ * Es un h2 (antes h4, que saltaba de nivel desde el h1) con el tamaño de h4.
+ */
 const SectionTitle = ({ children, className = "" }) => (
-  <h4
-    className={`text-brand-blue font-black font-Inter tracking-widest uppercase mb-8 xl:pl-16 ${className}`}
+  <h2
+    className={`text-[20px] text-brand-blue font-black font-Inter tracking-widest uppercase mb-8 xl:pl-16 ${className}`}
   >
     — {children}
-  </h4>
+  </h2>
 )
+
+/**
+ * Ancho que hace falta para un ícono de beneficio: se muestra a 48 px de alto
+ * (h-12), y se pide al doble para pantallas de alta densidad. Antes se pedían
+ * 256 px de ancho para un ícono que ocupa ~50-120.
+ */
+const BENEFIT_ICON_HEIGHT = 48
+const benefitIconWidth = image =>
+  image?.width && image?.height
+    ? Math.ceil((BENEFIT_ICON_HEIGHT * 2 * image.width) / image.height)
+    : 192
 
 /** Empareja cada vídeo con su portada por posición. */
 const buildVideoList = index => {
@@ -87,12 +101,13 @@ const IndexPage = ({ pageContext }) => {
         <TripAdvisorBadge />
 
         <section id="sectionBellowHeader">
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            components={markdownComponents}
-        >
-          {index.mainTextBelow?.markdown}
-        </ReactMarkdown>
+          {/* Sin rehype-raw: el texto no lleva HTML crudo (comprobado en los 5
+              idiomas, el resultado es idéntico) y ese plugin metía en el
+              navegador el analizador parse5 (~26 KiB sin usar). Si un editor
+              añade HTML dentro de este campo, react-markdown lo omite. */}
+          <ReactMarkdown components={markdownComponents}>
+            {index.mainTextBelow?.markdown}
+          </ReactMarkdown>
       </section>
 
       <Link to={index.viewCarsbuttonurl?.slug}>
@@ -129,10 +144,13 @@ const IndexPage = ({ pageContext }) => {
       <section className="grid px-5 font-bold sm:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-y-7 lg:gap-y-10 md:mx-4 md:my-12 justify-items-start md:text-center xl:px-16">
         {(index.freeBenefitsElements ?? []).map((benefit, position) => (
           <div key={position} className="flex items-center">
-            <img
+            <OptimizedImage
               src={benefit.benefitImage?.url}
               alt={benefit.benefitImage?.altText}
-              className="h-12"
+              widths={[benefitIconWidth(benefit.benefitImage)]}
+              width={benefit.benefitImage?.width}
+              height={benefit.benefitImage?.height}
+              className="h-12 w-auto"
             />
             <p className="col-span-1 ml-5">{benefit.benefitTitle}</p>
           </div>

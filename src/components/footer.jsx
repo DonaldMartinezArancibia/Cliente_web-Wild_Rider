@@ -44,18 +44,29 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
               <Link to={link.to}>{link.text}</Link>
             </li>
           ))}
-          <Example
-            iframeUrl={footerData.iFrameLinkOfTermsAndConditions}
-            linkTitle={footerData.termsAndConditionsTitle}
-          />
-          <Example
-            iframeUrl={footerData.iFrameLinkOfCookiePolicy}
-            linkTitle={footerData.cookiePolicyTitle}
-          />
-          <Example
-            iframeUrl={footerData.iFrameLinkOfPrivacyPolicy}
-            linkTitle={footerData.privacyPolicyTitle}
-          />
+          {/* Solo las políticas con título: si Hygraph no lo trae (hoy Términos y
+              Condiciones viene vacío) se dibujaría un botón invisible sin
+              nombre accesible. Cada una va en su <li>, no suelta dentro del <ul>. */}
+          {[
+            {
+              iframeUrl: footerData.iFrameLinkOfTermsAndConditions,
+              linkTitle: footerData.termsAndConditionsTitle,
+            },
+            {
+              iframeUrl: footerData.iFrameLinkOfCookiePolicy,
+              linkTitle: footerData.cookiePolicyTitle,
+            },
+            {
+              iframeUrl: footerData.iFrameLinkOfPrivacyPolicy,
+              linkTitle: footerData.privacyPolicyTitle,
+            },
+          ]
+            .filter(({ linkTitle }) => linkTitle)
+            .map(({ iframeUrl, linkTitle }) => (
+              <li key={linkTitle}>
+                <Example iframeUrl={iframeUrl} linkTitle={linkTitle} />
+              </li>
+            ))}
         </ul>
         <ul className="flex items-center space-x-8">
           {footerData.socialNetworks.map((network, index) => (
@@ -67,6 +78,8 @@ const Footer = ({ footerData, footerMenus, pageContext }) => {
               >
                 <img
                   src={network.socialNetworkLogo.url}
+                  width={network.socialNetworkLogo.width || undefined}
+                  height={network.socialNetworkLogo.height || undefined}
                   alt="Social Network Logo"
                 />
               </a>

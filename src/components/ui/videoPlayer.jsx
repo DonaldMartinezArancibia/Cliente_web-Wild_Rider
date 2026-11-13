@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import ReactPlayer from "react-player"
+import { optimizeImageUrl } from "../../lib/hygraphImage"
 
 const VideoPlayer = ({ videos }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0)
@@ -44,7 +45,7 @@ const VideoPlayer = ({ videos }) => {
         <div style={{ aspectRatio: "16 / 9" }}>
           <ReactPlayer
             src={videos[currentVideoIndex].sources[0].src}
-            light={videos[currentVideoIndex].cover?.url}
+            light={optimizeImageUrl(videos[currentVideoIndex].cover?.url, 1280)}
             playing={isPlaying}
             onClickPreview={() => setIsPlaying(true)}
             width="100%"

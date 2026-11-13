@@ -4,6 +4,7 @@ import { CarContent } from "../gql/carsPageQuery"
 import { useLocalizedQuery } from "../hooks/useLocalizedQuery"
 import OpenModal from "../components/carInfoModal"
 import TemplateBase from "../components/TemplateBase"
+import OptimizedImage from "../components/ui/OptimizedImage"
 
 const OurCarsAndReservation = ({ pageContext }) => {
   const carsQuery = useLocalizedQuery(Car, pageContext)
@@ -25,7 +26,7 @@ const OurCarsAndReservation = ({ pageContext }) => {
         </h1>
 
       <section className="p-[10px_10px_10px] sm:grid sm:grid-cols-[1fr_1fr] sm:grid-rows-[1fr] md:gap-10 xl:gap-28 xl:p-14">
-        {cars.map(item => (
+        {cars.map((item, carIndex) => (
           <article key={item.id} className="mb-10 md:mb-0">
             {item.longTermRentalTitle != null && (
               <div className="flex flex-col items-center justify-center p-4 bg-yellow-200 rounded-lg sm:flex-row">
@@ -36,10 +37,14 @@ const OurCarsAndReservation = ({ pageContext }) => {
               </div>
             )}
 
-            <img
+            <OptimizedImage
               className="m-auto w-11/12 md:w-auto lg:w-[90%]"
               src={item.carMainPhoto?.url}
               alt={item.carMainPhoto?.altText}
+              widths={[900]}
+              width={item.carMainPhoto?.width}
+              height={item.carMainPhoto?.height}
+              loading={carIndex < 2 ? "eager" : undefined}
             />
 
             <div className="flex flex-col items-center justify-between py-4 2xl:grid 2xl:grid-cols-2">
