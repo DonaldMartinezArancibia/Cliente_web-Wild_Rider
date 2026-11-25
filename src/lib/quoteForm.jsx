@@ -20,11 +20,29 @@ export function generateTimeOptions(minTime, maxTime, stepMinutes = 15) {
   return options
 }
 
+/**
+ * Convierte fecha y hora escritas en el formulario a milisegundos "de reloj":
+ * se toman los números tal como se escribieron y se pasan a UTC, que no tiene
+ * cambios de horario. Las horas de entrega y devolución son hora de Costa Rica
+ * (sin horario de verano); si se restaran como fechas locales del navegador,
+ * un cliente en Europa o EE. UU. perdería o ganaría una hora cuando el alquiler
+ * cruza el cambio de hora de su país.
+ */
+function wallClockMs(date, time) {
+  const local = new Date(`${date} ${time}`)
+  return Date.UTC(
+    local.getFullYear(),
+    local.getMonth(),
+    local.getDate(),
+    local.getHours(),
+    local.getMinutes()
+  )
+}
+
 /** Duración del alquiler en texto, tal y como la espera Zapier. */
 export function formatRentalDuration(startDate, startTime, endDate, endTime) {
-  const start = new Date(`${startDate} ${startTime}`)
-  const end = new Date(`${endDate} ${endTime}`)
-  const difference = end - start
+  const difference =
+    wallClockMs(endDate, endTime) - wallClockMs(startDate, startTime)
 
   const days = Math.floor(difference / (1000 * 60 * 60 * 24))
   const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
